@@ -80,11 +80,18 @@ namespace activityReport
 
             var conn = (System.Data.SQLite.SQLiteConnection) input.Connection;
 
-            string query = "select substr(Begin,0,11) as day, sum(Duration(Begin, End)) as Duration, sum(keydown) as Key, sum(clicks) as Click, sum(MouseMove) as MouseMove from input group by day";
+            string query = "select substr(Begin,0,11) as day, sum(Duration(Begin, End)) as Duration, sum(keydown) as Key, sum(clicks) as Click, sum(MouseMove) as MouseMove from input where TerminalServerSession = {0} group by day";
 
             DataContext d = new DataContext(input.Connection);
 
-            foreach (var i in d.ExecuteQuery<Summary>(query))
+            Console.WriteLine("home office");
+            foreach (var i in d.ExecuteQuery<Summary>(query, 1))
+            {
+                Console.WriteLine("{0}: {1}, {2}, {3}, {4}", i.Day, i.Time, i.Key, i.Click, i.MouseMove);
+            }
+
+            Console.WriteLine("company office");
+            foreach (var i in d.ExecuteQuery<Summary>(query, 0))
             {
                 Console.WriteLine("{0}: {1}, {2}, {3}, {4}", i.Day, i.Time, i.Key, i.Click, i.MouseMove);
             }

@@ -1,0 +1,23 @@
+﻿<Window x:Class="hagen.Main"
+    xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+    xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+    xmlns:local="clr-namespace:hagen"
+    Title="hagen"
+    FocusManager.FocusedElement="{Binding ElementName=Query}"
+    WindowStyle="None"
+        WindowState="Maximized"
+    AllowsTransparency="True"
+    Background="#B0000000"
+    >
+    <DockPanel Margin="50">
+      <local:ListSearch x:Name="List" DockPanel.Dock="Top">
+            <local:ListSearch.ContextMenu>
+                <ContextMenu Name="cm">
+                    <MenuItem Header="Properties..." Click="Properties"/>
+                    <MenuItem Header="Delete" Click="Delete"/>
+                    <MenuItem Header="Delete Broken Links" Click="Delete_Broken_Links_Click"/>
+                </ContextMenu>
+            </local:ListSearch.ContextMenu>
+        </local:ListSearch>
+    </DockPanel>
+</Window>

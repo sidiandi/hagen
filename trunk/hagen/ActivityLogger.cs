@@ -134,7 +134,7 @@ namespace hagen
             {
                 DateTime mustGo = now.AddHours(10.75);
                 var appointment = (Outlook.AppointmentItem)a.CreateItem(Outlook.OlItemType.olAppointmentItem);
-                appointment.Subject = "10h";
+                appointment.Subject = "Blocker";
                 appointment.Start = mustGo;
                 DateTime end = now.Date.AddDays(1);
                 if (mustGo > end)

@@ -117,35 +117,42 @@ namespace hagen
 
         void FirstInputToday(DateTime now)
         {
-            currentDay = now.Date;
-
-            var a = new Outlook.Application();
-
+            try
             {
-                var appointment = (Outlook.AppointmentItem)a.CreateItem(Outlook.OlItemType.olAppointmentItem);
-                appointment.Subject = "First activity";
-                appointment.Start = now;
-                appointment.End = now;
-                appointment.Importance = Microsoft.Office.Interop.Outlook.OlImportance.olImportanceLow;
-                appointment.ReminderSet = false;
-                appointment.Save();
-            }
+                currentDay = now.Date;
 
-            {
-                DateTime mustGo = now.AddHours(10.75);
-                var appointment = (Outlook.AppointmentItem)a.CreateItem(Outlook.OlItemType.olAppointmentItem);
-                appointment.Subject = "Blocker";
-                appointment.Start = mustGo;
-                DateTime end = now.Date.AddDays(1);
-                if (mustGo > end)
+                var a = new Outlook.Application();
+
                 {
-                    end = mustGo;
+                    var appointment = (Outlook.AppointmentItem)a.CreateItem(Outlook.OlItemType.olAppointmentItem);
+                    appointment.Subject = "First activity";
+                    appointment.Start = now;
+                    appointment.End = now;
+                    appointment.Importance = Microsoft.Office.Interop.Outlook.OlImportance.olImportanceLow;
+                    appointment.ReminderSet = false;
+                    appointment.Save();
                 }
-                appointment.End = end;
-                appointment.Importance = Microsoft.Office.Interop.Outlook.OlImportance.olImportanceHigh;
-                appointment.ReminderSet = true;
-                appointment.ReminderMinutesBeforeStart = 15;
-                appointment.Save();
+
+                {
+                    DateTime mustGo = now.AddHours(10.75);
+                    var appointment = (Outlook.AppointmentItem)a.CreateItem(Outlook.OlItemType.olAppointmentItem);
+                    appointment.Subject = "Blocker";
+                    appointment.Start = mustGo;
+                    DateTime end = now.Date.AddDays(1);
+                    if (mustGo > end)
+                    {
+                        end = mustGo;
+                    }
+                    appointment.End = end;
+                    appointment.Importance = Microsoft.Office.Interop.Outlook.OlImportance.olImportanceHigh;
+                    appointment.ReminderSet = true;
+                    appointment.ReminderMinutesBeforeStart = 15;
+                    appointment.Save();
+                }
+            }
+            catch (System.Exception ex)
+            {
+                log.Error("FirstInputToday", ex);
             }
         }
 

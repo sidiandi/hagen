@@ -49,8 +49,8 @@ namespace activityReport
                 }
             }
                     
-            public int Key;
-            public int Click;
+            public double Key;
+            public double Click;
             public double MouseMove;
         }
 
@@ -91,9 +91,12 @@ namespace activityReport
             }
 
             Console.WriteLine("company office");
-            foreach (var i in d.ExecuteQuery<Summary>(query, 0))
+            var companyDays = d.ExecuteQuery<Summary>(query, 0).ToList();
+            foreach (var i in companyDays)
             {
-                Console.WriteLine("{0}: {1}, {2}, {3}, {4}", i.Day, i.Time, i.Key, i.Click, i.MouseMove);
+                var come = d.ExecuteQuery<DateTime>("select Begin from input where Begin > {0} order by Begin limit 1", i.Day).First();
+                var go = d.ExecuteQuery<DateTime>("select Begin from input where Begin < {0} order by Begin desc limit 1", DateTime.Parse(i.Day).AddDays(1)).First();
+                Console.WriteLine("{0}: come {1}, go {2}, {3}, {4}, {5}, {6}", i.Day, come, go, i.Time, i.Key, i.Click, i.MouseMove);
             }
         }
     }

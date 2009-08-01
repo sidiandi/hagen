@@ -36,8 +36,6 @@ namespace hagen
         Hotkey hotkey;
         Main main;
 
-        ShellWatcher.IShellWatcher shellWatcher;
-
         protected override void OnStartup(StartupEventArgs e)
         {
             log4net.Config.BasicConfigurator.Configure(new Appender());

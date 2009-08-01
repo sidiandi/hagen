@@ -57,8 +57,6 @@ namespace hagen
             }
         }
 
-        string command;
-
         [Data]
         [Browsable(false)]
         public string Command

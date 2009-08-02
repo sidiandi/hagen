@@ -31,6 +31,11 @@
     <WarningLevel>4</WarningLevel>
   </PropertyGroup>
   <ItemGroup>
+    <Reference Include="System.Drawing" />
+    <Reference Include="ZedGraph, Version=5.1.4.31904, Culture=neutral, PublicKeyToken=02a83cbd123fcd60, processorArchitecture=MSIL">
+      <SpecificVersion>False</SpecificVersion>
+      <HintPath>..\..\lib\Zedgraph\ZedGraph.dll</HintPath>
+    </Reference>
     <Reference Include="Sidi.Util, Version=1.1.0.107, Culture=neutral, PublicKeyToken=1e33c1a5eebc53e1, processorArchitecture=MSIL">
       <SpecificVersion>False</SpecificVersion>
       <HintPath>..\..\lib\sidi-util\Sidi.Util.dll</HintPath>
@@ -46,6 +51,7 @@
       <SpecificVersion>False</SpecificVersion>
       <HintPath>..\..\lib\SQLite\bin\System.Data.SQLite.DLL</HintPath>
     </Reference>
+    <Reference Include="System.Windows.Forms" />
     <Reference Include="System.Xml.Linq">
       <RequiredTargetFramework>3.5</RequiredTargetFramework>
     </Reference>
@@ -56,6 +62,14 @@
     <Reference Include="System.Xml" />
   </ItemGroup>
   <ItemGroup>
+    <Compile Include="GraphEx.cs" />
+    <Compile Include="ListDetail.cs">
+      <SubType>Form</SubType>
+    </Compile>
+    <Compile Include="ListDetail.designer.cs">
+      <DependentUpon>ListDetail.cs</DependentUpon>
+    </Compile>
+    <Compile Include="PointPairListExtension.cs" />
     <Compile Include="Program.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
   </ItemGroup>
@@ -64,6 +78,11 @@
       <Project>{B8A11330-3766-4244-9962-8B0D25E98005}</Project>
       <Name>hagen</Name>
     </ProjectReference>
+  </ItemGroup>
+  <ItemGroup>
+    <EmbeddedResource Include="ListDetail.resx">
+      <DependentUpon>ListDetail.cs</DependentUpon>
+    </EmbeddedResource>
   </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
   <!-- To modify your build process, add your task inside one of the targets below and uncomment it. 

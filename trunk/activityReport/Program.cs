@@ -26,6 +26,9 @@ using Sidi.Persistence;
 using Sidi.IO;
 using System.Data.Linq;
 using System.Data.SQLite;
+using System.Windows.Forms;
+using ZedGraph;
+using System.Drawing;
 
 namespace activityReport
 {
@@ -33,8 +36,20 @@ namespace activityReport
     {
         static void Main(string[] args)
         {
+            SQLiteFunction.RegisterFunction(typeof(Duration));
             Parser.Run(new Program(), args);
         }
+
+        public Program()
+        {
+            input = Collection<Input>.UserSetting();
+            connection = (System.Data.SQLite.SQLiteConnection)input.Connection;
+            dataContext = new DataContext(input.Connection);
+        }
+
+        Collection<Input> input;
+        System.Data.SQLite.SQLiteConnection connection;
+        DataContext dataContext;
 
         public class Summary
         {
@@ -52,6 +67,33 @@ namespace activityReport
             public double Key;
             public double Click;
             public double MouseMove;
+
+            public DateTime Begin
+            {
+                get
+                {
+                    return DateTime.Parse(Day);
+                }
+                set { }
+            }
+
+                public DateTime End
+                {
+                    get
+                    {
+                        return Begin.AddDays(1);
+                    }
+                    set { }
+                }
+
+                public DateTime Come(DataContext dataContext)
+                {
+                    return dataContext.ExecuteQuery<DateTime>("select Begin from input where Begin > {0} order by Begin limit 1", Day).First();
+                }
+                public DateTime Go(DataContext dataContext)
+                {
+                        return dataContext.ExecuteQuery<DateTime>("select Begin from input where Begin < {0} order by Begin desc limit 1", DateTime.Parse(Day).AddDays(1)).First();
+                }
         }
 
         [SQLiteFunction(Arguments=2, FuncType=FunctionType.Scalar, Name="Duration") ]
@@ -71,33 +113,66 @@ namespace activityReport
             }
         }
 
+        IEnumerable<Summary> Days
+        {
+            get
+            {
+                string query = "select substr(Begin,0,11) as day, sum(Duration(Begin, End)) as Duration, sum(keydown) as Key, sum(clicks) as Click, sum(MouseMove) as MouseMove from input group by day";
+                return dataContext.ExecuteQuery<Summary>(query, 0).ToList();
+            }
+        }
+
         [Usage("Prints a day-by-day report")]
         public void Report()
         {
-            SQLiteFunction.RegisterFunction(typeof(Duration));
-
-            Collection<Input> input = Collection<Input>.UserSetting();
-
-            var conn = (System.Data.SQLite.SQLiteConnection) input.Connection;
-
-            string query = "select substr(Begin,0,11) as day, sum(Duration(Begin, End)) as Duration, sum(keydown) as Key, sum(clicks) as Click, sum(MouseMove) as MouseMove from input where TerminalServerSession = {0} group by day";
-
-            DataContext d = new DataContext(input.Connection);
-
-            Console.WriteLine("home office");
-            foreach (var i in d.ExecuteQuery<Summary>(query, 1))
+            foreach (var i in Days.ToList())
             {
-                Console.WriteLine("{0}: {1}, {2}, {3}, {4}", i.Day, i.Time, i.Key, i.Click, i.MouseMove);
-            }
+                var d = input.Range(i.Begin, i.End).ToList();
 
-            Console.WriteLine("company office");
-            var companyDays = d.ExecuteQuery<Summary>(query, 0).ToList();
-            foreach (var i in companyDays)
-            {
-                var come = d.ExecuteQuery<DateTime>("select Begin from input where Begin > {0} order by Begin limit 1", i.Day).First();
-                var go = d.ExecuteQuery<DateTime>("select Begin from input where Begin < {0} order by Begin desc limit 1", DateTime.Parse(i.Day).AddDays(1)).First();
-                Console.WriteLine("{0}: come {1}, go {2}, {3}, {4}, {5}, {6}", i.Day, come, go, i.Time, i.Key, i.Click, i.MouseMove);
+                var come = d.FirstOrDefault(x => !x.TerminalServerSession);
+                var go = d.LastOrDefault(x => !x.TerminalServerSession);
+
+                var teleCommuting = come == null ? d : d.Where(x => x.End <= come.Begin || go.End <= x.Begin);
+                var company = come == null ? new List<Input>() : d.Where(x => x.End > come.Begin || go.End > x.Begin);
+
+                Console.WriteLine();
+                Console.WriteLine(i.Day);
+
+                if (come != null)
+                {
+                    Console.WriteLine("Come: {0}", come.Begin);
+                    Console.WriteLine("Go: {0}", go.End);
+                    Console.WriteLine("Time: {0}", go.End - come.Begin);
+                    Console.WriteLine("Active: {0}", company.Active());
+                }
+                Console.WriteLine("Tele-commuting: {0}", teleCommuting.Active());
             }
         }
+
+        [Usage("Graphical reports")]
+        public void GraphicalUserInterface()
+        {
+            var main = new ListDetail();
+
+            foreach (var i in Days.ToList())
+            {
+                Summary s = i;
+                main.AddItem(s.Day, () =>
+                {
+                    var p = GraphEx.CreateTimeGraph();
+                    
+                    var d = input.Range(s.Begin, s.End);
+
+                    var ppl = new PointPairList();
+                    ppl.AddRange(d.Select(x => new PointPair(new XDate(x.Begin), x.KeyDown)));
+                    ppl = ppl.Accumulate();
+                    p.AddCurve("keystrokes",ppl,Color.Black);
+                    return p.AsControl();
+                });
+            }
+
+            Application.Run(main);
+        }
+
     }
 }

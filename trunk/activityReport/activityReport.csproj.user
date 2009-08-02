@@ -3,6 +3,6 @@
     <StartArguments>Rep</StartArguments>
   </PropertyGroup>
   <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Debug|AnyCPU' ">
-    <StartArguments>report</StartArguments>
+    <StartArguments>r</StartArguments>
   </PropertyGroup>
 </Project>

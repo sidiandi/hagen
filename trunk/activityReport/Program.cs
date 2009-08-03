@@ -136,16 +136,31 @@ namespace activityReport
                 var company = come == null ? new List<Input>() : d.Where(x => x.End > come.Begin || go.End > x.Begin);
 
                 Console.WriteLine();
-                Console.WriteLine(i.Day);
+                var day = DateTime.Parse(i.Day);
+                Console.WriteLine(day.ToString("ddd dd.MM.yyyy"));
+                double teleCommutingTime = 0.0;
+                double officeTime = 0.0;
 
+                string format = "{0,-20}: {1}";
+                string formatHours = "{0,-20}: {1:F2} h";
+                string hoursComeGo = "{0:F2} h, come: {1:HH:mm:ss}, go: {2:HH:mm:ss}";
                 if (come != null)
                 {
-                    Console.WriteLine("Come: {0}", come.Begin);
-                    Console.WriteLine("Go: {0}", go.End);
-                    Console.WriteLine("Time: {0}", go.End - come.Begin);
-                    Console.WriteLine("Active: {0}", company.Active());
+                    officeTime = (go.End - come.Begin).TotalHours;
+                    Console.WriteLine(format, "Company office", hoursComeGo.F(officeTime, come.Begin, go.End));
+                    var active = company.Active().TotalHours;
+                    // Console.WriteLine(format, "Active", "{0:F2} ({1:F0}%)".F(active, 100.0 * active / officeTime));
                 }
-                Console.WriteLine("Tele-commuting: {0}", teleCommuting.Active());
+
+                if (teleCommuting.Any())
+                {
+                    teleCommutingTime = teleCommuting.Active().TotalHours;
+                    DateTime tcCome = go == null ? day.AddHours(8) : go.Begin.AddHours(1);
+                    DateTime tcGo = tcCome.AddHours(teleCommutingTime);
+                    Console.WriteLine(format, "Home office", "{0:F2} h, come: {1:HH:mm:ss}, go: {2:HH:mm:ss}".F(teleCommutingTime, tcCome, tcGo));
+                }
+
+                Console.WriteLine(formatHours, "Total", officeTime + teleCommutingTime);
             }
         }
 

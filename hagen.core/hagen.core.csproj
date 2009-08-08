@@ -95,36 +95,6 @@
     </Reference>
   </ItemGroup>
   <ItemGroup>
-    <ApplicationDefinition Include="App.xaml">
-      <Generator>MSBuild:Compile</Generator>
-      <SubType>Designer</SubType>
-    </ApplicationDefinition>
-    <Page Include="ExpressionLight\Theme.xaml">
-      <Generator>MSBuild:Compile</Generator>
-      <SubType>Designer</SubType>
-    </Page>
-    <Page Include="PropertiesDialog.xaml">
-      <SubType>Designer</SubType>
-      <Generator>MSBuild:Compile</Generator>
-    </Page>
-    <Page Include="Themes\Generic.xaml">
-      <Generator>MSBuild:Compile</Generator>
-      <SubType>Designer</SubType>
-    </Page>
-    <Page Include="Main.xaml">
-      <Generator>MSBuild:Compile</Generator>
-      <SubType>Designer</SubType>
-    </Page>
-    <Compile Include="App.xaml.cs">
-      <DependentUpon>App.xaml</DependentUpon>
-      <SubType>Code</SubType>
-    </Compile>
-    <Compile Include="Main.xaml.cs">
-      <DependentUpon>Main.xaml</DependentUpon>
-      <SubType>Code</SubType>
-    </Compile>
-  </ItemGroup>
-  <ItemGroup>
     <Compile Include="Action.cs" />
     <Compile Include="Activity.cs" />
     <Compile Include="ActivityLogger.cs" />
@@ -134,17 +104,12 @@
     <Compile Include="FileActionFactory.cs" />
     <Compile Include="FileGroup.cs" />
     <Compile Include="FileGroupDescriptor.cs" />
-    <Compile Include="GAC.cs" />
     <Compile Include="globalKeyboardHook.cs" />
     <Compile Include="ICommand.cs" />
     <Compile Include="IconHelper.cs" />
     <Compile Include="InterceptConsole.cs" />
     <Compile Include="InternetShortcut.cs" />
-    <Compile Include="ListSearch.cs" />
     <Compile Include="OutlookDataObject.cs" />
-    <Compile Include="PropertiesDialog.xaml.cs">
-      <DependentUpon>PropertiesDialog.xaml</DependentUpon>
-    </Compile>
     <Compile Include="Properties\AssemblyInfo.cs">
       <SubType>Code</SubType>
     </Compile>

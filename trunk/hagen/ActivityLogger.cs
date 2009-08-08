@@ -44,7 +44,6 @@ namespace hagen
         {
             programUse = Collection<ProgramUse>.UserSetting();
             inputs = Collection<Input>.UserSetting();
-            ShellWatcher.ShellWatcher.Instance.Executed += new ShellWatcher.ExecutedEvent(Instance_Executed);
 
             BackgroundWorker backgroundWorker = new BackgroundWorker();
             backgroundWorker.DoWork += new DoWorkEventHandler(backgroundWorker_DoWork);
@@ -232,27 +231,8 @@ namespace hagen
            }
         }
 
-        void CommitProgramUse()
-        {
-            lock (this)
-            {
-                if (currentProgram != null)
-                {
-                    currentProgram.End = DateTime.Now;
-                    programUse.Add(currentProgram);
-                    currentProgram = null;
-                }
-            }
-        }
-
-        void Instance_Executed(object sender, ShellWatcher.SHELLEXECUTEINFO args)
-        {
-            log.InfoFormat("ShellExecute: {0}", args.lpFile);
-        }
-
         public void Dispose()
         {
-            CommitProgramUse();
             CommitInput();
         }
     }

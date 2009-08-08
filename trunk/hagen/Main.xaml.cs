@@ -60,14 +60,7 @@ namespace hagen
             this.PreviewDrop += new DragEventHandler(Window1_PreviewDrop);
             this.PreviewKeyDown += new KeyEventHandler(Main_PreviewKeyDown);
 
-            ShellWatcher.ShellWatcher.Instance.Executed += new ShellWatcher.ExecutedEvent(Instance_Executed);
             logger = new ActivityLogger();
-
-        }
-
-        void Instance_Executed(object sender, ShellWatcher.SHELLEXECUTEINFO args)
-        {
-            // StartProcess.Update(actions, args);
         }
 
         void Main_PreviewKeyDown(object sender, KeyEventArgs e)

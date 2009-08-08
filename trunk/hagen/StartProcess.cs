@@ -169,46 +169,7 @@ namespace hagen
             return s;
         }
 
-        static public Action CreateAction(ShellWatcher.SHELLEXECUTEINFO args)
-        {
-            StartProcess sp = new StartProcess();
-            sp.Arguments = args.lpParameters;
-            sp.CreateNoWindow = false;
-            sp.FileName = args.lpFile;
-            sp.Verb = args.lpVerb;
-            sp.WindowStyle = ProcessWindowStyle.Maximized;
-            sp.WorkingDirectory = args.lpDirectory;
-
-            var a = new Action();
-            a.CommandObject = sp;
-            a.LastUseTime = DateTime.Now;
-            a.Name = sp.ToString();
-
-            return a;
-        }
-
         static bool blockUpdate = false;
-
-        static public void Update(Collection<Action> actions, ShellWatcher.SHELLEXECUTEINFO args)
-        {
-            if (blockUpdate)
-            {
-                return;
-            }
-
-            var a = CreateAction(args);
-
-            Action ea = actions.Find("Command = @Command", "Command", a.Command);
-            if (ea != null)
-            {
-                ea.LastUseTime = a.LastUseTime;
-                actions.Update(ea);
-            }
-            else
-            {
-                actions.Add(a);
-            }
-        }
 
         static Icon browserIcon = null;
 

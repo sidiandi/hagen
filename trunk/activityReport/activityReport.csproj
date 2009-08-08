@@ -74,9 +74,9 @@
     <Compile Include="Properties\AssemblyInfo.cs" />
   </ItemGroup>
   <ItemGroup>
-    <ProjectReference Include="..\hagen\hagen.csproj">
+    <ProjectReference Include="..\hagen\hagen.core.csproj">
       <Project>{B8A11330-3766-4244-9962-8B0D25E98005}</Project>
-      <Name>hagen</Name>
+      <Name>hagen.core</Name>
     </ProjectReference>
   </ItemGroup>
   <ItemGroup>

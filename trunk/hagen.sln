@@ -1,7 +1,7 @@
 ﻿
 Microsoft Visual Studio Solution File, Format Version 10.00
 # Visual Studio 2008
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "hagen", "hagen\hagen.csproj", "{B8A11330-3766-4244-9962-8B0D25E98005}"
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "hagen.core", "hagen\hagen.core.csproj", "{B8A11330-3766-4244-9962-8B0D25E98005}"
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "ShellWatcher", "ShellWatcher\ShellWatcher.csproj", "{60133AAB-176B-41F2-821A-5693F0DE7BE8}"
 EndProject

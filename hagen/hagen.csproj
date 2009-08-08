@@ -157,7 +157,6 @@
       <DesignTimeSharedInput>True</DesignTimeSharedInput>
     </Compile>
     <Compile Include="AsyncQuery.cs" />
-    <Compile Include="ShellWatcherTest.cs" />
     <Compile Include="StartProcess.cs" />
     <EmbeddedResource Include="Properties\Resources.resx">
       <Generator>ResXFileCodeGenerator</Generator>
@@ -202,12 +201,6 @@
       <WrapperTool>primary</WrapperTool>
       <Isolated>False</Isolated>
     </COMReference>
-  </ItemGroup>
-  <ItemGroup>
-    <ProjectReference Include="..\ShellWatcher\ShellWatcher.csproj">
-      <Project>{60133AAB-176B-41F2-821A-5693F0DE7BE8}</Project>
-      <Name>ShellWatcher</Name>
-    </ProjectReference>
   </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
   <!-- To modify your build process, add your task inside one of the targets below and uncomment it. 

@@ -53,6 +53,7 @@
     <Compile Include="SHELLEXECUTEINFO.cs" />
     <Compile Include="ShellExecuteHook.cs" />
     <Compile Include="ShellWatcher.cs" />
+    <Compile Include="ShellWatcherTest.cs" />
   </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
   <!-- To modify your build process, add your task inside one of the targets below and uncomment it. 

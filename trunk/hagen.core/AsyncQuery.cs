@@ -56,7 +56,7 @@ namespace hagen
         {
             get
             {
-                foreach (List<T> list in lists)
+                foreach (IList<T> list in lists)
                 {
                     if (index < list.Count)
                     {
@@ -147,7 +147,7 @@ namespace hagen
         #endregion
     }
     
-    class AsyncQuery
+    public class AsyncQuery
     {
         Collection<Action> actions;
         Sidi.Util.AsyncCalculation<string, IList<Action>> asyncCalculation;

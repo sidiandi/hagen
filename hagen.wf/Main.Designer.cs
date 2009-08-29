@@ -28,58 +28,37 @@
         /// </summary>
         private void InitializeComponent()
         {
-            this.textBoxQuery = new System.Windows.Forms.TextBox();
-            this.listViewResults = new System.Windows.Forms.ListView();
-            this.columnHeader1 = new System.Windows.Forms.ColumnHeader();
+            this.searchBox1 = new hagen.wf.SearchBox();
             this.SuspendLayout();
             // 
-            // textBoxQuery
+            // searchBox1
             // 
-            this.textBoxQuery.Anchor = ((System.Windows.Forms.AnchorStyles)(((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Left)
-                        | System.Windows.Forms.AnchorStyles.Right)));
-            this.textBoxQuery.Location = new System.Drawing.Point(12, 12);
-            this.textBoxQuery.Name = "textBoxQuery";
-            this.textBoxQuery.Size = new System.Drawing.Size(590, 20);
-            this.textBoxQuery.TabIndex = 0;
-            // 
-            // listViewResults
-            // 
-            this.listViewResults.Anchor = ((System.Windows.Forms.AnchorStyles)((((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Bottom)
+            this.searchBox1.Anchor = ((System.Windows.Forms.AnchorStyles)((((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Bottom)
                         | System.Windows.Forms.AnchorStyles.Left)
                         | System.Windows.Forms.AnchorStyles.Right)));
-            this.listViewResults.Columns.AddRange(new System.Windows.Forms.ColumnHeader[] {
-            this.columnHeader1});
-            this.listViewResults.Location = new System.Drawing.Point(12, 38);
-            this.listViewResults.Name = "listViewResults";
-            this.listViewResults.Size = new System.Drawing.Size(590, 465);
-            this.listViewResults.TabIndex = 1;
-            this.listViewResults.UseCompatibleStateImageBehavior = false;
-            this.listViewResults.View = System.Windows.Forms.View.Details;
-            this.listViewResults.VirtualMode = true;
-            // 
-            // columnHeader1
-            // 
-            this.columnHeader1.Width = 456;
+            this.searchBox1.Data = null;
+            this.searchBox1.Location = new System.Drawing.Point(12, 12);
+            this.searchBox1.Name = "searchBox1";
+            this.searchBox1.Size = new System.Drawing.Size(590, 491);
+            this.searchBox1.TabIndex = 0;
             // 
             // Main
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 13F);
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
             this.ClientSize = new System.Drawing.Size(614, 515);
-            this.Controls.Add(this.listViewResults);
-            this.Controls.Add(this.textBoxQuery);
+            this.Controls.Add(this.searchBox1);
+            this.FormBorderStyle = System.Windows.Forms.FormBorderStyle.None;
             this.Name = "Main";
             this.Text = "Main";
             this.WindowState = System.Windows.Forms.FormWindowState.Maximized;
             this.ResumeLayout(false);
-            this.PerformLayout();
 
         }
 
         #endregion
 
-        private System.Windows.Forms.TextBox textBoxQuery;
-        private System.Windows.Forms.ListView listViewResults;
-        private System.Windows.Forms.ColumnHeader columnHeader1;
+        private SearchBox searchBox1;
+
     }
 }

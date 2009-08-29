@@ -9,6 +9,7 @@ using System.Windows.Forms;
 using Sidi.Persistence;
 using Sidi.IO;
 using Sidi.Util;
+using NUnit.Framework;
 
 namespace hagen.wf
 {
@@ -36,51 +37,18 @@ namespace hagen.wf
                 Environment.GetFolderPath(Environment.SpecialFolder.LocalApplicationData),
                 "hagen",
                 "hagen.sqlite"));
+
+            searchBox1.Data = actions;
+            searchBox1.ItemsActivated += new EventHandler(searchBox1_ItemsActivated);
             
-            asyncQuery = new AsyncQuery(actions);
-            asyncQuery.Complete += new EventHandler(asyncQuery_Complete);
-            
-            textBoxQuery.TextChanged += new EventHandler(textBoxQuery_TextChanged);
-
-            listViewResults.RetrieveVirtualItem += new RetrieveVirtualItemEventHandler(listViewResults_RetrieveVirtualItem);
-            listViewResults.ShowItemToolTips = true;
-
-            listViewResults.ItemActivate += new EventHandler(listViewResults_ItemActivate);
         }
 
-        void listViewResults_ItemActivate(object sender, EventArgs e)
+        void searchBox1_ItemsActivated(object sender, EventArgs e)
         {
-            var a = listViewResults.FocusedItem.Tag as Action;
-            a.Execute();
-        }
-
-        void listViewResults_RetrieveVirtualItem(object sender, RetrieveVirtualItemEventArgs e)
-        {
-            var lvi = new ListViewItem();
-            var a = currentResults[e.ItemIndex];
-            lvi.Text = a.Name;
-            lvi.Tag = a;
-            lvi.ToolTipText = StringEx.ToString(w => a.DumpProperties(w));
-
-            e.Item = lvi;
-        }
-
-        IList<Action> currentResults;
-
-        void asyncQuery_Complete(object sender, EventArgs e)
-        {
-            this.Invoke(new Action<IList<Action>>(list =>
-                {
-                    listViewResults.VirtualListSize = list.Count;
-                    listViewResults.Invalidate();
-                    currentResults = list;
-
-                }), asyncQuery.Result);
-        }
-
-        void textBoxQuery_TextChanged(object sender, EventArgs e)
-        {
-            asyncQuery.Query = textBoxQuery.Text;
+            foreach (var i in searchBox1.SelectedActions)
+            {
+                Activate(i);
+            }
         }
 
         void Main_KeyDown(object sender, KeyEventArgs e)
@@ -91,12 +59,19 @@ namespace hagen.wf
             }
         }
 
+        void Activate(Action a)
+        {
+            this.Hide();
+            a.LastUseTime = DateTime.Now;
+            actions.Update(a);
+            a.Execute();
+        }
+
         void hotkey_HotkeyPressed(object sender, EventArgs e)
         {
             WindowState = FormWindowState.Maximized;
             this.Visible = true;
-            textBoxQuery.Focus();
-            textBoxQuery.SelectAll();
+            searchBox1.Start();
         }
 
         protected override void OnClosed(EventArgs e)
@@ -105,6 +80,11 @@ namespace hagen.wf
 
             hotkey.Dispose();
             hotkey = null;
+        }
+
+        [TestFixture]
+        public class SearchBoxTest
+        {
         }
     }
 }

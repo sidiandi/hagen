@@ -35,7 +35,7 @@ namespace hagen
     public class ActivityLogger : IDisposable
     {
         private static readonly log4net.ILog log = log4net.LogManager.GetLogger(System.Reflection.MethodBase.GetCurrentMethod().DeclaringType);
-        
+
         Collection<ProgramUse> programUse;
         Collection<Input> inputs;
         InputHook interceptConsole = new InputHook();
@@ -63,32 +63,35 @@ namespace hagen
             DateTime n = DateTime.Now;
             ThreadPool.QueueUserWorkItem(new WaitCallback(x =>
             {
-                UpdateInput(n);
-                var newMousePos = new Vector(e.X, e.Y);
-                if (lastMousePos == null)
+                lock (this)
                 {
-                }
-                else
-                {
-                    double m = (newMousePos - lastMousePos.Value).Length;
-                    currentInput.MouseMove += m;
-                    currentInput.Clicks += e.Clicks;
-                    if (currentProgram != null)
+                    UpdateInput(n);
+                    var newMousePos = new Vector(e.X, e.Y);
+                    if (lastMousePos == null)
                     {
-                        currentProgram.MouseMove += m;
-                        currentProgram.Clicks += e.Clicks;
                     }
+                    else
+                    {
+                        double m = (newMousePos - lastMousePos.Value).Length;
+                        currentInput.MouseMove += m;
+                        currentInput.Clicks += e.Clicks;
+                        if (currentProgram != null)
+                        {
+                            currentProgram.MouseMove += m;
+                            currentProgram.Clicks += e.Clicks;
+                        }
+                    }
+                    lastMousePos = newMousePos;
                 }
-                lastMousePos = newMousePos;
             }));
         }
 
         void KeyboardInput(object sender, System.Windows.Forms.KeyEventArgs e)
         {
-            lock (this)
+            DateTime n = DateTime.Now;
+            ThreadPool.QueueUserWorkItem(new WaitCallback(x =>
             {
-                DateTime n = DateTime.Now;
-                ThreadPool.QueueUserWorkItem(new WaitCallback(x =>
+                lock (this)
                 {
                     UpdateInput(n);
                     ++currentInput.KeyDown;
@@ -97,8 +100,8 @@ namespace hagen
                     {
                         ++currentProgram.KeyDown;
                     }
-                }));
-            }
+                }
+            }));
         }
 
         void CommitInput()
@@ -163,7 +166,7 @@ namespace hagen
                 {
                     FirstInputToday(n);
                 }
-                
+
                 if (currentInput != null)
                 {
                     if (currentInput.End <= n)
@@ -203,55 +206,63 @@ namespace hagen
         ProgramUse currentProgram;
 
         void CheckWindowChanged()
-       {
-           try
-           {
-               AutomationElement focusedElement = AutomationElement.FocusedElement;
-               var p = Process.GetProcessById(focusedElement.Current.ProcessId);
-               string caption = p.MainWindowTitle;
-               lock (this)
-               {
-                   if (currentProgram == null || currentProgram.Caption != caption)
-                   {
-                       var n = DateTime.Now;
-                       if (currentProgram != null)
-                       {
-                           currentProgram.End = n;
-                           programUse.Add(currentProgram);
-                       }
-                       currentProgram = new ProgramUse();
-                       currentProgram.Begin = n;
-                       currentProgram.Caption = caption;
-                       currentProgram.File = p.MainModule.FileName;
-                   }
-               }
-           }
-           catch (Exception ex)
-           {
-           }
+        {
+            try
+            {
+                AutomationElement focusedElement = AutomationElement.FocusedElement;
+                var p = Process.GetProcessById(focusedElement.Current.ProcessId);
+                string caption = p.MainWindowTitle;
+                lock (this)
+                {
+                    if (currentProgram == null || currentProgram.Caption != caption)
+                    {
+                        var n = DateTime.Now;
+                        if (currentProgram != null)
+                        {
+                            currentProgram.End = n;
+                            programUse.Add(currentProgram);
+                        }
+                        currentProgram = new ProgramUse();
+                        currentProgram.Begin = n;
+                        currentProgram.Caption = caption;
+                        currentProgram.File = p.MainModule.FileName;
+                    }
+                }
+            }
+            catch (Exception ex)
+            {
+            }
         }
 
         public void Dispose()
         {
             CommitInput();
         }
-    }
 
-    [TestFixture]
-    public class ActivityLoggerTest
-    {
-        public ActivityLoggerTest()
+        [TestFixture]
+        public class Test
         {
-            log4net.Config.BasicConfigurator.Configure();
-        }
+            public Test()
+            {
+                log4net.Config.BasicConfigurator.Configure();
+            }
 
-        private static readonly log4net.ILog log = log4net.LogManager.GetLogger(System.Reflection.MethodBase.GetCurrentMethod().DeclaringType);
+            private static readonly log4net.ILog log = log4net.LogManager.GetLogger(System.Reflection.MethodBase.GetCurrentMethod().DeclaringType);
 
-        [Test]
-        public void Test()
-        {
-            var e = AutomationElement.FocusedElement.GetTopLevelElement();
-            log.Info(e.Current.Name);
+            [Test]
+            public void QueueUserWorkItem()
+            {
+                for (int i = 0; i < 1000; ++i)
+                {
+                    log.InfoFormat("Queue {0}", i);
+                    ThreadPool.QueueUserWorkItem(new WaitCallback(x =>
+                        {
+                            log.InfoFormat("Start {0}", i);
+                            Thread.Sleep(1000);
+                            log.InfoFormat("Stop {0}", i);
+                        }));
+                }
+            }
         }
     }
 }

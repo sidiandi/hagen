@@ -9,6 +9,7 @@ using System.Windows.Forms;
 using Sidi.Persistence;
 using Sidi.Collections;
 using Sidi.Util;
+using Etier.IconHelper;
 
 namespace hagen.wf
 {
@@ -48,13 +49,49 @@ namespace hagen.wf
         }
 
         AsyncQuery asyncQuery;
+
+        class ItemFormat : Sidi.Forms.ItemView<Action>.IItemFormat
+        {
+            public ItemFormat()
+            {
+            }
+
+            public Font Font = new Font("Arial", 12);
+
+            public void Paint(Sidi.Forms.ItemView<Action>.PaintArgs e)
+            {
+                int iconWidth = 32;
+                int padding = 4;
+                var g = e.Graphics;
+                g.FillRectangle(e.BackgroundBrush, e.Rect);
+                var icon = e.Item.Icon;
+                Rectangle iconRect = e.Rect;
+                iconRect.Inflate(-padding, -padding);
+                iconRect.Width = iconWidth;
+
+                if (icon != null)
+                {
+                    g.DrawIcon(icon, iconRect);
+                }
+
+                StringFormat sf = new StringFormat();
+                sf.Alignment = StringAlignment.Near;
+                sf.LineAlignment = StringAlignment.Center;
+                Rectangle tr = Rectangle.FromLTRB(iconRect.Right + padding, e.Rect.Top, e.Rect.Right, e.Rect.Bottom);
+                g.DrawString(e.Item.Name, Font, e.ForegroundBrush, tr, sf);
+            }
+        }
         
         public SearchBox()
         {
             itemView = new Sidi.Forms.ItemView<Action>();
             itemView.Dock = DockStyle.Fill;
             itemView.TabStop = false;
-            itemView.ItemLayout = new Sidi.Forms.ItemLayoutRows(20);
+            itemView.ItemLayout = new Sidi.Forms.ItemLayoutRows(32 + 2 * 4);
+            var itemFormat = new ItemFormat();
+            itemFormat.Font = this.Font;
+            itemView.ItemFormat = itemFormat;
+            itemView.UpdateInterval = 500;
 
             this.Controls.Add(itemView);
 

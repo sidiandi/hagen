@@ -17,48 +17,14 @@ namespace hagen.wf
         {
             Application.EnableVisualStyles();
             Application.SetCompatibleTextRenderingDefault(false);
-            
-            /*
-            log4net.Config.BasicConfigurator.Configure(new Appender());
 
-            log.Info("Startup");
-
-            var hotkey = new ManagedWinapi.Hotkey();
-            hotkey.Alt = true;
-            hotkey.Ctrl = true;
-            hotkey.KeyCode = System.Windows.Forms.Keys.Space;
-            hotkey.HotkeyPressed += new EventHandler(hotkey_HotkeyPressed);
-            
-            try
+            using (var activityLogger = new ActivityLogger())
             {
-                hotkey.Enabled = true;
+                log.Info("Startup");
+                var main = new Main();
+                Application.Run(main);
+                log.Info("Shutdown");
             }
-            catch (ManagedWinapi.HotkeyAlreadyInUseException ex)
-            {
-                log.Error("Could not register hotkey (already in use).", ex);
-                throw ex;
-            }
-
-            var main = new Main();
-
-            Application.Run(main);
-
-            */
-            Application.Run(new Main());
-
         }
-
-        /*
-        void hotkey_HotkeyPressed(object sender, EventArgs e)
-        {
-            main.Popup();
-        }
-
-        protected override void OnExit(ExitEventArgs e)
-        {
-            hotkey.Dispose();
-            base.OnExit(e);
-        }
-         */
     }
 }

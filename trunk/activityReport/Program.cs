@@ -32,17 +32,17 @@ using System.Drawing;
 
 namespace activityReport
 {
-    class Program
+    public class Program
     {
         static void Main(string[] args)
         {
-            SQLiteFunction.RegisterFunction(typeof(Duration));
             Parser.Run(new Program(), args);
         }
 
         public Program()
         {
-            input = Collection<Input>.UserSetting();
+            SQLiteFunction.RegisterFunction(typeof(Duration));
+            input = Hagen.Instance.Inputs;
             connection = (System.Data.SQLite.SQLiteConnection)input.Connection;
             dataContext = new DataContext(input.Connection);
         }
@@ -167,27 +167,39 @@ namespace activityReport
         [Usage("Graphical reports")]
         public void GraphicalUserInterface()
         {
+            Application.Run(StatisticsWindow());
+        }
+
+        public Form StatisticsWindow()
+        {
             var main = new ListDetail();
 
             foreach (var i in Days.ToList())
             {
                 Summary s = i;
-                main.AddItem(s.Day, () =>
+                main.AddItem(s.Day + " keyboard", () =>
                 {
                     var p = GraphEx.CreateTimeGraph();
-                    
+
                     var d = input.Range(s.Begin, s.End);
 
-                    var ppl = new PointPairList();
-                    ppl.AddRange(d.Select(x => new PointPair(new XDate(x.Begin), x.KeyDown)));
+                    var ppl = d.Select(x => new PointPair(new XDate(x.Begin), x.KeyDown)).ToPointPairList();
                     ppl = ppl.Accumulate();
-                    p.AddCurve("keystrokes",ppl,Color.Black);
+                    p.AddCurve("keystrokes", ppl, Color.Black, SymbolType.None);
+                    return p.AsControl();
+                });
+
+                main.AddItem(s.Day + " mouse", () =>
+                {
+                    var p = GraphEx.CreateTimeGraph();
+                    var d = input.Range(s.Begin, s.End);
+                    var ppl = d.Select(x => new PointPair(new XDate(x.Begin), x.MouseMove)).ToPointPairList();
+                    ppl = ppl.Accumulate();
+                    p.AddCurve("keystrokes", ppl, Color.Black, SymbolType.None);
                     return p.AsControl();
                 });
             }
-
-            Application.Run(main);
+            return main;
         }
-
     }
 }

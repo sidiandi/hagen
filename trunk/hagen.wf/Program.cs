@@ -23,6 +23,7 @@ namespace hagen.wf
                 log.Info("Startup");
                 var main = new Main();
                 Application.Run(main);
+                Application.Exit();
                 log.Info("Shutdown");
             }
         }

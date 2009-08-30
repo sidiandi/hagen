@@ -19,9 +19,12 @@ using System;
 using System.Diagnostics;
 using System.Windows.Forms;
 using System.Runtime.InteropServices;
+using System.Threading;
 
 class InputHook : IDisposable
 {
+    private static readonly log4net.ILog log = log4net.LogManager.GetLogger(System.Reflection.MethodBase.GetCurrentMethod().DeclaringType);
+
     private const int WH_KEYBOARD_LL = 13;
     private const int WH_MOUSE_LL = 14;
     private const int WM_KEYDOWN = 0x0100;
@@ -29,16 +32,27 @@ class InputHook : IDisposable
     private const int WM_SYSKEYDOWN = 0x104;
     private const int WM_SYSKEYUP = 0x105;
 
-    private LowLevelKeyboardProc _proc;
-    private IntPtr _hookID = IntPtr.Zero;
+    private LowLevelKeyboardProc keyboardProc;
+    private IntPtr keyboardHookID = IntPtr.Zero;
+    Thread hookThread;
 
     public InputHook()
     {
-         _proc = HookCallback;
-        _hookID = SetHook(_proc);
+        hookThread = new Thread(new ThreadStart(() =>
+        {
+            keyboardProc = HookCallback;
+            keyboardHookID = SetHook(keyboardProc);
 
-        mouseProc = MouseHook;
-        mouseHookID = SetHook(mouseProc);
+            mouseProc = MouseHook;
+            mouseHookID = SetHook(mouseProc);
+
+            Application.Run();
+            log.Info("hookThread end");
+        }));
+
+        hookThread.SetApartmentState(ApartmentState.STA);
+
+        hookThread.Start();
     }
 
     LowLevelMouseProc mouseProc;
@@ -105,7 +119,7 @@ class InputHook : IDisposable
             }
         }
 
-        return CallNextHookEx(_hookID, nCode, wParam, lParam);
+        return CallNextHookEx(keyboardHookID, nCode, wParam, lParam);
     }
 
     private enum MouseMessages
@@ -177,7 +191,7 @@ class InputHook : IDisposable
             MouseEventArgs e = new MouseEventArgs(MouseButtons.None, clicks, h.pt.x, h.pt.y, delta);
             MouseMove(this, e);
         }
-        return CallNextHookEx(_hookID, nCode, wParam, lParam);
+        return CallNextHookEx(keyboardHookID, nCode, wParam, lParam);
     }
 
     public event KeyEventHandler KeyDown;
@@ -207,7 +221,7 @@ class InputHook : IDisposable
 
     public void Dispose()
     {
-        UnhookWindowsHookEx(_hookID);
+        UnhookWindowsHookEx(keyboardHookID);
         UnhookWindowsHookEx(mouseHookID);
     }
 

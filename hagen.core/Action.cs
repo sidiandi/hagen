@@ -146,18 +146,11 @@ namespace hagen
         }
 
         [Browsable(false)]
-        public BitmapSource Icon
+        public Icon Icon
         {
             get
             {
-                Icon icon = icons[this];
-                if (icon == null)
-                {
-                    return null;
-                }
-                IntPtr hIcon = icon.Handle;
-                BitmapSource b = Imaging.CreateBitmapSourceFromHIcon(hIcon, Int32Rect.Empty, BitmapSizeOptions.FromEmptyOptions());
-                return b;
+                return icons[this];
             }
         }
 

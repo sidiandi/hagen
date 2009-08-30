@@ -208,5 +208,30 @@ namespace hagen
             }
             return icon;
         }
+
+        bool IsFile
+        {
+            get
+            {
+                if (FileName.StartsWith("http://"))
+                {
+                    return false;
+                }
+                return true;
+            }
+        }
+
+        public override bool IsWorking
+        {
+            get
+            {
+                if (!IsFile)
+                {
+                    return true;
+                }
+
+                return Directory.Exists(FileName) || File.Exists(FileName);
+            }
+        }
     }
 }

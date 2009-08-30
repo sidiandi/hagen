@@ -8,6 +8,11 @@ namespace activityReport
 {
     public static class PointPairListExtension
     {
+        public static PointPairList Average(this PointPairList d, TimeSpan window)
+        {
+            return d.Average(window.ToXDate().XLDate);
+        }
+        
         public static PointPairList Average(this PointPairList d, double window)
         {
             PointPairList integral = Integrate(d);
@@ -133,6 +138,19 @@ namespace activityReport
             {
                 p.X = p.X - offset;
             });
+        }
+
+        public static PointPairList ToPointPairList(this IEnumerable<PointPair> input)
+        {
+            var ppl = new PointPairList();
+            ppl.AddRange(input);
+            return ppl;
+        }
+
+        public static XDate ToXDate(this TimeSpan dt)
+        {
+            DateTime t = new DateTime(2009, 1, 1);
+            return new XDate(new XDate(t + dt).XLDate - new XDate(t).XLDate);
         }
     }
 }

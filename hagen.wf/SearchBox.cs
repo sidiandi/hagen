@@ -10,6 +10,7 @@ using Sidi.Persistence;
 using Sidi.Collections;
 using Sidi.Util;
 using Etier.IconHelper;
+using System.IO;
 
 namespace hagen.wf
 {
@@ -35,7 +36,7 @@ namespace hagen.wf
 
         void asyncQuery_Complete(object sender, EventArgs e)
         {
-            this.Invoke(new Action<IList<Action>>(x =>
+            this.BeginInvoke(new Action<IList<Action>>(x =>
                 {
                     itemView.List = x;
                     SelectItem(0);
@@ -97,12 +98,49 @@ namespace hagen.wf
 
             InitializeComponent();
 
+            this.AllowDrop = true;
+            this.DragEnter += new DragEventHandler(SearchBox_DragEnter);
+            this.DragDrop += new DragEventHandler(SearchBox_DragDrop);
+
             itemView.ItemsActivated += new EventHandler(itemView_ItemsActivated);
             itemView.GotFocus += new EventHandler(itemView_GotFocus);
 
             textBoxQuery.KeyDown += new KeyEventHandler(textBoxQuery_KeyDown);
 
             textBoxQuery.TextChanged += new EventHandler(textBoxQuery_TextChanged);
+        }
+
+        void SearchBox_DragDrop(object sender, DragEventArgs e)
+        {
+            var formats = e.Data.GetFormats();
+
+            var d = e.Data;
+
+            if (InternetShortcut.CanDecode(e.Data))
+            {
+                foreach (InternetShortcut i in InternetShortcut.Decode(e.Data))
+                {
+                    Action a = new Action();
+                    a.Name = i.Name;
+                    a.Command = i.Url;
+                    data.AddOrUpdate(a);
+                }
+            }
+            else if (e.Data.GetDataPresent(DataFormats.FileDrop))
+            {
+                foreach (string i in (string[])e.Data.GetData(DataFormats.FileDrop))
+                {
+                    Action a = new Action();
+                    a.Name = new FileInfo(i).Name;
+                    a.Command = i;
+                    data.AddOrUpdate(a);
+                }
+            }
+        }
+
+        void SearchBox_DragEnter(object sender, DragEventArgs e)
+        {
+            e.Effect = DragDropEffects.Copy;
         }
 
         void IconCache_EntryUpdated(object sender, LruCacheBackground<Action, Icon>.EntryUpdatedEventArgs arg)
@@ -143,6 +181,15 @@ namespace hagen.wf
             }
         }
 
+        public void Remove()
+        {
+            foreach (var i in itemView.SelectionEnumerator)
+            {
+                data.Remove(i);
+            }
+            Refresh();
+        }
+
         void textBoxQuery_KeyDown(object sender, KeyEventArgs e)
         {
             switch (e.KeyCode)
@@ -159,10 +206,19 @@ namespace hagen.wf
                     OnItemsActivated();
                     e.Handled = true;
                     break;
+                case Keys.Delete:
+                    Remove();
+                    e.Handled = true;
+                    break;
             }
         }
 
         void textBoxQuery_TextChanged(object sender, EventArgs e)
+        {
+            Refresh();
+        }
+
+        public void Refresh()
         {
             asyncQuery.Query = textBoxQuery.Text;
         }

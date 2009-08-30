@@ -38,9 +38,9 @@ namespace hagen
 
         public int Levels { set; get; }
 
-        public IEnumerable<Action> Recurse(FileSystemInfo root)
+        public IEnumerable<Action> Recurse(string root)
         {
-            return Directory.GetFiles(root.FullName, "*.*", SearchOption.AllDirectories).Select(x =>
+            return Directory.GetFiles(root, "*.*", SearchOption.AllDirectories).Select(x =>
             {
                 return Create(Sidi.IO.FileUtil.GetFileSystemInfo(x));
             });
@@ -58,18 +58,6 @@ namespace hagen
                 Action a = f.Create(new FileInfo(p));
                 Assert.AreEqual(p, a.Command);
             }
-
-            [Test]
-            public void Recurse()
-            {
-                FileActionFactory f = new FileActionFactory();
-                Collection<Action> c = Collection<Action>.UserSetting();
-                c.Clear();
-                foreach (Action a in f.Recurse(FileUtil.GetFileSystemInfo(p)))
-                {
-                    c.Add(a);
-                }
-            }
-        }
+       }
     }
 }

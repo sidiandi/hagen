@@ -174,7 +174,7 @@ namespace hagen
             }
         }
 
-        public static IEnumerable<File> Decode(System.Windows.IDataObject data)
+        public static IEnumerable<File> Decode(System.Windows.Forms.IDataObject data)
         {
             IntPtr fileGroupDescriptorWPointer = IntPtr.Zero;
             try
@@ -227,10 +227,9 @@ namespace hagen
                 //free unmanaged memory pointer
                 Marshal.FreeHGlobal(fileGroupDescriptorWPointer);
             }
-
         }
 
-        public static bool CanDecode(System.Windows.IDataObject data)
+        public static bool CanDecode(System.Windows.Forms.IDataObject data)
         {
             return data.GetDataPresent(FileGroupDescriptorW) && data.GetDataPresent(FileContents);
         }
@@ -243,7 +242,7 @@ namespace hagen
         /// <returns>
         /// A <see cref="MemoryStream"/> containing the raw data for the specified data format at the specified index.
         /// </returns>
-        public static MemoryStream GetData(System.Windows.IDataObject data, string format, int index)
+        public static MemoryStream GetData(System.Windows.Forms.IDataObject data, string format, int index)
         {
             //create a FORMATETC struct to request the data with
             FORMATETC formatetc = new FORMATETC();

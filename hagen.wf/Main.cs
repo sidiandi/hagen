@@ -10,6 +10,9 @@ using Sidi.Persistence;
 using Sidi.IO;
 using Sidi.Util;
 using NUnit.Framework;
+using System.Threading;
+using System.Diagnostics;
+using Sidi.Forms;
 
 namespace hagen.wf
 {
@@ -18,10 +21,13 @@ namespace hagen.wf
         ManagedWinapi.Hotkey hotkey;
         AsyncQuery asyncQuery;
         Collection<Action> actions;
+        MouseWheelSupport mouseWheelSupport;
 
         public Main()
         {
             InitializeComponent();
+            
+            this.AllowDrop = true;
 
             hotkey = new ManagedWinapi.Hotkey();
             hotkey.Alt = true;
@@ -33,13 +39,12 @@ namespace hagen.wf
             this.KeyDown += new KeyEventHandler(Main_KeyDown);
             this.KeyPreview = true;
 
-            actions = new Collection<Action>(FileUtil.CatDir(
-                Environment.GetFolderPath(Environment.SpecialFolder.LocalApplicationData),
-                "hagen",
-                "hagen.sqlite"));
+            actions = Hagen.Instance.Actions;
 
             searchBox1.Data = actions;
             searchBox1.ItemsActivated += new EventHandler(searchBox1_ItemsActivated);
+
+            mouseWheelSupport = new MouseWheelSupport(this);
             
         }
 
@@ -85,6 +90,41 @@ namespace hagen.wf
         [TestFixture]
         public class SearchBoxTest
         {
+        }
+
+        private void exitToolStripMenuItem_Click(object sender, EventArgs e)
+        {
+            this.Close();
+        }
+
+        private void updateStartMenuToolStripMenuItem_Click(object sender, EventArgs e)
+        {
+            actions.UpdateStartMenu();
+        }
+
+        private void cleanupToolStripMenuItem_Click(object sender, EventArgs e)
+        {
+            actions.Cleanup();
+        }
+
+        private void propertiesToolStripMenuItem_Click(object sender, EventArgs e)
+        {
+
+        }
+
+        private void statisticsToolStripMenuItem_Click(object sender, EventArgs e)
+        {
+            var ar = new activityReport.Program();
+            ar.StatisticsWindow().Show();
+        }
+
+        private void sqliteConsoleToolStripMenuItem_Click(object sender, EventArgs e)
+        {
+            Process p = new Process();
+            p.StartInfo.FileName = "sqlite3";
+            p.StartInfo.Arguments = Hagen.Instance.DatabasePath.Quote();
+            p.StartInfo.CreateNoWindow = false;
+            p.Start();
         }
     }
 }

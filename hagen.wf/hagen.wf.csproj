@@ -105,6 +105,10 @@
     </Compile>
   </ItemGroup>
   <ItemGroup>
+    <ProjectReference Include="..\activityReport\activityReport.csproj">
+      <Project>{D3E69D04-FEDA-48D8-9498-F41362F7E52A}</Project>
+      <Name>activityReport</Name>
+    </ProjectReference>
     <ProjectReference Include="..\hagen.core\hagen.core.csproj">
       <Project>{B8A11330-3766-4244-9962-8B0D25E98005}</Project>
       <Name>hagen.core</Name>

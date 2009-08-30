@@ -37,7 +37,7 @@ namespace hagen
 
     public class Appender : log4net.Appender.AppenderSkeleton
     {
-        Collection<Log> logs = Collection<Log>.UserSetting();
+        Collection<Log> logs = Hagen.Instance.Logs;
 
         protected override void Append(log4net.Core.LoggingEvent loggingEvent)
         {

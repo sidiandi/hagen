@@ -19,12 +19,12 @@ using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Text;
-using System.Windows;
 using IWshRuntimeLibrary;
+using System.Windows.Forms;
 
 namespace hagen
 {
-    class InternetShortcut
+    public class InternetShortcut
     {
         public static bool CanDecode(IDataObject data)
         {

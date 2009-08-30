@@ -96,6 +96,7 @@
   </ItemGroup>
   <ItemGroup>
     <Compile Include="Action.cs" />
+    <Compile Include="ActionsEx.cs" />
     <Compile Include="Activity.cs" />
     <Compile Include="ActivityLogger.cs" />
     <Compile Include="Appender.cs" />
@@ -105,6 +106,7 @@
     <Compile Include="FileGroup.cs" />
     <Compile Include="FileGroupDescriptor.cs" />
     <Compile Include="globalKeyboardHook.cs" />
+    <Compile Include="Hagen.cs" />
     <Compile Include="ICommand.cs" />
     <Compile Include="IconHelper.cs" />
     <Compile Include="InterceptConsole.cs" />

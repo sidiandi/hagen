@@ -34,5 +34,9 @@ namespace hagen
         {
             return null;
         }
+        public virtual bool IsWorking
+        {
+             get { return true; }
+        }
     }
 }

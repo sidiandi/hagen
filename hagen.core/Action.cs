@@ -180,7 +180,7 @@ namespace hagen
             [Test]
             public void Fill()
             {
-                Collection<Action> actions = Collection<Action>.UserSetting();
+                Collection<Action> actions = Hagen.Instance.Actions;
                 actions.Clear();
                 foreach (Action i in actions)
                 {

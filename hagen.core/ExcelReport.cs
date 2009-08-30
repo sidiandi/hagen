@@ -85,7 +85,7 @@ namespace hagen
             {
                 c.Value = i.Date;
 
-                var inputs = Collection<Input>.UserSetting().Select(
+                var inputs = Hagen.Instance.Inputs.Select(
                     "Begin >= {0} and End <= {1}".F(
                     i.ToString("yyyy-MM-dd").Quote(),
                     i.AddDays(1).ToString("yyyy-MM-dd").Quote()));

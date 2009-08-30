@@ -38,17 +38,18 @@ namespace hagen
 
         Collection<ProgramUse> programUse;
         Collection<Input> inputs;
-        InputHook interceptConsole = new InputHook();
+        InputHook interceptConsole;
 
         public ActivityLogger()
         {
-            programUse = Collection<ProgramUse>.UserSetting();
-            inputs = Collection<Input>.UserSetting();
+            programUse = Hagen.Instance.ProgramUses;
+            inputs = Hagen.Instance.Inputs;
 
             BackgroundWorker backgroundWorker = new BackgroundWorker();
             backgroundWorker.DoWork += new DoWorkEventHandler(backgroundWorker_DoWork);
             backgroundWorker.RunWorkerAsync();
 
+            interceptConsole = new InputHook();
             interceptConsole.KeyDown += new System.Windows.Forms.KeyEventHandler(KeyboardInput);
             interceptConsole.MouseMove += new System.Windows.Forms.MouseEventHandler(MouseInput);
         }

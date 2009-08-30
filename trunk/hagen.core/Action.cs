@@ -122,6 +122,14 @@ namespace hagen
 
         static LruCacheBackground<Action,Icon> icons;
 
+        static public LruCacheBackground<Action, Icon> IconCache
+        {
+            get
+            {
+                return icons;
+            }
+        }
+
         static Action()
         {
             icons = new LruCacheBackground<Action, Icon>(1024);

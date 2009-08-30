@@ -91,7 +91,7 @@ namespace hagen.wf
             var itemFormat = new ItemFormat();
             itemFormat.Font = this.Font;
             itemView.ItemFormat = itemFormat;
-            itemView.UpdateInterval = 500;
+            Action.IconCache.EntryUpdated += new LruCacheBackground<Action, Icon>.EntryUpdatedHandler(IconCache_EntryUpdated);
 
             this.Controls.Add(itemView);
 
@@ -103,6 +103,11 @@ namespace hagen.wf
             textBoxQuery.KeyDown += new KeyEventHandler(textBoxQuery_KeyDown);
 
             textBoxQuery.TextChanged += new EventHandler(textBoxQuery_TextChanged);
+        }
+
+        void IconCache_EntryUpdated(object sender, LruCacheBackground<Action, Icon>.EntryUpdatedEventArgs arg)
+        {
+            itemView.Invalidate();
         }
 
         void itemView_GotFocus(object sender, EventArgs e)

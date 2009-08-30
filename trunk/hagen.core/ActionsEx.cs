@@ -3,6 +3,8 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 using Sidi.Persistence;
+using System.IO;
+using Sidi.IO;
 
 namespace hagen
 {
@@ -12,6 +14,7 @@ namespace hagen
         {
             FileActionFactory f = new FileActionFactory();
             foreach (var p in new string[]{
+                AllUsersStartMenu,
                 Environment.GetFolderPath(Environment.SpecialFolder.StartMenu),
                 Environment.GetFolderPath(Environment.SpecialFolder.Desktop)
             })
@@ -20,6 +23,30 @@ namespace hagen
                 {
                     actions.AddOrUpdate(a);
                 }
+            }
+
+            foreach (var i in Enum.GetValues(typeof(Environment.SpecialFolder)))
+            {
+                try
+                {
+                    var a = f.Create(Environment.GetFolderPath((Environment.SpecialFolder)i));
+                    a.Name = i.ToString();
+                    actions.AddOrUpdate(a);
+                }
+                catch (Exception)
+                {
+                }
+            }
+        }
+
+        public static string AllUsersStartMenu
+        {
+            get
+            {
+                var d = Environment.GetFolderPath(Environment.SpecialFolder.StartMenu)
+                    .Split(new string[] { @"\" }, StringSplitOptions.None);
+                d[d.Length-2] = "All Users";
+                return FileUtil.CatDir(d);
             }
         }
 

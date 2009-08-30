@@ -28,11 +28,11 @@ namespace hagen
 {
     public class FileActionFactory
     {
-        public Action Create(FileSystemInfo file)
+        public Action Create(string file)
         {
             Action a = new Action();
-            a.Name = file.Name;
-            a.Command = file.FullName;
+            a.Name = Path.GetFileName(file);
+            a.Command = Path.GetFullPath(file);
             return a;
         }
 
@@ -42,7 +42,7 @@ namespace hagen
         {
             return Directory.GetFiles(root, "*.*", SearchOption.AllDirectories).Select(x =>
             {
-                return Create(Sidi.IO.FileUtil.GetFileSystemInfo(x));
+                return Create(x);
             });
         }
 
@@ -55,7 +55,7 @@ namespace hagen
             public void Create()
             {
                 FileActionFactory f = new FileActionFactory();
-                Action a = f.Create(new FileInfo(p));
+                Action a = f.Create(p);
                 Assert.AreEqual(p, a.Command);
             }
        }

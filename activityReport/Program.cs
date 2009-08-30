@@ -174,6 +174,8 @@ namespace activityReport
         {
             var main = new ListDetail();
 
+            if (false)
+            {
             foreach (var i in Days.ToList())
             {
                 Summary s = i;
@@ -199,7 +201,65 @@ namespace activityReport
                     return p.AsControl();
                 });
             }
+            }
+
+            var days = Days.ToList();
+
+            main.AddItem("Overview", () =>
+            {
+                var p = GraphEx.CreateTimeGraph();
+                p.YAxis.Type = AxisType.Date;
+                p.YAxis.Title.Text = "Day";
+
+                foreach (var i in Summarize(input))
+                {
+                    var b = new BoxObj(
+                        i.Begin.TimeOfDay.ToXDate().XLDate,
+                        new XDate(i.Begin.Date).XLDate,
+                        (i.Begin - i.End).ToXDate().XLDate,
+                        1.0);
+                    b.Fill = new Fill(i.TerminalServerSession ? Color.Red : Color.Green);
+                    b.Border.IsVisible = false;
+                    b.IsVisible = true;
+                    p.GraphObjList.Add(b);
+                }
+
+                p.YAxis.Scale.Min = new XDate(DateTime.Now - TimeSpan.FromDays(15)).XLDate;
+                p.YAxis.Scale.Max = new XDate(DateTime.Now).XLDate;
+
+                p.XAxis.Scale.Min = 0;
+                p.XAxis.Scale.Max = 1.0;
+
+                return p.AsControl();
+            });
             return main;
+        }
+
+        IEnumerable<Input> Summarize(IEnumerable<Input> raw)
+        {
+            Input s = null;
+            foreach (var i in raw)
+            {
+                if (s == null)
+                {
+                    s = new Input();
+                    s.TerminalServerSession = i.TerminalServerSession;
+                    s.Begin = i.Begin;
+                    s.End = i.End;
+                }
+                else
+                {
+                    if (s.TerminalServerSession != i.TerminalServerSession || s.End != i.Begin)
+                    {
+                        yield return s;
+                        s = null;
+                    }
+                    else
+                    {
+                        s.End = i.End;
+                    }
+                }
+            }
         }
     }
 }

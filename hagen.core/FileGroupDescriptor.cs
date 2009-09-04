@@ -337,7 +337,7 @@ namespace hagen
                     }
 
                 case TYMED.TYMED_HGLOBAL:
-                    FieldInfo innerDataField = data.GetType().GetField("_innerData", BindingFlags.NonPublic | BindingFlags.Instance);
+                    FieldInfo innerDataField = data.GetType().GetField("innerData", BindingFlags.NonPublic | BindingFlags.Instance);
                     object innerData = innerDataField.GetValue(data);
                     
                     MethodInfo GetDataFromHGLOBAL = innerData.GetType().GetMethod("GetDataFromHGLOBAL", BindingFlags.NonPublic | BindingFlags.Instance);

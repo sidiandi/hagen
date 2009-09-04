@@ -2,6 +2,7 @@
 using System.Collections.Generic;
 using System.Linq;
 using System.Windows.Forms;
+using System.Diagnostics;
 
 namespace hagen.wf
 {
@@ -18,7 +19,7 @@ namespace hagen.wf
             Application.EnableVisualStyles();
             Application.SetCompatibleTextRenderingDefault(false);
 
-            using (var activityLogger = new ActivityLogger())
+            using (var activityLogger = Debugger.IsAttached ? null : new ActivityLogger())
             {
                 log.Info("Startup");
                 var main = new Main();

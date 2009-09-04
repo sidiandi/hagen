@@ -260,6 +260,11 @@ namespace activityReport
                     }
                 }
             }
+
+            if (s != null)
+            {
+                yield return s;
+            }
         }
     }
 }

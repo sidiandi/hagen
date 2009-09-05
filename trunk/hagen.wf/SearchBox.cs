@@ -16,6 +16,8 @@ namespace hagen.wf
 {
     public partial class SearchBox : UserControl
     {
+        private static readonly log4net.ILog log = log4net.LogManager.GetLogger(System.Reflection.MethodBase.GetCurrentMethod().DeclaringType);
+
         Sidi.Forms.ItemView<Action> itemView;
 
         Collection<Action> data;
@@ -112,31 +114,57 @@ namespace hagen.wf
 
         void SearchBox_DragDrop(object sender, DragEventArgs e)
         {
-            var formats = e.Data.GetFormats();
-
-            var d = e.Data;
-
-            if (InternetShortcut.CanDecode(e.Data))
+            try
             {
-                foreach (InternetShortcut i in InternetShortcut.Decode(e.Data))
+                if (e.Data.GetDataPresent(DataFormats.FileDrop))
                 {
-                    Action a = new Action();
-                    a.Name = i.Name;
-                    a.Command = i.Url;
-                    data.AddOrUpdate(a);
+                    Array a = (Array)e.Data.GetData(DataFormats.FileDrop);
+                    foreach (object i in a)
+                    {
+                        TryAdd(i);
+                    }
+                }
+                else
+                {
+                    TryAdd(e.Data.GetData(typeof(String)));
                 }
             }
-            else if (e.Data.GetDataPresent(DataFormats.FileDrop))
+            catch (Exception exception)
             {
-                foreach (string i in (string[])e.Data.GetData(DataFormats.FileDrop))
-                {
-                    Action a = new Action();
-                    a.Name = new FileInfo(i).Name;
-                    a.Command = i;
-                    data.AddOrUpdate(a);
-                }
+                log.Warn(e.Data, exception);
             }
         }
+
+        List<Action> added = new List<Action>();
+
+        void TryAdd(object i)
+        {
+            try
+            {
+                string fn = i as string;
+                if (fn != null)
+                {
+                    Action action = new Action();
+                    if (Uri.IsWellFormedUriString(fn, UriKind.Absolute))
+                    {
+                        action.Name = fn;
+                        action.Command = fn;
+                    }
+                    else
+                    {
+                        action.Name = Path.GetFileName(fn);
+                        action.Command = Path.GetFullPath(fn);
+                    }
+                    data.AddOrUpdate(action);
+                    added.Add(action);
+                    itemView.List = added;
+                }
+            }
+            catch (Exception)
+            {
+            }
+        }
+
 
         void SearchBox_DragEnter(object sender, DragEventArgs e)
         {

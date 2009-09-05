@@ -45,7 +45,6 @@ namespace hagen.wf
             searchBox1.ItemsActivated += new EventHandler(searchBox1_ItemsActivated);
 
             mouseWheelSupport = new MouseWheelSupport(this);
-            
         }
 
         void searchBox1_ItemsActivated(object sender, EventArgs e)
@@ -77,6 +76,7 @@ namespace hagen.wf
             WindowState = FormWindowState.Maximized;
             this.Visible = true;
             searchBox1.Start();
+            this.Activate();
         }
 
         protected override void OnClosed(EventArgs e)

@@ -37,8 +37,8 @@
             this.propertiesToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
             this.viewToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
             this.statisticsToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
-            this.searchBox1 = new hagen.wf.SearchBox();
             this.sqliteConsoleToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
+            this.searchBox1 = new hagen.wf.SearchBox();
             this.menu.SuspendLayout();
             this.SuspendLayout();
             // 
@@ -116,8 +116,16 @@
             this.statisticsToolStripMenuItem.Text = "&Statistics";
             this.statisticsToolStripMenuItem.Click += new System.EventHandler(this.statisticsToolStripMenuItem_Click);
             // 
+            // sqliteConsoleToolStripMenuItem
+            // 
+            this.sqliteConsoleToolStripMenuItem.Name = "sqliteConsoleToolStripMenuItem";
+            this.sqliteConsoleToolStripMenuItem.Size = new System.Drawing.Size(152, 22);
+            this.sqliteConsoleToolStripMenuItem.Text = "Sqlite Console";
+            this.sqliteConsoleToolStripMenuItem.Click += new System.EventHandler(this.sqliteConsoleToolStripMenuItem_Click);
+            // 
             // searchBox1
             // 
+            this.searchBox1.AllowDrop = true;
             this.searchBox1.Anchor = ((System.Windows.Forms.AnchorStyles)((((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Bottom)
                         | System.Windows.Forms.AnchorStyles.Left)
                         | System.Windows.Forms.AnchorStyles.Right)));
@@ -126,13 +134,6 @@
             this.searchBox1.Name = "searchBox1";
             this.searchBox1.Size = new System.Drawing.Size(590, 476);
             this.searchBox1.TabIndex = 0;
-            // 
-            // sqliteConsoleToolStripMenuItem
-            // 
-            this.sqliteConsoleToolStripMenuItem.Name = "sqliteConsoleToolStripMenuItem";
-            this.sqliteConsoleToolStripMenuItem.Size = new System.Drawing.Size(152, 22);
-            this.sqliteConsoleToolStripMenuItem.Text = "Sqlite Console";
-            this.sqliteConsoleToolStripMenuItem.Click += new System.EventHandler(this.sqliteConsoleToolStripMenuItem_Click);
             // 
             // Main
             // 
@@ -144,8 +145,8 @@
             this.FormBorderStyle = System.Windows.Forms.FormBorderStyle.None;
             this.MainMenuStrip = this.menu;
             this.Name = "Main";
-            this.Text = "Main";
-            this.WindowState = System.Windows.Forms.FormWindowState.Maximized;
+            this.Text = "hagen";
+            this.Visible = false;
             this.menu.ResumeLayout(false);
             this.menu.PerformLayout();
             this.ResumeLayout(false);

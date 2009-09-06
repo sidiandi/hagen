@@ -11,7 +11,6 @@
     <Import Project="$(MSBuildExtensionsPath)\sidi-util\Sidi.Build.Targets"/>
     
     <Target Name="Doc" />
-    
     <Target Name="Package" DependsOnTargets="Build" />
     
     <Target Name="Upload" DependsOnTargets="Commit;Package">

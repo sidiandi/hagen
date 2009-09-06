@@ -64,6 +64,12 @@
     <Reference Include="System.Xml" />
   </ItemGroup>
   <ItemGroup>
+    <Compile Include="ActionProperties.cs">
+      <SubType>Form</SubType>
+    </Compile>
+    <Compile Include="ActionProperties.Designer.cs">
+      <DependentUpon>ActionProperties.cs</DependentUpon>
+    </Compile>
     <Compile Include="IconHelper.cs" />
     <Compile Include="Main.cs">
       <SubType>Form</SubType>
@@ -73,6 +79,9 @@
     </Compile>
     <Compile Include="Program.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
+    <EmbeddedResource Include="ActionProperties.resx">
+      <DependentUpon>ActionProperties.cs</DependentUpon>
+    </EmbeddedResource>
     <EmbeddedResource Include="Main.resx">
       <DependentUpon>Main.cs</DependentUpon>
     </EmbeddedResource>

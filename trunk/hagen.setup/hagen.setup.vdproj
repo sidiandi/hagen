@@ -15,32 +15,14 @@
     {
         "Entry"
         {
-        "MsmKey" = "8:_29CBA871736E80AE1C26348C46B41728"
-        "OwnerKey" = "8:_44D6FB6435771D3526BA27925F8B5D80"
-        "MsmSig" = "8:_UNDEFINED"
-        }
-        "Entry"
-        {
-        "MsmKey" = "8:_44D6FB6435771D3526BA27925F8B5D80"
-        "OwnerKey" = "8:_9F13B2C0678F4C2B83CABA82C9035210"
-        "MsmSig" = "8:_UNDEFINED"
-        }
-        "Entry"
-        {
         "MsmKey" = "8:_44D6FB6435771D3526BA27925F8B5D80"
         "OwnerKey" = "8:_BED61ACA261DA133FC93E16B5AF91384"
         "MsmSig" = "8:_UNDEFINED"
         }
         "Entry"
         {
-        "MsmKey" = "8:_456684B2159549043A4373370C479755"
+        "MsmKey" = "8:_44D6FB6435771D3526BA27925F8B5D80"
         "OwnerKey" = "8:_9F13B2C0678F4C2B83CABA82C9035210"
-        "MsmSig" = "8:_UNDEFINED"
-        }
-        "Entry"
-        {
-        "MsmKey" = "8:_456684B2159549043A4373370C479755"
-        "OwnerKey" = "8:_BED61ACA261DA133FC93E16B5AF91384"
         "MsmSig" = "8:_UNDEFINED"
         }
         "Entry"
@@ -69,8 +51,8 @@
         }
         "Entry"
         {
-        "MsmKey" = "8:_6962FF3BF55B859595048513DFED40D0"
-        "OwnerKey" = "8:_9F13B2C0678F4C2B83CABA82C9035210"
+        "MsmKey" = "8:_62EE9E4BBDE05818B708761436172ACC"
+        "OwnerKey" = "8:_44D6FB6435771D3526BA27925F8B5D80"
         "MsmSig" = "8:_UNDEFINED"
         }
         "Entry"
@@ -81,7 +63,7 @@
         }
         "Entry"
         {
-        "MsmKey" = "8:_6D7A783794CFCF38DDEE18BB29B3AFC9"
+        "MsmKey" = "8:_6962FF3BF55B859595048513DFED40D0"
         "OwnerKey" = "8:_9F13B2C0678F4C2B83CABA82C9035210"
         "MsmSig" = "8:_UNDEFINED"
         }
@@ -89,6 +71,12 @@
         {
         "MsmKey" = "8:_6D7A783794CFCF38DDEE18BB29B3AFC9"
         "OwnerKey" = "8:_78FD4BEE36199805F62D2359D055FD8F"
+        "MsmSig" = "8:_UNDEFINED"
+        }
+        "Entry"
+        {
+        "MsmKey" = "8:_6D7A783794CFCF38DDEE18BB29B3AFC9"
+        "OwnerKey" = "8:_9F13B2C0678F4C2B83CABA82C9035210"
         "MsmSig" = "8:_UNDEFINED"
         }
         "Entry"
@@ -106,6 +94,12 @@
         "Entry"
         {
         "MsmKey" = "8:_78FD4BEE36199805F62D2359D055FD8F"
+        "OwnerKey" = "8:_44D6FB6435771D3526BA27925F8B5D80"
+        "MsmSig" = "8:_UNDEFINED"
+        }
+        "Entry"
+        {
+        "MsmKey" = "8:_78FD4BEE36199805F62D2359D055FD8F"
         "OwnerKey" = "8:_9F13B2C0678F4C2B83CABA82C9035210"
         "MsmSig" = "8:_UNDEFINED"
         }
@@ -113,12 +107,6 @@
         {
         "MsmKey" = "8:_78FD4BEE36199805F62D2359D055FD8F"
         "OwnerKey" = "8:_BED61ACA261DA133FC93E16B5AF91384"
-        "MsmSig" = "8:_UNDEFINED"
-        }
-        "Entry"
-        {
-        "MsmKey" = "8:_78FD4BEE36199805F62D2359D055FD8F"
-        "OwnerKey" = "8:_44D6FB6435771D3526BA27925F8B5D80"
         "MsmSig" = "8:_UNDEFINED"
         }
         "Entry"
@@ -147,14 +135,20 @@
         }
         "Entry"
         {
-        "MsmKey" = "8:_93A63EF5A72B58D7DC759F17698505A6"
-        "OwnerKey" = "8:_9F13B2C0678F4C2B83CABA82C9035210"
+        "MsmKey" = "8:_811F4FEDC5480CAD536033EE373C6B1E"
+        "OwnerKey" = "8:_UNDEFINED"
         "MsmSig" = "8:_UNDEFINED"
         }
         "Entry"
         {
         "MsmKey" = "8:_93A63EF5A72B58D7DC759F17698505A6"
         "OwnerKey" = "8:_44D6FB6435771D3526BA27925F8B5D80"
+        "MsmSig" = "8:_UNDEFINED"
+        }
+        "Entry"
+        {
+        "MsmKey" = "8:_93A63EF5A72B58D7DC759F17698505A6"
+        "OwnerKey" = "8:_9F13B2C0678F4C2B83CABA82C9035210"
         "MsmSig" = "8:_UNDEFINED"
         }
         "Entry"
@@ -171,6 +165,18 @@
         }
         "Entry"
         {
+        "MsmKey" = "8:_B1F83C128C4018B0186C9902C9A06843"
+        "OwnerKey" = "8:_BED61ACA261DA133FC93E16B5AF91384"
+        "MsmSig" = "8:_UNDEFINED"
+        }
+        "Entry"
+        {
+        "MsmKey" = "8:_B1F83C128C4018B0186C9902C9A06843"
+        "OwnerKey" = "8:_9F13B2C0678F4C2B83CABA82C9035210"
+        "MsmSig" = "8:_UNDEFINED"
+        }
+        "Entry"
+        {
         "MsmKey" = "8:_BED61ACA261DA133FC93E16B5AF91384"
         "OwnerKey" = "8:_9F13B2C0678F4C2B83CABA82C9035210"
         "MsmSig" = "8:_UNDEFINED"
@@ -178,13 +184,13 @@
         "Entry"
         {
         "MsmKey" = "8:_C3C44EA6AFCABFA3F44B2059AA2A7F05"
-        "OwnerKey" = "8:_29CBA871736E80AE1C26348C46B41728"
+        "OwnerKey" = "8:_62EE9E4BBDE05818B708761436172ACC"
         "MsmSig" = "8:_UNDEFINED"
         }
         "Entry"
         {
         "MsmKey" = "8:_C3C44EA6AFCABFA3F44B2059AA2A7F05"
-        "OwnerKey" = "8:_62EE9E4BBDE05818B708761436172ACC"
+        "OwnerKey" = "8:_811F4FEDC5480CAD536033EE373C6B1E"
         "MsmSig" = "8:_UNDEFINED"
         }
         "Entry"
@@ -201,19 +207,19 @@
         }
         "Entry"
         {
-        "MsmKey" = "8:_F3CD332A0C76B004661A1874687A46CA"
+        "MsmKey" = "8:_F50C619E8CCB033BCADDF41EFA041CDD"
         "OwnerKey" = "8:_78FD4BEE36199805F62D2359D055FD8F"
         "MsmSig" = "8:_UNDEFINED"
         }
         "Entry"
         {
-        "MsmKey" = "8:_F3CD332A0C76B004661A1874687A46CA"
+        "MsmKey" = "8:_F50C619E8CCB033BCADDF41EFA041CDD"
         "OwnerKey" = "8:_9F13B2C0678F4C2B83CABA82C9035210"
         "MsmSig" = "8:_UNDEFINED"
         }
         "Entry"
         {
-        "MsmKey" = "8:_F3CD332A0C76B004661A1874687A46CA"
+        "MsmKey" = "8:_F50C619E8CCB033BCADDF41EFA041CDD"
         "OwnerKey" = "8:_BED61ACA261DA133FC93E16B5AF91384"
         "MsmSig" = "8:_UNDEFINED"
         }
@@ -226,73 +232,7 @@
         "Entry"
         {
         "MsmKey" = "8:_UNDEFINED"
-        "OwnerKey" = "8:_BED61ACA261DA133FC93E16B5AF91384"
-        "MsmSig" = "8:_UNDEFINED"
-        }
-        "Entry"
-        {
-        "MsmKey" = "8:_UNDEFINED"
-        "OwnerKey" = "8:_456684B2159549043A4373370C479755"
-        "MsmSig" = "8:_UNDEFINED"
-        }
-        "Entry"
-        {
-        "MsmKey" = "8:_UNDEFINED"
-        "OwnerKey" = "8:_62EE9E4BBDE05818B708761436172ACC"
-        "MsmSig" = "8:_UNDEFINED"
-        }
-        "Entry"
-        {
-        "MsmKey" = "8:_UNDEFINED"
-        "OwnerKey" = "8:_44D6FB6435771D3526BA27925F8B5D80"
-        "MsmSig" = "8:_UNDEFINED"
-        }
-        "Entry"
-        {
-        "MsmKey" = "8:_UNDEFINED"
-        "OwnerKey" = "8:_78FD4BEE36199805F62D2359D055FD8F"
-        "MsmSig" = "8:_UNDEFINED"
-        }
-        "Entry"
-        {
-        "MsmKey" = "8:_UNDEFINED"
-        "OwnerKey" = "8:_F3CD332A0C76B004661A1874687A46CA"
-        "MsmSig" = "8:_UNDEFINED"
-        }
-        "Entry"
-        {
-        "MsmKey" = "8:_UNDEFINED"
-        "OwnerKey" = "8:_6D7A783794CFCF38DDEE18BB29B3AFC9"
-        "MsmSig" = "8:_UNDEFINED"
-        }
-        "Entry"
-        {
-        "MsmKey" = "8:_UNDEFINED"
-        "OwnerKey" = "8:_6962FF3BF55B859595048513DFED40D0"
-        "MsmSig" = "8:_UNDEFINED"
-        }
-        "Entry"
-        {
-        "MsmKey" = "8:_UNDEFINED"
-        "OwnerKey" = "8:_4853048E0047AC01D09B274891B41A2D"
-        "MsmSig" = "8:_UNDEFINED"
-        }
-        "Entry"
-        {
-        "MsmKey" = "8:_UNDEFINED"
-        "OwnerKey" = "8:_93A63EF5A72B58D7DC759F17698505A6"
-        "MsmSig" = "8:_UNDEFINED"
-        }
-        "Entry"
-        {
-        "MsmKey" = "8:_UNDEFINED"
-        "OwnerKey" = "8:_29CBA871736E80AE1C26348C46B41728"
-        "MsmSig" = "8:_UNDEFINED"
-        }
-        "Entry"
-        {
-        "MsmKey" = "8:_UNDEFINED"
-        "OwnerKey" = "8:_4F0BE8089962B4F6822EF0B8E1E93017"
+        "OwnerKey" = "8:_811F4FEDC5480CAD536033EE373C6B1E"
         "MsmSig" = "8:_UNDEFINED"
         }
         "Entry"
@@ -304,13 +244,79 @@
         "Entry"
         {
         "MsmKey" = "8:_UNDEFINED"
+        "OwnerKey" = "8:_7AB343E3C9A9A6C0A78FAFA90884943A"
+        "MsmSig" = "8:_UNDEFINED"
+        }
+        "Entry"
+        {
+        "MsmKey" = "8:_UNDEFINED"
         "OwnerKey" = "8:_6FABAEB29E56CDD05478EFB539B1B27A"
         "MsmSig" = "8:_UNDEFINED"
         }
         "Entry"
         {
         "MsmKey" = "8:_UNDEFINED"
-        "OwnerKey" = "8:_7AB343E3C9A9A6C0A78FAFA90884943A"
+        "OwnerKey" = "8:_4F0BE8089962B4F6822EF0B8E1E93017"
+        "MsmSig" = "8:_UNDEFINED"
+        }
+        "Entry"
+        {
+        "MsmKey" = "8:_UNDEFINED"
+        "OwnerKey" = "8:_4853048E0047AC01D09B274891B41A2D"
+        "MsmSig" = "8:_UNDEFINED"
+        }
+        "Entry"
+        {
+        "MsmKey" = "8:_UNDEFINED"
+        "OwnerKey" = "8:_BED61ACA261DA133FC93E16B5AF91384"
+        "MsmSig" = "8:_UNDEFINED"
+        }
+        "Entry"
+        {
+        "MsmKey" = "8:_UNDEFINED"
+        "OwnerKey" = "8:_B1F83C128C4018B0186C9902C9A06843"
+        "MsmSig" = "8:_UNDEFINED"
+        }
+        "Entry"
+        {
+        "MsmKey" = "8:_UNDEFINED"
+        "OwnerKey" = "8:_44D6FB6435771D3526BA27925F8B5D80"
+        "MsmSig" = "8:_UNDEFINED"
+        }
+        "Entry"
+        {
+        "MsmKey" = "8:_UNDEFINED"
+        "OwnerKey" = "8:_78FD4BEE36199805F62D2359D055FD8F"
+        "MsmSig" = "8:_UNDEFINED"
+        }
+        "Entry"
+        {
+        "MsmKey" = "8:_UNDEFINED"
+        "OwnerKey" = "8:_6D7A783794CFCF38DDEE18BB29B3AFC9"
+        "MsmSig" = "8:_UNDEFINED"
+        }
+        "Entry"
+        {
+        "MsmKey" = "8:_UNDEFINED"
+        "OwnerKey" = "8:_F50C619E8CCB033BCADDF41EFA041CDD"
+        "MsmSig" = "8:_UNDEFINED"
+        }
+        "Entry"
+        {
+        "MsmKey" = "8:_UNDEFINED"
+        "OwnerKey" = "8:_6962FF3BF55B859595048513DFED40D0"
+        "MsmSig" = "8:_UNDEFINED"
+        }
+        "Entry"
+        {
+        "MsmKey" = "8:_UNDEFINED"
+        "OwnerKey" = "8:_93A63EF5A72B58D7DC759F17698505A6"
+        "MsmSig" = "8:_UNDEFINED"
+        }
+        "Entry"
+        {
+        "MsmKey" = "8:_UNDEFINED"
+        "OwnerKey" = "8:_62EE9E4BBDE05818B708761436172ACC"
         "MsmSig" = "8:_UNDEFINED"
         }
     }
@@ -358,7 +364,7 @@
         "DisplayName" = "8:Release"
         "IsDebugOnly" = "11:FALSE"
         "IsReleaseOnly" = "11:TRUE"
-        "OutputFilename" = "8:..\\..\\build\\hagen\\package\\Release\\hagen.setup.msi" 
+        "OutputFilename" = "8:..\\..\\build\\hagen\\package\\Release\\hagen.setup.msi"
         "PackageFilesAs" = "3:2"
         "PackageFileSize" = "3:-2147483648"
         "CabType" = "3:1"
@@ -375,6 +381,19 @@
             "PrerequisitesLocation" = "2:1"
             "Url" = "8:"
             "ComponentsUrl" = "8:"
+                "Items"
+                {
+                    "{EDC2488A-8267-493A-A98E-7D9C3B36CDF3}:Microsoft.Net.Framework.3.5.SP1"
+                    {
+                    "Name" = "8:.NET Framework 3.5 SP1"
+                    "ProductCode" = "8:Microsoft.Net.Framework.3.5.SP1"
+                    }
+                    "{EDC2488A-8267-493A-A98E-7D9C3B36CDF3}:Microsoft.Windows.Installer.3.1"
+                    {
+                    "Name" = "8:Windows Installer 3.1"
+                    "ProductCode" = "8:Microsoft.Windows.Installer.3.1"
+                    }
+                }
             }
         }
     }
@@ -405,42 +424,11 @@
         }
         "File"
         {
-            "{9F6F8455-1EF1-4B85-886A-4223BCC8E7F7}:_29CBA871736E80AE1C26348C46B41728"
-            {
-            "AssemblyRegister" = "3:1"
-            "AssemblyIsInGAC" = "11:FALSE"
-            "AssemblyAsmDisplayName" = "8:Interop.IWshRuntimeLibrary, Version=1.0.0.0, Culture=neutral, processorArchitecture=MSIL"
-                "ScatterAssemblies"
-                {
-                    "_29CBA871736E80AE1C26348C46B41728"
-                    {
-                    "Name" = "8:Interop.IWshRuntimeLibrary.dll"
-                    "Attributes" = "3:512"
-                    }
-                }
-            "SourcePath" = "8:Interop.IWshRuntimeLibrary.dll"
-            "TargetName" = "8:"
-            "Tag" = "8:"
-            "Folder" = "8:_CAC61B71C6F64187A7E563A5DF0379AA"
-            "Condition" = "8:"
-            "Transitive" = "11:FALSE"
-            "Vital" = "11:TRUE"
-            "ReadOnly" = "11:FALSE"
-            "Hidden" = "11:FALSE"
-            "System" = "11:FALSE"
-            "Permanent" = "11:FALSE"
-            "SharedLegacy" = "11:FALSE"
-            "PackageAs" = "3:1"
-            "Register" = "3:1"
-            "Exclude" = "11:FALSE"
-            "IsDependency" = "11:TRUE"
-            "IsolateTo" = "8:"
-            }
             "{9F6F8455-1EF1-4B85-886A-4223BCC8E7F7}:_44D6FB6435771D3526BA27925F8B5D80"
             {
             "AssemblyRegister" = "3:1"
             "AssemblyIsInGAC" = "11:FALSE"
-            "AssemblyAsmDisplayName" = "8:hagen.core, Version=1.0.0.0, Culture=neutral, processorArchitecture=MSIL"
+            "AssemblyAsmDisplayName" = "8:hagen.core, Version=0.1.0.52, Culture=neutral, processorArchitecture=MSIL"
                 "ScatterAssemblies"
                 {
                     "_44D6FB6435771D3526BA27925F8B5D80"
@@ -450,37 +438,6 @@
                     }
                 }
             "SourcePath" = "8:hagen.core.dll"
-            "TargetName" = "8:"
-            "Tag" = "8:"
-            "Folder" = "8:_CAC61B71C6F64187A7E563A5DF0379AA"
-            "Condition" = "8:"
-            "Transitive" = "11:FALSE"
-            "Vital" = "11:TRUE"
-            "ReadOnly" = "11:FALSE"
-            "Hidden" = "11:FALSE"
-            "System" = "11:FALSE"
-            "Permanent" = "11:FALSE"
-            "SharedLegacy" = "11:FALSE"
-            "PackageAs" = "3:1"
-            "Register" = "3:1"
-            "Exclude" = "11:FALSE"
-            "IsDependency" = "11:TRUE"
-            "IsolateTo" = "8:"
-            }
-            "{9F6F8455-1EF1-4B85-886A-4223BCC8E7F7}:_456684B2159549043A4373370C479755"
-            {
-            "AssemblyRegister" = "3:1"
-            "AssemblyIsInGAC" = "11:FALSE"
-            "AssemblyAsmDisplayName" = "8:ZedGraph, Version=5.1.4.31904, Culture=neutral, PublicKeyToken=02a83cbd123fcd60, processorArchitecture=MSIL"
-                "ScatterAssemblies"
-                {
-                    "_456684B2159549043A4373370C479755"
-                    {
-                    "Name" = "8:ZedGraph.dll"
-                    "Attributes" = "3:512"
-                    }
-                }
-            "SourcePath" = "8:ZedGraph.dll"
             "TargetName" = "8:"
             "Tag" = "8:"
             "Folder" = "8:_CAC61B71C6F64187A7E563A5DF0379AA"
@@ -746,6 +703,37 @@
             "IsDependency" = "11:TRUE"
             "IsolateTo" = "8:"
             }
+            "{9F6F8455-1EF1-4B85-886A-4223BCC8E7F7}:_811F4FEDC5480CAD536033EE373C6B1E"
+            {
+            "AssemblyRegister" = "3:1"
+            "AssemblyIsInGAC" = "11:TRUE"
+            "AssemblyAsmDisplayName" = "8:Interop.IWshRuntimeLibrary, Version=1.0.0.0, Culture=neutral, PublicKeyToken=b96d45b0f5f47a8d, processorArchitecture=MSIL"
+                "ScatterAssemblies"
+                {
+                    "_811F4FEDC5480CAD536033EE373C6B1E"
+                    {
+                    "Name" = "8:Interop.IWshRuntimeLibrary.dll"
+                    "Attributes" = "3:512"
+                    }
+                }
+            "SourcePath" = "8:Interop.IWshRuntimeLibrary.dll"
+            "TargetName" = "8:"
+            "Tag" = "8:"
+            "Folder" = "8:_CAC61B71C6F64187A7E563A5DF0379AA"
+            "Condition" = "8:"
+            "Transitive" = "11:FALSE"
+            "Vital" = "11:TRUE"
+            "ReadOnly" = "11:FALSE"
+            "Hidden" = "11:FALSE"
+            "System" = "11:FALSE"
+            "Permanent" = "11:FALSE"
+            "SharedLegacy" = "11:FALSE"
+            "PackageAs" = "3:1"
+            "Register" = "3:1"
+            "Exclude" = "11:FALSE"
+            "IsDependency" = "11:TRUE"
+            "IsolateTo" = "8:"
+            }
             "{9F6F8455-1EF1-4B85-886A-4223BCC8E7F7}:_93A63EF5A72B58D7DC759F17698505A6"
             {
             "AssemblyRegister" = "3:1"
@@ -760,6 +748,37 @@
                     }
                 }
             "SourcePath" = "8:log4net.dll"
+            "TargetName" = "8:"
+            "Tag" = "8:"
+            "Folder" = "8:_CAC61B71C6F64187A7E563A5DF0379AA"
+            "Condition" = "8:"
+            "Transitive" = "11:FALSE"
+            "Vital" = "11:TRUE"
+            "ReadOnly" = "11:FALSE"
+            "Hidden" = "11:FALSE"
+            "System" = "11:FALSE"
+            "Permanent" = "11:FALSE"
+            "SharedLegacy" = "11:FALSE"
+            "PackageAs" = "3:1"
+            "Register" = "3:1"
+            "Exclude" = "11:FALSE"
+            "IsDependency" = "11:TRUE"
+            "IsolateTo" = "8:"
+            }
+            "{9F6F8455-1EF1-4B85-886A-4223BCC8E7F7}:_B1F83C128C4018B0186C9902C9A06843"
+            {
+            "AssemblyRegister" = "3:1"
+            "AssemblyIsInGAC" = "11:FALSE"
+            "AssemblyAsmDisplayName" = "8:ZedGraph, Version=5.1.4.31904, Culture=neutral, PublicKeyToken=02a83cbd123fcd60, processorArchitecture=MSIL"
+                "ScatterAssemblies"
+                {
+                    "_B1F83C128C4018B0186C9902C9A06843"
+                    {
+                    "Name" = "8:ZedGraph.dll"
+                    "Attributes" = "3:512"
+                    }
+                }
+            "SourcePath" = "8:ZedGraph.dll"
             "TargetName" = "8:"
             "Tag" = "8:"
             "Folder" = "8:_CAC61B71C6F64187A7E563A5DF0379AA"
@@ -859,14 +878,14 @@
             "IsDependency" = "11:TRUE"
             "IsolateTo" = "8:"
             }
-            "{9F6F8455-1EF1-4B85-886A-4223BCC8E7F7}:_F3CD332A0C76B004661A1874687A46CA"
+            "{9F6F8455-1EF1-4B85-886A-4223BCC8E7F7}:_F50C619E8CCB033BCADDF41EFA041CDD"
             {
             "AssemblyRegister" = "3:1"
             "AssemblyIsInGAC" = "11:FALSE"
             "AssemblyAsmDisplayName" = "8:System.Data.SQLite, Version=1.0.61.0, Culture=neutral, PublicKeyToken=db937bc2d44ff139, processorArchitecture=x86"
                 "ScatterAssemblies"
                 {
-                    "_F3CD332A0C76B004661A1874687A46CA"
+                    "_F50C619E8CCB033BCADDF41EFA041CDD"
                     {
                     "Name" = "8:System.Data.SQLite.dll"
                     "Attributes" = "3:512"
@@ -946,11 +965,11 @@
         {
         "Name" = "8:Microsoft Visual Studio"
         "ProductName" = "8:hagen"
-        "ProductCode" = "8:{3699838C-3B72-4839-9DD6-3E220548B0D6}"
+        "ProductCode" = "8:{5CD13942-E9B2-46EB-88EA-EAFD8CCF2DBF}"
         "PackageCode" = "8:{FED09C3C-EFCD-4D86-86B6-2C0DD9BD9C57}"
         "UpgradeCode" = "8:{EBA083A5-A3A6-4E31-91EB-6FC33AD6F14A}"
         "RestartWWWService" = "11:FALSE"
-        "RemovePreviousVersions" = "11:FALSE"
+        "RemovePreviousVersions" = "11:TRUE"
         "DetectNewerInstalledVersion" = "11:TRUE"
         "InstallAllUsers" = "11:FALSE"
         "ProductVersion" = "8:1.0.0"
@@ -1495,7 +1514,7 @@
         {
             "{5259A561-127C-4D43-A0A1-72F10C7B3BF8}:_9F13B2C0678F4C2B83CABA82C9035210"
             {
-            "SourcePath" = "8:..\\..\\build\\hagen\\obj\\Release\\hagen.wf\\hagen.wf.exe"
+            "SourcePath" = "8:..\\..\\build\\hagen\\obj\\Debug\\hagen.wf\\hagen.wf.exe"
             "TargetName" = "8:"
             "Tag" = "8:"
             "Folder" = "8:_CAC61B71C6F64187A7E563A5DF0379AA"

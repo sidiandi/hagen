@@ -208,6 +208,7 @@ namespace activityReport
             main.AddItem("Overview", () =>
             {
                 var p = GraphEx.CreateTimeGraph();
+
                 p.YAxis.Type = AxisType.Date;
                 p.YAxis.Title.Text = "Day";
 
@@ -221,18 +222,29 @@ namespace activityReport
                     b.Fill = new Fill(i.TerminalServerSession ? Color.Red : Color.Green);
                     b.Border.IsVisible = false;
                     b.IsVisible = true;
+                    b.IsClippedToChartRect = true;
                     p.GraphObjList.Add(b);
                 }
-
-                p.YAxis.Scale.Min = new XDate(DateTime.Now - TimeSpan.FromDays(15)).XLDate;
-                p.YAxis.Scale.Max = new XDate(DateTime.Now).XLDate;
 
                 p.XAxis.Scale.Min = 0;
                 p.XAxis.Scale.Max = 1.0;
 
-                return p.AsControl();
+                p.YAxis.Scale.Min = new XDate(DateTime.Now - TimeSpan.FromDays(30)).XLDate;
+                p.YAxis.Scale.Max = new XDate(DateTime.Now).XLDate;
+
+                var c = p.AsControl();
+                c.ZoomEvent += new ZedGraphControl.ZoomEventHandler(c_ZoomEvent);
+
+                return c;
             });
             return main;
+        }
+
+        void c_ZoomEvent(ZedGraphControl sender, ZoomState oldState, ZoomState newState)
+        {
+            var p = sender.MasterPane.PaneList[0];
+            p.XAxis.Scale.Min = Math.Max(p.XAxis.Scale.Min, 0);
+            p.XAxis.Scale.Max = Math.Min(p.XAxis.Scale.Max, 1.0);
         }
 
         IEnumerable<Input> Summarize(IEnumerable<Input> raw)

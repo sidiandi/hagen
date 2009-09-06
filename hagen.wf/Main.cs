@@ -82,9 +82,9 @@ namespace hagen.wf
         protected override void OnClosed(EventArgs e)
         {
             base.OnClosed(e);
-
             hotkey.Dispose();
             hotkey = null;
+            Application.Exit();
         }
 
         [TestFixture]
@@ -109,7 +109,7 @@ namespace hagen.wf
 
         private void propertiesToolStripMenuItem_Click(object sender, EventArgs e)
         {
-
+            searchBox1.Properties();
         }
 
         private void statisticsToolStripMenuItem_Click(object sender, EventArgs e)

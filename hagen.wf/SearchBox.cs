@@ -250,5 +250,17 @@ namespace hagen.wf
         {
             asyncQuery.Query = textBoxQuery.Text;
         }
+
+        public void Properties()
+        {
+            ActionProperties dlg = new ActionProperties();
+            var action = SelectedActions.FirstOrDefault(); ;
+            dlg.EditedObject = action;
+            if (dlg.ShowDialog() == DialogResult.OK)
+            {
+                Data.Update(action);
+            }
+            Refresh();
+        }
     }
 }

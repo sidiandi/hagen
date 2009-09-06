@@ -15,6 +15,7 @@ namespace activityReport
         public static GraphPane CreateTimeGraph()
         {
             GraphPane pane = new GraphPane();
+            pane.IsFontsScaled = false;
             pane.XAxis.Type = AxisType.Date;
             pane.XAxis.MajorGrid.IsVisible = true;
             pane.XAxis.Title.Text = "Time";
@@ -24,7 +25,7 @@ namespace activityReport
             return pane;
         }
 
-        public static Control AsControl(this PaneBase pane)
+        public static ZedGraphControl AsControl(this PaneBase pane)
         {
             ZedGraphControl c = new ZedGraphControl();
             if (pane is MasterPane)

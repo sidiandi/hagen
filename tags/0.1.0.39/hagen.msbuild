@@ -1,0 +1,14 @@
+<?xml version="1.0" encoding="utf-8"?>
+<Project DefaultTargets="Release" xmlns="http://schemas.microsoft.com/developer/msbuild/2003">
+
+    <PropertyGroup>
+        <ProjectName>hagen</ProjectName>
+        <Major>0</Major>
+        <Minor>1</Minor>
+        <Build>0</Build>
+    </PropertyGroup>
+    
+    <Import Project="$(MSBuildExtensionsPath)\sidi-util\Sidi.Build.Targets"/>
+    
+    <Target Name="Doc" />
+</Project>

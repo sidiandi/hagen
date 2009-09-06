@@ -3,7 +3,7 @@
 
     <PropertyGroup>
         <ProjectName>hagen</ProjectName>
-        <Major>1</Major>
+        <Major>0</Major>
         <Minor>1</Minor>
         <Build>0</Build>
     </PropertyGroup>

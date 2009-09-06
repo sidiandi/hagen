@@ -12,6 +12,7 @@
     
     <Target Name="Doc" />
     
+    <Target Name="Package" DependsOnTargets="Build" />
     
     <Target Name="Upload" DependsOnTargets="Commit;Package">
         <GoogleCode.Upload

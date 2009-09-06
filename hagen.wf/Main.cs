@@ -19,7 +19,6 @@ namespace hagen.wf
     public partial class Main : Form
     {
         ManagedWinapi.Hotkey hotkey;
-        AsyncQuery asyncQuery;
         Collection<Action> actions;
         MouseWheelSupport mouseWheelSupport;
 

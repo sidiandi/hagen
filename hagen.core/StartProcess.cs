@@ -51,7 +51,7 @@ namespace hagen
         [NotifyParentProperty(true)]
         [DefaultValue("")]
         [MonitoringDescription("ProcessArguments")]
-        [RecommendedAsConfigurable(true)]
+        [SettingsBindable(true)]
         [TypeConverter("System.Diagnostics.Design.StringValueConverter, System.Design, Version=2.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a")]
         public string Arguments { get; set; }
         //
@@ -78,7 +78,7 @@ namespace hagen
         [DefaultValue("")]
         [Editor("System.Diagnostics.Design.StartFileNameEditor, System.Design, Version=2.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a", "System.Drawing.Design.UITypeEditor, System.Drawing, Version=2.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a")]
         [MonitoringDescription("ProcessFileName")]
-        [RecommendedAsConfigurable(true)]
+        [SettingsBindable(true)]
         public string FileName { get; set; }
         //
         // Summary:
@@ -121,7 +121,7 @@ namespace hagen
         [DefaultValue("")]
         [MonitoringDescription("ProcessWorkingDirectory")]
         [Editor("System.Diagnostics.Design.WorkingDirectoryEditor, System.Design, Version=2.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a", "System.Drawing.Design.UITypeEditor, System.Drawing, Version=2.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a")]
-        [RecommendedAsConfigurable(true)]
+        [SettingsBindable(true)]
         public string WorkingDirectory { get; set; }
 
         public override void Execute()
@@ -139,12 +139,10 @@ namespace hagen
 
             try
             {
-                blockUpdate = true;
                 p.Start();
             }
             finally
             {
-                blockUpdate = false;
             }
         }
 
@@ -168,8 +166,6 @@ namespace hagen
 
             return s;
         }
-
-        static bool blockUpdate = false;
 
         static Icon browserIcon = null;
 

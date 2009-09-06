@@ -202,8 +202,6 @@ namespace hagen
             }
         }
 
-
-        AutomationElement window;
         ProgramUse currentProgram;
 
         void CheckWindowChanged()
@@ -230,7 +228,7 @@ namespace hagen
                     }
                 }
             }
-            catch (Exception ex)
+            catch (Exception)
             {
             }
         }

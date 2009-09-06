@@ -155,9 +155,9 @@ class InputHook : IDisposable
         {
             MSLLHOOKSTRUCT h = (MSLLHOOKSTRUCT)Marshal.PtrToStructure(lParam, typeof(MSLLHOOKSTRUCT));
 
-            MouseButtons b;
             int clicks = 0;
             int delta = 0;
+            MouseButtons b = MouseButtons.None;
 
             switch ((MouseMessages)wParam)
             {
@@ -188,7 +188,7 @@ class InputHook : IDisposable
                     break;
             }
 
-            MouseEventArgs e = new MouseEventArgs(MouseButtons.None, clicks, h.pt.x, h.pt.y, delta);
+            MouseEventArgs e = new MouseEventArgs(b, clicks, h.pt.x, h.pt.y, delta);
             MouseMove(this, e);
         }
         return CallNextHookEx(keyboardHookID, nCode, wParam, lParam);

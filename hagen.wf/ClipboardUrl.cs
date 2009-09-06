@@ -32,14 +32,14 @@ namespace hagen.wf
             }
         }
 
-        public string Title {set; get; }
+        public string Title { set; get; }
         public string Url { set; get; }
 
         static string ReadFileDescriptorW(Stream s)
         {
             s.Seek(76, SeekOrigin.Current);
             var b = new BinaryReader(s);
-            byte[] fn = new byte[260*2];
+            byte[] fn = new byte[260 * 2];
             s.Read(fn, 0, fn.Length);
             string r = ASCIIEncoding.Unicode.GetString(fn);
             return r.Substring(0, r.IndexOf((char)0));
@@ -63,6 +63,32 @@ namespace hagen.wf
             }
             throw new Exception();
         }
+
+        /// <summary>
+        /// Test method dumps clipboard data formats to files
+        /// </summary>
+        /// <param name="data"></param>
+        public static void Dump(IDataObject data)
+        {
+            var f = data.GetFormats();
+            foreach (var i in f)
+            {
+                try
+                {
+                    var m = data.GetData(i) as MemoryStream;
+                    if (m != null)
+                    {
+                        File.WriteAllBytes(
+                            FileUtil.BinFile(FileUtil.CatDir(@"test", i)),
+                            m.ToArray());
+                    }
+                }
+                catch (Exception)
+                {
+                }
+            }
+        }
+
 
         [TestFixture]
         public class Test

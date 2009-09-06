@@ -117,29 +117,7 @@ namespace hagen.wf
         {
             try
             {
-                var f = e.Data.GetFormats();
-                if (false)
-                {
-                    foreach (var i in f)
-                    {
-                        try
-                        {
-                            var m = e.Data.GetData(i) as MemoryStream;
-                            if (m != null)
-                            {
-                                File.WriteAllBytes(
-                                    FileUtil.CatDir(@"D:\work\hagen\hagen.wf\test", i),
-                                    m.ToArray());
-                            }
-                        }
-                        catch (Exception)
-                        {
-                        }
-                    }
-                }
-
                 ClipboardUrl cbUrl;
-
                 if (ClipboardUrl.TryParse(e.Data, out cbUrl))
                 {
                     Action a = new Action();
@@ -290,7 +268,7 @@ namespace hagen.wf
             Refresh();
         }
 
-        public void Refresh()
+        new public void Refresh()
         {
             asyncQuery.Query = textBoxQuery.Text;
         }

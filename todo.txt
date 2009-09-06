@@ -1,4 +1,3 @@
 TODO:
-* Drag & Drop of Internet Shortcuts (with Title)
-* Embed statistics window as tab
-* screenshots as powerpoint
+Embed statistics window as tab
+screenshots as powerpoint

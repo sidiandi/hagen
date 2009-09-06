@@ -11,6 +11,7 @@ using Sidi.Collections;
 using Sidi.Util;
 using Etier.IconHelper;
 using System.IO;
+using Sidi.IO;
 
 namespace hagen.wf
 {
@@ -47,7 +48,7 @@ namespace hagen.wf
 
         void SelectItem(int index)
         {
-            itemView.Selection = new IntSet(new Interval(index, index+1));
+            itemView.Selection = new IntSet(new Interval(index, index + 1));
             itemView.FocusedItemIndex = index;
         }
 
@@ -84,7 +85,7 @@ namespace hagen.wf
                 g.DrawString(e.Item.Name, Font, e.ForegroundBrush, tr, sf);
             }
         }
-        
+
         public SearchBox()
         {
             itemView = new Sidi.Forms.ItemView<Action>();
@@ -116,7 +117,37 @@ namespace hagen.wf
         {
             try
             {
-                if (e.Data.GetDataPresent(DataFormats.FileDrop))
+                var f = e.Data.GetFormats();
+                if (false)
+                {
+                    foreach (var i in f)
+                    {
+                        try
+                        {
+                            var m = e.Data.GetData(i) as MemoryStream;
+                            if (m != null)
+                            {
+                                File.WriteAllBytes(
+                                    FileUtil.CatDir(@"D:\work\hagen\hagen.wf\test", i),
+                                    m.ToArray());
+                            }
+                        }
+                        catch (Exception)
+                        {
+                        }
+                    }
+                }
+
+                ClipboardUrl cbUrl;
+
+                if (ClipboardUrl.TryParse(e.Data, out cbUrl))
+                {
+                    Action a = new Action();
+                    a.Command = cbUrl.Url;
+                    a.Name = cbUrl.Title;
+                    TryAdd(a);
+                }
+                else if (e.Data.GetDataPresent(DataFormats.FileDrop))
                 {
                     Array a = (Array)e.Data.GetData(DataFormats.FileDrop);
                     foreach (object i in a)
@@ -126,7 +157,7 @@ namespace hagen.wf
                 }
                 else
                 {
-                    TryAdd(e.Data.GetData(typeof(String)));
+                    // TryAdd(e.Data.GetData(typeof(String)));
                 }
             }
             catch (Exception exception)
@@ -141,20 +172,33 @@ namespace hagen.wf
         {
             try
             {
-                string fn = i as string;
-                if (fn != null)
+                Action action = null;
+
+                if (i is Action)
                 {
-                    Action action = new Action();
-                    if (Uri.IsWellFormedUriString(fn, UriKind.Absolute))
+                    action = (Action)i;
+                }
+                else
+                {
+                    string fn = i as string;
+                    if (fn != null)
                     {
-                        action.Name = fn;
-                        action.Command = fn;
+                        action = new Action();
+                        if (Uri.IsWellFormedUriString(fn, UriKind.Absolute))
+                        {
+                            action.Name = fn;
+                            action.Command = fn;
+                        }
+                        else
+                        {
+                            action.Name = Path.GetFileName(fn);
+                            action.Command = Path.GetFullPath(fn);
+                        }
                     }
-                    else
-                    {
-                        action.Name = Path.GetFileName(fn);
-                        action.Command = Path.GetFullPath(fn);
-                    }
+                }
+
+                if (action != null)
+                {
                     data.AddOrUpdate(action);
                     added.Add(action);
                     itemView.List = added;
@@ -223,11 +267,11 @@ namespace hagen.wf
             switch (e.KeyCode)
             {
                 case Keys.Down:
-                    SelectItem(itemView.FocusedItemIndex+1);
+                    SelectItem(itemView.FocusedItemIndex + 1);
                     e.Handled = true;
                     break;
                 case Keys.Up:
-                    SelectItem(itemView.FocusedItemIndex-1);
+                    SelectItem(itemView.FocusedItemIndex - 1);
                     e.Handled = true;
                     break;
                 case Keys.Enter:

@@ -9,4 +9,6 @@
     </PropertyGroup>
     
     <Import Project="$(MSBuildExtensionsPath)\sidi-util\Sidi.Build.Targets"/>
+    
+    <Target Name="Doc" />
 </Project>

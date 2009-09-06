@@ -80,6 +80,7 @@
     </Compile>
     <Compile Include="Program.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
+    <Compile Include="..\VersionInfo.cs" />
     <EmbeddedResource Include="ActionProperties.resx">
       <DependentUpon>ActionProperties.cs</DependentUpon>
     </EmbeddedResource>

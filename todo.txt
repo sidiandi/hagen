@@ -1,5 +1,5 @@
 TODO:
-msbuild script for automatic release and testing
+msbuild script for automatic release and testing: create new ProductCode in vdproj
 Insert work hour limit into outlook correctly
 Embed statistics window as tab
 screenshots as powerpoint

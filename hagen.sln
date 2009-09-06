@@ -59,6 +59,7 @@ Global
 		{E42167C3-DEB5-4C2E-B2E0-47F20160C434}.Debug|x86.ActiveCfg = Debug
 		{E42167C3-DEB5-4C2E-B2E0-47F20160C434}.Release|Any CPU.ActiveCfg = Release
 		{E42167C3-DEB5-4C2E-B2E0-47F20160C434}.Release|Mixed Platforms.ActiveCfg = Release
+		{E42167C3-DEB5-4C2E-B2E0-47F20160C434}.Release|Mixed Platforms.Build.0 = Release
 		{E42167C3-DEB5-4C2E-B2E0-47F20160C434}.Release|x86.ActiveCfg = Release
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution

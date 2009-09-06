@@ -70,6 +70,7 @@
     <Compile Include="ActionProperties.Designer.cs">
       <DependentUpon>ActionProperties.cs</DependentUpon>
     </Compile>
+    <Compile Include="ClipboardUrl.cs" />
     <Compile Include="IconHelper.cs" />
     <Compile Include="Main.cs">
       <SubType>Form</SubType>
@@ -100,6 +101,21 @@
     <None Include="Properties\Settings.settings">
       <Generator>SettingsSingleFileGenerator</Generator>
       <LastGenOutput>Settings.Designer.cs</LastGenOutput>
+    </None>
+    <None Include="test\FileContents">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </None>
+    <None Include="test\FileGroupDescriptor">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </None>
+    <None Include="test\FileGroupDescriptorW">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </None>
+    <None Include="test\UniformResourceLocator">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </None>
+    <None Include="test\UniformResourceLocatorW">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
     </None>
     <Compile Include="Properties\Settings.Designer.cs">
       <AutoGen>True</AutoGen>

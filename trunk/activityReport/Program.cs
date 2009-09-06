@@ -63,7 +63,7 @@ namespace activityReport
                     Time = TimeSpan.FromSeconds(value);
                 }
             }
-                    
+
             public double Key;
             public double Click;
             public double MouseMove;
@@ -77,26 +77,26 @@ namespace activityReport
                 set { }
             }
 
-                public DateTime End
+            public DateTime End
+            {
+                get
                 {
-                    get
-                    {
-                        return Begin.AddDays(1);
-                    }
-                    set { }
+                    return Begin.AddDays(1);
                 }
+                set { }
+            }
 
-                public DateTime Come(DataContext dataContext)
-                {
-                    return dataContext.ExecuteQuery<DateTime>("select Begin from input where Begin > {0} order by Begin limit 1", Day).First();
-                }
-                public DateTime Go(DataContext dataContext)
-                {
-                        return dataContext.ExecuteQuery<DateTime>("select Begin from input where Begin < {0} order by Begin desc limit 1", DateTime.Parse(Day).AddDays(1)).First();
-                }
+            public DateTime Come(DataContext dataContext)
+            {
+                return dataContext.ExecuteQuery<DateTime>("select Begin from input where Begin > {0} order by Begin limit 1", Day).First();
+            }
+            public DateTime Go(DataContext dataContext)
+            {
+                return dataContext.ExecuteQuery<DateTime>("select Begin from input where Begin < {0} order by Begin desc limit 1", DateTime.Parse(Day).AddDays(1)).First();
+            }
         }
 
-        [SQLiteFunction(Arguments=2, FuncType=FunctionType.Scalar, Name="Duration") ]
+        [SQLiteFunction(Arguments = 2, FuncType = FunctionType.Scalar, Name = "Duration")]
         public class Duration : SQLiteFunction
         {
             public override object Invoke(object[] args)
@@ -174,37 +174,6 @@ namespace activityReport
         {
             var main = new ListDetail();
 
-            if (false)
-            {
-            foreach (var i in Days.ToList())
-            {
-                Summary s = i;
-                main.AddItem(s.Day + " keyboard", () =>
-                {
-                    var p = GraphEx.CreateTimeGraph();
-
-                    var d = input.Range(s.Begin, s.End);
-
-                    var ppl = d.Select(x => new PointPair(new XDate(x.Begin), x.KeyDown)).ToPointPairList();
-                    ppl = ppl.Accumulate();
-                    p.AddCurve("keystrokes", ppl, Color.Black, SymbolType.None);
-                    return p.AsControl();
-                });
-
-                main.AddItem(s.Day + " mouse", () =>
-                {
-                    var p = GraphEx.CreateTimeGraph();
-                    var d = input.Range(s.Begin, s.End);
-                    var ppl = d.Select(x => new PointPair(new XDate(x.Begin), x.MouseMove)).ToPointPairList();
-                    ppl = ppl.Accumulate();
-                    p.AddCurve("keystrokes", ppl, Color.Black, SymbolType.None);
-                    return p.AsControl();
-                });
-            }
-            }
-
-            var days = Days.ToList();
-
             main.AddItem("Overview", () =>
             {
                 var p = GraphEx.CreateTimeGraph();
@@ -237,6 +206,36 @@ namespace activityReport
 
                 return c;
             });
+
+
+            foreach (var i in Days.ToList())
+            {
+                Summary s = i;
+                main.AddItem(s.Day + " keyboard", () =>
+                {
+                    var p = GraphEx.CreateTimeGraph();
+
+                    var d = input.Range(s.Begin, s.End);
+
+                    var ppl = d.Select(x => new PointPair(new XDate(x.Begin), x.KeyDown)).ToPointPairList();
+                    ppl = ppl.Accumulate();
+                    p.AddCurve("keystrokes", ppl, Color.Black, SymbolType.None);
+                    return p.AsControl();
+                });
+
+                main.AddItem(s.Day + " mouse", () =>
+                {
+                    var p = GraphEx.CreateTimeGraph();
+                    var d = input.Range(s.Begin, s.End);
+                    var ppl = d.Select(x => new PointPair(new XDate(x.Begin), x.MouseMove)).ToPointPairList();
+                    ppl = ppl.Accumulate();
+                    p.AddCurve("keystrokes", ppl, Color.Black, SymbolType.None);
+                    return p.AsControl();
+                });
+            }
+
+            var days = Days.ToList();
+
             return main;
         }
 

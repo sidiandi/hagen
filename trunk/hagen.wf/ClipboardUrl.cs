@@ -13,6 +13,8 @@ namespace hagen.wf
     public class ClipboardUrl
     {
         const string FileGroupDescriptorWFormat = "FileGroupDescriptorW";
+        const string FileContentsFormat = "FileContents";
+        const string UniformResourceLocatorWFormat = "UniformResourceLocatorW";
 
         public static bool TryParse(IDataObject data, out ClipboardUrl clipboardUrl)
         {
@@ -21,12 +23,22 @@ namespace hagen.wf
                 var c = new ClipboardUrl();
                 var d = data.GetData(FileGroupDescriptorWFormat);
                 c.Title = Path.GetFileNameWithoutExtension(ReadFileDescriptorW((MemoryStream)d));
-                c.Url = ReadUrl((Stream)data.GetData("FileContents"));
+                if (data.GetDataPresent(UniformResourceLocatorWFormat))
+                {
+                    c.Url = ((Stream)data.GetData(UniformResourceLocatorWFormat))
+                        .ReadFixedLengthUnicodeString(260);
+                }
+                else if (data.GetDataPresent(FileContentsFormat))
+                {
+                    c.Url = ReadUrl((Stream)data.GetData(FileContentsFormat));
+                }
+
                 clipboardUrl = c;
                 return true;
             }
             catch (Exception)
             {
+                Dump(data);
                 clipboardUrl = null;
                 return false;
             }
@@ -39,10 +51,7 @@ namespace hagen.wf
         {
             s.Seek(76, SeekOrigin.Current);
             var b = new BinaryReader(s);
-            byte[] fn = new byte[260 * 2];
-            s.Read(fn, 0, fn.Length);
-            string r = ASCIIEncoding.Unicode.GetString(fn);
-            return r.Substring(0, r.IndexOf((char)0));
+            return s.ReadFixedLengthUnicodeString(260);
         }
 
         static string ReadUrl(Stream s)
@@ -78,9 +87,13 @@ namespace hagen.wf
                     var m = data.GetData(i) as MemoryStream;
                     if (m != null)
                     {
-                        File.WriteAllBytes(
-                            FileUtil.BinFile(FileUtil.CatDir(@"test", i)),
-                            m.ToArray());
+                        string dumpFile = FileUtil.BinFile(FileUtil.CatDir(@"cb-dump", i));
+                        string pd = Path.GetDirectoryName(dumpFile);
+                        if (!Directory.Exists(pd))
+                        {
+                            Directory.CreateDirectory(pd);
+                        }
+                        File.WriteAllBytes(dumpFile, m.ToArray());
                     }
                 }
                 catch (Exception)

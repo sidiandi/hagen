@@ -71,6 +71,7 @@
       <DependentUpon>ActionProperties.cs</DependentUpon>
     </Compile>
     <Compile Include="ClipboardUrl.cs" />
+    <Compile Include="Extensions.cs" />
     <Compile Include="Main.cs">
       <SubType>Form</SubType>
     </Compile>

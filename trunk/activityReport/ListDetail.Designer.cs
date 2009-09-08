@@ -64,7 +64,7 @@
             // 
             // columnHeader1
             // 
-            this.columnHeader1.Width = 400;
+            this.columnHeader1.Width = -1;
             // 
             // ListDetail
             // 

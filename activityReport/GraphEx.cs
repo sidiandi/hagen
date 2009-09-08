@@ -40,25 +40,5 @@ namespace activityReport
             c.AxisChange();
             return c;
         }
-
-        const string dateFmt = "yyyy-MM-dd HH:mm:ss";
-
-        public static IEnumerable<Input> Range(this Collection<Input> inputs, DateTime begin, DateTime end)
-        {
-            string q = "begin >= {0} and end <= {1}".F(
-                begin.ToString(dateFmt).Quote(),
-                end.ToString(dateFmt).Quote());
-            return inputs.Select(q);
-        }
-
-        public static TimeSpan Active(this IEnumerable<Input> data)
-        {
-            return data.Aggregate(TimeSpan.Zero, (a, x) =>
-                        {
-                            return a.Add(x.End - x.Begin);
-                        });
-        }
-
-
     }
 }

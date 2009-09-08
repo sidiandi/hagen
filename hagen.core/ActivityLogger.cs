@@ -52,10 +52,12 @@ namespace hagen
             interceptConsole = new InputHook();
             interceptConsole.KeyDown += new System.Windows.Forms.KeyEventHandler(KeyboardInput);
             interceptConsole.MouseMove += new System.Windows.Forms.MouseEventHandler(MouseInput);
+
+            workDayBegin = DateTime.Now.Date;
         }
 
         Vector? lastMousePos = null;
-        DateTime? currentDay = null;
+        DateTime workDayBegin;
         Input currentInput = null;
         TimeSpan inputLoggingInterval = new TimeSpan(0, 0, 10);
 
@@ -122,7 +124,13 @@ namespace hagen
         {
             try
             {
-                currentDay = now.Date;
+                if (Hagen.Instance.Inputs.Range(workDayBegin, now).Any())
+                {
+                    workDayBegin = DateTime.Now.Date.AddDays(1.0);
+                    return;
+                }
+
+                workDayBegin = DateTime.Now.Date.AddDays(1.0);
 
                 var a = new Outlook.Application();
 
@@ -163,7 +171,7 @@ namespace hagen
         {
             lock (this)
             {
-                if (currentDay == null || currentDay.Value != n.Date)
+                if (workDayBegin < n)
                 {
                     FirstInputToday(n);
                 }

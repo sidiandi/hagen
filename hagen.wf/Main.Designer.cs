@@ -39,6 +39,7 @@
             this.statisticsToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
             this.sqliteConsoleToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
             this.searchBox1 = new hagen.wf.SearchBox();
+            this.reportMailToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
             this.menu.SuspendLayout();
             this.SuspendLayout();
             // 
@@ -104,7 +105,8 @@
             // 
             this.viewToolStripMenuItem.DropDownItems.AddRange(new System.Windows.Forms.ToolStripItem[] {
             this.statisticsToolStripMenuItem,
-            this.sqliteConsoleToolStripMenuItem});
+            this.sqliteConsoleToolStripMenuItem,
+            this.reportMailToolStripMenuItem});
             this.viewToolStripMenuItem.Name = "viewToolStripMenuItem";
             this.viewToolStripMenuItem.Size = new System.Drawing.Size(41, 20);
             this.viewToolStripMenuItem.Text = "&View";
@@ -135,6 +137,13 @@
             this.searchBox1.Size = new System.Drawing.Size(590, 476);
             this.searchBox1.TabIndex = 0;
             // 
+            // reportMailToolStripMenuItem
+            // 
+            this.reportMailToolStripMenuItem.Name = "reportMailToolStripMenuItem";
+            this.reportMailToolStripMenuItem.Size = new System.Drawing.Size(152, 22);
+            this.reportMailToolStripMenuItem.Text = "Report Mail";
+            this.reportMailToolStripMenuItem.Click += new System.EventHandler(this.reportMailToolStripMenuItem_Click);
+            // 
             // Main
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 13F);
@@ -146,7 +155,6 @@
             this.MainMenuStrip = this.menu;
             this.Name = "Main";
             this.Text = "hagen";
-            this.Visible = false;
             this.menu.ResumeLayout(false);
             this.menu.PerformLayout();
             this.ResumeLayout(false);
@@ -167,6 +175,7 @@
         private System.Windows.Forms.ToolStripMenuItem viewToolStripMenuItem;
         private System.Windows.Forms.ToolStripMenuItem statisticsToolStripMenuItem;
         private System.Windows.Forms.ToolStripMenuItem sqliteConsoleToolStripMenuItem;
+        private System.Windows.Forms.ToolStripMenuItem reportMailToolStripMenuItem;
 
     }
 }

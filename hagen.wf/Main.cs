@@ -13,6 +13,7 @@ using NUnit.Framework;
 using System.Threading;
 using System.Diagnostics;
 using Sidi.Forms;
+using ol = Microsoft.Office.Interop.Outlook;
 
 namespace hagen.wf
 {
@@ -124,6 +125,20 @@ namespace hagen.wf
             p.StartInfo.Arguments = Hagen.Instance.DatabasePath.Quote();
             p.StartInfo.CreateNoWindow = false;
             p.Start();
+        }
+
+        private void reportMailToolStripMenuItem_Click(object sender, EventArgs e)
+        {
+            var a = new ol.Application();
+
+            {
+                var mail = (ol.MailItem)a.CreateItem(ol.OlItemType.olMailItem);
+                mail.Subject = "Gleitzeit";
+                mail.To = "Schiepers, Renate";
+                mail.Body = StringEx.ToString(x => new activityReport.Program().Report(x));
+                var insp = a.Inspectors.Add(mail);
+                insp.Activate();
+            }
         }
     }
 }

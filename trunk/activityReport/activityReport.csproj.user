@@ -3,6 +3,6 @@
     <StartArguments>gui</StartArguments>
   </PropertyGroup>
   <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Debug|AnyCPU' ">
-    <StartArguments>gui</StartArguments>
+    <StartArguments>report</StartArguments>
   </PropertyGroup>
 </Project>

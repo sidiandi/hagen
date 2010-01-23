@@ -246,31 +246,5 @@ namespace hagen
         {
             CommitInput();
         }
-
-        [TestFixture]
-        public class Test
-        {
-            public Test()
-            {
-                log4net.Config.BasicConfigurator.Configure();
-            }
-
-            private static readonly log4net.ILog log = log4net.LogManager.GetLogger(System.Reflection.MethodBase.GetCurrentMethod().DeclaringType);
-
-            [Test]
-            public void QueueUserWorkItem()
-            {
-                for (int i = 0; i < 1000; ++i)
-                {
-                    log.InfoFormat("Queue {0}", i);
-                    ThreadPool.QueueUserWorkItem(new WaitCallback(x =>
-                        {
-                            log.InfoFormat("Start {0}", i);
-                            Thread.Sleep(1000);
-                            log.InfoFormat("Stop {0}", i);
-                        }));
-                }
-            }
-        }
     }
 }

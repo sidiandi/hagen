@@ -120,7 +120,7 @@ namespace hagen.wf
         private void sqliteConsoleToolStripMenuItem_Click(object sender, EventArgs e)
         {
             Process p = new Process();
-            p.StartInfo.FileName = "sqlite3";
+            p.StartInfo.FileName = FileUtil.BinFile("sqlite3.exe");
             p.StartInfo.Arguments = Hagen.Instance.DatabasePath.Quote();
             p.StartInfo.CreateNoWindow = false;
             p.Start();

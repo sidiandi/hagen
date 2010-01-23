@@ -72,6 +72,11 @@ namespace hagen.wf
 
         void hotkey_HotkeyPressed(object sender, EventArgs e)
         {
+            Popup();
+        }
+
+        public void Popup()
+        {
             WindowState = FormWindowState.Maximized;
             this.Visible = true;
             searchBox1.Start();
@@ -141,6 +146,42 @@ namespace hagen.wf
                 insp.Activate();
             }
              */
+        }
+
+        private void notifyIcon_MouseDoubleClick(object sender, MouseEventArgs e)
+        {
+            Popup();
+        }
+
+        private void Main_Resize(object sender, EventArgs e)
+        {
+            if (WindowState == FormWindowState.Minimized)
+            {
+                Hide();
+            }
+        }
+
+        private void notifyIcon_BalloonTipShown(object sender, EventArgs e)
+        {
+        }
+
+        private void notifyIcon_MouseMove(object sender, MouseEventArgs e)
+        {
+        }
+
+        private void notifyIcon_MouseClick(object sender, MouseEventArgs e)
+        {
+            var now = DateTime.Now;
+            var workDayBegin = now.Date;
+            var r = Hagen.Instance.Inputs.Range(workDayBegin, DateTime.Now);
+            var begin = r.First().Begin;
+            var text = String.Format(
+                "Hours: {0:G3}\r\nCome: {1:HH:mm:ss}\r\nMust go: {2:HH:mm:ss}",
+                (now - begin).TotalHours,
+                begin,
+                begin.AddHours(10.75));
+
+            notifyIcon.ShowBalloonTip(5000, "hagen", text, ToolTipIcon.Info);
         }
     }
 }

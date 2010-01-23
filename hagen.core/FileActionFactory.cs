@@ -49,14 +49,15 @@ namespace hagen
         [TestFixture]
         public class Test
         {
-            string p = @"C:\Dokumente und Einstellungen\All Users\Startmenü\Programme";
-
             [Test]
             public void Create()
             {
+                string p = Environment.GetFolderPath(Environment.SpecialFolder.StartMenu);
+
                 FileActionFactory f = new FileActionFactory();
                 Action a = f.Create(p);
-                Assert.AreEqual(p, a.Command);
+                var sp = (StartProcess)a.CommandObject;
+                Assert.AreEqual(p, sp.FileName);
             }
        }
     }

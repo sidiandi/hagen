@@ -109,14 +109,14 @@ namespace hagen.wf
             [Test]
             public void ReadFileDescriptor()
             {
-                string fn = ClipboardUrl.ReadFileDescriptorW(File.OpenRead(FileUtil.BinFile(@"test\FileGroupDescriptorW")));
+                string fn = ClipboardUrl.ReadFileDescriptorW(File.OpenRead(FileUtil.BinFile(@"unit-test\FileGroupDescriptorW")));
                 Assert.AreEqual("myCSharp.de - DIE C#- und .NET Community - GUI Windows-Forms Email aus Clipboard auslesen.URL", fn);
             }
 
             [Test]
             public void ReadUrl()
             {
-                string u = ClipboardUrl.ReadUrl(File.OpenRead(FileUtil.BinFile(@"test\FileContents")));
+                string u = ClipboardUrl.ReadUrl(File.OpenRead(FileUtil.BinFile(@"unit-test\FileContents")));
                 Assert.AreEqual("http://www.mycsharp.de/wbb2/thread.php?threadid=73296", u);
             }
         }

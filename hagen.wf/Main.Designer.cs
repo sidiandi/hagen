@@ -170,6 +170,7 @@
             this.MainMenuStrip = this.menu;
             this.Name = "Main";
             this.Text = "hagen";
+            this.FormClosing += new System.Windows.Forms.FormClosingEventHandler(this.Main_FormClosing);
             this.Resize += new System.EventHandler(this.Main_Resize);
             this.menu.ResumeLayout(false);
             this.menu.PerformLayout();

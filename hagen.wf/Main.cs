@@ -183,5 +183,14 @@ namespace hagen.wf
 
             notifyIcon.ShowBalloonTip(5000, "hagen", text, ToolTipIcon.Info);
         }
+
+        private void Main_FormClosing(object sender, FormClosingEventArgs e)
+        {
+            var r = MessageBox.Show("End program?", "hagen", MessageBoxButtons.OKCancel);
+            if (r != DialogResult.OK)
+            {
+                e.Cancel = true;
+            }
+        }
     }
 }

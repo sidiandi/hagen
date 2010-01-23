@@ -174,21 +174,6 @@ namespace hagen
             }
         }
 
-        [TestFixture]
-        public class Test
-        {
-            [Test]
-            public void Fill()
-            {
-                Collection<Action> actions = Hagen.Instance.Actions;
-                actions.Clear();
-                foreach (Action i in actions)
-                {
-                    Console.WriteLine(i);
-                }
-            }
-        }
-
         #region INotifyPropertyChanged Members
 
         public event PropertyChangedEventHandler PropertyChanged;

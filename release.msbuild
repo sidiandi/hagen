@@ -7,21 +7,8 @@
         <Minor>1</Minor>
         <Build>0</Build>
     </PropertyGroup>
-    
-    <Import Project="$(MSBuildExtensionsPath)\sidi-util\Sidi.Build.Targets"/>
-    
-    <Target Name="Doc" />
-    <Target Name="Package" DependsOnTargets="Build" />
-    
-    <Target Name="Upload" DependsOnTargets="Commit;Package">
-        <GoogleCode.Upload
-            ProjectName="$(ProjectName)"
-            LocalFile="$(PackageDir)\Release\hagen.setup.msi"
-            RemoteFile="$(ProjectName)-$(Version).msi"
-            Summary="Installer for Version $(Version)"
-            />
-    </Target>
-    
-    <Target Name="Release" DependsOnTargets="Upload" />
+
+  <Import Project="Common.Targets"/>
+  <Import Project="$(MSBuildExtensionsPath)\sidi-util\google.code.Targets"/>
 
 </Project>

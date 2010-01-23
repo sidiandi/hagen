@@ -19,8 +19,6 @@ using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Text;
-using Excel = Microsoft.Office.Interop.Excel;
-using Outlook = Microsoft.Office.Interop.Outlook;
 using System.Reflection;
 using NUnit.Framework;
 using Sidi.Persistence;

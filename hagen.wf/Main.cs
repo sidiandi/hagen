@@ -13,7 +13,6 @@ using NUnit.Framework;
 using System.Threading;
 using System.Diagnostics;
 using Sidi.Forms;
-using ol = Microsoft.Office.Interop.Outlook;
 
 namespace hagen.wf
 {
@@ -129,6 +128,8 @@ namespace hagen.wf
 
         private void reportMailToolStripMenuItem_Click(object sender, EventArgs e)
         {
+            throw new NotImplementedException();
+            /*
             var a = new ol.Application();
 
             {
@@ -139,6 +140,7 @@ namespace hagen.wf
                 var insp = a.Inspectors.Add(mail);
                 insp.Activate();
             }
+             */
         }
     }
 }

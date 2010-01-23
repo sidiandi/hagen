@@ -28,7 +28,6 @@ using System.Threading;
 using Utilities;
 using System.Windows;
 using System.Diagnostics;
-using Outlook = Microsoft.Office.Interop.Outlook;
 
 namespace hagen
 {
@@ -132,6 +131,7 @@ namespace hagen
 
                 workDayBegin = DateTime.Now.Date.AddDays(1.0);
 
+                /*
                 var a = new Outlook.Application();
 
                 {
@@ -160,6 +160,7 @@ namespace hagen
                     appointment.ReminderMinutesBeforeStart = 15;
                     appointment.Save();
                 }
+                 */
             }
             catch (System.Exception ex)
             {

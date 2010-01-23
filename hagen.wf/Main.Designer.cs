@@ -28,6 +28,8 @@
         /// </summary>
         private void InitializeComponent()
         {
+            this.components = new System.ComponentModel.Container();
+            System.ComponentModel.ComponentResourceManager resources = new System.ComponentModel.ComponentResourceManager(typeof(Main));
             this.menu = new System.Windows.Forms.MenuStrip();
             this.fileToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
             this.exitToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
@@ -38,8 +40,9 @@
             this.viewToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
             this.statisticsToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
             this.sqliteConsoleToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
-            this.searchBox1 = new hagen.wf.SearchBox();
             this.reportMailToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
+            this.notifyIcon = new System.Windows.Forms.NotifyIcon(this.components);
+            this.searchBox1 = new hagen.wf.SearchBox();
             this.menu.SuspendLayout();
             this.SuspendLayout();
             // 
@@ -125,6 +128,25 @@
             this.sqliteConsoleToolStripMenuItem.Text = "Sqlite Console";
             this.sqliteConsoleToolStripMenuItem.Click += new System.EventHandler(this.sqliteConsoleToolStripMenuItem_Click);
             // 
+            // reportMailToolStripMenuItem
+            // 
+            this.reportMailToolStripMenuItem.Name = "reportMailToolStripMenuItem";
+            this.reportMailToolStripMenuItem.Size = new System.Drawing.Size(152, 22);
+            this.reportMailToolStripMenuItem.Text = "Report Mail";
+            this.reportMailToolStripMenuItem.Click += new System.EventHandler(this.reportMailToolStripMenuItem_Click);
+            // 
+            // notifyIcon
+            // 
+            this.notifyIcon.BalloonTipText = "hagen";
+            this.notifyIcon.BalloonTipTitle = "hagen";
+            this.notifyIcon.Icon = ((System.Drawing.Icon)(resources.GetObject("notifyIcon.Icon")));
+            this.notifyIcon.Text = "hagen";
+            this.notifyIcon.Visible = true;
+            this.notifyIcon.MouseMove += new System.Windows.Forms.MouseEventHandler(this.notifyIcon_MouseMove);
+            this.notifyIcon.BalloonTipShown += new System.EventHandler(this.notifyIcon_BalloonTipShown);
+            this.notifyIcon.MouseClick += new System.Windows.Forms.MouseEventHandler(this.notifyIcon_MouseClick);
+            this.notifyIcon.MouseDoubleClick += new System.Windows.Forms.MouseEventHandler(this.notifyIcon_MouseDoubleClick);
+            // 
             // searchBox1
             // 
             this.searchBox1.AllowDrop = true;
@@ -137,13 +159,6 @@
             this.searchBox1.Size = new System.Drawing.Size(590, 476);
             this.searchBox1.TabIndex = 0;
             // 
-            // reportMailToolStripMenuItem
-            // 
-            this.reportMailToolStripMenuItem.Name = "reportMailToolStripMenuItem";
-            this.reportMailToolStripMenuItem.Size = new System.Drawing.Size(152, 22);
-            this.reportMailToolStripMenuItem.Text = "Report Mail";
-            this.reportMailToolStripMenuItem.Click += new System.EventHandler(this.reportMailToolStripMenuItem_Click);
-            // 
             // Main
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 13F);
@@ -155,6 +170,7 @@
             this.MainMenuStrip = this.menu;
             this.Name = "Main";
             this.Text = "hagen";
+            this.Resize += new System.EventHandler(this.Main_Resize);
             this.menu.ResumeLayout(false);
             this.menu.PerformLayout();
             this.ResumeLayout(false);
@@ -176,6 +192,7 @@
         private System.Windows.Forms.ToolStripMenuItem statisticsToolStripMenuItem;
         private System.Windows.Forms.ToolStripMenuItem sqliteConsoleToolStripMenuItem;
         private System.Windows.Forms.ToolStripMenuItem reportMailToolStripMenuItem;
+        private System.Windows.Forms.NotifyIcon notifyIcon;
 
     }
 }

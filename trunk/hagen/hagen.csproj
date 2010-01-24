@@ -9,8 +9,8 @@
     <ProjectGuid>{5E196699-E12B-4500-8178-BD38ACC8D362}</ProjectGuid>
     <OutputType>WinExe</OutputType>
     <AppDesignerFolder>Properties</AppDesignerFolder>
-    <RootNamespace>hagen.wf</RootNamespace>
-    <AssemblyName>hagen.wf</AssemblyName>
+    <RootNamespace>hagen</RootNamespace>
+    <AssemblyName>hagen</AssemblyName>
     <TargetFrameworkVersion>v3.5</TargetFrameworkVersion>
     <FileAlignment>512</FileAlignment>
   </PropertyGroup>
@@ -105,6 +105,7 @@
     <Compile Include="Properties\Resources.Designer.cs">
       <AutoGen>True</AutoGen>
       <DependentUpon>Resources.resx</DependentUpon>
+      <DesignTime>True</DesignTime>
     </Compile>
     <None Include="Properties\Settings.settings">
       <Generator>SettingsSingleFileGenerator</Generator>

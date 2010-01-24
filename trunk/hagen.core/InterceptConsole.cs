@@ -35,6 +35,7 @@ class InputHook : IDisposable
     private LowLevelKeyboardProc keyboardProc;
     private IntPtr keyboardHookID = IntPtr.Zero;
     Thread hookThread;
+    ApplicationContext hookThreadApplicationContext;
 
     public InputHook()
     {
@@ -46,7 +47,8 @@ class InputHook : IDisposable
             mouseProc = MouseHook;
             mouseHookID = SetHook(mouseProc);
 
-            Application.Run();
+            hookThreadApplicationContext = new ApplicationContext();
+            Application.Run(hookThreadApplicationContext);
             log.Info("hookThread end");
         }));
 
@@ -223,6 +225,8 @@ class InputHook : IDisposable
     {
         UnhookWindowsHookEx(keyboardHookID);
         UnhookWindowsHookEx(mouseHookID);
+        hookThreadApplicationContext.ExitThread();
+        hookThread.Join();
     }
 
     #endregion

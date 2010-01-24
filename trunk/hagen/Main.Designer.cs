@@ -15,7 +15,7 @@
 // You should have received a copy of the GNU General Public License
 // along with hagen. If not, see <http://www.gnu.org/licenses/>.
 
-namespace hagen.wf
+namespace hagen
 {
     partial class Main
     {
@@ -59,7 +59,7 @@ namespace hagen.wf
             this.sqliteConsoleToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
             this.reportMailToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
             this.notifyIcon = new System.Windows.Forms.NotifyIcon(this.components);
-            this.searchBox1 = new hagen.wf.SearchBox();
+            this.searchBox1 = new hagen.SearchBox();
             this.menu.SuspendLayout();
             this.SuspendLayout();
             // 
@@ -187,6 +187,7 @@ namespace hagen.wf
             this.MainMenuStrip = this.menu;
             this.Name = "Main";
             this.Text = "hagen";
+            this.WindowState = System.Windows.Forms.FormWindowState.Minimized;
             this.FormClosing += new System.Windows.Forms.FormClosingEventHandler(this.Main_FormClosing);
             this.Resize += new System.EventHandler(this.Main_Resize);
             this.menu.ResumeLayout(false);

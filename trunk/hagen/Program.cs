@@ -23,7 +23,7 @@ using System.Diagnostics;
 using System.IO;
 using System.Reflection;
 
-namespace hagen.wf
+namespace hagen
 {
     static class Program
     {
@@ -40,12 +40,12 @@ namespace hagen.wf
 
             KillAlreadyRunning();
 
-            using (var activityLogger = Debugger.IsAttached ? null : new ActivityLogger())
+            // using (var activityLogger = Debugger.IsAttached ? null : new ActivityLogger())
+            using (var activityLogger = new ActivityLogger())
             {
                 log.Info("Startup");
                 var main = new Main();
-                Application.Run();
-                Application.Exit();
+                Application.Run(main);
                 log.Info("Shutdown");
             }
         }

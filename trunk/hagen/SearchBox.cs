@@ -30,7 +30,7 @@ using Etier.IconHelper;
 using System.IO;
 using Sidi.IO;
 
-namespace hagen.wf
+namespace hagen
 {
     public partial class SearchBox : UserControl
     {

@@ -21,7 +21,7 @@ using System.Linq;
 using System.Text;
 using System.IO;
 
-namespace hagen.wf
+namespace hagen
 {
     public static class Extensions
     {

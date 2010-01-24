@@ -31,7 +31,7 @@ using System.Threading;
 using System.Diagnostics;
 using Sidi.Forms;
 
-namespace hagen.wf
+namespace hagen
 {
     public partial class Main : Form
     {
@@ -44,6 +44,7 @@ namespace hagen.wf
             InitializeComponent();
             
             this.AllowDrop = true;
+            this.Load += new EventHandler(Main_Load);
 
             hotkey = new ManagedWinapi.Hotkey();
             hotkey.Alt = true;
@@ -61,6 +62,11 @@ namespace hagen.wf
             searchBox1.ItemsActivated += new EventHandler(searchBox1_ItemsActivated);
 
             mouseWheelSupport = new MouseWheelSupport(this);
+        }
+
+        void Main_Load(object sender, EventArgs e)
+        {
+            Hide();
         }
 
         void searchBox1_ItemsActivated(object sender, EventArgs e)
@@ -105,7 +111,6 @@ namespace hagen.wf
             base.OnClosed(e);
             hotkey.Dispose();
             hotkey = null;
-            Application.Exit();
         }
 
         [TestFixture]

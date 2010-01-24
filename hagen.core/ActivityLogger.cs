@@ -38,15 +38,15 @@ namespace hagen
         Collection<ProgramUse> programUse;
         Collection<Input> inputs;
         InputHook interceptConsole;
+        Thread backgroundWorker;
 
         public ActivityLogger()
         {
             programUse = Hagen.Instance.ProgramUses;
             inputs = Hagen.Instance.Inputs;
 
-            BackgroundWorker backgroundWorker = new BackgroundWorker();
-            backgroundWorker.DoWork += new DoWorkEventHandler(backgroundWorker_DoWork);
-            backgroundWorker.RunWorkerAsync();
+            backgroundWorker = new Thread(backgroundWorker_DoWork);
+            backgroundWorker.Start();
 
             interceptConsole = new InputHook();
             interceptConsole.KeyDown += new System.Windows.Forms.KeyEventHandler(KeyboardInput);
@@ -195,18 +195,27 @@ namespace hagen
             }
         }
 
-        void backgroundWorker_DoWork(object sender, DoWorkEventArgs e)
+        bool mustEnd = false;
+
+        void backgroundWorker_DoWork()
         {
-            while (true)
+            lock (this)
             {
-                try
+                for (; ; )
                 {
-                    CheckWindowChanged();
-                    Thread.Sleep(1000);
-                }
-                catch (Exception ex)
-                {
-                    log.Error(String.Empty, ex);
+                    Monitor.Wait(this, 1000);
+                    if (mustEnd)
+                    {
+                        break;
+                    }
+                    try
+                    {
+                        CheckWindowChanged();
+                    }
+                    catch (Exception ex)
+                    {
+                        log.Error(String.Empty, ex);
+                    }
                 }
             }
         }
@@ -245,6 +254,13 @@ namespace hagen
         public void Dispose()
         {
             CommitInput();
+            interceptConsole.Dispose();
+            interceptConsole = null;
+            lock (this)
+            {
+                mustEnd = true;
+            }
+            backgroundWorker.Join();
         }
     }
 }

@@ -25,7 +25,7 @@ using System.IO;
 using Sidi.IO;
 using System.Text.RegularExpressions;
 
-namespace hagen.wf
+namespace hagen
 {
     public class ClipboardUrl
     {

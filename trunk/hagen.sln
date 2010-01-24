@@ -3,7 +3,7 @@ Microsoft Visual Studio Solution File, Format Version 10.00
 # Visual Studio 2008
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "activityReport", "activityReport\activityReport.csproj", "{D3E69D04-FEDA-48D8-9498-F41362F7E52A}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "hagen", "hagen.wf\hagen.csproj", "{5E196699-E12B-4500-8178-BD38ACC8D362}"
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "hagen", "hagen\hagen.csproj", "{5E196699-E12B-4500-8178-BD38ACC8D362}"
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "hagen.core", "hagen.core\hagen.core.csproj", "{B8A11330-3766-4244-9962-8B0D25E98005}"
 EndProject

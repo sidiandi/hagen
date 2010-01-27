@@ -30,6 +30,7 @@ using System.Windows.Forms;
 using ZedGraph;
 using System.Drawing;
 using System.IO;
+using NUnit.Framework;
 
 namespace activityReport
 {
@@ -57,11 +58,11 @@ namespace activityReport
             public string Day;
             public TimeSpan Time;
 
-            public double Duration
+            public TimeInterval Interval
             {
-                set
+                get
                 {
-                    Time = TimeSpan.FromSeconds(value);
+                    return new TimeInterval(Begin, End);
                 }
             }
 
@@ -69,7 +70,7 @@ namespace activityReport
             public double Click;
             public double MouseMove;
 
-            public DateTime Begin
+            DateTime Begin
             {
                 get
                 {
@@ -78,7 +79,7 @@ namespace activityReport
                 set { }
             }
 
-            public DateTime End
+            DateTime End
             {
                 get
                 {
@@ -135,7 +136,7 @@ namespace activityReport
         {
             foreach (var i in Days.ToList())
             {
-                var d = input.Range(i.Begin, i.End).ToList();
+                var d = input.Range(i.Interval).ToList();
 
                 var come = d.FirstOrDefault(x => !x.TerminalServerSession);
                 var go = d.LastOrDefault(x => !x.TerminalServerSession);
@@ -207,67 +208,71 @@ namespace activityReport
         {
             var main = new ListDetail();
 
-            main.AddItem("Overview", () =>
+            var all = new TimeInterval(input.First().Begin,input.Last().End);
+
+            foreach (var mi in all.Months.Reverse())
             {
-                var p = GraphEx.CreateTimeGraph();
-
-                p.YAxis.Type = AxisType.Date;
-                p.YAxis.Title.Text = "Day";
-
-                foreach (var i in Summarize(input))
-                {
-                    var b = new BoxObj(
-                        i.Begin.TimeOfDay.ToXDate().XLDate,
-                        new XDate(i.Begin.Date).XLDate,
-                        (i.Begin - i.End).ToXDate().XLDate,
-                        1.0);
-                    b.Fill = new Fill(i.TerminalServerSession ? Color.Red : Color.Green);
-                    b.Border.IsVisible = false;
-                    b.IsVisible = true;
-                    b.IsClippedToChartRect = true;
-                    p.GraphObjList.Add(b);
-                }
-
-                p.XAxis.Scale.Min = 0;
-                p.XAxis.Scale.Max = 1.0;
-
-                p.YAxis.Scale.Min = new XDate(DateTime.Now - TimeSpan.FromDays(30)).XLDate;
-                p.YAxis.Scale.Max = new XDate(DateTime.Now).XLDate;
-
-                var c = p.AsControl();
-                c.ZoomEvent += new ZedGraphControl.ZoomEventHandler(c_ZoomEvent);
-
-                return c;
-            });
-
-
-            foreach (var i in Days.ToList())
-            {
-                Summary s = i;
-                main.AddItem(s.Day + " keyboard", () =>
+                TimeInterval m = mi;
+                main.AddItem("Overview {0:yyyy-MM} ".F(m.Begin), () =>
                 {
                     var p = GraphEx.CreateTimeGraph();
 
-                    var d = input.Range(s.Begin, s.End);
+                    p.YAxis.Type = AxisType.Date;
+                    p.YAxis.Title.Text = "Day";
 
-                    var ppl = d.Select(x => new PointPair(new XDate(x.Begin), x.KeyDown)).ToPointPairList();
-                    ppl = ppl.Accumulate();
-                    p.AddCurve("keystrokes", ppl, Color.Black, SymbolType.None);
-                    return p.AsControl();
-                });
+                    foreach (var i in Summarize(input.Range(m)))
+                    {
+                        var b = new BoxObj(
+                            i.Begin.TimeOfDay.ToXDate().XLDate,
+                            new XDate(i.Begin.Date).XLDate,
+                            (i.Begin - i.End).ToXDate().XLDate,
+                            1.0);
+                        b.Fill = new Fill(i.TerminalServerSession ? Color.Red : Color.Green);
+                        b.Border.IsVisible = false;
+                        b.IsVisible = true;
+                        b.IsClippedToChartRect = true;
+                        p.GraphObjList.Add(b);
+                    }
 
-                main.AddItem(s.Day + " mouse", () =>
-                {
-                    var p = GraphEx.CreateTimeGraph();
-                    var d = input.Range(s.Begin, s.End);
-                    var ppl = d.Select(x => new PointPair(new XDate(x.Begin), x.MouseMove)).ToPointPairList();
-                    ppl = ppl.Accumulate();
-                    p.AddCurve("keystrokes", ppl, Color.Black, SymbolType.None);
-                    return p.AsControl();
+                    p.XAxis.Scale.Min = 0;
+                    p.XAxis.Scale.Max = 1.0;
+
+                    p.YAxis.Scale.Min = new XDate(DateTime.Now - TimeSpan.FromDays(30)).XLDate;
+                    p.YAxis.Scale.Max = new XDate(DateTime.Now).XLDate;
+
+                    var c = p.AsControl();
+                    c.ZoomEvent += new ZedGraphControl.ZoomEventHandler(c_ZoomEvent);
+
+                    return c;
                 });
             }
 
-            var days = Days.ToList();
+            foreach (var i in all.Days.Reverse())
+            {
+                var d = i;
+
+                main.AddItem("{0} activity".F(i.Begin), () =>
+                {
+                    var p = GraphEx.CreateTimeGraph();
+                    p.AddYAxis("keystrokes");
+                    p.AddY2Axis("pixel");
+
+                    var data = input.Range(d);
+
+                    var ppl = data.Select(x => new PointPair(new XDate(x.Begin), x.KeyDown)).ToPointPairList();
+                    ppl = ppl.Accumulate();
+                    var kp = p.AddCurve("keystrokes", ppl, Color.Black, SymbolType.None);
+                    kp.YAxisIndex = 1;
+                    
+
+                    ppl = data.Select(x => new PointPair(new XDate(x.Begin), x.MouseMove)).ToPointPairList();
+                    ppl = ppl.Accumulate();
+                    var mc = p.AddCurve("mouse move", ppl, Color.Red, SymbolType.None);
+                    mc.YAxisIndex = 2;
+
+                    return p.AsControl();
+                });
+            }
 
             return main;
         }
@@ -308,6 +313,16 @@ namespace activityReport
             if (s != null)
             {
                 yield return s;
+            }
+        }
+
+        [TestFixture]
+        public class Test
+        {
+            [Test, Explicit("interactive")]
+            public void Stats()
+            {
+                Application.Run(new Program().StatisticsWindow());
             }
         }
     }

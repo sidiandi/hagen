@@ -195,7 +195,7 @@ namespace hagen
         {
             var now = DateTime.Now;
             var workDayBegin = now.Date;
-            var r = Hagen.Instance.Inputs.Range(workDayBegin, DateTime.Now);
+            var r = Hagen.Instance.Inputs.Range(new TimeInterval(workDayBegin, DateTime.Now));
             var begin = r.First().Begin;
             var text = String.Format(
                 "Hours: {0:G3}\r\nCome: {1:HH:mm:ss}\r\nMust go: {2:HH:mm:ss}",

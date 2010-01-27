@@ -123,7 +123,7 @@ namespace hagen
         {
             try
             {
-                if (Hagen.Instance.Inputs.Range(workDayBegin, now).Any())
+                if (Hagen.Instance.Inputs.Range(new TimeInterval(workDayBegin, now)).Any())
                 {
                     workDayBegin = DateTime.Now.Date.AddDays(1.0);
                     return;

@@ -87,12 +87,22 @@ namespace hagen
 
     public static class HagenEx
     {
-        public static IEnumerable<Input> Range(this Collection<Input> inputs, DateTime begin, DateTime end)
+        public static IEnumerable<Input> Range(this Collection<Input> inputs, TimeInterval range)
         {
-            string q = "begin >= {0} and end <= {1}".F(
-                begin.ToString(dateFmt).Quote(),
-                end.ToString(dateFmt).Quote());
+            string q = "begin >= {0} and begin <= {1}".F(
+                range.Begin.ToString(dateFmt).Quote(),
+                range.End.ToString(dateFmt).Quote());
             return inputs.Select(q);
+        }
+
+        public static Input First(this Collection<Input> inputs)
+        {
+            return inputs.Select("1 order by begin limit 1").First();
+        }
+
+        public static Input Last(this Collection<Input> inputs)
+        {
+            return inputs.Select("1 order by begin desc limit 1").First();
         }
 
         const string dateFmt = "yyyy-MM-dd HH:mm:ss";

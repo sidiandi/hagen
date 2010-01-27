@@ -122,6 +122,7 @@
     </Compile>
     <Compile Include="AsyncQuery.cs" />
     <Compile Include="StartProcess.cs" />
+    <Compile Include="TimeInterval.cs" />
     <EmbeddedResource Include="Properties\Resources.resx">
       <Generator>ResXFileCodeGenerator</Generator>
       <LastGenOutput>Resources.Designer.cs</LastGenOutput>

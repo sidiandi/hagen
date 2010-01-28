@@ -64,6 +64,7 @@ namespace activityReport
                 {
                     return new TimeInterval(Begin, End);
                 }
+                set { }
             }
 
             public double Key;

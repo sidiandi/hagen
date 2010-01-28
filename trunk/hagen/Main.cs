@@ -30,6 +30,7 @@ using NUnit.Framework;
 using System.Threading;
 using System.Diagnostics;
 using Sidi.Forms;
+using System.IO;
 
 namespace hagen
 {
@@ -155,7 +156,13 @@ namespace hagen
 
         private void reportMailToolStripMenuItem_Click(object sender, EventArgs e)
         {
-            throw new NotImplementedException();
+            var p = Path.GetTempPath().CatDir("work-time.txt");
+            using (var output = new StreamWriter(p))
+            {
+                new activityReport.Program().Report(output);
+            }
+            Process.Start("notepad.exe", p.Quote());
+
             /*
             var a = new ol.Application();
 

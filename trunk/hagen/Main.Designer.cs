@@ -125,8 +125,8 @@ namespace hagen
             // 
             this.viewToolStripMenuItem.DropDownItems.AddRange(new System.Windows.Forms.ToolStripItem[] {
             this.statisticsToolStripMenuItem,
-            this.sqliteConsoleToolStripMenuItem,
-            this.reportMailToolStripMenuItem});
+            this.reportMailToolStripMenuItem,
+            this.sqliteConsoleToolStripMenuItem});
             this.viewToolStripMenuItem.Name = "viewToolStripMenuItem";
             this.viewToolStripMenuItem.Size = new System.Drawing.Size(41, 20);
             this.viewToolStripMenuItem.Text = "&View";
@@ -142,14 +142,14 @@ namespace hagen
             // 
             this.sqliteConsoleToolStripMenuItem.Name = "sqliteConsoleToolStripMenuItem";
             this.sqliteConsoleToolStripMenuItem.Size = new System.Drawing.Size(152, 22);
-            this.sqliteConsoleToolStripMenuItem.Text = "Sqlite Console";
+            this.sqliteConsoleToolStripMenuItem.Text = "Sqlite &Console";
             this.sqliteConsoleToolStripMenuItem.Click += new System.EventHandler(this.sqliteConsoleToolStripMenuItem_Click);
             // 
             // reportMailToolStripMenuItem
             // 
             this.reportMailToolStripMenuItem.Name = "reportMailToolStripMenuItem";
             this.reportMailToolStripMenuItem.Size = new System.Drawing.Size(152, 22);
-            this.reportMailToolStripMenuItem.Text = "Report Mail";
+            this.reportMailToolStripMenuItem.Text = "&Report";
             this.reportMailToolStripMenuItem.Click += new System.EventHandler(this.reportMailToolStripMenuItem_Click);
             // 
             // notifyIcon

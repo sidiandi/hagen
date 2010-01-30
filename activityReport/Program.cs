@@ -272,21 +272,30 @@ namespace activityReport
                 main.AddItem("{0} activity".F(i.Begin), () =>
                 {
                     var p = GraphEx.CreateTimeGraph();
-                    p.AddYAxis("keystrokes");
-                    p.AddY2Axis("pixel");
+                    p.YAxisList.Clear();
+
+                    var keystrokeAxis = new YAxis("keystrokes");
+                    p.YAxisList.Add(keystrokeAxis);
+                    keystrokeAxis.Scale.Min = 0;
+                    keystrokeAxis.Scale.Max = 35e3;
+
+                    var mouseAxis = new YAxis("mouse move");
+                    p.YAxisList.Add(mouseAxis);
+                    mouseAxis.Scale.Min = 0;
+                    mouseAxis.Scale.Max = 6e6;
 
                     var data = input.Range(d);
 
                     var ppl = data.Select(x => new PointPair(new XDate(x.Begin), x.KeyDown)).ToPointPairList();
                     ppl = ppl.Accumulate();
                     var kp = p.AddCurve("keystrokes", ppl, Color.Black, SymbolType.None);
-                    kp.YAxisIndex = 1;
+                    kp.YAxisIndex = 0;
                     
 
                     ppl = data.Select(x => new PointPair(new XDate(x.Begin), x.MouseMove)).ToPointPairList();
                     ppl = ppl.Accumulate();
                     var mc = p.AddCurve("mouse move", ppl, Color.Red, SymbolType.None);
-                    mc.YAxisIndex = 2;
+                    mc.YAxisIndex = 1;
 
                     return p.AsControl();
                 });

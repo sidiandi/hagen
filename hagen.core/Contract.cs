@@ -9,6 +9,7 @@ namespace hagen
     public enum Place
     {
         Office,
+        OverHr,
         Home
     };
 

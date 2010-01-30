@@ -95,24 +95,7 @@ namespace hagen
             return inputs.Select(q);
         }
 
-        public static Input First(this Collection<Input> inputs)
-        {
-            return inputs.Select("1 order by begin limit 1").First();
-        }
-
-        public static Input Last(this Collection<Input> inputs)
-        {
-            return inputs.Select("1 order by begin desc limit 1").First();
-        }
-
         const string dateFmt = "yyyy-MM-dd HH:mm:ss";
 
-        public static TimeSpan Active(this IEnumerable<Input> data)
-        {
-            return data.Aggregate(TimeSpan.Zero, (a, x) =>
-            {
-                return a.Add(x.End - x.Begin);
-            });
-        }
     }
 }

@@ -159,7 +159,7 @@ namespace hagen
             var p = Path.GetTempPath().CatDir("work-time.txt");
             using (var output = new StreamWriter(p))
             {
-                new activityReport.Program().Report(output);
+                new activityReport.Program().Report(output, TimeInterval.LastDays(90));
             }
             Process.Start("notepad.exe", p.Quote());
 
@@ -208,7 +208,7 @@ namespace hagen
                 "Hours: {0:G3}\r\nCome: {1:HH:mm:ss}\r\nMust go: {2:HH:mm:ss}",
                 (now - begin).TotalHours,
                 begin,
-                begin.AddHours(10.75));
+                begin + Contract.Current.MaxWorkTimePerDay);
 
             notifyIcon.ShowBalloonTip(5000, "hagen", text, ToolTipIcon.Info);
         }

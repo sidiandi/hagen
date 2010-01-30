@@ -96,6 +96,7 @@
     <Compile Include="ActivityLogger.cs" />
     <Compile Include="Appender.cs" />
     <Compile Include="AutomationEx.cs" />
+    <Compile Include="Contract.cs" />
     <Compile Include="FileActionFactory.cs" />
     <Compile Include="FileGroup.cs" />
     <Compile Include="FileGroupDescriptor.cs" />
@@ -103,6 +104,7 @@
     <Compile Include="Hagen.cs" />
     <Compile Include="ICommand.cs" />
     <Compile Include="IconHelper.cs" />
+    <Compile Include="InputEx.cs" />
     <Compile Include="InterceptConsole.cs" />
     <Compile Include="InternetShortcut.cs" />
     <Compile Include="OutlookDataObject.cs" />
@@ -123,6 +125,7 @@
     <Compile Include="AsyncQuery.cs" />
     <Compile Include="StartProcess.cs" />
     <Compile Include="TimeInterval.cs" />
+    <Compile Include="WorkInterval.cs" />
     <EmbeddedResource Include="Properties\Resources.resx">
       <Generator>ResXFileCodeGenerator</Generator>
       <LastGenOutput>Resources.Designer.cs</LastGenOutput>

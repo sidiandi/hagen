@@ -128,18 +128,34 @@ namespace activityReport
         [Usage("Prints a day-by-day report")]
         public void Report()
         {
-            Report(Console.Out);
+            Report(Console.Out, TimeInterval.Last(new TimeSpan(30,0,0,0)));
         }
 
-        double MaxWorkTime = 10.75;
-
-        public void Report(TextWriter w)
+        public void Report(TextWriter w, TimeInterval range)
         {
-            foreach (var i in Days.ToList())
+            foreach (var i in range.Days)
             {
-                var d = input.Range(i.Interval).ToList();
+                var d = input.Range(i).ToList();
 
-                var come = d.FirstOrDefault(x => !x.TerminalServerSession);
+                w.WriteLine();
+                w.WriteLine("{0:ddd yyyy-MM-dd}", i.Begin);
+                var wis = d.WorkIntervals().ToList();
+                foreach (var wi in wis)
+                {
+                    w.WriteLine("{0,-6} Begin: {2:hh:mm:ss} End: {3:hh:mm:ss} {1,6:F} h",
+                        wi.Place,
+                        wi.TimeInterval.Duration.TotalHours,
+                        wi.TimeInterval.Begin,
+                        wi.TimeInterval.End);
+                }
+                var homeSum = wis.Where(x => x.Place == Place.Home).Sum(x => x.TimeInterval.Duration.TotalHours);
+                if (homeSum > 0)
+                {
+                    w.WriteLine("{0,-36} {1,6:F} h", "Home sum:", homeSum);
+                }
+
+                /*
+                var come = d.A.FirstOrDefault(x => !x.TerminalServerSession);
                 var go = d.LastOrDefault(x => !x.TerminalServerSession);
 
                 var teleCommuting = come == null ? d : d.Where(x => x.End <= come.Begin || go.End <= x.Begin);
@@ -196,6 +212,7 @@ namespace activityReport
                 }
 
                 w.WriteLine(formatHours, "Total", officeTime + teleCommutingTime);
+                 */
             }
         }
 
@@ -238,8 +255,8 @@ namespace activityReport
                     p.XAxis.Scale.Min = 0;
                     p.XAxis.Scale.Max = 1.0;
 
-                    p.YAxis.Scale.Min = new XDate(DateTime.Now - TimeSpan.FromDays(30)).XLDate;
-                    p.YAxis.Scale.Max = new XDate(DateTime.Now).XLDate;
+                    p.YAxis.Scale.Min = new XDate(m.Begin).XLDate;
+                    p.YAxis.Scale.Max = new XDate(m.End).XLDate;
 
                     var c = p.AsControl();
                     c.ZoomEvent += new ZedGraphControl.ZoomEventHandler(c_ZoomEvent);
@@ -324,6 +341,12 @@ namespace activityReport
             public void Stats()
             {
                 Application.Run(new Program().StatisticsWindow());
+            }
+
+            [Test, Explicit("interactive")]
+            public void Report()
+            {
+                new Program().Report(Console.Out, TimeInterval.LastDays(90));
             }
         }
     }

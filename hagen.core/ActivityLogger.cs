@@ -130,37 +130,6 @@ namespace hagen
                 }
 
                 workDayBegin = DateTime.Now.Date.AddDays(1.0);
-
-                /*
-                var a = new Outlook.Application();
-
-                {
-                    var appointment = (Outlook.AppointmentItem)a.CreateItem(Outlook.OlItemType.olAppointmentItem);
-                    appointment.Subject = "First activity";
-                    appointment.Start = now;
-                    appointment.End = now;
-                    appointment.Importance = Microsoft.Office.Interop.Outlook.OlImportance.olImportanceLow;
-                    appointment.ReminderSet = false;
-                    appointment.Save();
-                }
-
-                {
-                    DateTime mustGo = now.AddHours(10.75);
-                    var appointment = (Outlook.AppointmentItem)a.CreateItem(Outlook.OlItemType.olAppointmentItem);
-                    appointment.Subject = "Blocker";
-                    appointment.Start = mustGo;
-                    DateTime end = now.Date.AddDays(1);
-                    if (mustGo > end)
-                    {
-                        end = mustGo;
-                    }
-                    appointment.End = end;
-                    appointment.Importance = Microsoft.Office.Interop.Outlook.OlImportance.olImportanceHigh;
-                    appointment.ReminderSet = true;
-                    appointment.ReminderMinutesBeforeStart = 15;
-                    appointment.Save();
-                }
-                 */
             }
             catch (System.Exception ex)
             {

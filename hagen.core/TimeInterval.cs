@@ -15,6 +15,10 @@ namespace hagen
             End = end;
         }
 
+        public TimeInterval()
+        {
+        }
+
         public DateTime Begin { get; set; }
         public DateTime End { get; set; }
         public TimeSpan Duration
@@ -23,6 +27,19 @@ namespace hagen
             { 
                 return End - Begin; 
             } 
+        }
+
+        public static TimeInterval Last(TimeSpan t)
+        {
+            var n = DateTime.Now;
+            return new TimeInterval(n - t, n);
+        }
+
+        public static TimeInterval LastDays(int d)
+        {
+            var t = new TimeSpan(d, 0, 0, 0);
+            var n = DateTime.Now.Date.AddDays(1);
+            return new TimeInterval(n - t, n);
         }
 
         public override string ToString()

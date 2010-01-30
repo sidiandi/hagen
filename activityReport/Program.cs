@@ -148,7 +148,7 @@ namespace activityReport
                         wi.TimeInterval.Begin,
                         wi.TimeInterval.End);
                 }
-                var homeSum = wis.Where(x => x.Place == Place.Home).Sum(x => x.TimeInterval.Duration.TotalHours);
+                var homeSum = wis.Where(x => x.Place != Place.Office).Sum(x => x.TimeInterval.Duration.TotalHours);
                 if (homeSum > 0)
                 {
                     w.WriteLine("{0,-36} {1,6:F} h", "Home sum:", homeSum);

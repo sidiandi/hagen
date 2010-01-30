@@ -142,7 +142,7 @@ namespace activityReport
                 var wis = d.WorkIntervals().ToList();
                 foreach (var wi in wis)
                 {
-                    w.WriteLine("{0,-6} Begin: {2:hh:mm:ss} End: {3:hh:mm:ss} {1,6:F} h",
+                    w.WriteLine("{0,-6} Begin: {2:HH:mm:ss} End: {3:HH:mm:ss} {1,6:F} h",
                         wi.Place,
                         wi.TimeInterval.Duration.TotalHours,
                         wi.TimeInterval.Begin,
@@ -153,66 +153,6 @@ namespace activityReport
                 {
                     w.WriteLine("{0,-36} {1,6:F} h", "Home sum:", homeSum);
                 }
-
-                /*
-                var come = d.A.FirstOrDefault(x => !x.TerminalServerSession);
-                var go = d.LastOrDefault(x => !x.TerminalServerSession);
-
-                var teleCommuting = come == null ? d : d.Where(x => x.End <= come.Begin || go.End <= x.Begin);
-                var company = come == null ? new List<Input>() : d.Where(x => x.End > come.Begin || go.End > x.Begin);
-
-                w.WriteLine();
-                var day = DateTime.Parse(i.Day);
-                w.WriteLine(day.ToString("ddd dd.MM.yyyy"));
-                double teleCommutingTime = 0.0;
-                double officeTime = 0.0;
-                double extraOfficeTime = 0.0;
-
-                string format = "{0,-20}: {1}";
-                string formatHours = "{0,-20}: {1:F2} h";
-                string hoursComeGo = "{0:F2} h, come: {1:HH:mm:ss}, go: {2:HH:mm:ss}";
-                if (come != null)
-                {
-                    officeTime = (go.End - come.Begin).TotalHours;
-                    DateTime goTime = go.End;
-                    DateTime extraComeTime = goTime;
-                    DateTime extraGoTime = goTime;
-                    if (officeTime > MaxWorkTime)
-                    {
-                        extraOfficeTime = officeTime - MaxWorkTime;
-                        officeTime = MaxWorkTime;
-                        goTime = come.Begin.AddHours(officeTime);
-                        extraComeTime = goTime;
-                        extraGoTime = go.End;
-                    }
-                    w.WriteLine(format, "Company office", hoursComeGo.F(officeTime, come.Begin, goTime));
-                    if (extraOfficeTime > 0.0)
-                    {
-                        w.WriteLine(format, "Home office (x)", hoursComeGo.F(extraOfficeTime, extraComeTime, extraGoTime));
-                    }
-                    var active = company.Active().TotalHours;
-                    // w.WriteLine(format, "Active", "{0:F2} ({1:F0}%)".F(active, 100.0 * active / officeTime));
-                }
-
-                if (teleCommuting.Any())
-                {
-                    teleCommutingTime = teleCommuting.Active().TotalHours;
-                    var tcComeEvent = d.FirstOrDefault(x => x.TerminalServerSession && (go == null || go.End < x.Begin));
-                    DateTime tcCome;
-                    if (tcComeEvent != null)
-                    {
-                        tcCome = tcComeEvent.Begin;
-                    }
-                    else
-                    {
-                        tcCome = go == null ? day.AddHours(8) : go.Begin.AddHours(1);
-                    }
-                    DateTime tcGo = tcCome.AddHours(teleCommutingTime);
-                    w.WriteLine(format, "Home office", "{0:F2} h, come: {1:HH:mm:ss}, go: {2:HH:mm:ss}".F(teleCommutingTime, tcCome, tcGo));
-                }
-
-                w.WriteLine(formatHours, "Total", officeTime + teleCommutingTime);
-                 */
             }
         }
 

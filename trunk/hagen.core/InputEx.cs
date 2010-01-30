@@ -48,13 +48,42 @@ namespace hagen
 
         public static IEnumerable<WorkInterval> WorkIntervals(this IEnumerable<Input> data)
         {
-            WorkInterval atOffice = data.AtOffice();
-        
-            var atHome = data;
+            WorkInterval atOffice = null;
+            WorkInterval extraOffice = null;
+            DateTime leave = DateTime.MinValue;
+
+            if (data.Any(x => !x.TerminalServerSession))
+            {
+                atOffice = new WorkInterval();
+                atOffice.TimeInterval.Begin = data.First(x => !x.TerminalServerSession).Begin;
+                leave = data.Last(x => !x.TerminalServerSession).End;
+                atOffice.TimeInterval.End = leave;
+                if (atOffice.TimeInterval.Duration > Contract.Current.MaxWorkTimePerDay)
+                {
+                    atOffice.TimeInterval.End = atOffice.TimeInterval.Begin + Contract.Current.MaxWorkTimePerDay;
+
+                    extraOffice = new WorkInterval();
+                    extraOffice.TimeInterval.Begin = atOffice.TimeInterval.End;
+                    extraOffice.TimeInterval.End = leave;
+                    extraOffice.Place = Place.OverHr;
+                }
+                atOffice.Place = Place.Office;
+            }
+
+            IEnumerable<Input> atHome;
             if (atOffice != null)
             {
                 yield return atOffice;
-                atHome = data.Where(x => x.End < atOffice.TimeInterval.Begin || x.Begin > atOffice.TimeInterval.End);
+                if (extraOffice != null)
+                {
+                    yield return extraOffice;
+                }
+
+                atHome = data.Where(x => x.End < atOffice.TimeInterval.Begin || x.Begin > leave);
+            }
+            else
+            {
+                atHome = data;
             }
 
             WorkInterval w = null;

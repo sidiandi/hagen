@@ -22,6 +22,7 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 using Sidi.Util;
+using System.Data.Linq;
 
 namespace hagen
 {
@@ -87,12 +88,37 @@ namespace hagen
 
     public static class HagenEx
     {
+        class InputL
+        {
+            public DateTime End { set; get;}
+            public DateTime Begin { set; get; }
+            public int KeyDown { set; get; }
+            public double MouseMove { set; get; }
+            public int Clicks { set; get; }
+            public bool TerminalServerSession { set; get; }
+        }
+    
         public static IEnumerable<Input> Range(this Collection<Input> inputs, TimeInterval range)
         {
-            string q = "begin >= {0} and begin <= {1}".F(
+            string q = "select oid as Id, * from input where begin >= {0} and begin <= {1}".F(
                 range.Begin.ToString(dateFmt).Quote(),
                 range.End.ToString(dateFmt).Quote());
-            return inputs.Select(q);
+
+            var cmd = inputs.Connection.CreateCommand();
+            cmd.CommandText = q;
+
+            var dc = new DataContext(inputs.Connection);
+            return dc.Translate<InputL>(cmd.ExecuteReader()).Select(x =>
+                {
+                    var y = new Input();
+                    y.End = x.End;
+                    y.Begin = x.Begin;
+                    y.KeyDown = x.KeyDown;
+                    y.MouseMove = x.MouseMove;
+                    y.Clicks = x.Clicks;
+                    y.TerminalServerSession = x.TerminalServerSession;
+                    return y;
+                }).ToList();
         }
 
         const string dateFmt = "yyyy-MM-dd HH:mm:ss";

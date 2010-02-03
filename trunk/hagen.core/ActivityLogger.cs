@@ -58,7 +58,7 @@ namespace hagen
         Vector? lastMousePos = null;
         DateTime workDayBegin;
         Input currentInput = null;
-        TimeSpan inputLoggingInterval = new TimeSpan(0, 0, 10);
+        TimeSpan inputLoggingInterval = new TimeSpan(0, 1, 0);
 
         void MouseInput(object sender, System.Windows.Forms.MouseEventArgs e)
         {

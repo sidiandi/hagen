@@ -49,7 +49,7 @@ namespace activityReport
             dataContext = new DataContext(input.Connection);
         }
 
-        Collection<Input> input;
+        public Collection<Input> input;
         System.Data.SQLite.SQLiteConnection connection;
         DataContext dataContext;
 
@@ -181,10 +181,10 @@ namespace activityReport
                     foreach (var i in Summarize(input.Range(m)))
                     {
                         var b = new BoxObj(
-                            i.Begin.TimeOfDay.ToXDate().XLDate,
                             new XDate(i.Begin.Date).XLDate,
-                            (i.Begin - i.End).ToXDate().XLDate,
-                            1.0);
+                            i.Begin.TimeOfDay.ToXDate().XLDate,
+                            1.0,
+                            (i.Begin - i.End).ToXDate().XLDate);
                         b.Fill = new Fill(i.TerminalServerSession ? Color.Red : Color.Green);
                         b.Border.IsVisible = false;
                         b.IsVisible = true;
@@ -192,11 +192,11 @@ namespace activityReport
                         p.GraphObjList.Add(b);
                     }
 
-                    p.XAxis.Scale.Min = 0;
-                    p.XAxis.Scale.Max = 1.0;
+                    p.YAxis.Scale.Min = 0;
+                    p.YAxis.Scale.Max = 1.0;
 
-                    p.YAxis.Scale.Min = new XDate(m.Begin).XLDate;
-                    p.YAxis.Scale.Max = new XDate(m.End).XLDate;
+                    p.XAxis.Scale.Min = new XDate(m.Begin).XLDate;
+                    p.XAxis.Scale.Max = new XDate(m.End).XLDate;
 
                     var c = p.AsControl();
                     c.ZoomEvent += new ZedGraphControl.ZoomEventHandler(c_ZoomEvent);
@@ -236,6 +236,9 @@ namespace activityReport
                     ppl = ppl.Accumulate();
                     var mc = p.AddCurve("mouse move", ppl, Color.Red, SymbolType.None);
                     mc.YAxisIndex = 1;
+
+                    p.XAxis.Scale.Min = new XDate(d.Begin).XLDate;
+                    p.XAxis.Scale.Max = new XDate(d.End).XLDate;
 
                     return p.AsControl();
                 });
@@ -296,6 +299,14 @@ namespace activityReport
             public void Report()
             {
                 new Program().Report(Console.Out, TimeInterval.LastDays(90));
+            }
+
+            [Test, Explicit("interactive")]
+            public void OfficeReport()
+            {
+                var r = new Program();
+                r.input = new Collection<Input>(@"D:\temp\2010-01-30_worktime\hagen\hagen.sqlite");
+                Application.Run(r.StatisticsWindow());
             }
         }
     }

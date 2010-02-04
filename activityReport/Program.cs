@@ -174,6 +174,8 @@ namespace activityReport
                 main.AddItem("Overview {0:yyyy-MM} ".F(m.Begin), () =>
                 {
                     var p = GraphEx.CreateTimeGraph();
+                    p.XAxis.Scale.Min = new XDate(m.Begin).XLDate;
+                    p.XAxis.Scale.Max = new XDate(m.End).XLDate;
 
                     p.YAxis.Type = AxisType.Date;
                     p.YAxis.Title.Text = "Day";
@@ -195,13 +197,27 @@ namespace activityReport
                     p.YAxis.Scale.Min = 0;
                     p.YAxis.Scale.Max = 1.0;
 
-                    p.XAxis.Scale.Min = new XDate(m.Begin).XLDate;
-                    p.XAxis.Scale.Max = new XDate(m.End).XLDate;
-
                     var c = p.AsControl();
                     c.ZoomEvent += new ZedGraphControl.ZoomEventHandler(c_ZoomEvent);
 
                     return c;
+                });
+
+                main.AddItem("Hours {0:yyyy-MM} ".F(m.Begin), () =>
+                {
+                    var p = GraphEx.CreateTimeGraph();
+                    p.XAxis.Scale.Min = new XDate(m.Begin).XLDate;
+                    p.XAxis.Scale.Max = new XDate(m.End).XLDate;
+
+                    p.BarSettings.Type = BarType.Stack;
+
+                    var w = m.Days.Select(x => input.Range(x).WorkIntervals()).ToList();
+
+                    p.AddBar(Place.Office.ToString(), PointList(w, x => x.Place == Place.Office), Color.Green);
+                    p.AddBar(Place.OverHr.ToString(), PointList(w, x => x.Place == Place.OverHr), Color.Red);
+                    p.AddBar(Place.Home.ToString(), PointList(w, x => x.Place == Place.Home), Color.Yellow);
+
+                    return p.AsControl();
                 });
             }
 
@@ -245,6 +261,26 @@ namespace activityReport
             }
 
             return main;
+        }
+
+        IPointList PointList(IEnumerable<IEnumerable<WorkInterval>> data, Func<WorkInterval, bool> which)
+        {
+            return data
+                .Select(x =>
+                {
+                    if (x.Any())
+                    {
+                        var d = x.First().TimeInterval.Begin.Date;
+                        var h = x.Where(which).Sum(wi => wi.TimeInterval.Duration.TotalHours);
+                        return new PointPair(new XDate(d), h);
+                    }
+                    else
+                    {
+                        return null;
+                    }
+                })
+                .Where(x => x != null)
+                .ToPointPairList();
         }
 
         void c_ZoomEvent(ZedGraphControl sender, ZoomState oldState, ZoomState newState)

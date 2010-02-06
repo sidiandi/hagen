@@ -171,7 +171,7 @@ namespace activityReport
             foreach (var mi in all.Months.Reverse())
             {
                 TimeInterval m = mi;
-                main.AddItem("Overview {0:yyyy-MM} ".F(m.Begin), () =>
+                main.AddItem("{0:yyyy-MM} Overview".F(m.Begin), () =>
                 {
                     var p = GraphEx.CreateTimeGraph();
                     p.XAxis.Scale.Min = new XDate(m.Begin).XLDate;
@@ -203,7 +203,7 @@ namespace activityReport
                     return c;
                 });
 
-                main.AddItem("Hours {0:yyyy-MM} ".F(m.Begin), () =>
+                main.AddItem("{0:yyyy-MM} Hours".F(m.Begin), () =>
                 {
                     var p = GraphEx.CreateTimeGraph();
                     p.XAxis.Scale.Min = new XDate(m.Begin).XLDate;
@@ -216,6 +216,22 @@ namespace activityReport
                     p.AddBar(Place.Office.ToString(), PointList(w, x => x.Place == Place.Office), Color.Green);
                     p.AddBar(Place.OverHr.ToString(), PointList(w, x => x.Place == Place.OverHr), Color.Red);
                     p.AddBar(Place.Home.ToString(), PointList(w, x => x.Place == Place.Home), Color.Yellow);
+
+                    return p.AsControl();
+                });
+
+                main.AddItem("{0:yyyy-MM} Activity".F(m.Begin), () =>
+                {
+                    var p = GraphEx.CreateTimeGraph();
+                    p.XAxis.Scale.Min = new XDate(m.Begin).XLDate;
+                    p.XAxis.Scale.Max = new XDate(m.End).XLDate;
+
+                    p.BarSettings.Type = BarType.Stack;
+
+                    var w = m.Days.Select(x => input.Range(x)).ToList();
+
+                    p.AddBar("Local", PointList(w, x => !x.TerminalServerSession), Color.Green);
+                    p.AddBar("Remote", PointList(w, x => x.TerminalServerSession), Color.Yellow);
 
                     return p.AsControl();
                 });
@@ -272,6 +288,26 @@ namespace activityReport
                     {
                         var d = x.First().TimeInterval.Begin.Date;
                         var h = x.Where(which).Sum(wi => wi.TimeInterval.Duration.TotalHours);
+                        return new PointPair(new XDate(d), h);
+                    }
+                    else
+                    {
+                        return null;
+                    }
+                })
+                .Where(x => x != null)
+                .ToPointPairList();
+        }
+
+        IPointList PointList(IEnumerable<IEnumerable<Input>> data, Func<Input, bool> which)
+        {
+            return data
+                .Select(x =>
+                {
+                    if (x.Any())
+                    {
+                        var d = x.First().Begin.Date;
+                        var h = x.Where(which).Sum(wi => (wi.End - wi.Begin).TotalHours);
                         return new PointPair(new XDate(d), h);
                     }
                     else

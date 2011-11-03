@@ -99,7 +99,8 @@ namespace hagen
                 sf.Alignment = StringAlignment.Near;
                 sf.LineAlignment = StringAlignment.Center;
                 Rectangle tr = Rectangle.FromLTRB(iconRect.Right + padding, e.Rect.Top, e.Rect.Right, e.Rect.Bottom);
-                g.DrawString(e.Item.Name, Font, e.ForegroundBrush, tr, sf);
+                var itemText = String.Format("{0} ({1})", e.Item.Name, e.Item.CommandDetails);
+                g.DrawString(itemText, Font, e.ForegroundBrush, tr, sf);
             }
         }
 

@@ -215,11 +215,13 @@ namespace hagen
 
         private void Main_FormClosing(object sender, FormClosingEventArgs e)
         {
+            /*
             var r = MessageBox.Show("End program?", "hagen", MessageBoxButtons.OKCancel);
             if (r != DialogResult.OK)
             {
                 e.Cancel = true;
             }
+             */
         }
     }
 }

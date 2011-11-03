@@ -108,7 +108,14 @@ namespace hagen
         {
             get
             {
-                return StringEx.ToString(w => CommandObject.DumpProperties(w));
+                if (CommandObject is StartProcess)
+                {
+                    return ((StartProcess)CommandObject).FileName;
+                }
+                else
+                {
+                    return CommandObject.ToString();
+                }
             }
         }
 

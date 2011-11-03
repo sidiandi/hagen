@@ -22,11 +22,14 @@ using System.Text;
 using Sidi.Persistence;
 using System.IO;
 using Sidi.IO;
+using System.Runtime.InteropServices;
 
 namespace hagen
 {
     public static class ActionsEx
     {
+        private static readonly log4net.ILog log = log4net.LogManager.GetLogger(System.Reflection.MethodBase.GetCurrentMethod().DeclaringType);
+
         public static void UpdateStartMenu(this Collection<Action> actions)
         {
             FileActionFactory f = new FileActionFactory();
@@ -36,9 +39,16 @@ namespace hagen
                 Environment.GetFolderPath(Environment.SpecialFolder.Desktop)
             })
             {
-                foreach (var a in f.Recurse(p))
+                try
                 {
-                    actions.AddOrUpdate(a);
+                    foreach (var a in f.Recurse(p))
+                    {
+                        actions.AddOrUpdate(a);
+                    }
+                }
+                catch (Exception e)
+                {
+                    log.Warn(f, e);
                 }
             }
 
@@ -56,14 +66,18 @@ namespace hagen
             }
         }
 
+    [DllImport("shell32.dll")]
+    static extern bool SHGetSpecialFolderPath(IntPtr hwndOwner,
+       [Out] StringBuilder lpszPath, int nFolder, bool fCreate);
+    const int CSIDL_COMMON_STARTMENU = 0x16;  // \Windows\Start Menu\Programs
+
         public static string AllUsersStartMenu
         {
             get
             {
-                var d = Environment.GetFolderPath(Environment.SpecialFolder.StartMenu)
-                    .Split(new string[] { @"\" }, StringSplitOptions.None);
-                d[d.Length-2] = "All Users";
-                return FileUtil.CatDir(d);
+                StringBuilder path = new StringBuilder(260);
+                SHGetSpecialFolderPath(IntPtr.Zero, path, CSIDL_COMMON_STARTMENU, false);
+                return path.ToString();
             }
         }
 

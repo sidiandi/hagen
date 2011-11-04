@@ -51,17 +51,17 @@ namespace hagen
             this.fileToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
             this.exitToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
             this.editToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
-            this.updateStartMenuToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
             this.cleanupToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
             this.propertiesToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
             this.viewToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
             this.statisticsToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
             this.reportMailToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
             this.sqliteConsoleToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
-            this.notifyIcon = new System.Windows.Forms.NotifyIcon(this.components);
-            this.searchBox1 = new hagen.SearchBox();
             this.addToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
             this.linksFromInternetExplorerToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
+            this.notifyIcon = new System.Windows.Forms.NotifyIcon(this.components);
+            this.searchBox1 = new hagen.SearchBox();
+            this.startMenuToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
             this.menu.SuspendLayout();
             this.SuspendLayout();
             // 
@@ -96,31 +96,23 @@ namespace hagen
             // editToolStripMenuItem
             // 
             this.editToolStripMenuItem.DropDownItems.AddRange(new System.Windows.Forms.ToolStripItem[] {
-            this.updateStartMenuToolStripMenuItem,
             this.cleanupToolStripMenuItem,
             this.propertiesToolStripMenuItem});
             this.editToolStripMenuItem.Name = "editToolStripMenuItem";
             this.editToolStripMenuItem.Size = new System.Drawing.Size(39, 20);
             this.editToolStripMenuItem.Text = "&Edit";
             // 
-            // updateStartMenuToolStripMenuItem
-            // 
-            this.updateStartMenuToolStripMenuItem.Name = "updateStartMenuToolStripMenuItem";
-            this.updateStartMenuToolStripMenuItem.Size = new System.Drawing.Size(173, 22);
-            this.updateStartMenuToolStripMenuItem.Text = "Update Start Menu";
-            this.updateStartMenuToolStripMenuItem.Click += new System.EventHandler(this.updateStartMenuToolStripMenuItem_Click);
-            // 
             // cleanupToolStripMenuItem
             // 
             this.cleanupToolStripMenuItem.Name = "cleanupToolStripMenuItem";
-            this.cleanupToolStripMenuItem.Size = new System.Drawing.Size(173, 22);
+            this.cleanupToolStripMenuItem.Size = new System.Drawing.Size(152, 22);
             this.cleanupToolStripMenuItem.Text = "Cleanup";
             this.cleanupToolStripMenuItem.Click += new System.EventHandler(this.cleanupToolStripMenuItem_Click);
             // 
             // propertiesToolStripMenuItem
             // 
             this.propertiesToolStripMenuItem.Name = "propertiesToolStripMenuItem";
-            this.propertiesToolStripMenuItem.Size = new System.Drawing.Size(173, 22);
+            this.propertiesToolStripMenuItem.Size = new System.Drawing.Size(152, 22);
             this.propertiesToolStripMenuItem.Text = "Properties";
             this.propertiesToolStripMenuItem.Click += new System.EventHandler(this.propertiesToolStripMenuItem_Click);
             // 
@@ -155,6 +147,22 @@ namespace hagen
             this.sqliteConsoleToolStripMenuItem.Text = "Sqlite &Console";
             this.sqliteConsoleToolStripMenuItem.Click += new System.EventHandler(this.sqliteConsoleToolStripMenuItem_Click);
             // 
+            // addToolStripMenuItem
+            // 
+            this.addToolStripMenuItem.DropDownItems.AddRange(new System.Windows.Forms.ToolStripItem[] {
+            this.linksFromInternetExplorerToolStripMenuItem,
+            this.startMenuToolStripMenuItem});
+            this.addToolStripMenuItem.Name = "addToolStripMenuItem";
+            this.addToolStripMenuItem.Size = new System.Drawing.Size(41, 20);
+            this.addToolStripMenuItem.Text = "&Add";
+            // 
+            // linksFromInternetExplorerToolStripMenuItem
+            // 
+            this.linksFromInternetExplorerToolStripMenuItem.Name = "linksFromInternetExplorerToolStripMenuItem";
+            this.linksFromInternetExplorerToolStripMenuItem.Size = new System.Drawing.Size(219, 22);
+            this.linksFromInternetExplorerToolStripMenuItem.Text = "&Links from Internet Explorer";
+            this.linksFromInternetExplorerToolStripMenuItem.Click += new System.EventHandler(this.linksFromInternetExplorerToolStripMenuItem_Click);
+            // 
             // notifyIcon
             // 
             this.notifyIcon.BalloonTipText = "hagen";
@@ -179,20 +187,12 @@ namespace hagen
             this.searchBox1.Size = new System.Drawing.Size(590, 476);
             this.searchBox1.TabIndex = 0;
             // 
-            // addToolStripMenuItem
+            // startMenuToolStripMenuItem
             // 
-            this.addToolStripMenuItem.DropDownItems.AddRange(new System.Windows.Forms.ToolStripItem[] {
-            this.linksFromInternetExplorerToolStripMenuItem});
-            this.addToolStripMenuItem.Name = "addToolStripMenuItem";
-            this.addToolStripMenuItem.Size = new System.Drawing.Size(41, 20);
-            this.addToolStripMenuItem.Text = "&Add";
-            // 
-            // linksFromInternetExplorerToolStripMenuItem
-            // 
-            this.linksFromInternetExplorerToolStripMenuItem.Name = "linksFromInternetExplorerToolStripMenuItem";
-            this.linksFromInternetExplorerToolStripMenuItem.Size = new System.Drawing.Size(219, 22);
-            this.linksFromInternetExplorerToolStripMenuItem.Text = "&Links from Internet Explorer";
-            this.linksFromInternetExplorerToolStripMenuItem.Click += new System.EventHandler(this.linksFromInternetExplorerToolStripMenuItem_Click);
+            this.startMenuToolStripMenuItem.Name = "startMenuToolStripMenuItem";
+            this.startMenuToolStripMenuItem.Size = new System.Drawing.Size(219, 22);
+            this.startMenuToolStripMenuItem.Text = "Start Menu";
+            this.startMenuToolStripMenuItem.Click += new System.EventHandler(this.updateStartMenuToolStripMenuItem_Click);
             // 
             // Main
             // 
@@ -222,7 +222,6 @@ namespace hagen
         private System.Windows.Forms.ToolStripMenuItem fileToolStripMenuItem;
         private System.Windows.Forms.ToolStripMenuItem exitToolStripMenuItem;
         private System.Windows.Forms.ToolStripMenuItem editToolStripMenuItem;
-        private System.Windows.Forms.ToolStripMenuItem updateStartMenuToolStripMenuItem;
         private System.Windows.Forms.ToolStripMenuItem cleanupToolStripMenuItem;
         private System.Windows.Forms.ToolStripMenuItem propertiesToolStripMenuItem;
         private System.Windows.Forms.ToolStripMenuItem viewToolStripMenuItem;
@@ -232,6 +231,7 @@ namespace hagen
         private System.Windows.Forms.NotifyIcon notifyIcon;
         private System.Windows.Forms.ToolStripMenuItem addToolStripMenuItem;
         private System.Windows.Forms.ToolStripMenuItem linksFromInternetExplorerToolStripMenuItem;
+        private System.Windows.Forms.ToolStripMenuItem startMenuToolStripMenuItem;
 
     }
 }

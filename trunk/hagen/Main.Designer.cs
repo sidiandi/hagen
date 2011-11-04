@@ -56,10 +56,12 @@ namespace hagen
             this.propertiesToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
             this.viewToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
             this.statisticsToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
-            this.sqliteConsoleToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
             this.reportMailToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
+            this.sqliteConsoleToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
             this.notifyIcon = new System.Windows.Forms.NotifyIcon(this.components);
             this.searchBox1 = new hagen.SearchBox();
+            this.addToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
+            this.linksFromInternetExplorerToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
             this.menu.SuspendLayout();
             this.SuspendLayout();
             // 
@@ -68,7 +70,8 @@ namespace hagen
             this.menu.Items.AddRange(new System.Windows.Forms.ToolStripItem[] {
             this.fileToolStripMenuItem,
             this.editToolStripMenuItem,
-            this.viewToolStripMenuItem});
+            this.viewToolStripMenuItem,
+            this.addToolStripMenuItem});
             this.menu.Location = new System.Drawing.Point(0, 0);
             this.menu.Name = "menu";
             this.menu.Size = new System.Drawing.Size(614, 24);
@@ -80,13 +83,13 @@ namespace hagen
             this.fileToolStripMenuItem.DropDownItems.AddRange(new System.Windows.Forms.ToolStripItem[] {
             this.exitToolStripMenuItem});
             this.fileToolStripMenuItem.Name = "fileToolStripMenuItem";
-            this.fileToolStripMenuItem.Size = new System.Drawing.Size(35, 20);
+            this.fileToolStripMenuItem.Size = new System.Drawing.Size(37, 20);
             this.fileToolStripMenuItem.Text = "&File";
             // 
             // exitToolStripMenuItem
             // 
             this.exitToolStripMenuItem.Name = "exitToolStripMenuItem";
-            this.exitToolStripMenuItem.Size = new System.Drawing.Size(103, 22);
+            this.exitToolStripMenuItem.Size = new System.Drawing.Size(92, 22);
             this.exitToolStripMenuItem.Text = "E&xit";
             this.exitToolStripMenuItem.Click += new System.EventHandler(this.exitToolStripMenuItem_Click);
             // 
@@ -97,27 +100,27 @@ namespace hagen
             this.cleanupToolStripMenuItem,
             this.propertiesToolStripMenuItem});
             this.editToolStripMenuItem.Name = "editToolStripMenuItem";
-            this.editToolStripMenuItem.Size = new System.Drawing.Size(37, 20);
+            this.editToolStripMenuItem.Size = new System.Drawing.Size(39, 20);
             this.editToolStripMenuItem.Text = "&Edit";
             // 
             // updateStartMenuToolStripMenuItem
             // 
             this.updateStartMenuToolStripMenuItem.Name = "updateStartMenuToolStripMenuItem";
-            this.updateStartMenuToolStripMenuItem.Size = new System.Drawing.Size(176, 22);
+            this.updateStartMenuToolStripMenuItem.Size = new System.Drawing.Size(173, 22);
             this.updateStartMenuToolStripMenuItem.Text = "Update Start Menu";
             this.updateStartMenuToolStripMenuItem.Click += new System.EventHandler(this.updateStartMenuToolStripMenuItem_Click);
             // 
             // cleanupToolStripMenuItem
             // 
             this.cleanupToolStripMenuItem.Name = "cleanupToolStripMenuItem";
-            this.cleanupToolStripMenuItem.Size = new System.Drawing.Size(176, 22);
+            this.cleanupToolStripMenuItem.Size = new System.Drawing.Size(173, 22);
             this.cleanupToolStripMenuItem.Text = "Cleanup";
             this.cleanupToolStripMenuItem.Click += new System.EventHandler(this.cleanupToolStripMenuItem_Click);
             // 
             // propertiesToolStripMenuItem
             // 
             this.propertiesToolStripMenuItem.Name = "propertiesToolStripMenuItem";
-            this.propertiesToolStripMenuItem.Size = new System.Drawing.Size(176, 22);
+            this.propertiesToolStripMenuItem.Size = new System.Drawing.Size(173, 22);
             this.propertiesToolStripMenuItem.Text = "Properties";
             this.propertiesToolStripMenuItem.Click += new System.EventHandler(this.propertiesToolStripMenuItem_Click);
             // 
@@ -128,29 +131,29 @@ namespace hagen
             this.reportMailToolStripMenuItem,
             this.sqliteConsoleToolStripMenuItem});
             this.viewToolStripMenuItem.Name = "viewToolStripMenuItem";
-            this.viewToolStripMenuItem.Size = new System.Drawing.Size(41, 20);
+            this.viewToolStripMenuItem.Size = new System.Drawing.Size(44, 20);
             this.viewToolStripMenuItem.Text = "&View";
             // 
             // statisticsToolStripMenuItem
             // 
             this.statisticsToolStripMenuItem.Name = "statisticsToolStripMenuItem";
-            this.statisticsToolStripMenuItem.Size = new System.Drawing.Size(152, 22);
+            this.statisticsToolStripMenuItem.Size = new System.Drawing.Size(149, 22);
             this.statisticsToolStripMenuItem.Text = "&Statistics";
             this.statisticsToolStripMenuItem.Click += new System.EventHandler(this.statisticsToolStripMenuItem_Click);
-            // 
-            // sqliteConsoleToolStripMenuItem
-            // 
-            this.sqliteConsoleToolStripMenuItem.Name = "sqliteConsoleToolStripMenuItem";
-            this.sqliteConsoleToolStripMenuItem.Size = new System.Drawing.Size(152, 22);
-            this.sqliteConsoleToolStripMenuItem.Text = "Sqlite &Console";
-            this.sqliteConsoleToolStripMenuItem.Click += new System.EventHandler(this.sqliteConsoleToolStripMenuItem_Click);
             // 
             // reportMailToolStripMenuItem
             // 
             this.reportMailToolStripMenuItem.Name = "reportMailToolStripMenuItem";
-            this.reportMailToolStripMenuItem.Size = new System.Drawing.Size(152, 22);
+            this.reportMailToolStripMenuItem.Size = new System.Drawing.Size(149, 22);
             this.reportMailToolStripMenuItem.Text = "&Report";
             this.reportMailToolStripMenuItem.Click += new System.EventHandler(this.reportMailToolStripMenuItem_Click);
+            // 
+            // sqliteConsoleToolStripMenuItem
+            // 
+            this.sqliteConsoleToolStripMenuItem.Name = "sqliteConsoleToolStripMenuItem";
+            this.sqliteConsoleToolStripMenuItem.Size = new System.Drawing.Size(149, 22);
+            this.sqliteConsoleToolStripMenuItem.Text = "Sqlite &Console";
+            this.sqliteConsoleToolStripMenuItem.Click += new System.EventHandler(this.sqliteConsoleToolStripMenuItem_Click);
             // 
             // notifyIcon
             // 
@@ -159,10 +162,10 @@ namespace hagen
             this.notifyIcon.Icon = ((System.Drawing.Icon)(resources.GetObject("notifyIcon.Icon")));
             this.notifyIcon.Text = "hagen";
             this.notifyIcon.Visible = true;
-            this.notifyIcon.MouseMove += new System.Windows.Forms.MouseEventHandler(this.notifyIcon_MouseMove);
             this.notifyIcon.BalloonTipShown += new System.EventHandler(this.notifyIcon_BalloonTipShown);
             this.notifyIcon.MouseClick += new System.Windows.Forms.MouseEventHandler(this.notifyIcon_MouseClick);
             this.notifyIcon.MouseDoubleClick += new System.Windows.Forms.MouseEventHandler(this.notifyIcon_MouseDoubleClick);
+            this.notifyIcon.MouseMove += new System.Windows.Forms.MouseEventHandler(this.notifyIcon_MouseMove);
             // 
             // searchBox1
             // 
@@ -175,6 +178,21 @@ namespace hagen
             this.searchBox1.Name = "searchBox1";
             this.searchBox1.Size = new System.Drawing.Size(590, 476);
             this.searchBox1.TabIndex = 0;
+            // 
+            // addToolStripMenuItem
+            // 
+            this.addToolStripMenuItem.DropDownItems.AddRange(new System.Windows.Forms.ToolStripItem[] {
+            this.linksFromInternetExplorerToolStripMenuItem});
+            this.addToolStripMenuItem.Name = "addToolStripMenuItem";
+            this.addToolStripMenuItem.Size = new System.Drawing.Size(41, 20);
+            this.addToolStripMenuItem.Text = "&Add";
+            // 
+            // linksFromInternetExplorerToolStripMenuItem
+            // 
+            this.linksFromInternetExplorerToolStripMenuItem.Name = "linksFromInternetExplorerToolStripMenuItem";
+            this.linksFromInternetExplorerToolStripMenuItem.Size = new System.Drawing.Size(219, 22);
+            this.linksFromInternetExplorerToolStripMenuItem.Text = "&Links from Internet Explorer";
+            this.linksFromInternetExplorerToolStripMenuItem.Click += new System.EventHandler(this.linksFromInternetExplorerToolStripMenuItem_Click);
             // 
             // Main
             // 
@@ -212,6 +230,8 @@ namespace hagen
         private System.Windows.Forms.ToolStripMenuItem sqliteConsoleToolStripMenuItem;
         private System.Windows.Forms.ToolStripMenuItem reportMailToolStripMenuItem;
         private System.Windows.Forms.NotifyIcon notifyIcon;
+        private System.Windows.Forms.ToolStripMenuItem addToolStripMenuItem;
+        private System.Windows.Forms.ToolStripMenuItem linksFromInternetExplorerToolStripMenuItem;
 
     }
 }

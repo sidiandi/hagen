@@ -23,6 +23,10 @@ using Sidi.Persistence;
 using System.IO;
 using Sidi.IO;
 using System.Runtime.InteropServices;
+using NUnit.Framework;
+using SHDocVw;
+using Sidi.Extensions;
+using mshtml;
 
 namespace hagen
 {
@@ -66,10 +70,9 @@ namespace hagen
             }
         }
 
-    [DllImport("shell32.dll")]
-    static extern bool SHGetSpecialFolderPath(IntPtr hwndOwner,
-       [Out] StringBuilder lpszPath, int nFolder, bool fCreate);
-    const int CSIDL_COMMON_STARTMENU = 0x16;  // \Windows\Start Menu\Programs
+        [DllImport("shell32.dll")]
+        static extern bool SHGetSpecialFolderPath(IntPtr hwndOwner, [Out] StringBuilder lpszPath, int nFolder, bool fCreate);
+        const int CSIDL_COMMON_STARTMENU = 0x16;  // \Windows\Start Menu\Programs
 
         public static string AllUsersStartMenu
         {
@@ -102,6 +105,41 @@ namespace hagen
             else
             {
                 actions.Add(newAction);
+            }
+        }
+
+        public static IEnumerable<Action> GetAllIeLinks()
+        {
+            return new SHDocVw.ShellWindows()
+                .Cast<SHDocVw.InternetExplorer>()
+                .Where(ie => ie.IsInternetExplorer())
+                .SelectMany(ie =>
+                    {
+                        var d = (IHTMLDocument3) ie.Document;
+                        return d.getElementsByTagName("a")
+                            .Cast<IHTMLElement>()
+                            .Select(a =>
+                            {
+                                return new Action()
+                                {
+                                    Name = a.GetInnerText(),
+                                    Command = a.GetAttribute("href"),
+                                };
+                            });
+                    });
+        }
+
+        [TestFixture]
+        public class Test
+        {
+            private static readonly log4net.ILog log = log4net.LogManager.GetLogger(System.Reflection.MethodBase.GetCurrentMethod().DeclaringType);
+
+            public void Links()
+            {
+                foreach (var a in GetAllIeLinks())
+                {
+                    Console.WriteLine(a);
+                }
             }
         }
     }

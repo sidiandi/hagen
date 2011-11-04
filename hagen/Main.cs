@@ -31,6 +31,7 @@ using System.Threading;
 using System.Diagnostics;
 using Sidi.Forms;
 using System.IO;
+using mshtml;
 
 namespace hagen
 {
@@ -222,6 +223,16 @@ namespace hagen
                 e.Cancel = true;
             }
              */
+        }
+
+        private void linksFromInternetExplorerToolStripMenuItem_Click(object sender, EventArgs e)
+        {
+            var links = ActionsEx.GetAllIeLinks().ToList();
+            var selected = Prompt.SelectObjects(links, "Add Links");
+            foreach (var a in selected)
+            {
+                actions.Add(a);
+            }
         }
     }
 }

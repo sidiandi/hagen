@@ -30,13 +30,20 @@ namespace hagen
     {
         public string DatabasePath
         {
-        get
-        {
-            return FileUtil.CatDir(
-                Environment.GetFolderPath(Environment.SpecialFolder.LocalApplicationData),
-                "hagen",
-                "hagen.sqlite");
+            get
+            {
+                return FileUtil.CatDir(DataDirectory, "hagen.sqlite");
+            }
         }
+
+        public string DataDirectory
+        {
+            get
+            {
+                return FileUtil.CatDir(
+                    Environment.GetFolderPath(Environment.SpecialFolder.LocalApplicationData),
+                    "hagen");
+            }
         }
 
         public Collection<Action> Actions

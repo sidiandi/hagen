@@ -32,5 +32,17 @@ namespace hagen
             string r = ASCIIEncoding.Unicode.GetString(fn);
             return r.Substring(0, r.IndexOf((char)0));
         }
+
+        public static string Truncate(this string x, int maxLength)
+        {
+            if (x.Length > maxLength)
+            {
+                return x.Substring(0, maxLength);
+            }
+            else
+            {
+                return x;
+            }
+        }
     }
 }

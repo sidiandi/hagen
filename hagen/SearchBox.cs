@@ -125,6 +125,22 @@ namespace hagen
 
             itemView.ItemsActivated += new EventHandler(itemView_ItemsActivated);
             itemView.GotFocus += new EventHandler(itemView_GotFocus);
+            
+            itemView.ContextMenu = new ContextMenu(new MenuItem[]
+            {
+                new MenuItem("Activate", (s,e) =>
+                    {
+                        OnItemsActivated();
+                    }),
+                new MenuItem("Remove", (s,e) =>
+                    {
+                        Remove();
+                    }),
+                new MenuItem("Properties", (s,e) =>
+                    {
+                        Properties();
+                    }),
+            });
 
             textBoxQuery.KeyDown += new KeyEventHandler(textBoxQuery_KeyDown);
 
@@ -221,6 +237,19 @@ namespace hagen
             textBoxQuery.Focus();
         }
 
+        public string Query
+        {
+            get
+            {
+                return textBoxQuery.Text;
+            }
+
+            set
+            {
+                textBoxQuery.Text = value;
+            }
+        }
+
         public void Start()
         {
             textBoxQuery.SelectAll();
@@ -271,11 +300,14 @@ namespace hagen
                     e.Handled = true;
                     break;
                 case Keys.Enter:
-                    OnItemsActivated();
-                    e.Handled = true;
-                    break;
-                case Keys.Delete:
-                    Remove();
+                    if (e.Alt)
+                    {
+                        Properties();
+                    }
+                    else
+                    {
+                        OnItemsActivated();
+                    }
                     e.Handled = true;
                     break;
             }

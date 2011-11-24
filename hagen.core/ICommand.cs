@@ -26,6 +26,7 @@ namespace hagen
 {
     [Serializable]
     [XmlInclude(typeof(StartProcess))]
+    [XmlInclude(typeof(InsertText))]
     [TypeConverter(typeof(ExpandableObjectConverter))]
     public abstract class ICommand
     {

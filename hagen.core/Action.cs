@@ -114,7 +114,7 @@ namespace hagen
                 }
                 else
                 {
-                    return CommandObject.ToString();
+                    return CommandObject.SafeToString();
                 }
             }
         }

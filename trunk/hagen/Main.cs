@@ -100,10 +100,22 @@ namespace hagen
             Popup();
         }
 
+        int lastCLipboardHash = 0;
+
         public void Popup()
         {
             WindowState = FormWindowState.Maximized;
             this.Visible = true;
+            if (Clipboard.ContainsText())
+            {
+                var t = Clipboard.GetText();
+                var hash = t.GetHashCode();
+                if (lastCLipboardHash != hash)
+                {
+                    lastCLipboardHash = hash;
+                    searchBox1.Query = t.Truncate(256);
+                }
+            }
             searchBox1.Start();
             this.Activate();
         }
@@ -233,6 +245,42 @@ namespace hagen
             {
                 actions.Add(a);
             }
+        }
+
+        private void searchBox1_Load(object sender, EventArgs e)
+        {
+
+        }
+
+        private void noteToolStripMenuItem_Click(object sender, EventArgs e)
+        {
+            var notesFile = Hagen.Instance.DataDirectory.CatDir(
+                "Notes",
+                Sidi.IO.Long.LongNameEx.MakeFilename(searchBox1.Query + ".txt"));
+
+            if (!File.Exists(notesFile))
+            {
+                notesFile.EnsureParentDirectoryExists();
+                using (var w = File.OpenWrite(notesFile))
+                {
+                    w.Write(new byte[]{ 0xef, 0xbb, 0xbf }, 0, 3);
+                    using (var sw = new StreamWriter(w))
+                    {
+                        sw.WriteLine("Your text here");
+                    }
+                }
+            }
+
+            var p = Process.Start("notepad.exe", notesFile);
+            p.WaitForExit();
+
+            var a = new Action()
+            {
+                Name = searchBox1.Query,
+                CommandObject = new InsertText() { FileName = notesFile }
+            };
+
+            actions.Add(a);
         }
     }
 }

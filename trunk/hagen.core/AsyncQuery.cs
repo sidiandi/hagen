@@ -23,6 +23,7 @@ using System.Threading;
 using Sidi.Persistence;
 using System.Web;
 using System.Net;
+using Long = Sidi.IO.Long;
 
 namespace hagen
 {
@@ -205,22 +206,32 @@ namespace hagen
             {
                 if (String.IsNullOrEmpty(query) || query.Length <= 2)
                 {
-                    string sql = String.Format("Name like \"%{0}%\" order by LastUseTime desc limit 20", query);
+                    string sql = String.Format("Name like \"%{0}%\" order by LastUseTime desc limit 20", query.EscapeCsharpStringLiteral());
                     r = actions.Select(sql);
                 }
                 else
                 {
-                    string sql = String.Format("Name like \"%{0}%\" order by LastUseTime desc", query);
+                    string sql = String.Format("Name like \"%{0}%\" order by LastUseTime desc", query.EscapeCsharpStringLiteral());
                     r = actions.Select(sql);
 
                     List<Action> webLookup = new List<Action>();
+
+                    var fl = FileLocation.Parse(query);
+                    if (fl != null)
+                    {
+                        webLookup.Add(new Action()
+                        {
+                            Command = fl.Path,
+                        });
+                    }
+
                     webLookup.Add(WebLookupAction("Google", "http://www.google.com/search?q={0}", query));
                     webLookup.Add(WebLookupAction("Wikipedia", "http://en.wikipedia.org/wiki/Special:Search?search={0}&go=Go", query));
                     webLookup.Add(WebLookupAction("Leo", "http://dict.leo.org/?lp=ende&search={0}", query));
                     r = new CompositeList<Action>(r, webLookup);
                 }
             }
-            catch (Exception)
+            catch (Exception e)
             {
                 r = new List<Action>();
             }

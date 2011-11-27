@@ -151,20 +151,33 @@ namespace hagen
         {
             try
             {
+                FileActionFactory f = new FileActionFactory();
+
                 ClipboardUrl cbUrl;
                 if (ClipboardUrl.TryParse(e.Data, out cbUrl))
                 {
-                    Action a = new Action();
-                    a.Command = cbUrl.Url;
-                    a.Name = cbUrl.Title;
-                    TryAdd(a);
+                    Action a = f.FromUrl(cbUrl.Url, cbUrl.Title);
+                    AddAction(a);
                 }
                 else if (e.Data.GetDataPresent(DataFormats.FileDrop))
                 {
+                    // right-mouse drag - add recursive
+                    bool recursive = (e.Effect == DragDropEffects.Link);
+
                     Array a = (Array)e.Data.GetData(DataFormats.FileDrop);
-                    foreach (object i in a)
+                    foreach (var i in a.Cast<string>())
                     {
-                        TryAdd(i);
+                        if (recursive)
+                        {
+                            foreach (var action in f.Recurse(i))
+                            {
+                                AddAction(action);
+                            }
+                        }
+                        else
+                        {
+                            AddAction(f.FromFile(i));
+                        }
                     }
                 }
                 else
@@ -180,51 +193,23 @@ namespace hagen
 
         List<Action> added = new List<Action>();
 
-        void TryAdd(object i)
+        void AddAction(Action action)
         {
-            try
-            {
-                Action action = null;
-
-                if (i is Action)
-                {
-                    action = (Action)i;
-                }
-                else
-                {
-                    string fn = i as string;
-                    if (fn != null)
-                    {
-                        action = new Action();
-                        if (Uri.IsWellFormedUriString(fn, UriKind.Absolute))
-                        {
-                            action.Name = fn;
-                            action.Command = fn;
-                        }
-                        else
-                        {
-                            action.Name = Path.GetFileName(fn);
-                            action.Command = Path.GetFullPath(fn);
-                        }
-                    }
-                }
-
-                if (action != null)
-                {
-                    data.AddOrUpdate(action);
-                    added.Add(action);
-                    itemView.List = added;
-                }
-            }
-            catch (Exception)
-            {
-            }
+            data.AddOrUpdate(action);
+            added.Add(action);
+            itemView.List = added;
         }
-
 
         void SearchBox_DragEnter(object sender, DragEventArgs e)
         {
-            e.Effect = DragDropEffects.Copy;
+            if ((e.KeyState & 2) != 0)
+            {
+                e.Effect = DragDropEffects.Link;
+            }
+            else
+            {
+                e.Effect = DragDropEffects.Copy;
+            }
         }
 
         void IconCache_EntryUpdated(object sender, LruCacheBackground<Action, Icon>.EntryUpdatedEventArgs arg)

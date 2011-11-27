@@ -3,7 +3,7 @@
   <PropertyGroup>
     <OutputPath>$(SolutionDir)..\..\build\$(SolutionName)_$(Configuration)</OutputPath>
     <IntermediateOutputPath>$(TEMP)\build\$(AssemblyName)\obj\$(Configuration)\</IntermediateOutputPath>
-	<LibDir>C:\work\lib\</LibDir>
+	<LibDir>$(SolutionDir)\lib\</LibDir>
     <ProductVersion>9.0.21022</ProductVersion>
     <SchemaVersion>2.0</SchemaVersion>
     <TargetFrameworkVersion>v4.0</TargetFrameworkVersion>
@@ -24,11 +24,11 @@
     </Reference>
     <Reference Include="log4net">
       <SpecificVersion>False</SpecificVersion>
-      <HintPath>$(LibDir)log4net-1.2.10\bin\net\2.0\release\log4net.dll</HintPath>
+      <HintPath>$(LibDir)log4net\bin\net\2.0\release\log4net.dll</HintPath>
     </Reference>
     <Reference Include="nunit.framework">
       <SpecificVersion>False</SpecificVersion>
-      <HintPath>$(LibDir)NUnit-2.4.8-net-2.0\bin\nunit.framework.dll</HintPath>
+      <HintPath>$(LibDir)NUnit\bin\net-2.0\framework\nunit.framework.dll</HintPath>
     </Reference>
     <Reference Include="System.Data.SQLite">
       <SpecificVersion>False</SpecificVersion>

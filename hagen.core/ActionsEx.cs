@@ -27,6 +27,7 @@ using NUnit.Framework;
 using SHDocVw;
 using Sidi.Extensions;
 using mshtml;
+using Sidi.Util;
 
 namespace hagen
 {
@@ -40,8 +41,11 @@ namespace hagen
             foreach (var p in new string[]{
                 AllUsersStartMenu,
                 Environment.GetFolderPath(Environment.SpecialFolder.StartMenu),
-                Environment.GetFolderPath(Environment.SpecialFolder.Desktop)
-            })
+                Environment.GetFolderPath(Environment.SpecialFolder.Desktop),
+                Environment.GetFolderPath(Environment.SpecialFolder.MyDocuments).CatDir("My RoboForm Data")
+            }
+            .Where(x => new Sidi.IO.Long.LongName(x).Exists)
+            )
             {
                 try
                 {
@@ -60,7 +64,7 @@ namespace hagen
             {
                 try
                 {
-                    var a = f.Create(Environment.GetFolderPath((Environment.SpecialFolder)i));
+                    var a = f.FromFile(Environment.GetFolderPath((Environment.SpecialFolder)i));
                     a.Name = i.ToString();
                     actions.AddOrUpdate(a);
                 }

@@ -71,9 +71,7 @@ namespace hagen
                 }
                 else
                 {
-                    StartProcess p = new StartProcess();
-                    p.FileName = value;
-                    commandObject = p;
+                    commandObject = StartProcess.FromFileName(value);
                 }
             }
             

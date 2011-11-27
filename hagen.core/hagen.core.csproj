@@ -15,9 +15,6 @@
       <HintPath>$(LibDir)ManagedWinapi.dll</HintPath>
     </Reference>
     <Reference Include="Microsoft.CSharp" />
-    <Reference Include="Sidi.Util">
-      <HintPath>$(LibDir)sidi-util\Sidi.Util.dll</HintPath>
-    </Reference>
     <Reference Include="System.Drawing" />
     <Reference Include="System.Web" />
     <Reference Include="UIAutomationClient">

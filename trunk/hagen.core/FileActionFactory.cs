@@ -28,21 +28,36 @@ namespace hagen
 {
     public class FileActionFactory
     {
-        public Action Create(string file)
+        public Action FromFile(string file)
         {
-            Action a = new Action();
-            a.Name = Path.GetFileName(file);
-            a.Command = Path.GetFullPath(file);
-            return a;
+            return new Action()
+            {
+                Name = Path.GetFileName(file),
+                CommandObject = StartProcess.FromFileName(file)
+            };
         }
 
+        public Action FromUrl(string url, string title)
+        {
+            if (!Uri.IsWellFormedUriString(url, UriKind.Absolute))
+            {
+                throw new ArgumentOutOfRangeException(url);
+            }
+
+            return new Action()
+            {
+                Command = url,
+                Name = title
+            };
+        }
+        
         public int Levels { set; get; }
 
         public IEnumerable<Action> Recurse(string root)
         {
             return Directory.GetFiles(root, "*.*", SearchOption.AllDirectories).Select(x =>
             {
-                return Create(x);
+                return FromFile(x);
             });
         }
 
@@ -55,7 +70,7 @@ namespace hagen
                 string p = Environment.GetFolderPath(Environment.SpecialFolder.StartMenu);
 
                 FileActionFactory f = new FileActionFactory();
-                Action a = f.Create(p);
+                Action a = f.FromFile(p);
                 var sp = (StartProcess)a.CommandObject;
                 Assert.AreEqual(p, sp.FileName);
             }

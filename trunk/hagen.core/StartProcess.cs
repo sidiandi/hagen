@@ -126,16 +126,19 @@ namespace hagen
 
         public override void Execute()
         {
-            Process p = new Process();
-            ProcessStartInfo s = new ProcessStartInfo();
-            s.Arguments = Arguments;
-            s.CreateNoWindow = CreateNoWindow;
-            s.FileName = FileName;
-            s.UseShellExecute = true;
-            s.Verb = Verb;
-            s.WindowStyle = WindowStyle;
-            s.WorkingDirectory = WorkingDirectory;
-            p.StartInfo = s;
+            Process p = new Process()
+            {
+                StartInfo = new ProcessStartInfo()
+                {
+                    Arguments = Arguments,
+                    CreateNoWindow = CreateNoWindow,
+                    FileName = FileName,
+                    UseShellExecute = true,
+                    Verb = Verb,
+                    WindowStyle = WindowStyle,
+                    WorkingDirectory = WorkingDirectory
+                }
+            };
 
             try
             {
@@ -228,6 +231,22 @@ namespace hagen
 
                 return Directory.Exists(FileName) || File.Exists(FileName);
             }
+        }
+
+        public static StartProcess FromFileName(string fileName)
+        {
+            var p = new StartProcess()
+            {
+                FileName = fileName,
+            };
+
+            // verb selection for roboform cards
+            if (Path.GetExtension(fileName).Equals(".rfp", StringComparison.InvariantCultureIgnoreCase))
+            {
+                p.Verb = "Login";
+            }
+
+            return p;
         }
     }
 }

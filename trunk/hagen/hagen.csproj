@@ -13,10 +13,6 @@
       <SpecificVersion>False</SpecificVersion>
       <HintPath>..\..\lib\ManagedWinapi.dll</HintPath>
     </Reference>
-    <Reference Include="Sidi.Util, Version=2.0.0.446, Culture=neutral, PublicKeyToken=1e33c1a5eebc53e1, processorArchitecture=x86">
-      <SpecificVersion>False</SpecificVersion>
-      <HintPath>..\..\lib\sidi-util\Sidi.Util.dll</HintPath>
-    </Reference>
     <Reference Include="System.Data" />
     <Reference Include="System.Deployment" />
     <Reference Include="System.Drawing" />

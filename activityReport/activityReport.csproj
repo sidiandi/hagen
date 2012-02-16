@@ -18,8 +18,7 @@
     </Reference>
     <Reference Include="System.Drawing" />
     <Reference Include="ZedGraph">
-      <SpecificVersion>False</SpecificVersion>
-      <HintPath>$(LibDir)Zedgraph\ZedGraph.dll</HintPath>
+      <HintPath>..\..\lib\Zedgraph\ZedGraph.dll</HintPath>
     </Reference>
   </ItemGroup>
   <ItemGroup>

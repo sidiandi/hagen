@@ -10,7 +10,6 @@ using System.IO;
 using System.Text.RegularExpressions;
 using Sidi.Persistence;
 using System.Drawing;
-using Etier.IconHelper;
 using Microsoft.Win32;
 using System.Windows.Forms;
 

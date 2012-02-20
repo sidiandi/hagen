@@ -87,11 +87,9 @@ namespace hagen
             }
         }
 
-        void Activate(Action a)
+        void Activate(IAction a)
         {
             this.Hide();
-            a.LastUseTime = DateTime.Now;
-            actions.Update(a);
             a.Execute();
         }
 
@@ -256,7 +254,7 @@ namespace hagen
         {
             var notesFile = Hagen.Instance.DataDirectory.CatDir(
                 "Notes",
-                Sidi.IO.Long.LongNameEx.MakeFilename(searchBox1.Query + ".txt"));
+                Sidi.IO.Long.Path.GetValidFilename(searchBox1.Query + ".txt"));
 
             if (!File.Exists(notesFile))
             {

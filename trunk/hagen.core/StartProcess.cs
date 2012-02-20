@@ -22,12 +22,9 @@ using System.Text;
 using System.Diagnostics;
 using System.Xml.Serialization;
 using System.ComponentModel;
-using Sidi.Util;
 using System.IO;
 using System.Text.RegularExpressions;
-using Sidi.Persistence;
 using System.Drawing;
-using Etier.IconHelper;
 using Microsoft.Win32;
 
 namespace hagen
@@ -198,7 +195,7 @@ namespace hagen
             {
                 if (Directory.Exists(FileName))
                 {
-                    icon = IconReader.GetFolderIcon(Etier.IconHelper.IconReader.IconSize.Large, Etier.IconHelper.IconReader.FolderType.Closed);
+                    icon = IconReader.GetFolderIcon(IconReader.IconSize.Large, IconReader.FolderType.Closed);
                 }
                 else
                 {

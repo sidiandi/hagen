@@ -27,7 +27,6 @@ using System.Windows;
 using Sidi.Collections;
 using System.Diagnostics;
 using System.IO;
-using Etier.IconHelper;
 using System.Drawing;
 using System.ComponentModel;
 using Microsoft.Win32;
@@ -37,7 +36,7 @@ using Sidi.Util;
 
 namespace hagen
 {
-    public class Action : INotifyPropertyChanged
+    public class Action : INotifyPropertyChanged, IAction
     {
         [RowId]
         public long Id;

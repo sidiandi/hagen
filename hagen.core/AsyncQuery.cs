@@ -150,14 +150,13 @@ namespace hagen
     
     public class AsyncQuery
     {
-        Collection<Action> actions;
-        Sidi.Util.AsyncCalculation<string, IList<Action>> asyncCalculation;
+        Sidi.Util.AsyncCalculation<string, IList<IAction>> asyncCalculation;
         
         
-        public AsyncQuery(Collection<Action> actions)
+        public AsyncQuery(IActionSource actionSource)
         {
-            this.actions = actions;
-            asyncCalculation = new Sidi.Util.AsyncCalculation<string, IList<Action>>(Work);
+            this.ActionSource = actionSource;
+            asyncCalculation = new Sidi.Util.AsyncCalculation<string, IList<IAction>>(Work);
             asyncCalculation.Complete += new EventHandler(asyncCalculation_Complete);
         }
 
@@ -169,7 +168,7 @@ namespace hagen
             }
         }
 
-        public IList<Action> Result
+        public IList<IAction> Result
         {
             get
             {
@@ -198,55 +197,13 @@ namespace hagen
             asyncCalculation.Query = asyncCalculation.Query;
         }
 
-        IList<Action> Work(string query)
+        public IActionSource ActionSource;
+
+        IList<IAction> Work(string query)
         {
-            IList<Action> r = null;
-
-            try
-            {
-                if (String.IsNullOrEmpty(query) || query.Length <= 2)
-                {
-                    string sql = String.Format("Name like \"%{0}%\" order by LastUseTime desc limit 20", query.EscapeCsharpStringLiteral());
-                    r = actions.Select(sql);
-                }
-                else
-                {
-                    string sql = String.Format("Name like \"%{0}%\" order by LastUseTime desc", query.EscapeCsharpStringLiteral());
-                    r = actions.Select(sql);
-
-                    List<Action> webLookup = new List<Action>();
-
-                    var fl = FileLocation.Parse(query);
-                    if (fl != null)
-                    {
-                        webLookup.Add(new Action()
-                        {
-                            Command = fl.Path,
-                        });
-                    }
-
-                    webLookup.Add(WebLookupAction("Google", "http://www.google.com/search?q={0}", query));
-                    webLookup.Add(WebLookupAction("Wikipedia", "http://en.wikipedia.org/wiki/Special:Search?search={0}&go=Go", query));
-                    webLookup.Add(WebLookupAction("Leo", "http://dict.leo.org/?lp=ende&search={0}", query));
-                    r = new CompositeList<Action>(r, webLookup);
-                }
-            }
-            catch (Exception e)
-            {
-                r = new List<Action>();
-            }
-
-            return r;
+            return ActionSource.GetActions(query);
         }
 
         public event EventHandler Complete;
-
-        Action WebLookupAction(string title, string urlTemplate, string query)
-        {
-            Action a = new Action();
-            a.Command = String.Format(urlTemplate, HttpUtility.UrlEncode(query));
-            a.Name = String.Format("{0} \"{1}\"", title, query);
-            return a;
-        }
     }
 }

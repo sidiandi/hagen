@@ -35,6 +35,9 @@
   <ItemGroup>
     <Compile Include="Action.cs" />
     <Compile Include="ActionsEx.cs" />
+    <Compile Include="ActionSource\ActionWrapper.cs" />
+    <Compile Include="ActionSource\Composite.cs" />
+    <Compile Include="ActionSource\DatabaseLookup.cs" />
     <Compile Include="Activity.cs" />
     <Compile Include="ActivityLogger.cs" />
     <Compile Include="Appender.cs" />
@@ -43,11 +46,9 @@
     <Compile Include="FileActionFactory.cs" />
     <Compile Include="FileGroup.cs" />
     <Compile Include="FileGroupDescriptor.cs" />
-    <Compile Include="FileLocationParser.cs" />
     <Compile Include="globalKeyboardHook.cs" />
     <Compile Include="Hagen.cs" />
     <Compile Include="ICommand.cs" />
-    <Compile Include="IconHelper.cs" />
     <Compile Include="InputEx.cs" />
     <Compile Include="InsertText.cs" />
     <Compile Include="InterceptConsole.cs" />
@@ -149,6 +150,12 @@
       <ProductName>Windows Installer 3.1</ProductName>
       <Install>true</Install>
     </BootstrapperPackage>
+  </ItemGroup>
+  <ItemGroup>
+    <ProjectReference Include="..\hagen.ext\hagen.ext.csproj">
+      <Project>{9BF01205-1BD3-4121-909D-16CEC6D47143}</Project>
+      <Name>hagen.ext</Name>
+    </ProjectReference>
   </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
   <!-- To modify your build process, add your task inside one of the targets below and uncomment it. 

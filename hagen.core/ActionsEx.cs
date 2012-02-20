@@ -44,7 +44,7 @@ namespace hagen
                 Environment.GetFolderPath(Environment.SpecialFolder.Desktop),
                 Environment.GetFolderPath(Environment.SpecialFolder.MyDocuments).CatDir("My RoboForm Data")
             }
-            .Where(x => new Sidi.IO.Long.LongName(x).Exists)
+            .Where(x => new Sidi.IO.Long.Path(x).Exists)
             )
             {
                 try

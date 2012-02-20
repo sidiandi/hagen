@@ -26,9 +26,9 @@ using System.Windows.Forms;
 using Sidi.Persistence;
 using Sidi.Collections;
 using Sidi.Util;
-using Etier.IconHelper;
 using System.IO;
 using Sidi.IO;
+using hagen.ActionSource;
 
 namespace hagen
 {
@@ -36,7 +36,7 @@ namespace hagen
     {
         private static readonly log4net.ILog log = log4net.LogManager.GetLogger(System.Reflection.MethodBase.GetCurrentMethod().DeclaringType);
 
-        Sidi.Forms.ItemView<Action> itemView;
+        Sidi.Forms.ItemView<IAction> itemView;
 
         Collection<Action> data;
 
@@ -45,9 +45,16 @@ namespace hagen
             set
             {
                 data = value;
-                asyncQuery = new AsyncQuery(data);
+
+                var composite = new Composite(
+                    new DatabaseLookup(value),
+                    Composite.Plugins
+                    );
+
+                asyncQuery = new AsyncQuery(composite);
                 asyncQuery.Complete += new EventHandler(asyncQuery_Complete);
             }
+
             get
             {
                 return data;
@@ -56,7 +63,7 @@ namespace hagen
 
         void asyncQuery_Complete(object sender, EventArgs e)
         {
-            this.BeginInvoke(new Action<IList<Action>>(x =>
+            this.BeginInvoke(new Action<IList<IAction>>(x =>
                 {
                     itemView.List = x;
                     SelectItem(0);
@@ -71,7 +78,7 @@ namespace hagen
 
         AsyncQuery asyncQuery;
 
-        class ItemFormat : Sidi.Forms.ItemView<Action>.IItemFormat
+        class ItemFormat : Sidi.Forms.ItemView<IAction>.IItemFormat
         {
             public ItemFormat()
             {
@@ -79,7 +86,7 @@ namespace hagen
 
             public Font Font = new Font("Arial", 12);
 
-            public void Paint(Sidi.Forms.ItemView<Action>.PaintArgs e)
+            public void Paint(Sidi.Forms.ItemView<IAction>.PaintArgs e)
             {
                 int iconWidth = 32;
                 int padding = 4;
@@ -99,14 +106,14 @@ namespace hagen
                 sf.Alignment = StringAlignment.Near;
                 sf.LineAlignment = StringAlignment.Center;
                 Rectangle tr = Rectangle.FromLTRB(iconRect.Right + padding, e.Rect.Top, e.Rect.Right, e.Rect.Bottom);
-                var itemText = String.Format("{0} ({1})", e.Item.Name, e.Item.CommandDetails);
+                var itemText = String.Format("{0}", e.Item.Name);
                 g.DrawString(itemText, Font, e.ForegroundBrush, tr, sf);
             }
         }
 
         public SearchBox()
         {
-            itemView = new Sidi.Forms.ItemView<Action>();
+            itemView = new Sidi.Forms.ItemView<IAction>();
             itemView.Dock = DockStyle.Fill;
             itemView.TabStop = false;
             itemView.ItemLayout = new Sidi.Forms.ItemLayoutRows(32 + 2 * 4);
@@ -125,7 +132,7 @@ namespace hagen
 
             itemView.ItemsActivated += new EventHandler(itemView_ItemsActivated);
             itemView.GotFocus += new EventHandler(itemView_GotFocus);
-            
+
             itemView.ContextMenu = new ContextMenu(new MenuItem[]
             {
                 new MenuItem("Activate", (s,e) =>
@@ -197,7 +204,7 @@ namespace hagen
         {
             data.AddOrUpdate(action);
             added.Add(action);
-            itemView.List = added;
+            itemView.List = new SelectList<Action, IAction>(added, a => new ActionWrapper(a, data));
         }
 
         void SearchBox_DragEnter(object sender, DragEventArgs e)
@@ -255,7 +262,7 @@ namespace hagen
             }
         }
 
-        public IEnumerable<Action> SelectedActions
+        public IEnumerable<IAction> SelectedActions
         {
             get
             {
@@ -265,9 +272,9 @@ namespace hagen
 
         public void Remove()
         {
-            foreach (var i in itemView.SelectionEnumerator)
+            foreach (var i in itemView.SelectionEnumerator.OfType<ActionWrapper>())
             {
-                data.Remove(i);
+                data.Remove(i.Action);
             }
             Refresh();
         }
@@ -310,14 +317,17 @@ namespace hagen
 
         public void Properties()
         {
-            ActionProperties dlg = new ActionProperties();
-            var action = SelectedActions.FirstOrDefault(); ;
-            dlg.EditedObject = action;
-            if (dlg.ShowDialog() == DialogResult.OK)
+            var action = SelectedActions.OfType<ActionWrapper>().FirstOrDefault();
+            if (action != null)
             {
-                Data.Update(action);
+                ActionProperties dlg = new ActionProperties();
+                dlg.EditedObject = action;
+                if (dlg.ShowDialog() == DialogResult.OK)
+                {
+                    action.Data.Update(action.Action);
+                }
+                Refresh();
             }
-            Refresh();
         }
     }
 }

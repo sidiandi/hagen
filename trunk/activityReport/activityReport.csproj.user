@@ -4,7 +4,7 @@
     <StartArguments>gui</StartArguments>
   </PropertyGroup>
   <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Debug|AnyCPU' ">
-    <StartArguments>report</StartArguments>
+    <StartArguments>program</StartArguments>
   </PropertyGroup>
   <PropertyGroup>
     <PublishUrlHistory />
@@ -15,5 +15,8 @@
     <ErrorReportUrlHistory />
     <FallbackCulture>en-US</FallbackCulture>
     <VerifyUploadedFiles>false</VerifyUploadedFiles>
+  </PropertyGroup>
+  <PropertyGroup Condition="'$(Configuration)|$(Platform)' == 'Debug|x86'">
+    <StartArguments>GraphicalUserInterface</StartArguments>
   </PropertyGroup>
 </Project>

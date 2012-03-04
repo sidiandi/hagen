@@ -16,7 +16,7 @@ using System.Runtime.InteropServices;
 [assembly: AssemblyCopyright("Copyright (c) Andreas Grimme 2010")]
 [assembly: AssemblyCompany("sidi")]
 [assembly: AssemblyProduct("sidi-util")]
-[assembly: AssemblyVersion("0.2.0.118")]
-[assembly: AssemblyFileVersion("0.2.0.118")]
+[assembly: AssemblyVersion("0.2.0.122")]
+[assembly: AssemblyFileVersion("0.2.0.122")]
 
 

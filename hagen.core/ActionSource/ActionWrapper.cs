@@ -34,7 +34,7 @@ namespace hagen.ActionSource
         {
             get
             {
-                return Action.Name;
+                return String.Format("{0} ({1})", Action.Name, Action.CommandDetails);
             }
         }
 

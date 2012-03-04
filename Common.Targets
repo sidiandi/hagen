@@ -3,7 +3,7 @@
   <PropertyGroup>
     <OutputPath>$(SolutionDir)..\..\build\$(SolutionName)_$(Configuration)</OutputPath>
     <IntermediateOutputPath>$(TEMP)\build\$(AssemblyName)\obj\$(Configuration)\</IntermediateOutputPath>
-	<LibDir>$(SolutionDir)\lib\</LibDir>
+	<LibDir>$(SolutionDir)lib\</LibDir>
     <ProductVersion>9.0.21022</ProductVersion>
     <SchemaVersion>2.0</SchemaVersion>
     <TargetFrameworkVersion>v4.0</TargetFrameworkVersion>

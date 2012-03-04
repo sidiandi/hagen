@@ -31,13 +31,18 @@ using ZedGraph;
 using System.Drawing;
 using System.IO;
 using NUnit.Framework;
+using System.Text.RegularExpressions;
+using Sidi.Visualization;
 
 namespace activityReport
 {
     public class Program
     {
+        private static readonly log4net.ILog log = log4net.LogManager.GetLogger(System.Reflection.MethodBase.GetCurrentMethod().DeclaringType);
+
         static void Main(string[] args)
         {
+            log4net.Config.BasicConfigurator.Configure();
             Parser.Run(new Program(), args);
         }
 
@@ -156,6 +161,18 @@ namespace activityReport
             }
         }
 
+        [Usage("Program use")]
+        public void ProgramUse()
+        {
+            var t = TimeInterval.LastDays(60);
+            var programs = Hagen.Instance.ProgramUses.Query(p => p.Begin > t.Begin && p.Begin < t.End);
+            log.Info(programs.Count);
+
+            Sidi.Visualization.SimpleTreeMap.Show(programs
+                .Select(x => new SimpleTreeMap.Item() { Lineage = Regex.Split(x.File, @"\\").Cast<object>(), Color = Color.White, Size = x.KeyDown }
+                    ));
+        }
+
         [Usage("Graphical reports")]
         public void GraphicalUserInterface()
         {
@@ -234,6 +251,34 @@ namespace activityReport
                     p.AddBar("Remote", PointList(w, x => x.TerminalServerSession), Color.Yellow);
 
                     return p.AsControl();
+                });
+
+                main.AddItem("{0:yyyy-MM} Programs".F(m.Begin), () =>
+                {
+                    var programUse = Hagen.Instance.ProgramUses.Query(p => p.Begin > m.Begin && p.Begin < m.End && p.File != String.Empty);
+                    var stm = new Sidi.Visualization.SimpleTreeMap();
+                    stm.Items = 
+                        programUse.Select(i => new Sidi.Visualization.SimpleTreeMap.Item()
+                        {
+                            Lineage = Regex.Split(i.File, @"\\"),
+                            Size = (float) (i.End - i.Begin).TotalSeconds,
+                            Color = Color.White,
+                        });
+                    return stm.CreateControl();
+                });
+
+                main.AddItem("{0:yyyy-MM} Captions".F(m.Begin), () =>
+                {
+                    var programUse = Hagen.Instance.ProgramUses.Query(p => p.Begin > m.Begin && p.Begin < m.End && p.Caption != String.Empty);
+                    var stm = new Sidi.Visualization.SimpleTreeMap(); 
+                    stm.Items =
+                        programUse.Select(i => new Sidi.Visualization.SimpleTreeMap.Item()
+                        {
+                            Lineage = Regex.Split(i.Caption, @" \- ").Reverse(),
+                            Size = (float)(i.End - i.Begin).TotalSeconds,
+                            Color = Color.White,
+                        });
+                    return stm.CreateControl();
                 });
             }
 

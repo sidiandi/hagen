@@ -55,6 +55,14 @@ namespace hagen
             hotkey.HotkeyPressed += new EventHandler(hotkey_HotkeyPressed);
             hotkey.Enabled = true;
 
+            alertTimer.Interval = (int) alertInterval.TotalMilliseconds;
+            alertTimer.Start();
+            alertTimer.Tick += new EventHandler((s, e) =>
+                {
+                    CheckWorkTime();
+                });
+            CheckWorkTime();
+
             this.KeyDown += new KeyEventHandler(Main_KeyDown);
             this.KeyPreview = true;
 
@@ -201,27 +209,47 @@ namespace hagen
             }
         }
 
-        private void notifyIcon_BalloonTipShown(object sender, EventArgs e)
-        {
-        }
-
-        private void notifyIcon_MouseMove(object sender, MouseEventArgs e)
-        {
-        }
+        System.Windows.Forms.Timer alertTimer = new System.Windows.Forms.Timer();
+        TimeSpan alertInterval = TimeSpan.FromMinutes(5);
+        TimeSpan warnBefore = TimeSpan.FromHours(1);
 
         private void notifyIcon_MouseClick(object sender, MouseEventArgs e)
         {
+            ShowWorkTimeAlert();
+        }
+
+        void CheckWorkTime()
+        {
             var now = DateTime.Now;
-            var workDayBegin = now.Date;
-            var r = Hagen.Instance.Inputs.Range(new TimeInterval(workDayBegin, DateTime.Now));
-            var begin = r.First().Begin;
+            var begin = Hagen.Instance.GetWorkBegin(now);
+            var mustGo = begin + Contract.Current.MaxWorkTimePerDay;
+
+            if (now > mustGo - warnBefore)
+            {
+                ShowWorkTimeAlert();
+            }
+        }
+
+        public void ShowWorkTimeAlert()
+        {
+            var now = DateTime.Now;
+            var begin = Hagen.Instance.GetWorkBegin(now);
+            var mustGo = begin + Contract.Current.MaxWorkTimePerDay;
+
             var text = String.Format(
-                "Hours: {0:G3}\r\nCome: {1:HH:mm:ss}\r\nMust go: {2:HH:mm:ss}",
+@"Must go: {2:HH:mm:ss}
+Time left: {4:hh\:mm}
+
+Current: {3:HH:mm:ss}
+Come: {1:HH:mm:ss}
+Hours: {0:G3}",
                 (now - begin).TotalHours,
                 begin,
-                begin + Contract.Current.MaxWorkTimePerDay);
+                mustGo,
+                now,
+                mustGo - now);
 
-            notifyIcon.ShowBalloonTip(5000, "hagen", text, ToolTipIcon.Info);
+            notifyIcon.ShowBalloonTip(10000, "Work Time Alert", text, ToolTipIcon.Info);
         }
 
         private void Main_FormClosing(object sender, FormClosingEventArgs e)

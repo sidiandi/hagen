@@ -16,6 +16,10 @@
       <SpecificVersion>False</SpecificVersion>
       <HintPath>$(LibDir)NUnit-2.4.8-net-2.0\bin\nunit.framework.dll</HintPath>
     </Reference>
+    <Reference Include="Sidi.Util">
+      <SpecificVersion>False</SpecificVersion>
+      <HintPath>$(LibDir)sidi-util\Sidi.Util.dll</HintPath>
+    </Reference>
     <Reference Include="System.Drawing" />
     <Reference Include="ZedGraph">
       <HintPath>..\..\lib\Zedgraph\ZedGraph.dll</HintPath>

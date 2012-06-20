@@ -54,11 +54,19 @@ namespace hagen
             }
         }
 
-        public DateTime GetWorkBegin(DateTime time)
+        public DateTime? GetWorkBegin(DateTime time)
         {
             var workDayBegin = time.Date;
             var r = Inputs.Range(new TimeInterval(workDayBegin, time));
-            return r.First().Begin;
+            var b = r.FirstOrDefault();
+            if (b == null)
+            {
+                return null;
+            }
+            else
+            {
+                return b.Begin;
+            }
         }
 
         public Collection<Input> Inputs

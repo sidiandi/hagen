@@ -19,6 +19,11 @@ namespace hagen
         {
         }
 
+        public bool Contains(DateTime x)
+        {
+            return Begin <= x && x < End;
+        }
+
         public DateTime Begin { get; set; }
         public DateTime End { get; set; }
         public TimeSpan Duration

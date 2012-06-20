@@ -212,6 +212,7 @@ namespace hagen
         System.Windows.Forms.Timer alertTimer = new System.Windows.Forms.Timer();
         TimeSpan alertInterval = TimeSpan.FromMinutes(5);
         TimeSpan warnBefore = TimeSpan.FromHours(1);
+        TimeSpan warnAfter = TimeSpan.FromMinutes(30);
 
         private void notifyIcon_MouseClick(object sender, MouseEventArgs e)
         {
@@ -222,9 +223,15 @@ namespace hagen
         {
             var now = DateTime.Now;
             var begin = Hagen.Instance.GetWorkBegin(now);
-            var mustGo = begin + Contract.Current.MaxWorkTimePerDay;
+            if (begin == null)
+            {
+                return;
+            }
 
-            if (now > mustGo - warnBefore)
+            var mustGo = begin.Value + Contract.Current.MaxWorkTimePerDay;
+            var warn = new TimeInterval(mustGo - warnBefore, mustGo + warnAfter);
+
+            if (warn.Contains(now))
             {
                 ShowWorkTimeAlert();
             }
@@ -234,20 +241,30 @@ namespace hagen
         {
             var now = DateTime.Now;
             var begin = Hagen.Instance.GetWorkBegin(now);
-            var mustGo = begin + Contract.Current.MaxWorkTimePerDay;
+            string text;
+            if (begin == null)
+            {
+                begin = DateTime.Now;
+            }
 
-            var text = String.Format(
-@"Must go: {2:HH:mm:ss}
+            {
+                var mustGo = begin.Value + Contract.Current.MaxWorkTimePerDay;
+                var go = begin.Value + (Contract.Current.RegularWorkTimePerDay + Contract.Current.PauseTimePerDay);
+
+                text = String.Format(
+    @"Go: {5:HH:mm:ss}
+Latest go: {2:HH:mm:ss}
 Time left: {4:hh\:mm}
 
 Current: {3:HH:mm:ss}
 Come: {1:HH:mm:ss}
 Hours: {0:G3}",
-                (now - begin).TotalHours,
-                begin,
-                mustGo,
-                now,
-                mustGo - now);
+                    (now - begin.Value).TotalHours,
+                    begin.Value,
+                    mustGo,
+                    now,
+                    mustGo - now);
+            }
 
             notifyIcon.ShowBalloonTip(10000, "Work Time Alert", text, ToolTipIcon.Info);
         }

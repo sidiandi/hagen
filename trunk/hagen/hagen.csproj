@@ -9,6 +9,9 @@
     <AssemblyName>hagen</AssemblyName>
   </PropertyGroup>
   <ItemGroup>
+    <Reference Include="log4net">
+      <HintPath>..\lib\sidi-util\log4net.dll</HintPath>
+    </Reference>
     <Reference Include="ManagedWinapi, Version=0.3.0.0, Culture=neutral, processorArchitecture=MSIL">
       <SpecificVersion>False</SpecificVersion>
       <HintPath>..\..\lib\ManagedWinapi.dll</HintPath>

@@ -263,7 +263,8 @@ Hours: {0:G3}",
                     begin.Value,
                     mustGo,
                     now,
-                    mustGo - now);
+                    mustGo - now,
+                    go);
             }
 
             notifyIcon.ShowBalloonTip(10000, "Work Time Alert", text, ToolTipIcon.Info);

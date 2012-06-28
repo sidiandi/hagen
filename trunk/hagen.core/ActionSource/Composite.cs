@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 using System.Reflection;
+using Sidi.CommandLine;
 
 namespace hagen.ActionSource
 {
@@ -38,10 +39,23 @@ namespace hagen.ActionSource
 
         public static IList<IActionSource> GetPlugins(Assembly assembly)
         {
-            return assembly.GetTypes()
-                .Where(t => typeof(IActionSource).IsAssignableFrom(t))
+            var types = assembly.GetTypes()
                 .Where(t => t.GetConstructor(new Type[]{}) != null)
+                .ToList();
+
+            return types
+                .Where(t => typeof(IActionSource).IsAssignableFrom(t))
                 .Select(t => (IActionSource) Activator.CreateInstance(t))
+                
+                .Concat(types
+                    .Where(t => t.GetCustomAttributes(typeof(Usage), false).Any())
+                    .Select(t =>
+                        {
+                            var parser = new Parser(Activator.CreateInstance(t));
+                            return new ActionFilter(parser);
+                        }))
+
+                
                 .ToList();
         }
 

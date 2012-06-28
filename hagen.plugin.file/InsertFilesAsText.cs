@@ -9,43 +9,9 @@ using Sidi.CommandLine;
 
 namespace hagen
 {
-    public class ActionFilter : IActionSource
+    [Usage("Actions for files")]
+    public class FileActions
     {
-        public Parser Parser;
-
-        public ActionFilter()
-        {
-        }
-
-        List<string> emptyArgs = new List<string>();
-
-        public IList<IAction> GetActions(string query)
-        {
-            return Parser.Actions
-                .Where(i => Parser.IsMatch(query, i.Name))
-                .Select(i => (IAction) new SimpleAction(
-                    String.Format("{0} ({1})", i.Name, i.Usage),
-                    () => {
-                        if (i.MethodInfo.GetParameters().Length == 0)
-                        {
-                            i.Handle(emptyArgs, true);
-                        }
-                        else
-                        {
-                            this.Parser.Parse(new string[] { "ShowDialog", i.Name });
-                        }
-                    }))
-                .ToList();
-        }
-    }
-
-    public class FileActions : ActionFilter
-    {
-        public FileActions()
-        {
-            Parser = new Parser(this);
-        }
-
         [Usage("inserts files as text")]
         public void InsertFilesAsText()
         {

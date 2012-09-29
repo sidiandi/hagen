@@ -114,24 +114,31 @@ namespace hagen
             return new Rectangle((int)r.X, (int)r.Y, (int)r.Width, (int)r.Height);
         }
 
-        public void CaptureActiveWindow(Path destination)
+        public Path CaptureActiveWindow(Path directory)
         {
             var activeWindow = AutomationElement.FocusedElement.GetTopLevelElement();
             using (var b = Capture(ToRectangle(activeWindow.Current.BoundingRectangle)))
             {
-                var file = destination.CatDir(GetCaptureFilename(activeWindow, DateTime.Now));
+                var file = directory.CatDir(GetCaptureFilename(activeWindow, DateTime.Now));
                 file.EnsureParentDirectoryExists();
                 b.Save(file.ToString());
+                return file;
             }
         }
 
-        public void Capture(Screen screen, Path destination)
+        public Path Capture(Screen screen, Path destination)
         {
             using (var bitmap = Capture(screen))
             {
                 destination.EnsureParentDirectoryExists();
                 bitmap.Save(destination.ToString(), System.Drawing.Imaging.ImageFormat.Png);
+                return destination;
             }
+        }
+
+        public Path CaptureToDirectory(Screen screen, Path directory)
+        {
+            return Capture(screen, directory.CatDir(GetCaptureFilename(screen, DateTime.Now)));
         }
     }
 }

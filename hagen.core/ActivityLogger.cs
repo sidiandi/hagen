@@ -93,17 +93,14 @@ namespace hagen
         {
             if (e.KeyCode == System.Windows.Forms.Keys.PrintScreen)
             {
-                var sc = new ScreenCapture();
-                var dir = Hagen.Instance.ScreenCaptureDirectory;
                 if ((Control.ModifierKeys & Keys.Alt) == Keys.Alt)
                 {
-                    sc.CaptureActiveWindow(dir);
+                    Hagen.Instance.CaptureActiveWindow();
                 }
                 else
                 {
-                    sc.CaptureAll(dir);
+                    Hagen.Instance.CaptureScreens();
                 }
-                Process.Start(dir.ToString());
             }
         }
 

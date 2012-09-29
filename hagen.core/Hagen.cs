@@ -24,6 +24,7 @@ using System.Text;
 using Sidi.Util;
 using System.Data.Linq;
 using Sidi.IO.Long;
+using System.Windows.Forms;
 
 namespace hagen
 {
@@ -75,6 +76,27 @@ namespace hagen
             {
                 return b.Begin;
             }
+        }
+
+        public Path CaptureActiveWindow()
+        {
+            var sc = new ScreenCapture();
+            var dir = Hagen.Instance.ScreenCaptureDirectory;
+            return sc.CaptureActiveWindow(dir);
+        }
+
+        public IList<Path> CaptureScreens()
+        {
+            var sc = new ScreenCapture();
+            var dir = Hagen.Instance.ScreenCaptureDirectory;
+            return sc.CaptureAll(dir);
+        }
+
+        public Path CapturePrimaryScreen()
+        {
+            var sc = new ScreenCapture();
+            var dir = Hagen.Instance.ScreenCaptureDirectory;
+            return sc.CaptureToDirectory(Screen.PrimaryScreen, dir);
         }
 
         public Collection<Input> Inputs

@@ -28,6 +28,7 @@ using System.Threading;
 using Utilities;
 using System.Windows;
 using System.Diagnostics;
+using System.Windows.Forms;
 
 namespace hagen
 {
@@ -88,13 +89,34 @@ namespace hagen
             }));
         }
 
+        void HandlePrintScreen(KeyEventArgs e)
+        {
+            if (e.KeyCode == System.Windows.Forms.Keys.PrintScreen)
+            {
+                var sc = new ScreenCapture();
+                var dir = Hagen.Instance.ScreenCaptureDirectory;
+                if ((Control.ModifierKeys & Keys.Alt) == Keys.Alt)
+                {
+                    sc.CaptureActiveWindow(dir);
+                }
+                else
+                {
+                    sc.CaptureAll(dir);
+                }
+                Process.Start(dir.ToString());
+            }
+        }
+
         void KeyboardInput(object sender, System.Windows.Forms.KeyEventArgs e)
         {
-            DateTime n = DateTime.Now;
             ThreadPool.QueueUserWorkItem(new WaitCallback(x =>
             {
                 lock (this)
                 {
+                    var keyEvent = (System.Windows.Forms.KeyEventArgs)x;
+                    HandlePrintScreen(keyEvent);
+                    DateTime n = DateTime.Now;
+                    
                     UpdateInput(n);
                     ++currentInput.KeyDown;
 
@@ -103,7 +125,7 @@ namespace hagen
                         ++currentProgram.KeyDown;
                     }
                 }
-            }));
+            }), e);
         }
 
         void CommitInput()

@@ -168,7 +168,7 @@ namespace hagen
         {
             Process p = new Process();
             p.StartInfo.FileName = FileUtil.BinFile("sqlite3.exe");
-            p.StartInfo.Arguments = Hagen.Instance.DatabasePath.Quote();
+            p.StartInfo.Arguments = Hagen.Instance.DatabasePath.ToString().Quote();
             p.StartInfo.CreateNoWindow = false;
             p.Start();
         }
@@ -302,10 +302,10 @@ Hours: {0:G3}",
                 "Notes",
                 Sidi.IO.Long.Path.GetValidFilename(searchBox1.Query + ".txt"));
 
-            if (!File.Exists(notesFile))
+            if (!notesFile.Exists)
             {
                 notesFile.EnsureParentDirectoryExists();
-                using (var w = File.OpenWrite(notesFile))
+                using (var w = Sidi.IO.Long.File.OpenWrite(notesFile))
                 {
                     w.Write(new byte[]{ 0xef, 0xbb, 0xbf }, 0, 3);
                     using (var sw = new StreamWriter(w))
@@ -315,13 +315,13 @@ Hours: {0:G3}",
                 }
             }
 
-            var p = Process.Start("notepad.exe", notesFile);
+            var p = Process.Start("notepad.exe", notesFile.ToString());
             p.WaitForExit();
 
             var a = new Action()
             {
                 Name = searchBox1.Query,
-                CommandObject = new InsertText() { FileName = notesFile }
+                CommandObject = new InsertText() { FileName = notesFile.ToString() }
             };
 
             actions.Add(a);

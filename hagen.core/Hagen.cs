@@ -23,26 +23,34 @@ using System.Linq;
 using System.Text;
 using Sidi.Util;
 using System.Data.Linq;
+using Sidi.IO.Long;
 
 namespace hagen
 {
     public class Hagen
     {
-        public string DatabasePath
+        public Path DatabasePath
         {
             get
             {
-                return FileUtil.CatDir(DataDirectory, "hagen.sqlite");
+                return DataDirectory.CatDir("hagen.sqlite");
             }
         }
 
-        public string DataDirectory
+        public Path DataDirectory
         {
             get
             {
-                return FileUtil.CatDir(
-                    Environment.GetFolderPath(Environment.SpecialFolder.LocalApplicationData),
-                    "hagen");
+                return new Sidi.IO.Long.Path(Environment.GetFolderPath(Environment.SpecialFolder.LocalApplicationData))
+                    .CatDir("hagen");
+            }
+        }
+
+        public Path ScreenCaptureDirectory
+        {
+            get
+            {
+                return DataDirectory.CatDir("screen");
             }
         }
 
@@ -50,7 +58,7 @@ namespace hagen
         {
             get
             {
-                return new Collection<Action>(DatabasePath);
+                return new Collection<Action>(DatabasePath.NoPrefix);
             }
         }
 
@@ -73,7 +81,7 @@ namespace hagen
         {
             get
             {
-                return new Collection<Input>(DatabasePath);
+                return new Collection<Input>(DatabasePath.NoPrefix);
             }
         }
 
@@ -81,7 +89,7 @@ namespace hagen
         {
             get
             {
-                return new Collection<ProgramUse>(DatabasePath);
+                return new Collection<ProgramUse>(DatabasePath.NoPrefix);
             }
         }
 
@@ -89,7 +97,7 @@ namespace hagen
         {
             get
             {
-                return new Collection<Log>(DatabasePath);
+                return new Collection<Log>(DatabasePath.NoPrefix);
             }
         }
 

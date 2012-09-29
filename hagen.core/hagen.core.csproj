@@ -73,6 +73,7 @@
       <DesignTimeSharedInput>True</DesignTimeSharedInput>
     </Compile>
     <Compile Include="AsyncQuery.cs" />
+    <Compile Include="ScreenCapture.cs" />
     <Compile Include="StartProcess.cs" />
     <Compile Include="StringEx.cs" />
     <Compile Include="TimeInterval.cs" />

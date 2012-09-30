@@ -33,6 +33,7 @@ using System.IO;
 using NUnit.Framework;
 using System.Text.RegularExpressions;
 using Sidi.Visualization;
+using Sidi.Extensions;
 
 namespace activityReport
 {
@@ -136,29 +137,128 @@ namespace activityReport
             Report(Console.Out, TimeInterval.Last(new TimeSpan(30,0,0,0)));
         }
 
+        [Usage("Prints a day-by-day work time report")]
+        public void Worktime()
+        {
+            WorktimeReport(Console.Out, new TimeInterval(DateTime.Now.AddYears(-1), DateTime.Now));
+        }
+
         public void Report(TextWriter w, TimeInterval range)
         {
-            foreach (var i in range.Days)
+            var wti = range.Days.Select(x => new WorktimeInfo(x, input)).ToList();
+            foreach (var day in wti)
             {
-                var d = input.Range(i).ToList();
-
-                w.WriteLine();
-                w.WriteLine("{0:ddd yyyy-MM-dd}", i.Begin);
-                var wis = d.WorkIntervals().ToList();
-                foreach (var wi in wis)
+                w.Write(@"{0:ddd dd.MM.yyyy}: ", day.Date);
+                if (day.Come == null)
                 {
-                    w.WriteLine("{0,-6} Begin: {2:HH:mm:ss} End: {3:HH:mm:ss} {1,6:F} h",
-                        wi.Place,
-                        wi.TimeInterval.Duration.TotalHours,
-                        wi.TimeInterval.Begin,
-                        wi.TimeInterval.End);
+                    w.Write("nicht anwesend");
                 }
-                var homeSum = wis.Where(x => x.Place != Place.Office).Sum(x => x.TimeInterval.Duration.TotalHours);
-                if (homeSum > 0)
+                else
                 {
-                    w.WriteLine("{0,-36} {1,6:F} h", "Home sum:", homeSum);
+                    w.Write("Kommzeit {0:HH:mm} Uhr, Gehzeit {1:HH:mm} Uhr", day.Come, day.OfficialGo);
+                }
+                w.WriteLine();
+            }
+        }
+
+        public class WorktimeInfo
+        {
+            public WorktimeInfo()
+            {
+                Come = null;
+                Go = null;
+            }
+
+            public WorktimeInfo(TimeInterval day, Collection<Input> input)
+            {
+                var data = input.Range(day);
+                Date = day.Begin.Date;
+
+                Due = activityReport.Worktime.IsWorkDay(Date) ? activityReport.Worktime.RegularDailyWorkTime.TotalHours : 0;
+
+                if (data.Any())
+                {
+                    Attendance = new TimeInterval(
+                        data.First().Begin,
+                        data.Last().End);
+                    Come = Attendance.Begin;
+                    Go = Attendance.End;
+
+                    OfficialWorktime = activityReport.Worktime.GetOfficialWorkTime(Attendance).TotalHours;
+                    RealWorktime = Attendance.Duration.TotalHours;
+                    ActivityTime = data.Active().TotalHours;
+                }
+                else
+                {
+                    Attendance = null;
+                    Come = null;
+                    Go = null;
+                    OfficialWorktime = 0;
+                    RealWorktime = 0;
+                    ActivityTime = 0;
                 }
             }
+
+            public DateTime? OfficialGo
+            {
+                get
+                {
+                    if (Go == null)
+                    {
+                        return null;
+                    }
+
+                    var lastLegalGo = this.Come 
+                        + activityReport.Worktime.MaxWorkTimePerDay 
+                        + activityReport.Worktime.Pause;
+
+                    if (Go.Value < lastLegalGo)
+                    {
+                        return Go;
+                    }
+                    else
+                    {
+                        return lastLegalGo;
+                    }
+
+                }
+            }
+
+            public DateTime Date;
+            public DateTime? Come;
+            public DateTime? Go;
+            public TimeInterval Attendance;
+            public double OfficialWorktime;
+            public double RealWorktime;
+            public double ActivityTime;
+            public double Due;
+            public double Balance;
+
+            public double Change { get { return OfficialWorktime - Due; } }
+        }
+
+        void UpdateBalance(IList<WorktimeInfo> e)
+        {
+            for (int i = 1; i < e.Count; ++i)
+            {
+                e[i].Balance = e[i - 1].Balance + e[i].OfficialWorktime - e[i].Due;
+            }
+        }
+
+        public void WorktimeReport(TextWriter w, TimeInterval range)
+        {
+            var wti = range.Days.Select(x => new WorktimeInfo(x, input)).ToList();
+            UpdateBalance(wti);
+
+            wti.ListFormat()
+                .AddColumn("Date", x => String.Format("{0:ddd dd.MM.yyyy}", x.Date))
+                .AddColumn("Come", x => String.Format("{0:HH:mm}", x.Come))
+                .AddColumn("Go", x => String.Format("{0:HH:mm}", x.Go))
+                .AddColumn("Worktime", x => String.Format("{0:F2}", x.OfficialWorktime))
+                .AddColumn("Due", x => String.Format("{0:F2}", x.Due))
+                .AddColumn("Change", x => String.Format("{0:F2}", x.Change))
+                .AddColumn("Balance", x => String.Format("{0:F2}", x.Balance))
+                .RenderText();
         }
 
         [Usage("Program use")]

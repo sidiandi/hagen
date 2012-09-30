@@ -178,7 +178,7 @@ namespace hagen
             var p = Path.GetTempPath().CatDir("work-time.txt");
             using (var output = new StreamWriter(p))
             {
-                new activityReport.Program().Report(output, TimeInterval.LastDays(90));
+                new activityReport.Program().WorktimeReport(output, TimeInterval.LastDays(90));
             }
             Process.Start("notepad.exe", p.Quote());
 

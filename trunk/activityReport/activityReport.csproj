@@ -27,6 +27,7 @@
   </ItemGroup>
   <ItemGroup>
     <Compile Include="GraphEx.cs" />
+    <Compile Include="IEnumerableEx.cs" />
     <Compile Include="ListDetail.cs">
       <SubType>Form</SubType>
     </Compile>
@@ -36,6 +37,7 @@
     <Compile Include="PointPairListExtension.cs" />
     <Compile Include="Program.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
+    <Compile Include="Worktime.cs" />
   </ItemGroup>
   <ItemGroup>
     <EmbeddedResource Include="ListDetail.resx">

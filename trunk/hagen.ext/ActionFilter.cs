@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 using Sidi.CommandLine;
+using System.Text.RegularExpressions;
 
 namespace hagen
 {
@@ -20,7 +21,7 @@ namespace hagen
         public IList<IAction> GetActions(string query)
         {
             return Parser.Actions
-                .Where(i => Parser.IsMatch(query, i.Name))
+                .Where(i => Parser.IsMatch(query, i.Name) || Regex.IsMatch(i.Name, query, RegexOptions.IgnoreCase))
                 .Select(i => (IAction)new SimpleAction(
                     String.Format("{0} ({1})", i.Name, i.Usage),
                     () =>

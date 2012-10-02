@@ -62,7 +62,7 @@ namespace hagen.ActionSource
 <img src=""cid:{0}""
 </body>
 </html>", id);
-            mailInspector.Activate();
+            ((_Inspector)mailInspector).Activate();
         }
 
         [TestFixture]

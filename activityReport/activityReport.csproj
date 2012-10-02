@@ -22,7 +22,7 @@
     </Reference>
     <Reference Include="System.Drawing" />
     <Reference Include="ZedGraph">
-      <HintPath>..\..\lib\Zedgraph\ZedGraph.dll</HintPath>
+      <HintPath>$(LibDir)ZedGraph.dll</HintPath>
     </Reference>
   </ItemGroup>
   <ItemGroup>

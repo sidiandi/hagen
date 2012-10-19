@@ -33,7 +33,7 @@ namespace hagen.ActionSource
             this.Sources = sources.ToList();
         }
 
-        public IList<IAction> GetActions(string query)
+        public IEnumerable<IAction> GetActions(string query)
         {
             return Sources.SelectMany(source => 
                 {

@@ -24,7 +24,7 @@ namespace hagen.ActionSource
 {
     public class OpenFile : IActionSource
     {
-        public IList<IAction> GetActions(string query)
+        public IEnumerable<IAction> GetActions(string query)
         {
             var fl = FileLocation.Parse(query);
             return new IAction[] { new ShellAction(fl.Path) }.ToList();

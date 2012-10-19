@@ -201,7 +201,7 @@ namespace hagen
 
         IList<IAction> Work(string query)
         {
-            return ActionSource.GetActions(query);
+            return ActionSource.GetActions(query).ToList();
         }
 
         public event EventHandler Complete;

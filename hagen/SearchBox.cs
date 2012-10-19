@@ -29,6 +29,7 @@ using Sidi.Util;
 using System.IO;
 using Sidi.IO;
 using hagen.ActionSource;
+using BrightIdeasSoftware;
 
 namespace hagen
 {
@@ -36,7 +37,7 @@ namespace hagen
     {
         private static readonly log4net.ILog log = log4net.LogManager.GetLogger(System.Reflection.MethodBase.GetCurrentMethod().DeclaringType);
 
-        Sidi.Forms.ItemView<IAction> itemView;
+        ObjectListView itemView;
 
         Collection<Action> data;
 
@@ -65,61 +66,65 @@ namespace hagen
         {
             this.BeginInvoke(new Action<IList<IAction>>(x =>
                 {
-                    itemView.List = x;
+                    Actions = x;
                     SelectItem(0);
                 }), asyncQuery.Result);
         }
 
         void SelectItem(int index)
         {
-            itemView.Selection = new IntSet(new Interval(index, index + 1));
-            itemView.FocusedItemIndex = index;
+            itemView.SelectedIndex = index;
         }
 
         AsyncQuery asyncQuery;
 
-        class ItemFormat : Sidi.Forms.ItemView<IAction>.IItemFormat
-        {
-            public ItemFormat()
-            {
-            }
-
-            public Font Font = new Font("Arial", 12);
-
-            public void Paint(Sidi.Forms.ItemView<IAction>.PaintArgs e)
-            {
-                int iconWidth = 32;
-                int padding = 4;
-                var g = e.Graphics;
-                g.FillRectangle(e.BackgroundBrush, e.Rect);
-                var icon = e.Item.Icon;
-                Rectangle iconRect = e.Rect;
-                iconRect.Inflate(-padding, -padding);
-                iconRect.Width = iconWidth;
-
-                if (icon != null)
-                {
-                    g.DrawIcon(icon, iconRect);
-                }
-
-                StringFormat sf = new StringFormat();
-                sf.Alignment = StringAlignment.Near;
-                sf.LineAlignment = StringAlignment.Center;
-                Rectangle tr = Rectangle.FromLTRB(iconRect.Right + padding, e.Rect.Top, e.Rect.Right, e.Rect.Bottom);
-                var itemText = String.Format("{0}", e.Item.Name);
-                g.DrawString(itemText, Font, e.ForegroundBrush, tr, sf);
-            }
-        }
-
         public SearchBox()
         {
-            itemView = new Sidi.Forms.ItemView<IAction>();
-            itemView.Dock = DockStyle.Fill;
-            itemView.TabStop = false;
-            itemView.ItemLayout = new Sidi.Forms.ItemLayoutRows(32 + 2 * 4);
-            var itemFormat = new ItemFormat();
-            itemFormat.Font = this.Font;
-            itemView.ItemFormat = itemFormat;
+            int size = 40;
+
+            itemView = new ObjectListView()
+            {
+                HeaderStyle = ColumnHeaderStyle.None,
+                Dock = DockStyle.Fill,
+                TabStop = false,
+                RowHeight = size,
+                GridLines = false,
+                HideSelection = false,
+                UseCustomSelectionColors = true,
+                HighlightBackgroundColor = SystemColors.Highlight,
+                UnfocusedHighlightBackgroundColor = SystemColors.Highlight,
+                HighlightForegroundColor = SystemColors.HighlightText,
+                UnfocusedHighlightForegroundColor = SystemColors.HighlightText,
+                OwnerDraw = true,
+                ShowGroups = false,
+                ShowItemToolTips = true,
+                TintSortColumn = true,
+                UseAlternatingBackColors = true,
+                UseHotItem = true,
+                FullRowSelect = true,
+            };
+
+            itemView.Columns.Add(new OLVColumn()
+                {
+                    Name = "Icon",
+                    AspectGetter = x => ((IAction)x).Name,
+                    AspectToStringConverter = x => String.Empty,
+                    ImageGetter = x =>
+                    {
+                        var icon = ((IAction)x).Icon;
+                        return icon != null ? icon.ToBitmap() : null;
+                    },
+                    Width = size,
+                });
+
+            itemView.Columns.Add(new OLVColumn()
+                {
+                    Name = "Name",
+                    AspectGetter = x => ((IAction)x).Name,
+                    WordWrap = true,
+                    FillsFreeSpace = true,
+                });
+
             Action.IconCache.EntryUpdated += new LruCacheBackground<Action, Icon>.EntryUpdatedHandler(IconCache_EntryUpdated);
 
             this.Controls.Add(itemView);
@@ -130,7 +135,7 @@ namespace hagen
             this.DragEnter += new DragEventHandler(SearchBox_DragEnter);
             this.DragDrop += new DragEventHandler(SearchBox_DragDrop);
 
-            itemView.ItemsActivated += new EventHandler(itemView_ItemsActivated);
+            itemView.ItemActivate += new EventHandler(itemView_ItemsActivated);
             itemView.GotFocus += new EventHandler(itemView_GotFocus);
 
             itemView.ContextMenu = new ContextMenu(new MenuItem[]
@@ -152,6 +157,11 @@ namespace hagen
             textBoxQuery.KeyDown += new KeyEventHandler(textBoxQuery_KeyDown);
 
             textBoxQuery.TextChanged += new EventHandler(textBoxQuery_TextChanged);
+        }
+
+        void itemView_RetrieveVirtualItem(object sender, RetrieveVirtualItemEventArgs e)
+        {
+            e.Item = new ListViewItem(actions[e.ItemIndex].Name);
         }
 
         void SearchBox_DragDrop(object sender, DragEventArgs e)
@@ -204,7 +214,17 @@ namespace hagen
         {
             data.AddOrUpdate(action);
             added.Add(action);
-            itemView.List = new SelectList<Action, IAction>(added, a => new ActionWrapper(a, data));
+            Actions = new SelectList<Action, IAction>(added, a => new ActionWrapper(a, data));
+        }
+
+        IList<IAction> actions;
+        IList<IAction> Actions
+        {
+            set
+            {
+                actions = value;
+                itemView.SetObjects(actions);
+            }
         }
 
         void SearchBox_DragEnter(object sender, DragEventArgs e)
@@ -266,13 +286,13 @@ namespace hagen
         {
             get
             {
-                return itemView.SelectionEnumerator;
+                return itemView.SelectedObjects.Cast<IAction>();
             }
         }
 
         public void Remove()
         {
-            foreach (var i in itemView.SelectionEnumerator.OfType<ActionWrapper>())
+            foreach (var i in itemView.SelectedObjects.OfType<ActionWrapper>())
             {
                 data.Remove(i.Action);
             }
@@ -284,11 +304,17 @@ namespace hagen
             switch (e.KeyCode)
             {
                 case Keys.Down:
-                    SelectItem(itemView.FocusedItemIndex + 1);
+                    if (itemView.SelectedIndex < itemView.GetItemCount())
+                    {
+                        SelectItem(itemView.SelectedIndex + 1);
+                    }
                     e.Handled = true;
                     break;
                 case Keys.Up:
-                    SelectItem(itemView.FocusedItemIndex - 1);
+                    if (itemView.SelectedIndex > 0)
+                    {
+                        SelectItem(itemView.SelectedIndex - 1);
+                    }
                     e.Handled = true;
                     break;
                 case Keys.Enter:
@@ -330,4 +356,58 @@ namespace hagen
             }
         }
     }
+
+    public class ListWrapper : IVirtualListDataSource
+    {
+        public ListWrapper(IList<IAction> actions)
+        {
+            this.actions = actions;
+        }
+        IList<IAction> actions;
+
+        public void AddObjects(System.Collections.ICollection modelObjects)
+        {
+            throw new NotImplementedException();
+        }
+
+        public object GetNthObject(int n)
+        {
+            return actions[n];
+        }
+
+        public int GetObjectCount()
+        {
+            return actions.Count;
+        }
+
+        public int GetObjectIndex(object model)
+        {
+            return actions.IndexOf((IAction)model);
+        }
+
+        public void PrepareCache(int first, int last)
+        {
+        }
+
+        public void RemoveObjects(System.Collections.ICollection modelObjects)
+        {
+            throw new NotImplementedException();
+        }
+
+        public int SearchText(string value, int first, int last, OLVColumn column)
+        {
+            throw new NotImplementedException();
+        }
+
+        public void SetObjects(System.Collections.IEnumerable collection)
+        {
+            throw new NotImplementedException();
+        }
+
+        public void Sort(OLVColumn column, SortOrder order)
+        {
+            throw new NotImplementedException();
+        }
+    }
+
 }

@@ -31,7 +31,7 @@ namespace hagen.ActionSource
 
         Sidi.Persistence.Collection<Action> actions;
         
-        public IList<IAction> GetActions(string query)
+        public IEnumerable<IAction> GetActions(string query)
         {
             string sql;
             if (String.IsNullOrEmpty(query) || query.Length <= 2)

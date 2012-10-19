@@ -35,7 +35,7 @@ namespace hagen
 
         List<string> emptyArgs = new List<string>();
 
-        public IList<IAction> GetActions(string query)
+        public IEnumerable<IAction> GetActions(string query)
         {
             return Parser.Actions
                 .Where(i => Parser.IsMatch(query, i.Name) || Regex.IsMatch(i.Name, query, RegexOptions.IgnoreCase))

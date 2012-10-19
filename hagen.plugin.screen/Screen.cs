@@ -33,22 +33,24 @@ namespace hagen.ActionSource
     [Usage("Makes screen shots")]
     public class Screen
     {
+        /*
         [Usage("Create a screen shot mail")]
-        public void CaptureActiveWindow()
+        public void MailScreenshotActiveWindow()
         {
             var files = Hagen.Instance.CaptureScreens();
             Process.Start(files[0].ToString());
         }
+         */
 
         [Usage("Create a screen shot mail")]
-        public void MailPrimaryScreen()
+        public void MailScreenShotPrimaryScreen()
         {
             var file = Hagen.Instance.CapturePrimaryScreen();
             CreateOutlookEmailWithEmbeddedPicture(file);
         }
 
         [Usage("Create a screen shot of active window and prepare an email")]
-        public void MailActiveWindow()
+        public void MailScreenShotActiveWindow()
         {
             var file = Hagen.Instance.CaptureActiveWindow();
             CreateOutlookEmailWithEmbeddedPicture(file);
@@ -62,9 +64,26 @@ namespace hagen.ActionSource
 
         const string PR_HIDE_ATTACH = "http://schemas.microsoft.com/mapi/id/{00062008-0000-0000-C000-000000000046}/8514000B";
 
+        Microsoft.Office.Interop.Outlook.Application GetOutlook()
+        {
+            try
+            {
+                var instance = Marshal.GetActiveObject("Outlook.Application") as Microsoft.Office.Interop.Outlook.Application;
+                if (instance != null)
+                {
+                    return instance;
+                }
+            }
+            catch
+            {
+            }
+
+            return new Microsoft.Office.Interop.Outlook.Application();
+        }
+        
         public void CreateOutlookEmailWithEmbeddedPicture(Path imagePath)
         {
-            var outlook = Marshal.GetActiveObject("Outlook.Application") as Microsoft.Office.Interop.Outlook.Application;
+            var outlook = GetOutlook();
             var mailItem = (MailItem) outlook.CreateItem(Microsoft.Office.Interop.Outlook.OlItemType.olMailItem);
             mailItem.Subject = imagePath.Name;
             mailItem.BodyFormat = OlBodyFormat.olFormatHTML;

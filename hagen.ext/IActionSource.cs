@@ -24,6 +24,6 @@ namespace hagen
 {
     public interface IActionSource
     {
-        IList<IAction> GetActions(string query);
+        IEnumerable<IAction> GetActions(string query);
     }
 }

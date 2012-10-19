@@ -24,13 +24,21 @@ namespace hagen.ActionSource
 {
     public class WebLookup : IActionSource
     {
-        public IList<IAction> GetActions(string query)
+        public IEnumerable<IAction> GetActions(string query)
         {
-            var webLookup = new List<IAction>();
-            webLookup.Add(WebLookupAction("Google", "http://www.google.com/search?q={0}", query));
-            webLookup.Add(WebLookupAction("Wikipedia", "http://en.wikipedia.org/wiki/Special:Search?search={0}&go=Go", query));
-            webLookup.Add(WebLookupAction("Leo", "http://dict.leo.org/?lp=ende&search={0}", query));
-            return webLookup;
+            query = query.Trim();
+            if (Uri.IsWellFormedUriString(query, UriKind.Absolute))
+            {
+                yield return new ShellAction(query, String.Format("Open URL {0}", query));
+            }
+            else
+            {
+                yield return WebLookupAction("Google", "http://www.google.com/search?q={0}", query);
+                yield return WebLookupAction("Wikipedia", "http://en.wikipedia.org/wiki/Special:Search?search={0}&go=Go", query);
+                yield return WebLookupAction("Translate", "http://translate.google.com/#auto/en/{0}", query);
+                yield return WebLookupAction("Leo", "http://dict.leo.org/?lp=ende&search={0}", query);
+                yield return WebLookupAction("Preis", "http://www.heise.de/preisvergleich/?fs={0}&x=0&y=0&in=", query);
+            }
         }
 
         IAction WebLookupAction(string title, string urlTemplate, string query)

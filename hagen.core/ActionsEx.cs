@@ -28,6 +28,7 @@ using SHDocVw;
 using Sidi.Extensions;
 using mshtml;
 using Sidi.Util;
+using Sidi.IO.Long;
 
 namespace hagen
 {
@@ -38,13 +39,15 @@ namespace hagen
         public static void UpdateStartMenu(this Collection<Action> actions)
         {
             FileActionFactory f = new FileActionFactory();
-            foreach (var p in new string[]{
-                AllUsersStartMenu,
-                Environment.GetFolderPath(Environment.SpecialFolder.StartMenu),
-                Environment.GetFolderPath(Environment.SpecialFolder.Desktop),
-                Environment.GetFolderPath(Environment.SpecialFolder.MyDocuments).CatDir("My RoboForm Data")
+            foreach (var p in new[]
+            {
+                new Sidi.IO.Long.Path(AllUsersStartMenu),
+                new Sidi.IO.Long.Path(Environment.GetFolderPath(Environment.SpecialFolder.StartMenu)),
+                new Sidi.IO.Long.Path(Environment.GetFolderPath(Environment.SpecialFolder.Desktop)),
+                new Sidi.IO.Long.Path(Environment.GetFolderPath(Environment.SpecialFolder.MyDocuments))
+                    .CatDir("My RoboForm Data")
             }
-            .Where(x => new Sidi.IO.Long.Path(x).Exists)
+            .Where(x => x.Exists)
             )
             {
                 try

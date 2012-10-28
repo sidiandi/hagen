@@ -24,6 +24,7 @@ using NUnit.Framework;
 using System.IO;
 using Sidi.IO;
 using System.Text.RegularExpressions;
+using L = Sidi.IO.Long;
 
 namespace hagen
 {
@@ -104,7 +105,7 @@ namespace hagen
                     var m = data.GetData(i) as MemoryStream;
                     if (m != null)
                     {
-                        string dumpFile = FileUtil.BinFile(FileUtil.CatDir(@"cb-dump", i));
+                        string dumpFile = L.Paths.BinDir.CatDir(@"cb-dump", i);
                         string pd = Path.GetDirectoryName(dumpFile);
                         if (!Directory.Exists(pd))
                         {
@@ -126,14 +127,16 @@ namespace hagen
             [Test]
             public void ReadFileDescriptor()
             {
-                string fn = ClipboardUrl.ReadFileDescriptorW(File.OpenRead(FileUtil.BinFile(@"unit-test\FileGroupDescriptorW")));
+                string fn = ClipboardUrl.ReadFileDescriptorW(File.OpenRead(
+                    Sidi.IO.Long.Paths.BinDir.CatDir(@"unit-test\FileGroupDescriptorW")));
                 Assert.AreEqual("myCSharp.de - DIE C#- und .NET Community - GUI Windows-Forms Email aus Clipboard auslesen.URL", fn);
             }
 
             [Test]
             public void ReadUrl()
             {
-                string u = ClipboardUrl.ReadUrl(File.OpenRead(FileUtil.BinFile(@"unit-test\FileContents")));
+                string u = ClipboardUrl.ReadUrl(File.OpenRead(
+                    Sidi.IO.Long.Paths.BinDir.CatDir(@"unit-test\FileContents")));
                 Assert.AreEqual("http://www.mycsharp.de/wbb2/thread.php?threadid=73296", u);
             }
         }

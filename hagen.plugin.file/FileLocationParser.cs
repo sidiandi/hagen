@@ -23,6 +23,7 @@ using NUnit.Framework;
 using System.Text.RegularExpressions;
 using Sidi.IO.Long;
 using Sidi.Util;
+using Sidi.Extensions;
 
 namespace hagen
 {

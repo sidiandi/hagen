@@ -24,6 +24,7 @@ using System.Text;
 using Sidi.Util;
 using System.Data.Linq;
 using Sidi.IO.Long;
+using Sidi.Extensions;
 using System.Windows.Forms;
 
 namespace hagen

@@ -66,7 +66,7 @@ namespace hagen
 
         public override string ToString()
         {
-            return "[{0:o}; {1:o}[".F(Begin, End);
+            return String.Format("[{0:o}; {1:o}[", Begin, End);
         }
 
         public IEnumerable<TimeInterval> Days

@@ -32,6 +32,8 @@ using System.Diagnostics;
 using Sidi.Forms;
 using System.IO;
 using mshtml;
+using Sidi.Extensions;
+using L = Sidi.IO.Long;
 
 namespace hagen
 {
@@ -167,7 +169,7 @@ namespace hagen
         private void sqliteConsoleToolStripMenuItem_Click(object sender, EventArgs e)
         {
             Process p = new Process();
-            p.StartInfo.FileName = FileUtil.BinFile("sqlite3.exe");
+            p.StartInfo.FileName = L.Paths.BinDir.CatDir("sqlite3.exe");
             p.StartInfo.Arguments = Hagen.Instance.DatabasePath.ToString().Quote();
             p.StartInfo.CreateNoWindow = false;
             p.Start();
@@ -175,12 +177,12 @@ namespace hagen
 
         private void reportMailToolStripMenuItem_Click(object sender, EventArgs e)
         {
-            var p = Path.GetTempPath().CatDir("work-time.txt");
+            var p = new Sidi.IO.Long.Path(Path.GetTempPath()).CatDir("work-time.txt");
             using (var output = new StreamWriter(p))
             {
                 new activityReport.Program().WorktimeReport(output, TimeInterval.LastDays(90));
             }
-            Process.Start("notepad.exe", p.Quote());
+            Process.Start("notepad.exe", p.ToString().Quote());
 
             /*
             var a = new ol.Application();

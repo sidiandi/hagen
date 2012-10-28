@@ -34,6 +34,7 @@ using NUnit.Framework;
 using System.Text.RegularExpressions;
 using Sidi.Visualization;
 using Sidi.Extensions;
+using Sidi.Forms;
 
 namespace activityReport
 {
@@ -134,7 +135,7 @@ namespace activityReport
         [Usage("Prints a day-by-day report")]
         public void Report()
         {
-            Report(Console.Out, TimeInterval.Last(new TimeSpan(30,0,0,0)));
+            Report(Console.Out, TimeInterval.Last(new TimeSpan(30, 0, 0, 0)));
         }
 
         [Usage("Prints a day-by-day work time report")]
@@ -208,8 +209,8 @@ namespace activityReport
                         return null;
                     }
 
-                    var lastLegalGo = this.Come 
-                        + activityReport.Worktime.MaxWorkTimePerDay 
+                    var lastLegalGo = this.Come
+                        + activityReport.Worktime.MaxWorkTimePerDay
                         + activityReport.Worktime.Pause;
 
                     if (Go.Value < lastLegalGo)
@@ -261,16 +262,44 @@ namespace activityReport
                 .RenderText();
         }
 
+        TypedTreeMap<T> CreateTreeMap<T>(IList<T> data)
+        {
+            return new TypedTreeMap<T>()
+            {
+                Items = data
+            };
+        }
+
         [Usage("Program use")]
         public void ProgramUse()
         {
             var t = TimeInterval.LastDays(60);
-            var programs = Hagen.Instance.ProgramUses.Query(p => p.Begin > t.Begin && p.Begin < t.End);
-            log.Info(programs.Count);
+            var programs = Hagen.Instance.ProgramUses.Query(p => p.Begin > t.Begin && p.Begin < t.End)
+                .GroupBy(x => x.File)
+                .Select(x => new { File = x.Key, KeyDown = x.Sum(i => i.KeyDown) })
+                .ToList();
 
-            Sidi.Visualization.SimpleTreeMap.Show(programs
-                .Select(x => new SimpleTreeMap.Item() { Lineage = Regex.Split(x.File, @"\\").Cast<object>(), Color = Color.White, Size = x.KeyDown }
-                    ));
+            var tm = CreateTreeMap(programs);
+            tm.GetLineage = x => Regex.Split(x.File.ToLower(), @"\\");
+            tm.GetSize = x => x.KeyDown;
+
+            tm.RunFullScreen();
+        }
+
+        [Usage("Program use")]
+        public void Captions()
+        {
+            var t = TimeInterval.LastDays(60);
+            var programs = Hagen.Instance.ProgramUses.Query(p => p.Begin > t.Begin && p.Begin < t.End)
+                .GroupBy(x => x.Caption)
+                .Select(x => new { Caption = x.Key, KeyDown = x.Sum(i => i.KeyDown) })
+                .ToList();
+
+            var tm = CreateTreeMap(programs);
+            tm.GetLineage = x => Regex.Split(x.Caption, @" \- ").Reverse();
+            tm.GetSize = x => x.KeyDown;
+
+            tm.RunFullScreen();
         }
 
         [Usage("Graphical reports")]
@@ -283,7 +312,7 @@ namespace activityReport
         {
             var main = new ListDetail();
 
-            var all = new TimeInterval(input.First().Begin,input.Last().End);
+            var all = new TimeInterval(input.First().Begin, input.Last().End);
 
             foreach (var mi in all.Months.Reverse())
             {
@@ -355,30 +384,29 @@ namespace activityReport
 
                 main.AddItem("{0:yyyy-MM} Programs".F(m.Begin), () =>
                 {
-                    var programUse = Hagen.Instance.ProgramUses.Query(p => p.Begin > m.Begin && p.Begin < m.End && p.File != String.Empty);
-                    var stm = new Sidi.Visualization.SimpleTreeMap();
-                    stm.Items = 
-                        programUse.Select(i => new Sidi.Visualization.SimpleTreeMap.Item()
-                        {
-                            Lineage = Regex.Split(i.File, @"\\"),
-                            Size = (float) (i.End - i.Begin).TotalSeconds,
-                            Color = Color.White,
-                        });
-                    return stm.CreateControl();
+                    IList<ProgramUse> programUse = Hagen.Instance.ProgramUses.Query(p => p.Begin > m.Begin && p.Begin < m.End && p.File != String.Empty);
+                    var stm = new Sidi.Visualization.TypedTreeMap<ProgramUse>()
+                    {
+                        Items = programUse.ToList(),
+                        GetLineage = x => Regex.Split(((ProgramUse)x).File, @"\\"),
+                        GetSize = i => (i.End - i.Begin).TotalSeconds,
+                        GetColor = i => Color.White,
+                        GetText = i => i.Caption,
+                    };
+                    return stm;
                 });
 
                 main.AddItem("{0:yyyy-MM} Captions".F(m.Begin), () =>
                 {
-                    var programUse = Hagen.Instance.ProgramUses.Query(p => p.Begin > m.Begin && p.Begin < m.End && p.Caption != String.Empty);
-                    var stm = new Sidi.Visualization.SimpleTreeMap(); 
-                    stm.Items =
-                        programUse.Select(i => new Sidi.Visualization.SimpleTreeMap.Item()
-                        {
-                            Lineage = Regex.Split(i.Caption, @" \- ").Reverse(),
-                            Size = (float)(i.End - i.Begin).TotalSeconds,
-                            Color = Color.White,
-                        });
-                    return stm.CreateControl();
+                    IList<ProgramUse> programUse = Hagen.Instance.ProgramUses.Query(p => p.Begin > m.Begin && p.Begin < m.End && p.Caption != String.Empty);
+                    var tm = new Sidi.Visualization.TypedTreeMap<ProgramUse>()
+                    {
+                        Items = programUse.ToList(),
+                        GetLineage = x => Regex.Split(((ProgramUse)x).Caption, @" \- ").Reverse(),
+                        GetSize = i => (float)(i.End - i.Begin).TotalSeconds,
+                        GetColor = i => Color.White,
+                    };
+                    return tm;
                 });
             }
 
@@ -407,7 +435,7 @@ namespace activityReport
                     ppl = ppl.Accumulate();
                     var kp = p.AddCurve("keystrokes", ppl, Color.Black, SymbolType.None);
                     kp.YAxisIndex = 0;
-                    
+
 
                     ppl = data.Select(x => new PointPair(new XDate(x.Begin), x.MouseMove)).ToPointPairList();
                     ppl = ppl.Accumulate();

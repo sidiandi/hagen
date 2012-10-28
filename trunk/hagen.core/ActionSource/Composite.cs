@@ -78,10 +78,10 @@ namespace hagen.ActionSource
 
         public static IList<IActionSource> GetPlugins()
         {
-            var dlls = System.IO.Directory.GetFiles(Sidi.IO.FileUtil.BinFile("."), "*.dll");
+            var dlls = Sidi.IO.Long.Paths.BinDir.Info.GetFiles("*.dll");
             
             return dlls
-                .Select(dll => Assembly.LoadFile(dll))
+                .Select(dll => Assembly.LoadFile(dll.FullName.ToString()))
                 .SelectMany(a => GetPlugins(a))
                 .ToList();
         }

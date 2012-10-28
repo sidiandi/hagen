@@ -33,6 +33,7 @@ using Microsoft.Win32;
 using System.Text.RegularExpressions;
 using System.Xml.Serialization;
 using Sidi.Util;
+using Sidi.Extensions;
 
 namespace hagen
 {
@@ -142,7 +143,7 @@ namespace hagen
 
         public Action()
         {
-            icons.EntryUpdated += new LruCacheBackground<Action, Icon>.EntryUpdatedHandler(icons_EntryUpdated);
+            icons.EntryUpdated +=new EventHandler<LruCacheBackground<Action,System.Drawing.Icon>.EntryUpdatedEventArgs>(icons_EntryUpdated);
             LastUseTime = DateTime.Now;
         }
 

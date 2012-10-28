@@ -98,8 +98,9 @@ namespace hagen
                 OwnerDraw = true,
                 ShowGroups = false,
                 ShowItemToolTips = true,
-                TintSortColumn = true,
+                Sorting = SortOrder.None,
                 UseAlternatingBackColors = true,
+                AlternateRowBackColor = Color.FromArgb(0xff, 0xf0, 0xf0, 0xf0),
                 UseHotItem = true,
                 FullRowSelect = true,
             };
@@ -125,7 +126,7 @@ namespace hagen
                     FillsFreeSpace = true,
                 });
 
-            Action.IconCache.EntryUpdated += new LruCacheBackground<Action, Icon>.EntryUpdatedHandler(IconCache_EntryUpdated);
+            Action.IconCache.EntryUpdated +=new EventHandler<LruCacheBackground<Action,Icon>.EntryUpdatedEventArgs>(IconCache_EntryUpdated);
 
             this.Controls.Add(itemView);
 
@@ -356,58 +357,4 @@ namespace hagen
             }
         }
     }
-
-    public class ListWrapper : IVirtualListDataSource
-    {
-        public ListWrapper(IList<IAction> actions)
-        {
-            this.actions = actions;
-        }
-        IList<IAction> actions;
-
-        public void AddObjects(System.Collections.ICollection modelObjects)
-        {
-            throw new NotImplementedException();
-        }
-
-        public object GetNthObject(int n)
-        {
-            return actions[n];
-        }
-
-        public int GetObjectCount()
-        {
-            return actions.Count;
-        }
-
-        public int GetObjectIndex(object model)
-        {
-            return actions.IndexOf((IAction)model);
-        }
-
-        public void PrepareCache(int first, int last)
-        {
-        }
-
-        public void RemoveObjects(System.Collections.ICollection modelObjects)
-        {
-            throw new NotImplementedException();
-        }
-
-        public int SearchText(string value, int first, int last, OLVColumn column)
-        {
-            throw new NotImplementedException();
-        }
-
-        public void SetObjects(System.Collections.IEnumerable collection)
-        {
-            throw new NotImplementedException();
-        }
-
-        public void Sort(OLVColumn column, SortOrder order)
-        {
-            throw new NotImplementedException();
-        }
-    }
-
 }

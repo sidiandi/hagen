@@ -24,7 +24,7 @@ using NUnit.Framework;
 using System.IO;
 using Sidi.IO;
 using System.Text.RegularExpressions;
-using L = Sidi.IO.Long;
+using L = Sidi.IO;
 
 namespace hagen
 {
@@ -40,7 +40,7 @@ namespace hagen
             {
                 var c = new ClipboardUrl();
                 var d = data.GetData(FileGroupDescriptorWFormat);
-                c.Title = Path.GetFileNameWithoutExtension(ReadFileDescriptorW((MemoryStream)d));
+                c.Title = System.IO.Path.GetFileNameWithoutExtension(ReadFileDescriptorW((MemoryStream)d));
                 if (data.GetDataPresent(UniformResourceLocatorWFormat))
                 {
                     c.Url = ((Stream)data.GetData(UniformResourceLocatorWFormat))
@@ -105,13 +105,9 @@ namespace hagen
                     var m = data.GetData(i) as MemoryStream;
                     if (m != null)
                     {
-                        string dumpFile = L.Paths.BinDir.CatDir(@"cb-dump", i);
-                        string pd = Path.GetDirectoryName(dumpFile);
-                        if (!Directory.Exists(pd))
-                        {
-                            Directory.CreateDirectory(pd);
-                        }
-                        File.WriteAllBytes(dumpFile, m.ToArray());
+                        var dumpFile = L.Paths.BinDir.CatDir(@"cb-dump", i);
+                        dumpFile.EnsureParentDirectoryExists();
+                        System.IO.File.WriteAllBytes(dumpFile, m.ToArray());
                     }
                 }
                 catch (Exception)
@@ -127,16 +123,16 @@ namespace hagen
             [Test]
             public void ReadFileDescriptor()
             {
-                string fn = ClipboardUrl.ReadFileDescriptorW(File.OpenRead(
-                    Sidi.IO.Long.Paths.BinDir.CatDir(@"unit-test\FileGroupDescriptorW")));
+                string fn = ClipboardUrl.ReadFileDescriptorW(System.IO.File.OpenRead(
+                    Sidi.IO.Paths.BinDir.CatDir(@"unit-test\FileGroupDescriptorW")));
                 Assert.AreEqual("myCSharp.de - DIE C#- und .NET Community - GUI Windows-Forms Email aus Clipboard auslesen.URL", fn);
             }
 
             [Test]
             public void ReadUrl()
             {
-                string u = ClipboardUrl.ReadUrl(File.OpenRead(
-                    Sidi.IO.Long.Paths.BinDir.CatDir(@"unit-test\FileContents")));
+                string u = ClipboardUrl.ReadUrl(LFile.OpenRead(
+                    Sidi.IO.Paths.BinDir.CatDir(@"unit-test\FileContents")));
                 Assert.AreEqual("http://www.mycsharp.de/wbb2/thread.php?threadid=73296", u);
             }
         }

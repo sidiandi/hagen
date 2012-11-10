@@ -35,6 +35,7 @@ using System.Text.RegularExpressions;
 using Sidi.Visualization;
 using Sidi.Extensions;
 using Sidi.Forms;
+using L = Sidi.IO;
 
 namespace activityReport
 {
@@ -384,28 +385,32 @@ namespace activityReport
 
                 main.AddItem("{0:yyyy-MM} Programs".F(m.Begin), () =>
                 {
-                    IList<ProgramUse> programUse = Hagen.Instance.ProgramUses.Query(p => p.Begin > m.Begin && p.Begin < m.End && p.File != String.Empty);
-                    var stm = new Sidi.Visualization.TypedTreeMap<ProgramUse>()
-                    {
-                        Items = programUse.ToList(),
-                        GetLineage = x => Regex.Split(((ProgramUse)x).File, @"\\"),
-                        GetSize = i => (i.End - i.Begin).TotalSeconds,
-                        GetColor = i => Color.White,
-                        GetText = i => i.Caption,
-                    };
+                    var programUse = Hagen.Instance.ProgramUses
+                        .Query(p => p.Begin > m.Begin && p.Begin < m.End && p.File != String.Empty)
+                        .GroupBy(p => p.File)
+                        .Select(p => new { File = new LPath(p.Key), TotalSeconds = p.Sum(x => (x.End - x.Begin).TotalSeconds) });
+
+                    var stm = programUse.CreateTreeMap();
+                    stm.GetLineage = x => x.File.Parts;
+                    stm.GetSize = i => i.TotalSeconds;
+                    stm.GetColor = i => Color.White;
+                    stm.GetText = i => new LPath(i.File).FileName;
+
                     return stm;
                 });
 
                 main.AddItem("{0:yyyy-MM} Captions".F(m.Begin), () =>
                 {
-                    IList<ProgramUse> programUse = Hagen.Instance.ProgramUses.Query(p => p.Begin > m.Begin && p.Begin < m.End && p.Caption != String.Empty);
-                    var tm = new Sidi.Visualization.TypedTreeMap<ProgramUse>()
-                    {
-                        Items = programUse.ToList(),
-                        GetLineage = x => Regex.Split(((ProgramUse)x).Caption, @" \- ").Reverse(),
-                        GetSize = i => (float)(i.End - i.Begin).TotalSeconds,
-                        GetColor = i => Color.White,
-                    };
+                    var programUse = Hagen.Instance.ProgramUses
+                        .Query(p => p.Begin > m.Begin && p.Begin < m.End && p.Caption != String.Empty)
+                        .GroupBy(p => p.Caption)
+                        .Select(p => new { Caption = Regex.Split(p.Key, @" \- ").Reverse(), Duration = p.Sum(x => (x.End - x.Begin).TotalSeconds)});
+
+                    var tm = programUse.CreateTreeMap();
+                    tm.GetLineage = x => x.Caption;
+                    tm.GetSize = i => i.Duration;
+                    tm.GetColor = i => Color.White;
+                    tm.GetText = x => x.Caption.Last();
                     return tm;
                 });
             }

@@ -30,7 +30,7 @@ namespace hagen
     [Usage("Actions for files")]
     public class FileActions
     {
-        [Usage("inserts files as text")]
+        [Usage("inserts files in clipboard as text")]
         public void InsertFilesAsText()
         {
             if (Clipboard.ContainsFileDropList())

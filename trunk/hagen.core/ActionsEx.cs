@@ -28,7 +28,7 @@ using SHDocVw;
 using Sidi.Extensions;
 using mshtml;
 using Sidi.Util;
-using Sidi.IO.Long;
+using Sidi.IO;
 
 namespace hagen
 {
@@ -41,11 +41,10 @@ namespace hagen
             FileActionFactory f = new FileActionFactory();
             foreach (var p in new[]
             {
-                new Sidi.IO.Long.Path(AllUsersStartMenu),
-                new Sidi.IO.Long.Path(Environment.GetFolderPath(Environment.SpecialFolder.StartMenu)),
-                new Sidi.IO.Long.Path(Environment.GetFolderPath(Environment.SpecialFolder.Desktop)),
-                new Sidi.IO.Long.Path(Environment.GetFolderPath(Environment.SpecialFolder.MyDocuments))
-                    .CatDir("My RoboForm Data")
+                new LPath(AllUsersStartMenu),
+                Sidi.IO.Paths.GetFolderPath(Environment.SpecialFolder.StartMenu),
+                Sidi.IO.Paths.GetFolderPath(Environment.SpecialFolder.Desktop),
+                Sidi.IO.Paths.GetFolderPath(Environment.SpecialFolder.MyDocuments).CatDir("My RoboForm Data")
             }
             .Where(x => x.Exists)
             )

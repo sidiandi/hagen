@@ -23,7 +23,7 @@ using System.Linq;
 using System.Text;
 using Sidi.Util;
 using System.Data.Linq;
-using Sidi.IO.Long;
+using Sidi.IO;
 using Sidi.Extensions;
 using System.Windows.Forms;
 
@@ -31,7 +31,7 @@ namespace hagen
 {
     public class Hagen
     {
-        public Path DatabasePath
+        public LPath DatabasePath
         {
             get
             {
@@ -39,16 +39,16 @@ namespace hagen
             }
         }
 
-        public Path DataDirectory
+        public LPath DataDirectory
         {
             get
             {
-                return new Sidi.IO.Long.Path(Environment.GetFolderPath(Environment.SpecialFolder.LocalApplicationData))
+                return Sidi.IO.Paths.GetFolderPath(Environment.SpecialFolder.LocalApplicationData)
                     .CatDir("hagen");
             }
         }
 
-        public Path ScreenCaptureDirectory
+        public LPath ScreenCaptureDirectory
         {
             get
             {
@@ -79,21 +79,21 @@ namespace hagen
             }
         }
 
-        public Path CaptureActiveWindow()
+        public LPath CaptureActiveWindow()
         {
             var sc = new ScreenCapture();
             var dir = Hagen.Instance.ScreenCaptureDirectory;
             return sc.CaptureActiveWindow(dir);
         }
 
-        public IList<Path> CaptureScreens()
+        public IList<LPath> CaptureScreens()
         {
             var sc = new ScreenCapture();
             var dir = Hagen.Instance.ScreenCaptureDirectory;
             return sc.CaptureAll(dir);
         }
 
-        public Path CapturePrimaryScreen()
+        public LPath CapturePrimaryScreen()
         {
             var sc = new ScreenCapture();
             var dir = Hagen.Instance.ScreenCaptureDirectory;

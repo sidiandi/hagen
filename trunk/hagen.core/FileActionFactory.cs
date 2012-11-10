@@ -32,7 +32,7 @@ namespace hagen
         {
             return new Action()
             {
-                Name = Path.GetFileName(file),
+                Name = new LPath(file).FileName,
                 CommandObject = StartProcess.FromFileName(file)
             };
         }
@@ -53,12 +53,9 @@ namespace hagen
         
         public int Levels { set; get; }
 
-        public IEnumerable<Action> Recurse(string root)
+        public IEnumerable<Action> Recurse(LPath root)
         {
-            return Directory.GetFiles(root, "*.*", SearchOption.AllDirectories).Select(x =>
-            {
-                return FromFile(x);
-            });
+            return Sidi.IO.Find.AllFiles(root).Select(x => FromFile(x.ToString()));
         }
 
         [TestFixture]

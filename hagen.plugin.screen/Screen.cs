@@ -19,7 +19,7 @@ using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Text;
-using Sidi.IO.Long;
+using Sidi.IO;
 using System.Windows.Forms;
 using Sidi.CommandLine;
 using System.Diagnostics;
@@ -81,16 +81,16 @@ namespace hagen.ActionSource
             return new Microsoft.Office.Interop.Outlook.Application();
         }
         
-        public void CreateOutlookEmailWithEmbeddedPicture(Path imagePath)
+        public void CreateOutlookEmailWithEmbeddedPicture(LPath imagePath)
         {
             var outlook = GetOutlook();
             var mailItem = (MailItem) outlook.CreateItem(Microsoft.Office.Interop.Outlook.OlItemType.olMailItem);
-            mailItem.Subject = imagePath.Name;
+            mailItem.Subject = imagePath.FileName;
             mailItem.BodyFormat = OlBodyFormat.olFormatHTML;
             var mailInspector = (Inspector) outlook.Inspectors.Add(mailItem);
             var a = mailItem.Attachments.Add(imagePath.ToString());
             a.PropertyAccessor.SetProperty(PR_ATTACH_MIME_TAG, "image/png");
-            var id = HttpUtility.UrlEncode(imagePath.Name);
+            var id = HttpUtility.UrlEncode(imagePath.FileName);
             a.PropertyAccessor.SetProperty(PR_ATTACH_CONTENT_ID, id);
 
             mailItem.HTMLBody = String.Format(@"<html>

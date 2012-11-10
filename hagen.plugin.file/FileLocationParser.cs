@@ -21,7 +21,7 @@ using System.Linq;
 using System.Text;
 using NUnit.Framework;
 using System.Text.RegularExpressions;
-using Sidi.IO.Long;
+using Sidi.IO;
 using Sidi.Util;
 using Sidi.Extensions;
 
@@ -55,7 +55,7 @@ namespace hagen
 
         public static FileLocation Parse(string spec)
         {
-            if (Sidi.IO.Long.Path.IsValidDriveRoot(spec))
+            if (LPath.IsValidDriveRoot(spec))
             {
                 return new FileLocation()
                 {
@@ -71,7 +71,7 @@ namespace hagen
             .ToList();
 
 
-            return candidates.FirstOrDefault(i => i != null && new FileSystemInfo(new Path(i.Path)).Exists);
+            return candidates.FirstOrDefault(i => i != null && new LPath(i.Path).Exists);
         }
 
         public static FileLocation FromRegex(Match m)
@@ -109,7 +109,7 @@ namespace hagen
             }
         }
 
-        public string Path;
+        public LPath Path;
         public int Line;
         public int Column;
 

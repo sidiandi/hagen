@@ -26,8 +26,6 @@ using System.Windows.Forms;
 
 namespace activityReport
 {
-    public delegate Control CreateDetailView();
-    
     public partial class ListDetail : Form
     {
         public ListDetail()
@@ -35,7 +33,7 @@ namespace activityReport
             InitializeComponent();
         }
 
-        public void AddItem(string text, CreateDetailView createDetailView)
+        public void AddItem(string text, Func<Control> createDetailView)
         {
             ListViewItem i = new ListViewItem(text);
             i.Tag = createDetailView;
@@ -44,7 +42,7 @@ namespace activityReport
 
         private void List_SelectedIndexChanged(object sender, EventArgs e)
         {
-            CreateDetailView c = List.FocusedItem.Tag as CreateDetailView;
+            var c = List.FocusedItem.Tag as Func<Control>;
             Splitter.Panel2.Controls.Clear();
             if (c != null)
             {

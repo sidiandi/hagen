@@ -33,7 +33,7 @@ using Sidi.Forms;
 using System.IO;
 using mshtml;
 using Sidi.Extensions;
-using L = Sidi.IO.Long;
+using L = Sidi.IO;
 
 namespace hagen
 {
@@ -73,7 +73,7 @@ namespace hagen
             searchBox1.Data = actions;
             searchBox1.ItemsActivated += new EventHandler(searchBox1_ItemsActivated);
 
-            mouseWheelSupport = new MouseWheelSupport(this);
+            // mouseWheelSupport = new MouseWheelSupport(this);
         }
 
         void Main_Load(object sender, EventArgs e)
@@ -170,14 +170,14 @@ namespace hagen
         {
             Process p = new Process();
             p.StartInfo.FileName = L.Paths.BinDir.CatDir("sqlite3.exe");
-            p.StartInfo.Arguments = Hagen.Instance.DatabasePath.ToString().Quote();
+            p.StartInfo.Arguments = Hagen.Instance.DatabasePath.Quote();
             p.StartInfo.CreateNoWindow = false;
             p.Start();
         }
 
         private void reportMailToolStripMenuItem_Click(object sender, EventArgs e)
         {
-            var p = new Sidi.IO.Long.Path(Path.GetTempPath()).CatDir("work-time.txt");
+            var p = Paths.Temp.CatDir("work-time.txt");
             using (var output = new StreamWriter(p))
             {
                 new activityReport.Program().WorktimeReport(output, TimeInterval.LastDays(90));
@@ -302,12 +302,12 @@ Hours: {0:G3}",
         {
             var notesFile = Hagen.Instance.DataDirectory.CatDir(
                 "Notes",
-                Sidi.IO.Long.Path.GetValidFilename(searchBox1.Query + ".txt"));
+                LPath.GetValidFilename(searchBox1.Query + ".txt"));
 
             if (!notesFile.Exists)
             {
                 notesFile.EnsureParentDirectoryExists();
-                using (var w = Sidi.IO.Long.File.OpenWrite(notesFile))
+                using (var w = LFile.OpenWrite(notesFile))
                 {
                     w.Write(new byte[]{ 0xef, 0xbb, 0xbf }, 0, 3);
                     using (var sw = new StreamWriter(w))

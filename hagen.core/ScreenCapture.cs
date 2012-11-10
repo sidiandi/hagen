@@ -19,7 +19,7 @@ using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Text;
-using Sidi.IO.Long;
+using Sidi.IO;
 using System.Windows.Forms;
 using System.Drawing;
 using NUnit.Framework;
@@ -30,7 +30,7 @@ namespace hagen
 {
     public class ScreenCapture
     {
-        public IList<Path> CaptureAll(Path destinationDirectory)
+        public IList<LPath> CaptureAll(LPath destinationDirectory)
         {
             var now = DateTime.Now;
             return Screen.AllScreens.Select(screen =>
@@ -41,27 +41,27 @@ namespace hagen
             }).ToList();
         }
 
-        Path GetCaptureFilename(Screen screen, DateTime time)
+        LPath GetCaptureFilename(Screen screen, DateTime time)
         {
-            var name = (String.Format("{0}_{1}.png", time.ToString("s"), new Path(screen.DeviceName).FileNameWithoutExtension));
-            return Path.GetValidFilename(name);
+            var name = (String.Format("{0}_{1}.png", time.ToString("s"), new LPath(screen.DeviceName).FileNameWithoutExtension));
+            return LPath.GetValidFilename(name);
         }
 
-        Path GetCaptureFilename(AutomationElement window, DateTime time)
+        LPath GetCaptureFilename(AutomationElement window, DateTime time)
         {
             var name = String.Format("{0}_{1}.png",
                 time.ToString("s"),
                 window.Current.Name);
-            return Path.GetValidFilename(name);
+            return LPath.GetValidFilename(name);
         }
 
-        Path GetCaptureFilename(AutomationElement window, int index, DateTime time)
+        LPath GetCaptureFilename(AutomationElement window, int index, DateTime time)
         {
             var name = String.Format("{0}_{2:D2}_{1}.png",
                 time.ToString("s"),
                 window.Current.Name,
                 index);
-            return Path.GetValidFilename(name);
+            return LPath.GetValidFilename(name);
         }
 
         [TestFixture]
@@ -72,7 +72,7 @@ namespace hagen
             {
                 var time = DateTime.Now;
                 var screen = Screen.PrimaryScreen;
-                Console.WriteLine(String.Format("{0}_{1}.png", time.ToString("s"), new Path(screen.DeviceName).FileNameWithoutExtension));
+                Console.WriteLine(String.Format("{0}_{1}.png", time.ToString("s"), new LPath(screen.DeviceName).FileNameWithoutExtension));
                 Console.WriteLine(new ScreenCapture().GetCaptureFilename(screen, time));
             }
 
@@ -80,13 +80,13 @@ namespace hagen
             public void CaptureActiveWindow()
             {
                 var s = new ScreenCapture();
-                s.CaptureActiveWindow(new Path(@"C:\temp\cap"));
+                s.CaptureActiveWindow(new LPath(@"C:\temp\cap"));
             }
 
             [Test]
             public void Filename2()
             {
-                var dir = new Path(@"C:\temp\cap");
+                var dir = new LPath(@"C:\temp\cap");
                 var time = DateTime.Now;
                 var sc = new ScreenCapture();
                 var cap = sc.Capture(Screen.PrimaryScreen);
@@ -131,7 +131,7 @@ namespace hagen
             return new Rectangle((int)r.X, (int)r.Y, (int)r.Width, (int)r.Height);
         }
 
-        public Path CaptureActiveWindow(Path directory)
+        public LPath CaptureActiveWindow(LPath directory)
         {
             var activeWindow = AutomationElement.FocusedElement.GetTopLevelElement();
             using (var b = Capture(ToRectangle(activeWindow.Current.BoundingRectangle)))
@@ -143,7 +143,7 @@ namespace hagen
             }
         }
 
-        public Path Capture(Screen screen, Path destination)
+        public LPath Capture(Screen screen, LPath destination)
         {
             using (var bitmap = Capture(screen))
             {
@@ -153,7 +153,7 @@ namespace hagen
             }
         }
 
-        public Path CaptureToDirectory(Screen screen, Path directory)
+        public LPath CaptureToDirectory(Screen screen, LPath directory)
         {
             return Capture(screen, directory.CatDir(GetCaptureFilename(screen, DateTime.Now)));
         }

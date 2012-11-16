@@ -15,7 +15,6 @@
 // You should have received a copy of the GNU General Public License
 // along with hagen. If not, see <http://www.gnu.org/licenses/>.
 
-using Sidi.IO;
 using System;
 using Sidi.Persistence;
 using System.Collections.Generic;

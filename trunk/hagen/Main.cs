@@ -41,7 +41,6 @@ namespace hagen
     {
         ManagedWinapi.Hotkey hotkey;
         Collection<Action> actions;
-        MouseWheelSupport mouseWheelSupport;
 
         public Main()
         {
@@ -72,8 +71,6 @@ namespace hagen
 
             searchBox1.Data = actions;
             searchBox1.ItemsActivated += new EventHandler(searchBox1_ItemsActivated);
-
-            // mouseWheelSupport = new MouseWheelSupport(this);
         }
 
         void Main_Load(object sender, EventArgs e)

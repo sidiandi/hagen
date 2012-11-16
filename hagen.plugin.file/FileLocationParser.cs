@@ -124,14 +124,14 @@ namespace hagen
                 Assert.IsTrue(new Regex(FileLocation.PathPattern).IsMatch(@"C:\windows"), regex[0].ToString());
                 
                 var fl = FileLocation.Parse(@"  C:\work\hagen\hagen\Main.cs(119,34): error CS1002: ; expected");
-                Assert.AreEqual(@"C:\work\hagen\hagen\Main.cs", fl.Path);
+                Assert.AreEqual(new LPath(@"C:\work\hagen\hagen\Main.cs"), fl.Path);
                 Assert.AreEqual(119, fl.Line);
 
                 fl = FileLocation.Parse(@"C:\Windows");
-                Assert.AreEqual(@"C:\Windows", fl.Path);
+                Assert.AreEqual(new LPath(@"C:\Windows"), fl.Path);
 
                 fl = FileLocation.Parse(@"C:/Windows");
-                Assert.AreEqual(@"C:\Windows", fl.Path);
+                Assert.AreEqual(new LPath(@"C:\Windows"), fl.Path);
             }
         }
     }

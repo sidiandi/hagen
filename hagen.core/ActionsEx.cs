@@ -28,7 +28,6 @@ using SHDocVw;
 using Sidi.Extensions;
 using mshtml;
 using Sidi.Util;
-using Sidi.IO;
 
 namespace hagen
 {

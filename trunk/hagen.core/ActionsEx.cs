@@ -92,10 +92,14 @@ namespace hagen
         public static void Cleanup(this Collection<Action> actions)
         {
             var toDelete = actions.Where(x => !x.CommandObject.IsWorking).ToList();
-
-            foreach (var a in toDelete)
+            
+            using (var t = actions.BeginTransaction())
             {
-                actions.Remove(a);
+                foreach (var a in toDelete)
+                {
+                    actions.Remove(a);
+                }
+                t.Commit();
             }
         }
 

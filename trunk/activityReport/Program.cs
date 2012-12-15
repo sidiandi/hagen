@@ -27,7 +27,6 @@ using Sidi.IO;
 using System.Data.Linq;
 using System.Data.SQLite;
 using System.Windows.Forms;
-using ZedGraph;
 using System.Drawing;
 using System.IO;
 using NUnit.Framework;
@@ -36,6 +35,7 @@ using Sidi.Visualization;
 using Sidi.Extensions;
 using Sidi.Forms;
 using L = Sidi.IO;
+using Dvc = System.Windows.Forms.DataVisualization.Charting;
 
 namespace activityReport
 {
@@ -320,67 +320,87 @@ namespace activityReport
                 TimeInterval m = mi;
                 main.AddItem("{0:yyyy-MM} Overview".F(m.Begin), () =>
                 {
-                    var p = GraphEx.CreateTimeGraph();
-                    p.XAxis.Scale.Min = new XDate(m.Begin).XLDate;
-                    p.XAxis.Scale.Max = new XDate(m.End).XLDate;
+                    var chart = new Dvc.Chart();
 
-                    p.YAxis.Type = AxisType.Date;
-                    p.YAxis.Title.Text = "Day";
+                    var ca = new Dvc.ChartArea()
+                    {
+                        Name = "Overview",
+                    };
+                    ca.AxisY.LabelStyle.Format = "HH:mm";
+                    chart.ChartAreas.Add(ca);
+                    
+                    var a = new Dvc.Series()
+                    {
+                        Name = "Activity",
+                        ChartType = Dvc.SeriesChartType.RangeColumn,
+                    };
+
+                    chart.Series.Add(a);
+
+                    var refday = m.Begin.Date;
+                    ca.AxisY.Maximum = refday.AddDays(1).ToOADate();
+                    ca.AxisY.Minimum = refday.ToOADate();
 
                     foreach (var i in Summarize(input.Range(m)))
                     {
-                        var b = new BoxObj(
-                            new XDate(i.Begin.Date).XLDate,
-                            i.Begin.TimeOfDay.ToXDate().XLDate,
-                            1.0,
-                            (i.Begin - i.End).ToXDate().XLDate);
-                        b.Fill = new Fill(i.TerminalServerSession ? Color.Red : Color.Green);
-                        b.Border.IsVisible = false;
-                        b.IsVisible = true;
-                        b.IsClippedToChartRect = true;
-                        p.GraphObjList.Add(b);
+                        a.Points.AddXY(
+                            i.Begin.Date,
+                            refday + i.Begin.TimeOfDay,
+                            refday + i.End.TimeOfDay);
                     }
 
-                    p.YAxis.Scale.Min = 0;
-                    p.YAxis.Scale.Max = 1.0;
-
-                    var c = p.AsControl();
-                    c.ZoomEvent += new ZedGraphControl.ZoomEventHandler(c_ZoomEvent);
-
-                    return c;
+                    return chart;
                 });
 
                 main.AddItem("{0:yyyy-MM} Hours".F(m.Begin), () =>
                 {
-                    var p = GraphEx.CreateTimeGraph();
-                    p.XAxis.Scale.Min = new XDate(m.Begin).XLDate;
-                    p.XAxis.Scale.Max = new XDate(m.End).XLDate;
+                    var c = new Dvc.Chart();
 
-                    p.BarSettings.Type = BarType.Stack;
+                    var ca = new Dvc.ChartArea("Activity");
+                    c.ChartAreas.Add(ca);
 
-                    var w = m.Days.Select(x => input.Range(x).WorkIntervals()).ToList();
+                    var a = new Dvc.Series()
+                    {
+                        Name = "Activity",
+                        ChartType = Dvc.SeriesChartType.StackedColumn
+                    };
 
-                    p.AddBar(Place.Office.ToString(), PointList(w, x => x.Place == Place.Office), Color.Green);
-                    p.AddBar(Place.OverHr.ToString(), PointList(w, x => x.Place == Place.OverHr), Color.Red);
-                    p.AddBar(Place.Home.ToString(), PointList(w, x => x.Place == Place.Home), Color.Yellow);
-
-                    return p.AsControl();
-                });
-
-                main.AddItem("{0:yyyy-MM} Activity".F(m.Begin), () =>
-                {
-                    var p = GraphEx.CreateTimeGraph();
-                    p.XAxis.Scale.Min = new XDate(m.Begin).XLDate;
-                    p.XAxis.Scale.Max = new XDate(m.End).XLDate;
-
-                    p.BarSettings.Type = BarType.Stack;
+                    var t = new Dvc.Series()
+                    {
+                        Name = "Presence",
+                        ChartType = Dvc.SeriesChartType.StackedColumn
+                    };
 
                     var w = m.Days.Select(x => input.Range(x)).ToList();
 
-                    p.AddBar("Local", PointList(w, x => !x.TerminalServerSession), Color.Green);
-                    p.AddBar("Remote", PointList(w, x => x.TerminalServerSession), Color.Yellow);
+                    ca.AxisY.Title = "Hours";
 
-                    return p.AsControl();
+                    foreach (var i in w)
+                    {
+                        if (!i.Any())
+                        {
+                            continue;
+                        }
+
+                        var x = i.First().Begin.Date;
+                        var active = i.Sum(j => (j.End - j.Begin).TotalHours);
+                        var total = (i.Last().End - i.First().Begin).TotalHours;
+                        total -= active;
+
+                        a.Points.AddXY(x, active);
+                        t.Points.AddXY(x, total);
+                    }
+
+                    c.Series.Add(a);
+                    c.Series.Add(t);
+                    
+                    c.Legends.Add(new Dvc.Legend()
+                    {
+                        LegendStyle = Dvc.LegendStyle.Row,
+                        Docking = Dvc.Docking.Top
+                    });
+
+                    return c;
                 });
 
                 main.AddItem("{0:yyyy-MM} Programs".F(m.Begin), () =>
@@ -415,17 +435,45 @@ namespace activityReport
                 });
             }
 
-            foreach (var i in all.Days.Reverse())
+            foreach (var iDay in all.Days.Reverse())
             {
-                var d = i;
-
-                main.AddItem("{0} activity".F(i.Begin), () =>
+                var day = iDay;
+                main.AddItem("{0} activity".F(day.Begin), () =>
                 {
-                    var p = GraphEx.CreateTimeGraph();
-                    p.YAxisList.Clear();
+                    var c = new Dvc.Chart();
 
-                    var keystrokeAxis = new YAxis("keystrokes");
-                    p.YAxisList.Add(keystrokeAxis);
+                    var ca = new Dvc.ChartArea();
+                    ca.AxisX.LabelStyle.Format = "HH:mm";
+
+                    /*
+                    ca.AxisY.Maximum = 35e3;
+                    ca.AxisY2.Maximum = 6e6;
+                     */
+                    ca.AxisY.Title = "Keystrokes";
+                    ca.AxisY2.Title  = "Mouse";
+
+                    ca.AxisX.Minimum = day.Begin.ToOADate();
+                    ca.AxisX.Maximum = day.End.ToOADate();
+                    c.ChartAreas.Add(ca);
+
+
+                    var keystrokes = new Dvc.Series()
+                    {
+                        Name = "keystrokes",
+                        ChartType = Dvc.SeriesChartType.FastLine,
+                    };
+
+                    var mouse = new Dvc.Series()
+                    {
+                        Name = "mouse",
+                        ChartType = Dvc.SeriesChartType.FastLine,
+                        YAxisType = Dvc.AxisType.Secondary
+                    };
+
+                    c.Series.Add(keystrokes);
+                    c.Series.Add(mouse);
+                    
+                    /*
                     keystrokeAxis.Scale.Min = 0;
                     keystrokeAxis.Scale.Max = 35e3;
 
@@ -433,30 +481,33 @@ namespace activityReport
                     p.YAxisList.Add(mouseAxis);
                     mouseAxis.Scale.Min = 0;
                     mouseAxis.Scale.Max = 6e6;
+                    */
 
-                    var data = input.Range(d);
+                    var data = input.Range(day);
 
-                    var ppl = data.Select(x => new PointPair(new XDate(x.Begin), x.KeyDown)).ToPointPairList();
-                    ppl = ppl.Accumulate();
-                    var kp = p.AddCurve("keystrokes", ppl, Color.Black, SymbolType.None);
-                    kp.YAxisIndex = 0;
+                    int totalKeyDown = 0;
+                    double totalMouseMove = 0;
+                    foreach (var i in data)
+                    {
+                        totalKeyDown += i.KeyDown;
+                        totalMouseMove += i.MouseMove;
+                        keystrokes.Points.AddXY(i.Begin, totalKeyDown);
+                        mouse.Points.AddXY(i.Begin, totalMouseMove);
+                    }
 
-
-                    ppl = data.Select(x => new PointPair(new XDate(x.Begin), x.MouseMove)).ToPointPairList();
-                    ppl = ppl.Accumulate();
-                    var mc = p.AddCurve("mouse move", ppl, Color.Red, SymbolType.None);
-                    mc.YAxisIndex = 1;
-
-                    p.XAxis.Scale.Min = new XDate(d.Begin).XLDate;
-                    p.XAxis.Scale.Max = new XDate(d.End).XLDate;
-
-                    return p.AsControl();
+                    c.Legends.Add(new Dvc.Legend()
+                        {
+                            Docking = Dvc.Docking.Top,
+                            LegendStyle = Dvc.LegendStyle.Row,
+                        });
+                    return c;
                 });
             }
 
             return main;
         }
 
+        /*
         IPointList PointList(IEnumerable<IEnumerable<WorkInterval>> data, Func<WorkInterval, bool> which)
         {
             return data
@@ -503,6 +554,7 @@ namespace activityReport
             p.XAxis.Scale.Min = Math.Max(p.XAxis.Scale.Min, 0);
             p.XAxis.Scale.Max = Math.Min(p.XAxis.Scale.Max, 1.0);
         }
+        */
 
         IEnumerable<Input> Summarize(IEnumerable<Input> raw)
         {

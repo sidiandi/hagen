@@ -34,6 +34,7 @@ using System.IO;
 using mshtml;
 using Sidi.Extensions;
 using L = Sidi.IO;
+using BrightIdeasSoftware;
 
 namespace hagen
 {

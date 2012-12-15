@@ -19,6 +19,7 @@ using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Text;
+using Sidi.IO;
 
 namespace hagen.ActionSource
 {
@@ -30,6 +31,11 @@ namespace hagen.ActionSource
         }
 
         Sidi.Persistence.Collection<Action> actions;
+
+        IEnumerable<IAction> ToIActions(Action action)
+        {
+            yield return new ActionWrapper(action, actions);
+        }
         
         public IEnumerable<IAction> GetActions(string query)
         {
@@ -43,9 +49,8 @@ namespace hagen.ActionSource
                 sql = String.Format("Name like \"%{0}%\" order by LastUseTime desc", query.EscapeCsharpStringLiteral());
             }
 
-                return new Sidi.Collections.SelectList<Action, IAction>(
-                    actions.Select(sql),
-                    action => new ActionWrapper(action, actions));
+            var r = actions.Select(sql);
+            return r.SelectMany(action => ToIActions(action));
         }
     }
 }

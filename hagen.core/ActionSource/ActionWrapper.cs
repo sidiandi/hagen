@@ -21,7 +21,7 @@ using System.Linq;
 using System.Text;
 
 namespace hagen.ActionSource
-{
+{   
     public class ActionWrapper : IAction
     {
         public ActionWrapper(Action action, Sidi.Persistence.Collection<Action> data)

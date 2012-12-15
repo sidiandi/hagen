@@ -21,6 +21,7 @@ using System.Linq;
 using System.Text;
 using Sidi.CommandLine;
 using System.Text.RegularExpressions;
+using Sidi.IO;
 
 namespace hagen
 {
@@ -33,27 +34,50 @@ namespace hagen
             this.Parser = parser;
         }
 
-        List<string> emptyArgs = new List<string>();
+        static List<string> emptyArgs = new List<string>();
+
+        static bool TakesPathList(Sidi.CommandLine.Action a)
+        {
+            var pi = a.MethodInfo.GetParameters();
+            return pi.Length == 1 && pi[0].ParameterType == typeof(PathList);
+        }
+
+        IAction ToIAction(Sidi.CommandLine.Action a)
+        {
+            if (TakesPathList(a))
+            {
+                var pathList = PathList.GetFilesSelectedInExplorer();
+                return new SimpleAction(
+                    String.Format("{0}({2}) ({1})", a.Name, a.Usage, pathList),
+                    () =>
+                    {
+                        a.Handle(new List<string>(){pathList.ToString()}, true);
+                    });
+            }
+            else
+            {
+                return new SimpleAction(
+                    String.Format("{0} ({1})", a.Name, a.Usage),
+                    () =>
+                    {
+                        if (a.MethodInfo.GetParameters().Length == 0)
+                        {
+                            a.Handle(emptyArgs, true);
+                        }
+                        else
+                        {
+                            this.Parser.Parse(new string[] { "ShowDialog", a.Name });
+                        }
+                    });
+            }
+        }
 
         public IEnumerable<IAction> GetActions(string query)
         {
             return Parser.Actions
                 .Where(i => Parser.IsMatch(query, i.Name) || Regex.IsMatch(i.Name, query, RegexOptions.IgnoreCase))
-                .Select(i => (IAction)new SimpleAction(
-                    String.Format("{0} ({1})", i.Name, i.Usage),
-                    () =>
-                    {
-                        if (i.MethodInfo.GetParameters().Length == 0)
-                        {
-                            i.Handle(emptyArgs, true);
-                        }
-                        else
-                        {
-                            this.Parser.Parse(new string[] { "ShowDialog", i.Name });
-                        }
-                    }))
+                .Select(i => ToIAction(i))
                 .ToList();
         }
     }
-
 }

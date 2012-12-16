@@ -36,6 +36,7 @@ using Sidi.Extensions;
 using Sidi.Forms;
 using L = Sidi.IO;
 using Dvc = System.Windows.Forms.DataVisualization.Charting;
+using System.Windows.Forms.DataVisualization.Charting;
 
 namespace activityReport
 {
@@ -326,13 +327,12 @@ namespace activityReport
                     {
                         Name = "Overview",
                     };
-                    ca.AxisY.LabelStyle.Format = "HH:mm";
                     chart.ChartAreas.Add(ca);
                     
                     var a = new Dvc.Series()
                     {
                         Name = "Activity",
-                        ChartType = Dvc.SeriesChartType.RangeColumn,
+                        ChartType = Dvc.SeriesChartType.RangeBar,
                     };
 
                     chart.Series.Add(a);
@@ -340,6 +340,27 @@ namespace activityReport
                     var refday = m.Begin.Date;
                     ca.AxisY.Maximum = refday.AddDays(1).ToOADate();
                     ca.AxisY.Minimum = refday.ToOADate();
+
+                    var stripLine = new StripLine()
+                    {
+                        IntervalOffsetType = DateTimeIntervalType.Days,
+                        IntervalType = DateTimeIntervalType.Weeks,
+                        StripWidthType = DateTimeIntervalType.Days,
+
+                        Interval = 1,
+                        StripWidth = 2,
+                        BackColor = Color.LightGray,
+                        IntervalOffset = -1.5,
+                    };
+
+                    ca.AxisX.StripLines.Add(stripLine);
+                    ca.AxisX.LabelStyle.Format = "ddd dd.MM.yyyy";
+                    ca.AxisX.IntervalType = DateTimeIntervalType.Days;
+                    ca.AxisX.Interval = 1;
+
+                    ca.AxisY.LabelStyle.Format = "HH:mm";
+                    ca.AxisY.IntervalType = DateTimeIntervalType.Hours;
+                    ca.AxisY.Interval = 1;
 
                     foreach (var i in Summarize(input.Range(m)))
                     {

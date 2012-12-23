@@ -26,7 +26,7 @@
       <HintPath>..\packages\NUnit.2.6.2\lib\nunit.framework.dll</HintPath>
     </Reference>
     <Reference Include="ObjectListView">
-      <HintPath>..\lib\ObjectListView.dll</HintPath>
+      <HintPath>..\packages\Unofficial.ObjectListView.2.6.0\lib\net20\ObjectListView.dll</HintPath>
     </Reference>
     <Reference Include="Sidi.Util, Version=2.4.0.617, Culture=neutral, PublicKeyToken=1e33c1a5eebc53e1, processorArchitecture=x86">
       <SpecificVersion>False</SpecificVersion>

@@ -46,7 +46,7 @@ namespace hagen
         {
             if (TakesPathList(a))
             {
-                var pathList = PathList.GetFilesSelectedInExplorer();
+                var pathList = PathList.ReadClipboard();
                 return new SimpleAction(
                     String.Format("{0}({2}) ({1})", a.Name, a.Usage, pathList),
                     () =>

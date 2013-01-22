@@ -253,6 +253,22 @@ namespace activityReport
             var wti = range.Days.Select(x => new WorktimeInfo(x, input)).ToList();
             UpdateBalance(wti);
 
+            var days = wti.OrderByDescending(x => x.Date);
+
+            foreach (var i in days)
+            {
+                if (i.Date.DayOfWeek == DayOfWeek.Sunday)
+                {
+                    w.WriteLine(new string('-', 80));
+                }
+
+                w.WriteLine("{0:ddd dd.MM.yyyy}", i.Date);
+                w.WriteLine("Kommzeit: {0:HH:mm}", i.Come);
+                w.WriteLine("Gehzeit:  {0:HH:mm}", i.Go);
+                w.WriteLine();
+            }
+            
+            /*
             wti.ListFormat()
                 .AddColumn("Date", x => String.Format("{0:ddd dd.MM.yyyy}", x.Date))
                 .AddColumn("Come", x => String.Format("{0:HH:mm}", x.Come))
@@ -261,7 +277,8 @@ namespace activityReport
                 .AddColumn("Due", x => String.Format("{0:F2}", x.Due))
                 .AddColumn("Change", x => String.Format("{0:F2}", x.Change))
                 .AddColumn("Balance", x => String.Format("{0:F2}", x.Balance))
-                .RenderText();
+                .RenderText(w);
+             */
         }
 
         TypedTreeMap<T> CreateTreeMap<T>(IList<T> data)

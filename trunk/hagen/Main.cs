@@ -110,6 +110,7 @@ namespace hagen
 
         public void Popup()
         {
+            StartProcess.SaveFocus();
             WindowState = FormWindowState.Maximized;
             this.Visible = true;
             if (Clipboard.ContainsText())

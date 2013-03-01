@@ -26,6 +26,9 @@ using System.IO;
 using System.Text.RegularExpressions;
 using System.Drawing;
 using Microsoft.Win32;
+using System.Windows.Automation;
+using System.Windows;
+using Sidi.Extensions;
 
 namespace hagen
 {
@@ -121,8 +124,28 @@ namespace hagen
         [SettingsBindable(true)]
         public string WorkingDirectory { get; set; }
 
+        public static void SaveFocus()
+        {
+            FocusedElement = AutomationElement.FocusedElement;
+        }
+
+        static AutomationElement FocusedElement;
+
         public override void Execute()
         {
+            var focus = FocusedElement;
+            var name = (string) focus.GetCurrentPropertyValue(AutomationElement.NameProperty);
+            object pattern = null;
+            if (Regex.IsMatch(name, "File", RegexOptions.IgnoreCase) && focus.TryGetCurrentPattern(ValuePattern.Pattern, out pattern))
+            {
+                var tp = pattern as ValuePattern;
+                if (tp != null)
+                {
+                    tp.SetValue(this.FileName);
+                    return;
+                }
+            }
+
             Process p = new Process()
             {
                 StartInfo = new ProcessStartInfo()

@@ -25,6 +25,8 @@ using System.Data.Linq;
 using Sidi.IO;
 using Sidi.Extensions;
 using System.Windows.Forms;
+using System.Windows.Automation;
+using System.Runtime.InteropServices;
 
 namespace hagen
 {
@@ -82,7 +84,7 @@ namespace hagen
         {
             var sc = new ScreenCapture();
             var dir = Hagen.Instance.ScreenCaptureDirectory;
-            return sc.CaptureActiveWindow(dir);
+            return sc.CaptureWindow(dir, SavedFocusedElement.GetTopLevelElement());
         }
 
         public IList<LPath> CaptureScreens()
@@ -136,6 +138,24 @@ namespace hagen
         }
 
         static Hagen instance;
+
+        public void SaveFocus()
+        {
+            NativeMethods.GUITHREADINFO threadInfo = new NativeMethods.GUITHREADINFO();
+            threadInfo.cbSize = Marshal.SizeOf(threadInfo);
+            NativeMethods.GetGUIThreadInfo(0, out threadInfo);
+            focusedElement = (IntPtr) threadInfo.hwndFocus;
+        }
+
+        IntPtr focusedElement = IntPtr.Zero;
+
+        public AutomationElement SavedFocusedElement
+        {
+            get
+            {
+                return AutomationElement.FromHandle(focusedElement);
+            }
+        }
     }
 
     public static class HagenEx

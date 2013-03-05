@@ -80,7 +80,7 @@ namespace hagen
             public void CaptureActiveWindow()
             {
                 var s = new ScreenCapture();
-                s.CaptureActiveWindow(new LPath(@"C:\temp\cap"));
+                s.CaptureWindow(new LPath(@"C:\temp\cap"), AutomationElement.FocusedElement);
             }
 
             [Test]
@@ -131,12 +131,11 @@ namespace hagen
             return new Rectangle((int)r.X, (int)r.Y, (int)r.Width, (int)r.Height);
         }
 
-        public LPath CaptureActiveWindow(LPath directory)
+        public LPath CaptureWindow(LPath directory, AutomationElement window)
         {
-            var activeWindow = AutomationElement.FocusedElement.GetTopLevelElement();
-            using (var b = Capture(ToRectangle(activeWindow.Current.BoundingRectangle)))
+            using (var b = Capture(ToRectangle(window.Current.BoundingRectangle)))
             {
-                var file = directory.CatDir(GetCaptureFilename(activeWindow, DateTime.Now));
+                var file = directory.CatDir(GetCaptureFilename(window, DateTime.Now));
                 file.EnsureParentDirectoryExists();
                 b.Save(file.ToString());
                 return file;

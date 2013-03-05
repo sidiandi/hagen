@@ -83,6 +83,7 @@
     <Compile Include="InterceptConsole.cs" />
     <Compile Include="InternetShortcut.cs" />
     <Compile Include="mshtmlEx.cs" />
+    <Compile Include="NativeMethods.cs" />
     <Compile Include="OutlookDataObject.cs" />
     <Compile Include="Properties\AssemblyInfo.cs">
       <SubType>Code</SubType>

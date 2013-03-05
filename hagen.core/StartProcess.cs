@@ -124,16 +124,9 @@ namespace hagen
         [SettingsBindable(true)]
         public string WorkingDirectory { get; set; }
 
-        public static void SaveFocus()
-        {
-            FocusedElement = AutomationElement.FocusedElement;
-        }
-
-        static AutomationElement FocusedElement;
-
         public override void Execute()
         {
-            var focus = FocusedElement;
+            var focus = Hagen.Instance.SavedFocusedElement;
             var name = (string) focus.GetCurrentPropertyValue(AutomationElement.NameProperty);
             object pattern = null;
             if (Regex.IsMatch(name, "File", RegexOptions.IgnoreCase) && focus.TryGetCurrentPattern(ValuePattern.Pattern, out pattern))

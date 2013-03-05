@@ -161,8 +161,7 @@ namespace hagen
 
         private void statisticsToolStripMenuItem_Click(object sender, EventArgs e)
         {
-            var ar = new activityReport.Program();
-            ar.StatisticsWindow().Show();
+            new activityReport.Program().ShowStatisticsWindow();
         }
 
         private void sqliteConsoleToolStripMenuItem_Click(object sender, EventArgs e)
@@ -176,25 +175,7 @@ namespace hagen
 
         private void reportMailToolStripMenuItem_Click(object sender, EventArgs e)
         {
-            var p = Paths.Temp.CatDir("work-time.txt");
-            using (var output = new StreamWriter(p))
-            {
-                new activityReport.Program().WorktimeReport(output, TimeInterval.LastDays(90));
-            }
-            Process.Start("notepad.exe", p.ToString().Quote());
-
-            /*
-            var a = new ol.Application();
-
-            {
-                var mail = (ol.MailItem)a.CreateItem(ol.OlItemType.olMailItem);
-                mail.Subject = "Gleitzeit";
-                mail.To = "Schiepers, Renate";
-                mail.Body = StringEx.ToString(x => new activityReport.Program().Report(x));
-                var insp = a.Inspectors.Add(mail);
-                insp.Activate();
-            }
-             */
+            new activityReport.Program().ShowReport();
         }
 
         private void notifyIcon_MouseDoubleClick(object sender, MouseEventArgs e)

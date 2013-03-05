@@ -21,6 +21,7 @@ using System.Linq;
 using System.Text;
 using System.Reflection;
 using Sidi.CommandLine;
+using Sidi.Extensions;
 
 namespace hagen.ActionSource
 {
@@ -78,10 +79,11 @@ namespace hagen.ActionSource
 
         public static IList<IActionSource> GetPlugins()
         {
-            var dlls = Sidi.IO.Paths.BinDir.GetFiles("*.dll");
-            
-            return dlls
-                .Select(dll => Assembly.LoadFile(dll))
+            var assemblies = Sidi.IO.Paths.BinDir.GetFiles()
+                .Where(x => x.Extension.Equals(".dll") || x.Extension.Equals(".exe"));
+
+            return assemblies 
+                .SafeSelect(dll => Assembly.LoadFile(dll))
                 .SelectMany(a => GetPlugins(a))
                 .ToList();
         }

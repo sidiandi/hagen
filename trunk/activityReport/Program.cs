@@ -37,9 +37,11 @@ using Sidi.Forms;
 using L = Sidi.IO;
 using Dvc = System.Windows.Forms.DataVisualization.Charting;
 using System.Windows.Forms.DataVisualization.Charting;
+using System.Diagnostics;
 
 namespace activityReport
 {
+    [Usage("Makes screen shots")]
     public class Program
     {
         private static readonly log4net.ILog log = log4net.LogManager.GetLogger(System.Reflection.MethodBase.GetCurrentMethod().DeclaringType);
@@ -138,6 +140,23 @@ namespace activityReport
         public void Report()
         {
             Report(Console.Out, TimeInterval.Last(new TimeSpan(30, 0, 0, 0)));
+        }
+
+        [Usage("Shows a day-by-day worktime report")]
+        public void ShowReport()
+        {
+            var p = Hagen.Instance.DataDirectory.CatDir("work-time-report.txt");
+            using (var output = new StreamWriter(p))
+            {
+                new activityReport.Program().WorktimeReport(output, TimeInterval.LastDays(90));
+            }
+            Process.Start("notepad.exe", p.ToString().Quote());
+        }
+
+        [Usage("Show statistics window")]
+        public void ShowStatisticsWindow()
+        {
+            StatisticsWindow().Show();
         }
 
         [Usage("Prints a day-by-day work time report")]

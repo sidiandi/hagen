@@ -41,6 +41,19 @@ namespace hagen
 
         Collection<Action> data;
 
+        static StartProcess GetStartProcess(IAction a)
+        {
+            try
+            {
+                var commandObject = ((ActionWrapper)a).Action.CommandObject;
+                return ((StartProcess)commandObject);
+            }
+            catch
+            {
+                return null;
+            }
+        }
+
         public Collection<Action> Data
         {
             set
@@ -48,8 +61,33 @@ namespace hagen
                 data = value;
 
                 var composite = new Composite(
-                    new DatabaseLookup(value),
-                    Composite.Plugins
+                    new Filter(
+                        new DatabaseLookup(value),
+                        actions =>
+                        {
+                            return actions.SelectMany(action =>
+                            {
+                                var sp = GetStartProcess(action);
+                                if (sp != null && new LPath(sp.FileName).IsDirectory)
+                                {
+                                    var openInVlc = new Action()
+                                    {
+                                        Name = String.Format("Open in VLC: {0}", sp.FileName),
+                                        CommandObject = new StartProcess()
+                                        {
+                                            Arguments = sp.FileName,
+                                            FileName = @"C:\Program Files (x86)\VideoLAN\VLC\vlc.exe"
+                                        }
+                                    };
+                                    return new[] { action, openInVlc };
+                                }
+                                else
+                                {
+                                    return new [] {action };
+                                }
+                            });
+                        }),
+                    Plugins.Default
                     );
 
                 asyncQuery = new AsyncQuery(composite);

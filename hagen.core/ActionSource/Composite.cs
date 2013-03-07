@@ -22,6 +22,7 @@ using System.Text;
 using System.Reflection;
 using Sidi.CommandLine;
 using Sidi.Extensions;
+using Sidi.IO;
 
 namespace hagen.ActionSource
 {
@@ -54,46 +55,5 @@ namespace hagen.ActionSource
         }
 
         public IList<IActionSource> Sources;
-
-        public static IList<IActionSource> GetPlugins(Assembly assembly)
-        {
-            var types = assembly.GetTypes()
-                .Where(t => t.GetConstructor(new Type[]{}) != null)
-                .ToList();
-
-            return types
-                .Where(t => typeof(IActionSource).IsAssignableFrom(t))
-                .Select(t => (IActionSource) Activator.CreateInstance(t))
-                
-                .Concat(types
-                    .Where(t => t.GetCustomAttributes(typeof(Usage), false).Any())
-                    .Select(t =>
-                        {
-                            var parser = new Parser(Activator.CreateInstance(t));
-                            return new ActionFilter(parser);
-                        }))
-
-                
-                .ToList();
-        }
-
-        public static IList<IActionSource> GetPlugins()
-        {
-            var assemblies = Sidi.IO.Paths.BinDir.GetFiles()
-                .Where(x => x.Extension.Equals(".dll") || x.Extension.Equals(".exe"));
-
-            return assemblies 
-                .SafeSelect(dll => Assembly.LoadFile(dll))
-                .SelectMany(a => GetPlugins(a))
-                .ToList();
-        }
-
-        public static IActionSource Plugins
-        {
-            get
-            {
-                return new Composite() { Sources = GetPlugins() };
-            }
-        }
     }
 }

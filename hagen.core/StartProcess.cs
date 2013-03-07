@@ -126,16 +126,20 @@ namespace hagen
 
         public override void Execute()
         {
+            // fill the input box of a file open dialog
             var focus = Hagen.Instance.SavedFocusedElement;
-            var name = (string) focus.GetCurrentPropertyValue(AutomationElement.NameProperty);
-            object pattern = null;
-            if (Regex.IsMatch(name, "File", RegexOptions.IgnoreCase) && focus.TryGetCurrentPattern(ValuePattern.Pattern, out pattern))
+            if (focus != null)
             {
-                var tp = pattern as ValuePattern;
-                if (tp != null)
+                var name = (string)focus.GetCurrentPropertyValue(AutomationElement.NameProperty);
+                object pattern = null;
+                if (Regex.IsMatch(name, "File", RegexOptions.IgnoreCase) && focus.TryGetCurrentPattern(ValuePattern.Pattern, out pattern))
                 {
-                    tp.SetValue(this.FileName);
-                    return;
+                    var tp = pattern as ValuePattern;
+                    if (tp != null)
+                    {
+                        tp.SetValue(this.FileName);
+                        return;
+                    }
                 }
             }
 

@@ -2,7 +2,8 @@
 <Project DefaultTargets="Release" xmlns="http://schemas.microsoft.com/developer/msbuild/2003">
 
     <PropertyGroup>
-	<MSBuildExtensionsPath>$(MSBuildProjectDirectory)\lib</MSBuildExtensionsPath>
+    <MSBuildCommunityTasksPath>$(MSBuildProjectDirectory)\.build</MSBuildCommunityTasksPath>
+	<MSBuildExtensionsPath>$(MSBuildProjectDirectory)\.build</MSBuildExtensionsPath>
         <ProjectName>hagen</ProjectName>
         <Major>0</Major>
         <Minor>2</Minor>
@@ -10,6 +11,6 @@
     </PropertyGroup>
 
   <Import Project="Common.Targets"/>
-  <Import Project="$(MSBuildExtensionsPath)\sidi-util\google.code.Targets"/>
+  <Import Project="$(MSBuildExtensionsPath)\google.code.Targets"/>
 
 </Project>

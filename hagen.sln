@@ -4,6 +4,7 @@ Microsoft Visual Studio Solution File, Format Version 11.00
 Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Solution Items", "Solution Items", "{646BF95A-C0C7-490F-830F-E329ACB616C1}"
 	ProjectSection(SolutionItems) = preProject
 		Common.Targets = Common.Targets
+		hagen.msbuild = hagen.msbuild
 		todo.txt = todo.txt
 	EndProjectSection
 EndProject

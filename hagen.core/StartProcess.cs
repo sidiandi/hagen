@@ -132,7 +132,7 @@ namespace hagen
             {
                 var name = (string)focus.GetCurrentPropertyValue(AutomationElement.NameProperty);
                 object pattern = null;
-                if (Regex.IsMatch(name, "File", RegexOptions.IgnoreCase) && focus.TryGetCurrentPattern(ValuePattern.Pattern, out pattern))
+                if (Regex.IsMatch(name, "(File|Folder)", RegexOptions.IgnoreCase) && focus.TryGetCurrentPattern(ValuePattern.Pattern, out pattern))
                 {
                     var tp = pattern as ValuePattern;
                     if (tp != null)

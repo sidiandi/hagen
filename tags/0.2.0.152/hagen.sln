@@ -1,0 +1,69 @@
+﻿
+Microsoft Visual Studio Solution File, Format Version 11.00
+# Visual Studio 2010
+Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Solution Items", "Solution Items", "{646BF95A-C0C7-490F-830F-E329ACB616C1}"
+	ProjectSection(SolutionItems) = preProject
+		Common.Targets = Common.Targets
+		hagen.msbuild = hagen.msbuild
+		todo.txt = todo.txt
+	EndProjectSection
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "activityReport", "activityReport\activityReport.csproj", "{D3E69D04-FEDA-48D8-9498-F41362F7E52A}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "hagen", "hagen\hagen.csproj", "{5E196699-E12B-4500-8178-BD38ACC8D362}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "hagen.core", "hagen.core\hagen.core.csproj", "{B8A11330-3766-4244-9962-8B0D25E98005}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "hagen.ext", "hagen.ext\hagen.ext.csproj", "{9BF01205-1BD3-4121-909D-16CEC6D47143}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "hagen.plugin.web", "hagen.plugin.web\hagen.plugin.web.csproj", "{D54AAAE7-E7AA-4A1D-A045-9E70853B7040}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "hagen.plugin.file", "hagen.plugin.file\hagen.plugin.file.csproj", "{E383806E-CF6C-4F40-B838-33574AC4A18C}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "hagen.plugin.screen", "hagen.plugin.screen\hagen.plugin.screen.csproj", "{BE26DB18-ADEA-45A7-B2FF-E1847FD4FCC2}"
+EndProject
+Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = ".nuget", ".nuget", "{BFA35297-F359-4563-83FF-CBA94980F910}"
+	ProjectSection(SolutionItems) = preProject
+		.nuget\NuGet.Config = .nuget\NuGet.Config
+		.nuget\NuGet.exe = .nuget\NuGet.exe
+		.nuget\NuGet.targets = .nuget\NuGet.targets
+		.nuget\packages.config = .nuget\packages.config
+	EndProjectSection
+EndProject
+Global
+	GlobalSection(SolutionConfigurationPlatforms) = preSolution
+		Debug|x86 = Debug|x86
+		Release|x86 = Release|x86
+	EndGlobalSection
+	GlobalSection(ProjectConfigurationPlatforms) = postSolution
+		{D3E69D04-FEDA-48D8-9498-F41362F7E52A}.Debug|x86.ActiveCfg = Debug|x86
+		{D3E69D04-FEDA-48D8-9498-F41362F7E52A}.Debug|x86.Build.0 = Debug|x86
+		{D3E69D04-FEDA-48D8-9498-F41362F7E52A}.Release|x86.ActiveCfg = Release|Any CPU
+		{5E196699-E12B-4500-8178-BD38ACC8D362}.Debug|x86.ActiveCfg = Debug|x86
+		{5E196699-E12B-4500-8178-BD38ACC8D362}.Debug|x86.Build.0 = Debug|x86
+		{5E196699-E12B-4500-8178-BD38ACC8D362}.Release|x86.ActiveCfg = Release|x86
+		{5E196699-E12B-4500-8178-BD38ACC8D362}.Release|x86.Build.0 = Release|x86
+		{B8A11330-3766-4244-9962-8B0D25E98005}.Debug|x86.ActiveCfg = Debug|x86
+		{B8A11330-3766-4244-9962-8B0D25E98005}.Debug|x86.Build.0 = Debug|x86
+		{B8A11330-3766-4244-9962-8B0D25E98005}.Release|x86.ActiveCfg = Release|x86
+		{B8A11330-3766-4244-9962-8B0D25E98005}.Release|x86.Build.0 = Release|x86
+		{9BF01205-1BD3-4121-909D-16CEC6D47143}.Debug|x86.ActiveCfg = Debug|x86
+		{9BF01205-1BD3-4121-909D-16CEC6D47143}.Debug|x86.Build.0 = Debug|x86
+		{9BF01205-1BD3-4121-909D-16CEC6D47143}.Release|x86.ActiveCfg = Release|Any CPU
+		{D54AAAE7-E7AA-4A1D-A045-9E70853B7040}.Debug|x86.ActiveCfg = Debug|x86
+		{D54AAAE7-E7AA-4A1D-A045-9E70853B7040}.Debug|x86.Build.0 = Debug|x86
+		{D54AAAE7-E7AA-4A1D-A045-9E70853B7040}.Release|x86.ActiveCfg = Release|x86
+		{D54AAAE7-E7AA-4A1D-A045-9E70853B7040}.Release|x86.Build.0 = Release|x86
+		{E383806E-CF6C-4F40-B838-33574AC4A18C}.Debug|x86.ActiveCfg = Debug|x86
+		{E383806E-CF6C-4F40-B838-33574AC4A18C}.Debug|x86.Build.0 = Debug|x86
+		{E383806E-CF6C-4F40-B838-33574AC4A18C}.Release|x86.ActiveCfg = Release|x86
+		{E383806E-CF6C-4F40-B838-33574AC4A18C}.Release|x86.Build.0 = Release|x86
+		{BE26DB18-ADEA-45A7-B2FF-E1847FD4FCC2}.Debug|x86.ActiveCfg = Debug|x86
+		{BE26DB18-ADEA-45A7-B2FF-E1847FD4FCC2}.Debug|x86.Build.0 = Debug|x86
+		{BE26DB18-ADEA-45A7-B2FF-E1847FD4FCC2}.Release|x86.ActiveCfg = Release|x86
+		{BE26DB18-ADEA-45A7-B2FF-E1847FD4FCC2}.Release|x86.Build.0 = Release|x86
+	EndGlobalSection
+	GlobalSection(SolutionProperties) = preSolution
+		HideSolutionNode = FALSE
+	EndGlobalSection
+EndGlobal

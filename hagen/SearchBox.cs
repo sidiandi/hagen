@@ -68,7 +68,7 @@ namespace hagen
                             return actions.SelectMany(action =>
                             {
                                 var sp = GetStartProcess(action);
-                                if (sp != null && new LPath(sp.FileName).IsDirectory)
+                                if (sp != null && LPath.IsValidFilename(sp.FileName) && new LPath(sp.FileName).IsDirectory)
                                 {
                                     var openInVlc = new Action()
                                     {

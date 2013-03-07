@@ -84,7 +84,12 @@ namespace hagen
         {
             var sc = new ScreenCapture();
             var dir = Hagen.Instance.ScreenCaptureDirectory;
-            return sc.CaptureWindow(dir, SavedFocusedElement.GetTopLevelElement());
+            var fe = SavedFocusedElement;
+            if (fe == null)
+            {
+                throw new Exception("Not active window");
+            }
+            return sc.CaptureWindow(dir, fe.GetTopLevelElement());
         }
 
         public IList<LPath> CaptureScreens()
@@ -153,6 +158,10 @@ namespace hagen
         {
             get
             {
+                if (focusedElement == IntPtr.Zero)
+                {
+                    return null;
+                }
                 return AutomationElement.FromHandle(focusedElement);
             }
         }

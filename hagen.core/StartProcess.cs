@@ -229,7 +229,7 @@ namespace hagen
         {
             get
             {
-                if (FileName.StartsWith("http://"))
+                if (String.IsNullOrEmpty(FileName) || FileName.StartsWith("http://"))
                 {
                     return false;
                 }

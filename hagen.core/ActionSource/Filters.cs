@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 using Sidi.IO;
+using System.Drawing;
 
 namespace hagen.ActionSource
 {
@@ -21,34 +22,90 @@ namespace hagen.ActionSource
             }
         }
 
+        static LPath GetPath(IAction a)
+        {
+            try
+            {
+                var sp = GetStartProcess(a);
+                if (sp != null)
+                {
+                    if (!String.IsNullOrEmpty(sp.FileName) && LPath.IsValid(sp.FileName))
+                    {
+                        return new LPath(sp.FileName);
+                    }
+                }
+            }
+            catch
+            {
+            }
+            return null;
+        }
+
+        static Filters()
+        {
+        }
+
+        static LPath vlcExe = new LPath(@"C:\Program Files (x86)\VideoLAN\VLC\vlc.exe");
+
         public static IActionSource OpenInVlc(IActionSource source)
         {
             return new Filter(source, actions =>
             {
                 return actions.SelectMany(action =>
                 {
-                    var sp = GetStartProcess(action);
-                    if (sp != null)
+                    var dir = GetPath(action);
+                    if (dir != null && dir.IsDirectory)
                     {
-                        if (LPath.IsValid(sp.FileName))
+                        var openInVlc = new Action()
                         {
-                            var dir = new LPath(sp.FileName);
-                            if (dir.IsDirectory)
+                            Name = String.Format("Open in VLC: {0}", dir.Quote()),
+                            CommandObject = new StartProcess()
                             {
-                                var openInVlc = new Action()
-                                {
-                                    Name = String.Format("Open in VLC: {0}", sp.FileName),
-                                    CommandObject = new StartProcess()
-                                    {
-                                        Arguments = dir,
-                                        FileName = @"C:\Program Files (x86)\VideoLAN\VLC\vlc.exe"
-                                    }
-                                };
-                                return new[] { action, openInVlc };
+                                Arguments = dir.Quote(),
+                                FileName = vlcExe
                             }
-                        }
+                        };
+                        return new[] { action, openInVlc };
                     }
 
+                    return new[] { action };
+                });
+            });
+        }
+
+        static LPath notepadPlusPlusExe = Paths.GetFolderPath(Environment.SpecialFolder.ProgramFilesX86)
+            .CatDir(@"Notepad++\notepad++.exe");
+        
+        public static IActionSource NoFileAssociation(IActionSource source)
+        {
+            var blacklist = new HashSet<string>()
+            {
+                ".lnk",
+                ".exe",
+                ".dll",
+                ".jpg",
+                ".jpeg",
+                ".url",
+            };
+            
+            return new Filter(source, actions =>
+            {
+                return actions.SelectMany(action =>
+                {
+                    var p = GetPath(action);
+                    if (p != null && p.IsFile && !blacklist.Contains(p.Extension.ToLower()))
+                    {
+                        var openInVlc = new Action()
+                        {
+                            Name = String.Format("Notepad: {0}", p),
+                            CommandObject = new StartProcess()
+                            {
+                                Arguments = p.Quote(),
+                                FileName = notepadPlusPlusExe,
+                            }
+                        };
+                        return new[] { action, openInVlc };
+                    }
                     return new[] { action };
                 });
             });

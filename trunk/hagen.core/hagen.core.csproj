@@ -68,6 +68,7 @@
     <Compile Include="ActionSource\Composite.cs" />
     <Compile Include="ActionSource\DatabaseLookup.cs" />
     <Compile Include="ActionSource\Filter.cs" />
+    <Compile Include="ActionSource\Filters.cs" />
     <Compile Include="Activity.cs" />
     <Compile Include="ActivityLogger.cs" />
     <Compile Include="Appender.cs" />

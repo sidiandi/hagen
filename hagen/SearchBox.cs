@@ -114,8 +114,15 @@ namespace hagen
                     AspectToStringConverter = x => String.Empty,
                     ImageGetter = x =>
                     {
-                        var icon = ((IAction)x).Icon;
-                        return icon != null ? icon.ToBitmap() : null;
+                        try
+                        {
+                            var icon = ((IAction)x).Icon;
+                            return icon != null ? icon.ToBitmap() : null;
+                        }
+                        catch
+                        {
+                            return null;
+                        }
                     },
                     Width = size,
                 });

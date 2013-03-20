@@ -72,9 +72,9 @@
     <Reference Include="log4net, Version=1.2.11.0, Culture=neutral, PublicKeyToken=669e0ddf0bb1aa2a, processorArchitecture=MSIL">
       <HintPath>..\packages\log4net.2.0.0\lib\net40-full\log4net.dll</HintPath>
     </Reference>
-    <Reference Include="Sidi.Util, Version=2.4.0.669, Culture=neutral, PublicKeyToken=1e33c1a5eebc53e1, processorArchitecture=x86">
+    <Reference Include="Sidi.Util, Version=2.4.0.709, Culture=neutral, PublicKeyToken=1e33c1a5eebc53e1, processorArchitecture=x86">
       <SpecificVersion>False</SpecificVersion>
-      <HintPath>..\packages\sidi-util.2.4.0.669\lib\net40\Sidi.Util.dll</HintPath>
+      <HintPath>..\packages\sidi-util.2.4.0.709\lib\net40\Sidi.Util.dll</HintPath>
     </Reference>
     <Reference Include="System" />
     <Reference Include="System.Core" />

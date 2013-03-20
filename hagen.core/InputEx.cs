@@ -20,6 +20,7 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 using Sidi.Persistence;
+using Sidi.Util;
 
 namespace hagen
 {
@@ -48,11 +49,14 @@ namespace hagen
             if (data.Any(x => !x.TerminalServerSession))
             {
                 var w = new WorkInterval();
-                w.TimeInterval.Begin = data.First(x => !x.TerminalServerSession).Begin;
-                w.TimeInterval.End = data.Last(x => !x.TerminalServerSession).End;
+                w.TimeInterval = new Sidi.Util.TimeInterval(
+                    data.First(x => !x.TerminalServerSession).Begin,
+                    data.Last(x => !x.TerminalServerSession).End);
                 if (w.TimeInterval.Duration > Contract.Current.MaxWorkTimePerDay)
                 {
-                    w.TimeInterval.End = w.TimeInterval.Begin + Contract.Current.MaxWorkTimePerDay;
+                    w.TimeInterval = new Sidi.Util.TimeInterval(
+                        w.TimeInterval.Begin,
+                        w.TimeInterval.Begin + Contract.Current.MaxWorkTimePerDay);
                 }
                 w.Place = Place.Office;
                 return w;
@@ -71,17 +75,25 @@ namespace hagen
 
             if (data.Any(x => !x.TerminalServerSession))
             {
-                atOffice = new WorkInterval();
-                atOffice.TimeInterval.Begin = data.First(x => !x.TerminalServerSession).Begin;
                 leave = data.Last(x => !x.TerminalServerSession).End;
-                atOffice.TimeInterval.End = leave;
+                atOffice = new WorkInterval()
+                {
+                    TimeInterval = new TimeInterval(
+                        data.First(x => !x.TerminalServerSession).Begin,
+                        leave)
+                };
                 if (atOffice.TimeInterval.Duration > Contract.Current.MaxWorkTimePerDay)
                 {
-                    atOffice.TimeInterval.End = atOffice.TimeInterval.Begin + Contract.Current.MaxWorkTimePerDay;
+                    atOffice.TimeInterval = new TimeInterval(
+                        atOffice.TimeInterval.Begin,
+                        Contract.Current.MaxWorkTimePerDay);
 
-                    extraOffice = new WorkInterval();
-                    extraOffice.TimeInterval.Begin = atOffice.TimeInterval.End;
-                    extraOffice.TimeInterval.End = leave;
+                    extraOffice = new WorkInterval()
+                    {
+                        TimeInterval = new TimeInterval(
+                            atOffice.TimeInterval.End,
+                            leave)
+                    };
                     extraOffice.Place = Place.OverHr;
                 }
                 atOffice.Place = Place.Office;
@@ -110,7 +122,7 @@ namespace hagen
                 {
                     if (w.TimeInterval.End + Contract.Current.MaxHomeOfficeIdleTime >= i.Begin)
                     {
-                        w.TimeInterval.End = i.End;
+                        w.TimeInterval = new TimeInterval(w.TimeInterval.Begin, i.End);
                     }
                     else
                     {
@@ -123,8 +135,7 @@ namespace hagen
                 {
                     w = new WorkInterval();
                     w.Place = Place.Home;
-                    w.TimeInterval.Begin = i.Begin;
-                    w.TimeInterval.End = i.End;
+                    w.TimeInterval = new TimeInterval(i.Begin, i.End);
                 }
             }
             if (w != null)

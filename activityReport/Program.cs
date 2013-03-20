@@ -139,7 +139,7 @@ namespace activityReport
         [Usage("Prints a day-by-day report")]
         public void Report()
         {
-            Report(Console.Out, TimeInterval.Last(new TimeSpan(30, 0, 0, 0)));
+            Report(Console.Out, TimeIntervalExtensions.LastDays(30));
         }
 
         [Usage("Shows a day-by-day worktime report")]
@@ -148,7 +148,7 @@ namespace activityReport
             var p = Hagen.Instance.DataDirectory.CatDir("work-time-report.txt");
             using (var output = new StreamWriter(p))
             {
-                new activityReport.Program().WorktimeReport(output, TimeInterval.LastDays(90));
+                new activityReport.Program().WorktimeReport(output, TimeIntervalExtensions.LastDays(90));
             }
             Process.Start("notepad.exe", p.ToString().Quote());
         }
@@ -311,7 +311,7 @@ namespace activityReport
         [Usage("Program use")]
         public void ProgramUse()
         {
-            var t = TimeInterval.LastDays(60);
+            var t = TimeIntervalExtensions.LastDays(60);
             var programs = Hagen.Instance.ProgramUses.Query(p => p.Begin > t.Begin && p.Begin < t.End)
                 .GroupBy(x => x.File)
                 .Select(x => new { File = x.Key, KeyDown = x.Sum(i => i.KeyDown) })
@@ -327,7 +327,7 @@ namespace activityReport
         [Usage("Program use")]
         public void Captions()
         {
-            var t = TimeInterval.LastDays(60);
+            var t = TimeIntervalExtensions.LastDays(60);
             var programs = Hagen.Instance.ProgramUses.Query(p => p.Begin > t.Begin && p.Begin < t.End)
                 .GroupBy(x => x.Caption)
                 .Select(x => new { Caption = x.Key, KeyDown = x.Sum(i => i.KeyDown) })
@@ -657,7 +657,7 @@ namespace activityReport
             [Test, Explicit("interactive")]
             public void Report()
             {
-                new Program().Report(Console.Out, TimeInterval.LastDays(90));
+                new Program().Report(Console.Out, TimeIntervalExtensions.LastDays(90));
             }
 
             [Test, Explicit("interactive")]

@@ -20,6 +20,7 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 using Sidi.Persistence;
+using Sidi.Util;
 
 namespace hagen
 {
@@ -27,7 +28,7 @@ namespace hagen
     {
         public WorkInterval()
         {
-            TimeInterval = new TimeInterval();
+            TimeInterval = TimeInterval.MaxValue;
         }
 
         public TimeInterval TimeInterval { get; set; }

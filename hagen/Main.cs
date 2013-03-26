@@ -308,5 +308,10 @@ Hours: {0:G3}",
 
             actions.Add(a);
         }
+
+        private void deleteToolStripMenuItem_Click(object sender, EventArgs e)
+        {
+            searchBox1.Remove();
+        }
     }
 }

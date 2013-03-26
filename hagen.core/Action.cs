@@ -144,7 +144,7 @@ namespace hagen
         public Action()
         {
             icons.EntryUpdated +=new EventHandler<LruCacheBackground<Action,System.Drawing.Icon>.EntryUpdatedEventArgs>(icons_EntryUpdated);
-            LastUseTime = DateTime.Now;
+            LastUseTime = DateTime.MinValue;
         }
 
         void icons_EntryUpdated(object sender, LruCacheBackground<Action, Icon>.EntryUpdatedEventArgs arg)

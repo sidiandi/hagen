@@ -33,7 +33,8 @@ namespace hagen
             return new Action()
             {
                 Name = new LPath(file).FileName,
-                CommandObject = StartProcess.FromFileName(file)
+                CommandObject = StartProcess.FromFileName(file),
+                LastUseTime = new LPath(file).Info.LastWriteTimeUtc,
             };
         }
 

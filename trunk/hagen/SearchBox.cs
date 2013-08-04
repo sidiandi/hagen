@@ -48,9 +48,11 @@ namespace hagen
                 data = value;
 
                 var composite = new Composite(
-                    Filters.NoFileAssociation(
+                    // Filters.NoFileAssociation(
                         Filters.OpenInVlc(
-                            new DatabaseLookup(value))),
+                            new DatabaseLookup(value))
+                    // )
+                    ,
                     Plugins.Default
                     );
 

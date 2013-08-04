@@ -35,6 +35,7 @@ using mshtml;
 using Sidi.Extensions;
 using L = Sidi.IO;
 using BrightIdeasSoftware;
+using Sidi.Test;
 
 namespace hagen
 {
@@ -146,7 +147,9 @@ namespace hagen
 
         private void updateStartMenuToolStripMenuItem_Click(object sender, EventArgs e)
         {
-            actions.UpdateStartMenu();
+            // actions.UpdateStartMenu();
+            var a = ActionsEx.PathExecutables();
+            actions.AddOrUpdate(a);
         }
 
         private void cleanupToolStripMenuItem_Click(object sender, EventArgs e)
@@ -266,10 +269,21 @@ Hours: {0:G3}",
         private void linksFromInternetExplorerToolStripMenuItem_Click(object sender, EventArgs e)
         {
             var links = ActionsEx.GetAllIeLinks().ToList();
-            var selected = Prompt.ChooseMany(links.ListFormat(), "Add Links");
+            var selected = Prompt.ChooseMany(links.ListFormat().DefaultColumns(), "Add Links");
             foreach (var a in selected)
             {
                 actions.Add(a);
+            }
+        }
+
+        [TestFixture]
+        public class Test : TestBase
+        {
+            [Test, RequiresSTA]
+            public void IeLinks()
+            {
+                var a = new Main();
+                a.linksFromInternetExplorerToolStripMenuItem_Click(null, null);
             }
         }
 

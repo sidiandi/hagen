@@ -266,7 +266,7 @@ Hours: {0:G3}",
         private void linksFromInternetExplorerToolStripMenuItem_Click(object sender, EventArgs e)
         {
             var links = ActionsEx.GetAllIeLinks().ToList();
-            var selected = Prompt.SelectObjects(links, "Add Links");
+            var selected = Prompt.ChooseMany(links.ListFormat(), "Add Links");
             foreach (var a in selected)
             {
                 actions.Add(a);

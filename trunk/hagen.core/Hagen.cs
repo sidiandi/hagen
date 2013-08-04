@@ -146,10 +146,7 @@ namespace hagen
 
         public void SaveFocus()
         {
-            NativeMethods.GUITHREADINFO threadInfo = new NativeMethods.GUITHREADINFO();
-            threadInfo.cbSize = Marshal.SizeOf(threadInfo);
-            NativeMethods.GetGUIThreadInfo(0, out threadInfo);
-            focusedElement = (IntPtr) threadInfo.hwndFocus;
+            focusedElement = (IntPtr)NativeMethods.GetForegroundWindow();
         }
 
         IntPtr focusedElement = IntPtr.Zero;

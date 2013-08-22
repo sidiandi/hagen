@@ -343,7 +343,7 @@ namespace activityReport
         [Usage("Graphical reports")]
         public void GraphicalUserInterface()
         {
-            Application.Run(StatisticsWindow());
+            System.Windows.Forms.Application.Run(StatisticsWindow());
         }
 
         public Form StatisticsWindow()
@@ -651,7 +651,7 @@ namespace activityReport
             [Test, Explicit("interactive")]
             public void Stats()
             {
-                Application.Run(new Program().StatisticsWindow());
+                System.Windows.Forms.Application.Run(new Program().StatisticsWindow());
             }
 
             [Test, Explicit("interactive")]
@@ -665,7 +665,7 @@ namespace activityReport
             {
                 var r = new Program();
                 r.input = new Collection<Input>(@"D:\temp\2010-01-30_worktime\hagen\hagen.sqlite");
-                Application.Run(r.StatisticsWindow());
+                System.Windows.Forms.Application.Run(r.StatisticsWindow());
             }
         }
     }

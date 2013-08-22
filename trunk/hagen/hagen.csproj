@@ -31,21 +31,21 @@
       <HintPath>..\packages\Unofficial.ObjectListView.2.6.0\lib\net20\ObjectListView.dll</HintPath>
     </Reference>
     <Reference Include="Sidi.Office, Version=1.0.0.0, Culture=neutral, processorArchitecture=MSIL">
-      <HintPath>..\..\nuget-packages\sidi-util.2.4.0.879\lib\net40\Sidi.Office.dll</HintPath>
+      <HintPath>..\..\nuget-packages\sidi-util.2.4.0.891\lib\net40\Sidi.Office.dll</HintPath>
     </Reference>
-    <Reference Include="Sidi.Util, Version=2.4.0.879, Culture=neutral, PublicKeyToken=1e33c1a5eebc53e1, processorArchitecture=MSIL">
+    <Reference Include="Sidi.Util, Version=2.4.0.891, Culture=neutral, PublicKeyToken=1e33c1a5eebc53e1, processorArchitecture=MSIL">
       <SpecificVersion>False</SpecificVersion>
-      <HintPath>..\..\nuget-packages\sidi-util.2.4.0.879\lib\net40\Sidi.Util.dll</HintPath>
+      <HintPath>..\..\nuget-packages\sidi-util.2.4.0.891\lib\net40\Sidi.Util.dll</HintPath>
     </Reference>
     <Reference Include="System" />
     <Reference Include="System.Data" />
-    <Reference Include="System.Data.SQLite, Version=1.0.87.0, Culture=neutral, PublicKeyToken=db937bc2d44ff139, processorArchitecture=MSIL">
+    <Reference Include="System.Data.SQLite, Version=1.0.88.0, Culture=neutral, PublicKeyToken=db937bc2d44ff139, processorArchitecture=MSIL">
       <SpecificVersion>False</SpecificVersion>
-      <HintPath>..\..\nuget-packages\System.Data.SQLite.1.0.87.0\lib\net40\System.Data.SQLite.dll</HintPath>
+      <HintPath>..\..\nuget-packages\System.Data.SQLite.1.0.88.0\lib\net40\System.Data.SQLite.dll</HintPath>
     </Reference>
-    <Reference Include="System.Data.SQLite.Linq, Version=1.0.87.0, Culture=neutral, PublicKeyToken=db937bc2d44ff139, processorArchitecture=MSIL">
+    <Reference Include="System.Data.SQLite.Linq, Version=1.0.88.0, Culture=neutral, PublicKeyToken=db937bc2d44ff139, processorArchitecture=MSIL">
       <SpecificVersion>False</SpecificVersion>
-      <HintPath>..\..\nuget-packages\System.Data.SQLite.1.0.87.0\lib\net40\System.Data.SQLite.Linq.dll</HintPath>
+      <HintPath>..\..\nuget-packages\System.Data.SQLite.1.0.88.0\lib\net40\System.Data.SQLite.Linq.dll</HintPath>
     </Reference>
     <Reference Include="System.Deployment" />
     <Reference Include="System.Drawing" />
@@ -60,6 +60,7 @@
       <DependentUpon>ActionProperties.cs</DependentUpon>
     </Compile>
     <Compile Include="ClipboardUrl.cs" />
+    <Compile Include="ControlExtensions.cs" />
     <Compile Include="Extensions.cs" />
     <Compile Include="Main.cs">
       <SubType>Form</SubType>
@@ -70,6 +71,12 @@
     <Compile Include="Program.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
     <Compile Include="..\VersionInfo.cs" />
+    <Compile Include="TaskProgress.cs">
+      <SubType>Form</SubType>
+    </Compile>
+    <Compile Include="TaskProgress.Designer.cs">
+      <DependentUpon>TaskProgress.cs</DependentUpon>
+    </Compile>
     <EmbeddedResource Include="ActionProperties.resx">
       <DependentUpon>ActionProperties.cs</DependentUpon>
       <SubType>Designer</SubType>
@@ -97,6 +104,9 @@
       <DependentUpon>Resources.resx</DependentUpon>
       <DesignTime>True</DesignTime>
     </Compile>
+    <EmbeddedResource Include="TaskProgress.resx">
+      <DependentUpon>TaskProgress.cs</DependentUpon>
+    </EmbeddedResource>
     <None Include="app.config" />
     <None Include="MSBuild.Community.Tasks.ReadMe.md" />
     <None Include="packages.config" />
@@ -208,10 +218,10 @@
   </ItemGroup>
   <ItemGroup>
     <Content Include="x64\SQLite.Interop.dll">
-      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
     </Content>
     <Content Include="x86\SQLite.Interop.dll">
-      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
     </Content>
   </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />

@@ -269,10 +269,16 @@ Hours: {0:G3}",
         private void linksFromInternetExplorerToolStripMenuItem_Click(object sender, EventArgs e)
         {
             var links = ActionsEx.GetAllIeLinks().ToList();
-            var selected = Prompt.ChooseMany(links.ListFormat().DefaultColumns(), "Add Links");
-            foreach (var a in selected)
+            try
             {
-                actions.Add(a);
+                var selected = Prompt.ChooseMany(links.ListFormat().DefaultColumns(), "Add Links");
+                foreach (var a in selected)
+                {
+                    actions.Add(a);
+                }
+            }
+            catch
+            {
             }
         }
 

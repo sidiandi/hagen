@@ -57,26 +57,26 @@ namespace hagen
             }
         }
 
-        public Collection<Action> Actions
+        public Collection<Action> OpenActions()
         {
-            get
-            {
-                return new Collection<Action>(DatabasePath.NoPrefix);
-            }
+            return new Collection<Action>(DatabasePath);
         }
 
         public DateTime? GetWorkBegin(DateTime time)
         {
             var workDayBegin = time.Date;
-            var r = Inputs.Range(new TimeInterval(workDayBegin, time));
-            var b = r.FirstOrDefault();
-            if (b == null)
+            using (var inputs = OpenInputs())
             {
-                return null;
-            }
-            else
-            {
-                return b.Begin;
+                var r = inputs.Range(new TimeInterval(workDayBegin, time));
+                var b = r.FirstOrDefault();
+                if (b == null)
+                {
+                    return null;
+                }
+                else
+                {
+                    return b.Begin;
+                }
             }
         }
 
@@ -106,28 +106,19 @@ namespace hagen
             return sc.CaptureToDirectory(Screen.PrimaryScreen, dir);
         }
 
-        public Collection<Input> Inputs
+        public Collection<Input> OpenInputs()
         {
-            get
-            {
-                return new Collection<Input>(DatabasePath.NoPrefix);
-            }
+            return new Collection<Input>(DatabasePath);
         }
 
-        public Collection<ProgramUse> ProgramUses
+        public Collection<ProgramUse> OpenProgramUses()
         {
-            get
-            {
-                return new Collection<ProgramUse>(DatabasePath.NoPrefix);
-            }
+            return new Collection<ProgramUse>(DatabasePath);
         }
 
-        public Collection<Log> Logs
+        public Collection<Log> OpenLogs()
         {
-            get
-            {
-                return new Collection<Log>(DatabasePath.NoPrefix);
-            }
+            return new Collection<Log>(DatabasePath);
         }
 
         public static Hagen Instance

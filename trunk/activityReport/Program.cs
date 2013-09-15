@@ -55,7 +55,7 @@ namespace activityReport
         public Program()
         {
             SQLiteFunction.RegisterFunction(typeof(Duration));
-            input = Hagen.Instance.Inputs;
+            input = Hagen.Instance.OpenInputs();
             connection = (System.Data.SQLite.SQLiteConnection)input.Connection;
             dataContext = new DataContext(input.Connection);
         }
@@ -311,33 +311,39 @@ namespace activityReport
         [Usage("Program use")]
         public void ProgramUse()
         {
-            var t = TimeIntervalExtensions.LastDays(60);
-            var programs = Hagen.Instance.ProgramUses.Query(p => p.Begin > t.Begin && p.Begin < t.End)
-                .GroupBy(x => x.File)
-                .Select(x => new { File = x.Key, KeyDown = x.Sum(i => i.KeyDown) })
-                .ToList();
+            using (var pu = Hagen.Instance.OpenProgramUses())
+            {
+                var t = TimeIntervalExtensions.LastDays(60);
+                var programs = pu.Query(p => p.Begin > t.Begin && p.Begin < t.End)
+                    .GroupBy(x => x.File)
+                    .Select(x => new { File = x.Key, KeyDown = x.Sum(i => i.KeyDown) })
+                    .ToList();
 
-            var tm = CreateTreeMap(programs);
-            tm.GetLineage = x => Regex.Split(x.File.ToLower(), @"\\");
-            tm.GetSize = x => x.KeyDown;
+                var tm = CreateTreeMap(programs);
+                tm.GetLineage = x => Regex.Split(x.File.ToLower(), @"\\");
+                tm.GetSize = x => x.KeyDown;
 
-            tm.RunFullScreen();
+                tm.RunFullScreen();
+            }
         }
 
         [Usage("Program use")]
         public void Captions()
         {
-            var t = TimeIntervalExtensions.LastDays(60);
-            var programs = Hagen.Instance.ProgramUses.Query(p => p.Begin > t.Begin && p.Begin < t.End)
-                .GroupBy(x => x.Caption)
-                .Select(x => new { Caption = x.Key, KeyDown = x.Sum(i => i.KeyDown) })
-                .ToList();
+            using (var pu = Hagen.Instance.OpenProgramUses())
+            {
+                var t = TimeIntervalExtensions.LastDays(60);
+                var programs = pu.Query(p => p.Begin > t.Begin && p.Begin < t.End)
+                    .GroupBy(x => x.Caption)
+                    .Select(x => new { Caption = x.Key, KeyDown = x.Sum(i => i.KeyDown) })
+                    .ToList();
 
-            var tm = CreateTreeMap(programs);
-            tm.GetLineage = x => Regex.Split(x.Caption, @" \- ").Reverse();
-            tm.GetSize = x => x.KeyDown;
+                var tm = CreateTreeMap(programs);
+                tm.GetLineage = x => Regex.Split(x.Caption, @" \- ").Reverse();
+                tm.GetSize = x => x.KeyDown;
 
-            tm.RunFullScreen();
+                tm.RunFullScreen();
+            }
         }
 
         [Usage("Graphical reports")]
@@ -462,33 +468,39 @@ namespace activityReport
 
                 main.AddItem("{0:yyyy-MM} Programs".F(m.Begin), () =>
                 {
-                    var programUse = Hagen.Instance.ProgramUses
-                        .Query(p => p.Begin > m.Begin && p.Begin < m.End && p.File != String.Empty)
-                        .GroupBy(p => p.File)
-                        .Select(p => new { File = new LPath(p.Key), TotalSeconds = p.Sum(x => (x.End - x.Begin).TotalSeconds) });
+                    using (var pu = Hagen.Instance.OpenProgramUses())
+                    {
+                        var programUse = pu
+                            .Query(p => p.Begin > m.Begin && p.Begin < m.End && p.File != String.Empty)
+                            .GroupBy(p => p.File)
+                            .Select(p => new { File = new LPath(p.Key), TotalSeconds = p.Sum(x => (x.End - x.Begin).TotalSeconds) });
 
-                    var stm = programUse.CreateTreeMap();
-                    stm.GetLineage = x => x.File.Parts;
-                    stm.GetSize = i => i.TotalSeconds;
-                    stm.GetColor = i => Color.White;
-                    stm.GetText = i => new LPath(i.File).FileName;
+                        var stm = programUse.CreateTreeMap();
+                        stm.GetLineage = x => x.File.Parts;
+                        stm.GetSize = i => i.TotalSeconds;
+                        stm.GetColor = i => Color.White;
+                        stm.GetText = i => new LPath(i.File).FileName;
 
-                    return stm;
+                        return stm;
+                    }
                 });
 
                 main.AddItem("{0:yyyy-MM} Captions".F(m.Begin), () =>
                 {
-                    var programUse = Hagen.Instance.ProgramUses
+                    using (var pu = Hagen.Instance.OpenProgramUses())
+                    {
+                        var programUse = pu
                         .Query(p => p.Begin > m.Begin && p.Begin < m.End && p.Caption != String.Empty)
                         .GroupBy(p => p.Caption)
                         .Select(p => new { Caption = Regex.Split(p.Key, @" \- ").Reverse(), Duration = p.Sum(x => (x.End - x.Begin).TotalSeconds)});
 
-                    var tm = programUse.CreateTreeMap();
-                    tm.GetLineage = x => x.Caption;
-                    tm.GetSize = i => i.Duration;
-                    tm.GetColor = i => Color.White;
-                    tm.GetText = x => x.Caption.Last();
-                    return tm;
+                        var tm = programUse.CreateTreeMap();
+                        tm.GetLineage = x => x.Caption;
+                        tm.GetSize = i => i.Duration;
+                        tm.GetColor = i => Color.White;
+                        tm.GetText = x => x.Caption.Last();
+                        return tm;
+                    }
                 });
             }
 

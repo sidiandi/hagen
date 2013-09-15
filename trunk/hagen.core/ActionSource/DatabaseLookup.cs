@@ -50,7 +50,7 @@ namespace hagen.ActionSource
             }
 
             var r = actions.Select(sql);
-            return r.SelectMany(action => ToIActions(action));
+            return r.SelectMany(action => ToIActions(action)).ToList();
         }
     }
 }

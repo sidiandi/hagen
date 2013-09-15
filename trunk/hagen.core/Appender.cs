@@ -35,9 +35,9 @@ namespace hagen
         public string Message;
     }
 
-    public class Appender : log4net.Appender.AppenderSkeleton
+    public class Appender : log4net.Appender.AppenderSkeleton, IDisposable
     {
-        Collection<Log> logs = Hagen.Instance.Logs;
+        Collection<Log> logs = Hagen.Instance.OpenLogs();
 
         protected override void Append(log4net.Core.LoggingEvent loggingEvent)
         {
@@ -45,7 +45,15 @@ namespace hagen
             log.Level = loggingEvent.Level.ToString();
             log.Logger = loggingEvent.LoggerName;
             log.Message = loggingEvent.RenderedMessage;
-            logs.Add(log);
+            lock (logs)
+            {
+                logs.Add(log);
+            }
+        }
+
+        public void Dispose()
+        {
+            logs.Dispose();
         }
     }
 }

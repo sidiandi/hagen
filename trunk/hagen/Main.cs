@@ -69,7 +69,7 @@ namespace hagen
             this.KeyDown += new KeyEventHandler(Main_KeyDown);
             this.KeyPreview = true;
 
-            actions = Hagen.Instance.Actions;
+            actions = Hagen.Instance.OpenActions();
 
             searchBox1.Data = actions;
             searchBox1.ItemsActivated += new EventHandler(searchBox1_ItemsActivated);

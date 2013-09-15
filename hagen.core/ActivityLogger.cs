@@ -44,8 +44,8 @@ namespace hagen
 
         public ActivityLogger()
         {
-            programUse = Hagen.Instance.ProgramUses;
-            inputs = Hagen.Instance.Inputs;
+            programUse = Hagen.Instance.OpenProgramUses();
+            inputs = Hagen.Instance.OpenInputs();
 
             backgroundWorker = new Thread(backgroundWorker_DoWork);
             backgroundWorker.Start();
@@ -141,19 +141,22 @@ namespace hagen
 
         void FirstInputToday(DateTime now)
         {
-            try
+            using (var inputs = Hagen.Instance.OpenInputs())
             {
-                if (Hagen.Instance.Inputs.Range(new TimeInterval(workDayBegin, now)).Any())
+                try
                 {
-                    workDayBegin = DateTime.Now.Date.AddDays(1.0);
-                    return;
-                }
+                    if (inputs.Range(new TimeInterval(workDayBegin, now)).Any())
+                    {
+                        workDayBegin = DateTime.Now.Date.AddDays(1.0);
+                        return;
+                    }
 
-                workDayBegin = DateTime.Now.Date.AddDays(1.0);
-            }
-            catch (System.Exception ex)
-            {
-                log.Error("FirstInputToday", ex);
+                    workDayBegin = DateTime.Now.Date.AddDays(1.0);
+                }
+                catch (System.Exception ex)
+                {
+                    log.Error("FirstInputToday", ex);
+                }
             }
         }
 
@@ -250,6 +253,8 @@ namespace hagen
                 mustEnd = true;
             }
             backgroundWorker.Join();
+            programUse.Dispose();
+            inputs.Dispose();
         }
     }
 }

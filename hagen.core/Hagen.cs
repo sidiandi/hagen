@@ -32,6 +32,13 @@ namespace hagen
 {
     public class Hagen
     {
+        public Hagen()
+        {
+            actions = new Collection<Action>(DatabasePath);
+        }
+
+        Collection<Action> actions;
+
         public LPath DatabasePath
         {
             get
@@ -59,7 +66,7 @@ namespace hagen
 
         public Collection<Action> OpenActions()
         {
-            return new Collection<Action>(DatabasePath);
+            return new Collection<Action>(actions.SharedConnection);
         }
 
         public DateTime? GetWorkBegin(DateTime time)
@@ -108,17 +115,17 @@ namespace hagen
 
         public Collection<Input> OpenInputs()
         {
-            return new Collection<Input>(DatabasePath);
+            return new Collection<Input>(actions.SharedConnection);
         }
 
         public Collection<ProgramUse> OpenProgramUses()
         {
-            return new Collection<ProgramUse>(DatabasePath);
+            return new Collection<ProgramUse>(actions.SharedConnection);
         }
 
         public Collection<Log> OpenLogs()
         {
-            return new Collection<Log>(DatabasePath);
+            return new Collection<Log>(actions.SharedConnection);
         }
 
         public static Hagen Instance

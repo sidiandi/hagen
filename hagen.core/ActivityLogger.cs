@@ -231,10 +231,13 @@ namespace hagen
                             currentProgram.End = n;
                             programUse.Add(currentProgram);
                         }
-                        currentProgram = new ProgramUse();
-                        currentProgram.Begin = n;
-                        currentProgram.Caption = caption;
-                        currentProgram.File = p.MainModule.FileName;
+
+                        currentProgram = new ProgramUse()
+                        {
+                            Begin = n,
+                            Caption = caption,
+                            File = p.MainModule.FileName
+                        };
                     }
                 }
             }

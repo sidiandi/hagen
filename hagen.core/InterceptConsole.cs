@@ -20,6 +20,7 @@ using System.Diagnostics;
 using System.Windows.Forms;
 using System.Runtime.InteropServices;
 using System.Threading;
+using System.Threading.Tasks;
 
 class InputHook : IDisposable
 {
@@ -105,21 +106,24 @@ class InputHook : IDisposable
     private IntPtr HookCallback(
         int nCode, IntPtr wParam, IntPtr lParam)
     {
-        var kea = CreateKeyEventArgs(wParam, lParam);
-        if (IsKeyDown(wParam))
+        Task.Factory.StartNew(() =>
         {
-            if (KeyDown != null)
+            var kea = CreateKeyEventArgs(wParam, lParam);
+            if (IsKeyDown(wParam))
             {
-                KeyDown(this, kea);
+                if (KeyDown != null)
+                {
+                    KeyDown(this, kea);
+                }
             }
-        }
-        if (IsKeyUp(wParam))
-        {
-            if (KeyUp != null)
+            if (IsKeyUp(wParam))
             {
-                KeyUp(this, kea);
+                if (KeyUp != null)
+                {
+                    KeyUp(this, kea);
+                }
             }
-        }
+        });
 
         return CallNextHookEx(keyboardHookID, nCode, wParam, lParam);
     }
@@ -153,46 +157,50 @@ class InputHook : IDisposable
 
     private IntPtr MouseHook(int nCode, IntPtr wParam, IntPtr lParam)
     {
-        if (MouseMove != null)
-        {
-            MSLLHOOKSTRUCT h = (MSLLHOOKSTRUCT)Marshal.PtrToStructure(lParam, typeof(MSLLHOOKSTRUCT));
-
-            int clicks = 0;
-            int delta = 0;
-            MouseButtons b = MouseButtons.None;
-
-            switch ((MouseMessages)wParam)
+        Task.Factory.StartNew(() =>
             {
-                case MouseMessages.WM_LBUTTONDOWN:
-                    b = MouseButtons.Left;
-                    clicks = 1;
-                    break;
-                case MouseMessages.WM_LBUTTONUP:
-                    b = MouseButtons.Left;
-                    clicks = 0;
-                    break;
-                case MouseMessages.WM_MOUSEMOVE:
-                    b = MouseButtons.None;
-                    clicks = 0;
-                    break;
-                case MouseMessages.WM_MOUSEWHEEL:
-                    b = MouseButtons.None;
-                    clicks = 0;
-                    delta = (int)(h.mouseData >> 16);
-                    break;
-                case MouseMessages.WM_RBUTTONDOWN:
-                    b = MouseButtons.Right;
-                    clicks = 1;
-                    break;
-                case MouseMessages.WM_RBUTTONUP:
-                    b = MouseButtons.Right;
-                    clicks = 0;
-                    break;
-            }
+                if (MouseMove != null)
+                {
+                    MSLLHOOKSTRUCT h = (MSLLHOOKSTRUCT)Marshal.PtrToStructure(lParam, typeof(MSLLHOOKSTRUCT));
 
-            MouseEventArgs e = new MouseEventArgs(b, clicks, h.pt.x, h.pt.y, delta);
-            MouseMove(this, e);
-        }
+                    int clicks = 0;
+                    int delta = 0;
+                    MouseButtons b = MouseButtons.None;
+
+                    switch ((MouseMessages)wParam)
+                    {
+                        case MouseMessages.WM_LBUTTONDOWN:
+                            b = MouseButtons.Left;
+                            clicks = 1;
+                            break;
+                        case MouseMessages.WM_LBUTTONUP:
+                            b = MouseButtons.Left;
+                            clicks = 0;
+                            break;
+                        case MouseMessages.WM_MOUSEMOVE:
+                            b = MouseButtons.None;
+                            clicks = 0;
+                            break;
+                        case MouseMessages.WM_MOUSEWHEEL:
+                            b = MouseButtons.None;
+                            clicks = 0;
+                            delta = (int)(h.mouseData >> 16);
+                            break;
+                        case MouseMessages.WM_RBUTTONDOWN:
+                            b = MouseButtons.Right;
+                            clicks = 1;
+                            break;
+                        case MouseMessages.WM_RBUTTONUP:
+                            b = MouseButtons.Right;
+                            clicks = 0;
+                            break;
+                    }
+
+                    MouseEventArgs e = new MouseEventArgs(b, clicks, h.pt.x, h.pt.y, delta);
+                    MouseMove(this, e);
+                }
+            });
+
         return CallNextHookEx(keyboardHookID, nCode, wParam, lParam);
     }
 

@@ -32,11 +32,11 @@
       <HintPath>..\packages\Unofficial.ObjectListView.2.6.0\lib\net20\ObjectListView.dll</HintPath>
     </Reference>
     <Reference Include="Sidi.Office, Version=1.0.0.0, Culture=neutral, processorArchitecture=MSIL">
-      <HintPath>..\..\nuget-packages\sidi-util.2.5.0.963\lib\net40\Sidi.Office.dll</HintPath>
+      <HintPath>..\..\nuget-packages\sidi-util.2.5.0.967\lib\net40\Sidi.Office.dll</HintPath>
     </Reference>
-    <Reference Include="Sidi.Util, Version=2.5.0.963, Culture=neutral, PublicKeyToken=1e33c1a5eebc53e1, processorArchitecture=MSIL">
+    <Reference Include="Sidi.Util, Version=2.5.0.967, Culture=neutral, PublicKeyToken=1e33c1a5eebc53e1, processorArchitecture=MSIL">
       <SpecificVersion>False</SpecificVersion>
-      <HintPath>..\..\nuget-packages\sidi-util.2.5.0.963\lib\net40\Sidi.Util.dll</HintPath>
+      <HintPath>..\..\nuget-packages\sidi-util.2.5.0.967\lib\net40\Sidi.Util.dll</HintPath>
     </Reference>
     <Reference Include="System" />
     <Reference Include="System.Data" />
@@ -52,6 +52,9 @@
     <Reference Include="System.Drawing" />
     <Reference Include="System.Windows.Forms" />
     <Reference Include="System.Xml" />
+    <Reference Include="WeifenLuo.WinFormsUI.Docking">
+      <HintPath>..\..\nuget-packages\DockPanelSuite.2.8.0.0\lib\net40\WeifenLuo.WinFormsUI.Docking.dll</HintPath>
+    </Reference>
   </ItemGroup>
   <ItemGroup>
     <Compile Include="ActionProperties.cs">
@@ -62,6 +65,7 @@
     </Compile>
     <Compile Include="ClipboardUrl.cs" />
     <Compile Include="ControlExtensions.cs" />
+    <Compile Include="DockExtension.cs" />
     <Compile Include="Extensions.cs" />
     <Compile Include="Main.cs">
       <SubType>Form</SubType>
@@ -218,6 +222,7 @@
     </BootstrapperPackage>
   </ItemGroup>
   <ItemGroup>
+    <Content Include="license.txt" />
     <Content Include="x64\SQLite.Interop.dll">
       <CopyToOutputDirectory>Always</CopyToOutputDirectory>
     </Content>

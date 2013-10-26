@@ -36,6 +36,7 @@ using Sidi.Extensions;
 using L = Sidi.IO;
 using BrightIdeasSoftware;
 using Sidi.Test;
+using WeifenLuo.WinFormsUI.Docking;
 
 namespace hagen
 {
@@ -43,37 +44,72 @@ namespace hagen
     {
         ManagedWinapi.Hotkey hotkey;
         Collection<Action> actions;
-
-        public Main()
+        
+        void InitUserInterface()
         {
-            InitializeComponent();
-            
+            this.IsMdiContainer = true;
+            this.FormBorderStyle = System.Windows.Forms.FormBorderStyle.None;
+
+            dockPanel = new DockPanel()
+            {
+                Dock = DockStyle.Fill,
+                DocumentStyle = DocumentStyle.DockingMdi,
+            };
+            this.Controls.Add(dockPanel);
+
+            searchBox1 = new SearchBox()
+            {
+                Text = "Search",
+                Data = actions
+            };
+            searchBox1.ItemsActivated += new EventHandler(searchBox1_ItemsActivated);
+            searchBox1.AsDockContent().Show(dockPanel, DockState.Document);
+
+            jobList = new JobList()
+            {
+                Text = "Jobs"
+            };
+            jobList.AsDockContent().Show(dockPanel, DockState.DockRight);
+
             this.AllowDrop = true;
             this.Load += new EventHandler(Main_Load);
-
-            hotkey = new ManagedWinapi.Hotkey();
-            hotkey.Alt = true;
-            hotkey.Ctrl = true;
-            hotkey.KeyCode = System.Windows.Forms.Keys.Space;
-            hotkey.HotkeyPressed += new EventHandler(hotkey_HotkeyPressed);
-            hotkey.Enabled = true;
-
-            alertTimer.Interval = (int) alertInterval.TotalMilliseconds;
-            alertTimer.Start();
-            alertTimer.Tick += new EventHandler((s, e) =>
-                {
-                    CheckWorkTime();
-                });
-            CheckWorkTime();
 
             this.KeyDown += new KeyEventHandler(Main_KeyDown);
             this.KeyPreview = true;
 
+            hotkey = new ManagedWinapi.Hotkey()
+            {
+                Alt = true,
+                Ctrl = true,
+                KeyCode = System.Windows.Forms.Keys.Space,
+                Enabled = true
+            };
+            hotkey.HotkeyPressed += new EventHandler(hotkey_HotkeyPressed);
+
+            alertTimer = new System.Windows.Forms.Timer()
+            {
+                Interval = (int)alertInterval.TotalMilliseconds
+            };
+            alertTimer.Tick += new EventHandler((s, e) =>
+            {
+                CheckWorkTime();
+            });
+            alertTimer.Start();
+        }
+
+        DockPanel dockPanel;
+        SearchBox searchBox1;
+
+        public Main()
+        {
             actions = Hagen.Instance.OpenActions();
 
-            searchBox1.Data = actions;
-            searchBox1.ItemsActivated += new EventHandler(searchBox1_ItemsActivated);
+            InitUserInterface();
+            InitializeComponent();
+            CheckWorkTime();
         }
+
+        Sidi.Forms.JobList jobList;
 
         void Main_Load(object sender, EventArgs e)
         {
@@ -125,6 +161,7 @@ namespace hagen
                 }
             }
             searchBox1.Start();
+            searchBox1.Focus();
             this.Activate();
         }
 
@@ -147,9 +184,12 @@ namespace hagen
 
         private void updateStartMenuToolStripMenuItem_Click(object sender, EventArgs e)
         {
-            // actions.UpdateStartMenu();
-            var a = ActionsEx.PathExecutables();
-            actions.AddOrUpdate(a);
+            jobList.AddJob("Update start menu", bgw =>
+              {
+                  // actions.UpdateStartMenu();
+                  var a = ActionsEx.PathExecutables();
+                  actions.AddOrUpdate(a);
+              });
         }
 
         private void cleanupToolStripMenuItem_Click(object sender, EventArgs e)
@@ -194,7 +234,7 @@ namespace hagen
             }
         }
 
-        System.Windows.Forms.Timer alertTimer = new System.Windows.Forms.Timer();
+        System.Windows.Forms.Timer alertTimer;
         TimeSpan alertInterval = TimeSpan.FromMinutes(5);
         TimeSpan warnBefore = TimeSpan.FromHours(1);
         TimeSpan warnAfter = TimeSpan.FromMinutes(30);
@@ -332,6 +372,26 @@ Hours: {0:G3}",
         private void deleteToolStripMenuItem_Click(object sender, EventArgs e)
         {
             searchBox1.Remove();
+        }
+
+        private void notesToolStripMenuItem_Click(object sender, EventArgs e)
+        {
+            var file = new LPath(@"C:\Users\Andreas\Desktop\Notes.txt");
+            var s = InsertText.ReadSections(file);
+            foreach (var i in s)
+            {
+                var a = new Action()
+                {
+                    Name = i.Key,
+                    CommandObject = new InsertText()
+                    {
+                        FileName = file,
+                        Section = i.Key,
+                    }
+                };
+
+                actions.Add(a);
+            }
         }
     }
 }

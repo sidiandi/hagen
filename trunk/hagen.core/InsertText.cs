@@ -29,6 +29,9 @@ using Sidi.Persistence;
 using System.Drawing;
 using Microsoft.Win32;
 using System.Windows.Forms;
+using Sidi.IO;
+using Sidi.Extensions;
+using NUnit.Framework;
 
 namespace hagen
 {
@@ -44,11 +47,49 @@ namespace hagen
         [SettingsBindable(true)]
         public string FileName { get; set; }
 
+        public string Section { get; set; }
+
         public override void Execute()
         {
-            var text = File.ReadAllText(FileName);
+            var text = ReadText(FileName, Section);
             Clipboard.SetText(text);
             SendKeys.Send("+{INS}");
+        }
+
+        public static string ReadText(LPath file, string section)
+        {
+            if (String.IsNullOrEmpty(section))
+            {
+                return System.IO.File.ReadAllText(file);
+            }
+            else
+            {
+                return ReadSections(file)[section];
+            }
+        }
+
+        public static System.Collections.Generic.Dictionary<string, string> ReadSections(LPath file)
+        {
+            var p = Regex.Split(System.IO.File.ReadAllText(file), @"^\=", RegexOptions.Multiline);
+            return p.Select(t => t.Lines())
+                .Where(x => x.Count() >= 2)
+                .Select(lines =>
+                {
+                    return new { Section = lines.First().Trim(), Content = lines.Skip(1).Join().Trim() };
+                })
+                .ToDictionary(x => x.Section, x => x.Content);
+        }
+
+        [TestFixture]
+        public class Test : Sidi.Test.TestBase
+        {
+            public void ReadSections()
+            {
+                var f = Paths.BinDir.CatDir(@"test\sections.txt");
+                var s = InsertText.ReadSections(f);
+                Assert.AreEqual(3, s.Count);
+                Assert.AreEqual("This is text A.", s["A"]);
+            }
         }
     }
 }

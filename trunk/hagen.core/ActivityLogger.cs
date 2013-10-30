@@ -41,11 +41,14 @@ namespace hagen
         Collection<Input> inputs;
         InputHook interceptConsole;
         Thread backgroundWorker;
+        Hagen hagen;
 
-        public ActivityLogger()
+        public ActivityLogger(Hagen hagen)
         {
-            programUse = Hagen.Instance.OpenProgramUses();
-            inputs = Hagen.Instance.OpenInputs();
+            this.hagen = hagen;
+
+            programUse = hagen.OpenProgramUses();
+            inputs = hagen.OpenInputs();
 
             backgroundWorker = new Thread(backgroundWorker_DoWork);
             backgroundWorker.Start();
@@ -96,11 +99,11 @@ namespace hagen
             {
                 if ((Control.ModifierKeys & Keys.Alt) == Keys.Alt)
                 {
-                    Hagen.Instance.CaptureActiveWindow();
+                    hagen.CaptureActiveWindow();
                 }
                 else
                 {
-                    Hagen.Instance.CaptureScreens();
+                    hagen.CaptureScreens();
                 }
             }
         }
@@ -141,7 +144,7 @@ namespace hagen
 
         void FirstInputToday(DateTime now)
         {
-            using (var inputs = Hagen.Instance.OpenInputs())
+            using (var inputs = hagen.OpenInputs())
             {
                 try
                 {

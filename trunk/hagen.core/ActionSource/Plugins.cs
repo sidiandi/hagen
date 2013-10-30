@@ -13,11 +13,17 @@ namespace hagen.ActionSource
     {
         public Plugins(PathList searchPath)
         {
-            var assemblies = Find.AllFiles(searchPath)
-                .Where(x => x.Extension.Equals(".dll") || x.Extension.Equals(".exe"));
+            var hagenExe = Assembly.GetEntryAssembly().GetLocalPath();
 
-            this.Sources = assemblies
-                .SafeSelect(dll => Assembly.LoadFile(dll.FullName))
+            var assemblyFileExtension = new Sidi.IO.FileType("exe", "dll");
+            var assemblyFiles = Find.AllFiles(searchPath)
+                .Select(x => x.FullName)
+                .Where(x => assemblyFileExtension.Is(x))
+                .Where(x => !x.Equals(hagenExe))
+                .ToList();
+
+            this.Sources = assemblyFiles
+                .SafeSelect(dll => Assembly.LoadFile(dll))
                 .SelectMany(a => GetPlugins(a))
                 .ToList();
         }
@@ -46,8 +52,10 @@ namespace hagen.ActionSource
 
         static IList<IActionSource> GetPlugins()
         {
+            var extensions = new Sidi.IO.FileType("exe", "dll");
             var assemblies = Sidi.IO.Paths.BinDir.GetFiles()
-                .Where(x => x.Extension.Equals(".dll") || x.Extension.Equals(".exe"));
+                .Where(x => extensions.Is(x))
+                .Where(x => !x.FileName.Equals("hagen.exe"));
 
             return assemblies
                 .SafeSelect(dll => Assembly.LoadFile(dll))

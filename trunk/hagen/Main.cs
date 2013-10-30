@@ -37,11 +37,15 @@ using L = Sidi.IO;
 using BrightIdeasSoftware;
 using Sidi.Test;
 using WeifenLuo.WinFormsUI.Docking;
+using Sidi.CommandLine;
 
 namespace hagen
 {
+    [Usage("Quick starter")]
     public partial class Main : Form
     {
+        private static readonly log4net.ILog log = log4net.LogManager.GetLogger(System.Reflection.MethodBase.GetCurrentMethod().DeclaringType);
+
         ManagedWinapi.Hotkey hotkey;
         Collection<Action> actions;
         
@@ -69,7 +73,14 @@ namespace hagen
             {
                 Text = "Jobs"
             };
-            jobList.AsDockContent().Show(dockPanel, DockState.DockRight);
+            jobList.AsDockContent().Show(dockPanel, DockState.DockBottom);
+
+            var logViewer = new LogViewer2()
+            {
+                Text = "Log",
+            };
+            logViewer.AsDockContent().Show(dockPanel, DockState.DockBottom);
+            logViewer.AddToRoot();
 
             this.AllowDrop = true;
             this.Load += new EventHandler(Main_Load);
@@ -99,10 +110,13 @@ namespace hagen
 
         DockPanel dockPanel;
         SearchBox searchBox1;
+        Hagen hagen;
 
-        public Main()
+        public Main(Hagen hagen)
         {
-            actions = Hagen.Instance.OpenActions();
+            this.hagen = hagen;
+
+            actions = hagen.OpenActions();
 
             InitUserInterface();
             InitializeComponent();
@@ -145,9 +159,10 @@ namespace hagen
 
         int lastCLipboardHash = 0;
 
+        [Usage("Activate the program's main window")]
         public void Popup()
         {
-            Hagen.Instance.SaveFocus();
+            hagen.SaveFocus();
             WindowState = FormWindowState.Maximized;
             this.Visible = true;
             if (Clipboard.ContainsText())
@@ -186,9 +201,31 @@ namespace hagen
         {
             jobList.AddJob("Update start menu", bgw =>
               {
-                  // actions.UpdateStartMenu();
-                  var a = ActionsEx.PathExecutables();
-                  actions.AddOrUpdate(a);
+                  int count = 0;
+
+                  using (new BackgroundWorkerReportProgressAppender(bgw))
+                  {
+                      using (var actions = hagen.OpenActions())
+                      {
+                          log.Info("Update");
+                          var actionsToAdd = new[]
+                          {
+                            ActionsEx.GetPathExecutables(),
+                            ActionsEx.GetStartMenuActions(),
+                            ActionsEx.GetSpecialFolderActions()
+                          }.SelectMany(x => x)
+                              .Select(x =>
+                              {
+                                  log.Info(x);
+                                  bgw.ReportProgress(++count, x);
+                                  return x;
+                              })
+                              .ToList();
+
+                          bgw.ReportProgress(0, "Updating {0} actions".F(actionsToAdd.Count));
+                          actions.AddOrUpdate(actionsToAdd);
+                      }
+                  }
               });
         }
 
@@ -211,7 +248,7 @@ namespace hagen
         {
             Process p = new Process();
             p.StartInfo.FileName = L.Paths.BinDir.CatDir("sqlite3.exe");
-            p.StartInfo.Arguments = Hagen.Instance.DatabasePath.Quote();
+            p.StartInfo.Arguments = hagen.DatabasePath.Quote();
             p.StartInfo.CreateNoWindow = false;
             p.Start();
         }
@@ -247,7 +284,7 @@ namespace hagen
         void CheckWorkTime()
         {
             var now = DateTime.Now;
-            var begin = Hagen.Instance.GetWorkBegin(now);
+            var begin = hagen.GetWorkBegin(now);
             if (begin == null)
             {
                 return;
@@ -265,7 +302,7 @@ namespace hagen
         public void ShowWorkTimeAlert()
         {
             var now = DateTime.Now;
-            var begin = Hagen.Instance.GetWorkBegin(now);
+            var begin = hagen.GetWorkBegin(now);
             string text;
             if (begin == null)
             {
@@ -328,7 +365,7 @@ Hours: {0:G3}",
             [Test, RequiresSTA]
             public void IeLinks()
             {
-                var a = new Main();
+                var a = new Main(Hagen.Instance);
                 a.linksFromInternetExplorerToolStripMenuItem_Click(null, null);
             }
         }
@@ -340,7 +377,7 @@ Hours: {0:G3}",
 
         private void noteToolStripMenuItem_Click(object sender, EventArgs e)
         {
-            var notesFile = Hagen.Instance.DataDirectory.CatDir(
+            var notesFile = hagen.DataDirectory.CatDir(
                 "Notes",
                 LPath.GetValidFilename(searchBox1.Query + ".txt"));
 

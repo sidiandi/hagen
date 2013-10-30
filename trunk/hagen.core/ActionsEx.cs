@@ -29,6 +29,7 @@ using Sidi.Extensions;
 using mshtml;
 using Sidi.Util;
 using System.Text.RegularExpressions;
+using Sidi.Extensions;
 
 namespace hagen
 {
@@ -36,13 +37,13 @@ namespace hagen
     {
         private static readonly log4net.ILog log = log4net.LogManager.GetLogger(System.Reflection.MethodBase.GetCurrentMethod().DeclaringType);
 
-        public static List<Action> UpdateStartMenu()
+        public static IEnumerable<Action> GetStartMenuActions()
         {
             FileActionFactory f = new FileActionFactory();
 
             var result = new List<Action>();
 
-            result.AddRange(
+            return
                 new[]
                 {
                     new LPath(AllUsersStartMenu),
@@ -51,65 +52,39 @@ namespace hagen
                     Sidi.IO.Paths.GetFolderPath(Environment.SpecialFolder.MyDocuments).CatDir("My RoboForm Data")
                 }
                 .Where(x => x.Exists)
-                .SelectMany(p => f.Recurse(p)));
-            
-            result.AddRange(
-                Enum.GetValues(typeof(Environment.SpecialFolder)).Cast<Environment.SpecialFolder>()
-                .SafeSelect(i =>
+                .SelectMany(p => f.Recurse(p));
+        }
+
+        public static IEnumerable<Action> GetPathExecutables()
+        {
+            FileActionFactory f = new FileActionFactory();
+            var exeExtensions = new FileType("exe", "bat", "cmd", "msc", "cpl");
+
+            var path = Regex.Split(System.Environment.GetEnvironmentVariable("PATH"), @"\;")
+                .SafeSelect(x => LPath.Parse(x)).ToList();
+
+            log.InfoFormat("Searching {0}", path);
+
+            return path.SelectMany(p =>
+            {
+                return p.GetFiles().Where(x => exeExtensions.Is(x))
+                    .SafeSelect(x => f.FromFile(x));
+            });
+        }
+
+        public static IEnumerable<Action> GetSpecialFolderActions()
+        {
+            FileActionFactory f = new FileActionFactory();
+
+            return Enum.GetValues(typeof(Environment.SpecialFolder)).Cast<Environment.SpecialFolder>()
+                .SafeSelect(i => 
                 {
                     var a = f.FromFile(Environment.GetFolderPath((Environment.SpecialFolder)i));
                     a.Name = i.ToString();
                     return a;
-                }));
-
-            return result;
+                });
         }
 
-        public static List<Action> PathExecutables()
-        {
-            FileActionFactory f = new FileActionFactory();
-            var path = Regex.Split(
-                    System.Environment.GetEnvironmentVariable("PATH"),
-                    @"\;")
-                    .SafeSelect(x => new LPath(x))
-                    .Where(x => x.IsDirectory);
-
-            var result = new List<Action>();        
-    
-            foreach (var p in path)
-            {
-                try
-                {
-                    var exeExtensions = new FileType("exe", "bat", "cmd", "msc", "cpl");
-
-                    var exes = p.GetFiles().Where(x => exeExtensions.Is(x));
-                    foreach (var i in exes)
-                    {
-                        result.Add(f.FromFile(i));
-                    }
-                }
-                catch (Exception e)
-                {
-                    log.Warn(f, e);
-                }
-            }
-
-            foreach (var i in Enum.GetValues(typeof(Environment.SpecialFolder)))
-            {
-                try
-                {
-                    var a = f.FromFile(Environment.GetFolderPath((Environment.SpecialFolder)i));
-                    a.Name = i.ToString();
-                    result.Add(a);
-                }
-                catch (Exception)
-                {
-                }
-            }
-
-            return result;
-        }
-        
         [DllImport("shell32.dll")]
         static extern bool SHGetSpecialFolderPath(IntPtr hwndOwner, [Out] StringBuilder lpszPath, int nFolder, bool fCreate);
         const int CSIDL_COMMON_STARTMENU = 0x16;  // \Windows\Start Menu\Programs
@@ -145,10 +120,12 @@ namespace hagen
             {
                 newAction.Id = ea.Id;
                 actions.Update(newAction);
+                log.InfoFormat("Update {0}", newAction);
             }
             else
             {
                 actions.Add(newAction);
+                log.InfoFormat("Add {0}", newAction);
             }
         }
 
@@ -196,13 +173,6 @@ namespace hagen
                 {
                     Console.WriteLine(a);
                 }
-            }
-
-            [Test]
-            public void PathExecutables()
-            {
-                var p = ActionsEx.PathExecutables();
-                p.ListFormat().AllPublic().RenderText();
             }
         }
     }

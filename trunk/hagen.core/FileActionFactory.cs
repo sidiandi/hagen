@@ -28,14 +28,18 @@ namespace hagen
 {
     public class FileActionFactory
     {
-        public Action FromFile(string file)
+        private static readonly log4net.ILog log = log4net.LogManager.GetLogger(System.Reflection.MethodBase.GetCurrentMethod().DeclaringType);
+
+        public Action FromFile(LPath file)
         {
-            return new Action()
+            var action = new Action()
             {
-                Name = new LPath(file).FileName,
+                Name = file.FileName,
                 CommandObject = StartProcess.FromFileName(file),
-                LastUseTime = new LPath(file).Info.LastWriteTimeUtc,
+                LastUseTime = file.Info.LastWriteTimeUtc,
             };
+            log.InfoFormat("Created action for {0}", file);
+            return action;
         }
 
         public Action FromUrl(string url, string title)

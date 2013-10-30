@@ -14,7 +14,6 @@ namespace hagen
             DockContent dockContent = new DockContent()
             {
                 Text = c.Text,
-                Dock = DockStyle.Fill,
             };
 
             c.Dock = DockStyle.Fill;

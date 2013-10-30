@@ -70,6 +70,10 @@ namespace hagen
             searchBox1.ItemsActivated += new EventHandler(searchBox1_ItemsActivated);
             searchBox1.AsDockContent().Show(dockPanel, DockState.Document);
 
+            searchBox1.AllowDrop = true;
+            searchBox1.DragEnter += new DragEventHandler(SearchBox_DragEnter);
+            searchBox1.DragDrop += new DragEventHandler(SearchBox_DragDrop);
+
             jobList = new JobList()
             {
                 Text = "Jobs"
@@ -200,33 +204,26 @@ namespace hagen
 
         private void updateStartMenuToolStripMenuItem_Click(object sender, EventArgs e)
         {
-            jobList.AddJob("Update start menu", bgw =>
+            jobList.AddJob("Update start menu", () =>
               {
-                  int count = 0;
+                    using (var actions = hagen.OpenActions())
+                    {
+                        log.Info("Update");
+                        var actionsToAdd = new[]
+                        {
+                        ActionsEx.GetPathExecutables(),
+                        ActionsEx.GetStartMenuActions(),
+                        ActionsEx.GetSpecialFolderActions()
+                        }.SelectMany(x => x)
+                            .Select(x =>
+                            {
+                                log.Info(x);
+                                return x;
+                            })
+                            .ToList();
 
-                  using (new BackgroundWorkerReportProgressAppender(bgw))
-                  {
-                      using (var actions = hagen.OpenActions())
-                      {
-                          log.Info("Update");
-                          var actionsToAdd = new[]
-                          {
-                            ActionsEx.GetPathExecutables(),
-                            ActionsEx.GetStartMenuActions(),
-                            ActionsEx.GetSpecialFolderActions()
-                          }.SelectMany(x => x)
-                              .Select(x =>
-                              {
-                                  log.Info(x);
-                                  bgw.ReportProgress(++count, x);
-                                  return x;
-                              })
-                              .ToList();
-
-                          bgw.ReportProgress(0, "Updating {0} actions".F(actionsToAdd.Count));
-                          actions.AddOrUpdate(actionsToAdd);
-                      }
-                  }
+                        actions.AddOrUpdate(actionsToAdd);
+                    }
               });
         }
 
@@ -430,6 +427,74 @@ Hours: {0:G3}",
 
                 actions.Add(a);
             }
+        }
+
+        void SearchBox_DragDrop(object sender, DragEventArgs e)
+        {
+            ClipboardUrl cbUrl;
+            if (ClipboardUrl.TryParse(e.Data, out cbUrl))
+            {
+                FileActionFactory f = new FileActionFactory();
+                var a = f.FromUrl(cbUrl.Url, cbUrl.Title);
+                actions.AddOrUpdate(a);
+                return;
+            }
+
+            // right-mouse drag - add recursive
+            bool recursive = (e.Effect == DragDropEffects.Link);
+
+            var pathList = Sidi.IO.PathList.Get(e.Data);
+            if (pathList != null)
+            {
+                jobList.AddJob(pathList.ToString(), () => { Add(pathList); });
+            }
+        }
+
+        public void Add(PathList paths)
+        {
+            using (var actions = hagen.OpenActions())
+            {
+                FileActionFactory f = new FileActionFactory();
+                foreach (var i in paths)
+                {
+                    log.Info(i);
+                    var action = f.FromFile(i);
+                    actions.AddOrUpdate(action);
+                }
+            }
+        }
+
+        void SearchBox_DragEnter(object sender, DragEventArgs e)
+        {
+            if ((e.KeyState & 2) != 0)
+            {
+                e.Effect = DragDropEffects.Link;
+            }
+            else
+            {
+                e.Effect = DragDropEffects.Copy;
+            }
+        }
+
+        private void updateFilesToolStripMenuItem_Click(object sender, EventArgs e)
+        {
+            jobList.AddJob("Update Files", () =>
+                {
+                    var updateFile = hagen.DataDirectory.CatDir("update.txt");
+                    var updater = new Updater(hagen);
+                    var p = new Parser(updater);
+                    if (updateFile.IsFile)
+                    {
+                        p.Run(Tokenizer.FromFile(updateFile));
+                    }
+                    else
+                    {
+                        using (var w = updateFile.WriteText())
+                        {
+                            p.PrintSampleScript(w);
+                        }
+                    }
+                });
         }
     }
 }

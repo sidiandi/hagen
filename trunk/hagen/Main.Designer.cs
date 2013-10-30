@@ -64,6 +64,7 @@ namespace hagen
             this.noteToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
             this.notesToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
             this.notifyIcon = new System.Windows.Forms.NotifyIcon(this.components);
+            this.updateFilesToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
             this.menu.SuspendLayout();
             this.SuspendLayout();
             // 
@@ -164,7 +165,8 @@ namespace hagen
             this.linksFromInternetExplorerToolStripMenuItem,
             this.startMenuToolStripMenuItem,
             this.noteToolStripMenuItem,
-            this.notesToolStripMenuItem});
+            this.notesToolStripMenuItem,
+            this.updateFilesToolStripMenuItem});
             this.addToolStripMenuItem.Name = "addToolStripMenuItem";
             this.addToolStripMenuItem.Size = new System.Drawing.Size(41, 20);
             this.addToolStripMenuItem.Text = "&Add";
@@ -208,6 +210,13 @@ namespace hagen
             this.notifyIcon.MouseClick += new System.Windows.Forms.MouseEventHandler(this.notifyIcon_MouseClick);
             this.notifyIcon.MouseDoubleClick += new System.Windows.Forms.MouseEventHandler(this.notifyIcon_MouseDoubleClick);
             // 
+            // updateFilesToolStripMenuItem
+            // 
+            this.updateFilesToolStripMenuItem.Name = "updateFilesToolStripMenuItem";
+            this.updateFilesToolStripMenuItem.Size = new System.Drawing.Size(219, 22);
+            this.updateFilesToolStripMenuItem.Text = "&Update Files";
+            this.updateFilesToolStripMenuItem.Click += new System.EventHandler(this.updateFilesToolStripMenuItem_Click);
+            // 
             // Main
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 13F);
@@ -247,6 +256,7 @@ namespace hagen
         private System.Windows.Forms.ToolStripMenuItem noteToolStripMenuItem;
         private System.Windows.Forms.ToolStripMenuItem deleteToolStripMenuItem;
         private System.Windows.Forms.ToolStripMenuItem notesToolStripMenuItem;
+        private System.Windows.Forms.ToolStripMenuItem updateFilesToolStripMenuItem;
 
     }
 }

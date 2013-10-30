@@ -34,7 +34,7 @@ namespace hagen
     {
         public Hagen()
         {
-            actions = new Collection<Action>(DatabasePath);
+            actions = OpenActions();
         }
 
         Collection<Action> actions;
@@ -66,7 +66,7 @@ namespace hagen
 
         public Collection<Action> OpenActions()
         {
-            return new Collection<Action>(actions.SharedConnection);
+            return new Collection<Action>(DatabasePath);
         }
 
         public DateTime? GetWorkBegin(DateTime time)

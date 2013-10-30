@@ -27,7 +27,14 @@ namespace hagen.ActionSource
         public IEnumerable<IAction> GetActions(string query)
         {
             var fl = FileLocation.Parse(query);
-            return new IAction[] { new ShellAction(fl.Path) }.ToList();
+            if (fl != null)
+            {
+                return new IAction[] { new ShellAction(fl.Path) }.ToList();
+            }
+            else
+            {
+                return new IAction[] { };
+            }
         }
     }
 }

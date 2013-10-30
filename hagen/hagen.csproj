@@ -31,6 +31,9 @@
     <Reference Include="ObjectListView">
       <HintPath>..\packages\Unofficial.ObjectListView.2.6.0\lib\net20\ObjectListView.dll</HintPath>
     </Reference>
+    <Reference Include="ScintillaNET">
+      <HintPath>..\lib\ScintillaNET\ScintillaNET.dll</HintPath>
+    </Reference>
     <Reference Include="Sidi.Office, Version=1.0.0.0, Culture=neutral, processorArchitecture=MSIL">
       <HintPath>..\..\nuget-packages\sidi-util.2.5.0.967\lib\net40\Sidi.Office.dll</HintPath>
     </Reference>
@@ -63,10 +66,14 @@
     <Compile Include="ActionProperties.Designer.cs">
       <DependentUpon>ActionProperties.cs</DependentUpon>
     </Compile>
+    <Compile Include="BackgroundWorkerReportProgressAppender.cs" />
     <Compile Include="ClipboardUrl.cs" />
     <Compile Include="ControlExtensions.cs" />
     <Compile Include="DockExtension.cs" />
     <Compile Include="Extensions.cs" />
+    <Compile Include="LogViewer2.cs">
+      <SubType>Component</SubType>
+    </Compile>
     <Compile Include="Main.cs">
       <SubType>Form</SubType>
     </Compile>
@@ -82,6 +89,7 @@
     <Compile Include="TaskProgress.Designer.cs">
       <DependentUpon>TaskProgress.cs</DependentUpon>
     </Compile>
+    <Compile Include="Testfixture.cs" />
     <EmbeddedResource Include="ActionProperties.resx">
       <DependentUpon>ActionProperties.cs</DependentUpon>
       <SubType>Designer</SubType>
@@ -223,6 +231,12 @@
   </ItemGroup>
   <ItemGroup>
     <Content Include="license.txt" />
+    <None Include="SciLexer.dll">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </None>
+    <None Include="SciLexer64.dll">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </None>
     <Content Include="x64\SQLite.Interop.dll">
       <CopyToOutputDirectory>Always</CopyToOutputDirectory>
     </Content>

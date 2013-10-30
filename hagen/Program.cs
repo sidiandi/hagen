@@ -22,10 +22,12 @@ using System.Windows.Forms;
 using System.Diagnostics;
 using System.IO;
 using System.Reflection;
+using Sidi.CommandLine;
 
 namespace hagen
 {
-    static class Program
+    [Usage("Quick starter")]
+    public class Program
     {
         private static readonly log4net.ILog log = log4net.LogManager.GetLogger(System.Reflection.MethodBase.GetCurrentMethod().DeclaringType);
 
@@ -33,21 +35,43 @@ namespace hagen
         /// The main entry point for the application.
         /// </summary>
         [STAThread]
-        static void Main()
+        static void Main(string[] args)
         {
+            var p = new Program();
+            new Parser(p).Parse(args);
+            p.RunUserInterface();
+        }
+
+        public Program()
+        {
+            log4net.Config.BasicConfigurator.Configure();
+
+            log.Info("Startup");
+
             Application.EnableVisualStyles();
             Application.SetCompatibleTextRenderingDefault(false);
 
             KillAlreadyRunning();
 
-            // using (var activityLogger = Debugger.IsAttached ? null : new ActivityLogger())
-            using (var activityLogger = new ActivityLogger())
+            hagen = Hagen.Instance;
+            main = new Main(hagen);
+        }
+
+        public void RunUserInterface()
+        {
+            using (var activityLogger = new ActivityLogger(hagen))
             {
-                log.Info("Startup");
-                var main = new Main();
                 Application.Run(main);
-                log.Info("Shutdown");
             }
+        }
+
+        Hagen hagen;
+        Main main;
+
+        [Usage("Show main window")]
+        public void Popup()
+        {
+            main.Popup();
         }
 
         /// <summary>

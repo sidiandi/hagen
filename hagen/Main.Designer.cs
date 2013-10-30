@@ -218,6 +218,7 @@ namespace hagen
             this.MainMenuStrip = this.menu;
             this.Name = "Main";
             this.Text = "hagen";
+            this.WindowState = System.Windows.Forms.FormWindowState.Minimized;
             this.FormClosing += new System.Windows.Forms.FormClosingEventHandler(this.Main_FormClosing);
             this.Resize += new System.EventHandler(this.Main_Resize);
             this.menu.ResumeLayout(false);

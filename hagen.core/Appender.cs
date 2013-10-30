@@ -37,7 +37,15 @@ namespace hagen
 
     public class Appender : log4net.Appender.AppenderSkeleton, IDisposable
     {
-        Collection<Log> logs = Hagen.Instance.OpenLogs();
+        public Appender(Hagen hagen)
+        {
+            this.hagen = hagen;
+            logs = hagen.OpenLogs();
+        }
+
+        Hagen hagen;
+
+        Collection<Log> logs;
 
         protected override void Append(log4net.Core.LoggingEvent loggingEvent)
         {

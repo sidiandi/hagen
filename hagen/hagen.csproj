@@ -71,6 +71,7 @@
     <Compile Include="ControlExtensions.cs" />
     <Compile Include="DockExtension.cs" />
     <Compile Include="Extensions.cs" />
+    <Compile Include="JobListExtensions.cs" />
     <Compile Include="LogViewer2.cs">
       <SubType>Component</SubType>
     </Compile>

@@ -146,10 +146,6 @@ namespace hagen
 
             InitializeComponent();
 
-            this.AllowDrop = true;
-            this.DragEnter += new DragEventHandler(SearchBox_DragEnter);
-            this.DragDrop += new DragEventHandler(SearchBox_DragDrop);
-
             itemView.ItemActivate += new EventHandler(itemView_ItemsActivated);
             itemView.GotFocus += new EventHandler(itemView_GotFocus);
 
@@ -179,50 +175,6 @@ namespace hagen
             e.Item = new ListViewItem(actions[e.ItemIndex].Name);
         }
 
-        void SearchBox_DragDrop(object sender, DragEventArgs e)
-        {
-            try
-            {
-                FileActionFactory f = new FileActionFactory();
-
-                ClipboardUrl cbUrl;
-                if (ClipboardUrl.TryParse(e.Data, out cbUrl))
-                {
-                    Action a = f.FromUrl(cbUrl.Url, cbUrl.Title);
-                    AddAction(a);
-                }
-                else if (e.Data.GetDataPresent(DataFormats.FileDrop))
-                {
-                    // right-mouse drag - add recursive
-                    bool recursive = (e.Effect == DragDropEffects.Link);
-
-                    Array a = (Array)e.Data.GetData(DataFormats.FileDrop);
-                    foreach (var i in a.Cast<string>())
-                    {
-                        if (recursive)
-                        {
-                            foreach (var action in f.Recurse(i))
-                            {
-                                AddAction(action);
-                            }
-                        }
-                        else
-                        {
-                            AddAction(f.FromFile(i));
-                        }
-                    }
-                }
-                else
-                {
-                    // TryAdd(e.Data.GetData(typeof(String)));
-                }
-            }
-            catch (Exception exception)
-            {
-                log.Warn(e.Data, exception);
-            }
-        }
-
         List<Action> added = new List<Action>();
 
         void AddAction(Action action)
@@ -239,18 +191,6 @@ namespace hagen
             {
                 actions = value;
                 itemView.SetObjects(actions);
-            }
-        }
-
-        void SearchBox_DragEnter(object sender, DragEventArgs e)
-        {
-            if ((e.KeyState & 2) != 0)
-            {
-                e.Effect = DragDropEffects.Link;
-            }
-            else
-            {
-                e.Effect = DragDropEffects.Copy;
             }
         }
 

@@ -90,8 +90,8 @@ namespace hagen
         public LPath CaptureActiveWindow()
         {
             var sc = new ScreenCapture();
-            var dir = Hagen.Instance.ScreenCaptureDirectory;
-            var fe = SavedFocusedElement;
+            var dir = ScreenCaptureDirectory;
+            var fe = UserInterfaceState.Instance.SavedFocusedElement;
             if (fe == null)
             {
                 throw new Exception("Not active window");
@@ -102,14 +102,14 @@ namespace hagen
         public IList<LPath> CaptureScreens()
         {
             var sc = new ScreenCapture();
-            var dir = Hagen.Instance.ScreenCaptureDirectory;
+            var dir = ScreenCaptureDirectory;
             return sc.CaptureAll(dir);
         }
 
         public LPath CapturePrimaryScreen()
         {
             var sc = new ScreenCapture();
-            var dir = Hagen.Instance.ScreenCaptureDirectory;
+            var dir = ScreenCaptureDirectory;
             return sc.CaptureToDirectory(Screen.PrimaryScreen, dir);
         }
 
@@ -128,6 +128,7 @@ namespace hagen
             return new Collection<Log>(actions.SharedConnection);
         }
 
+        /*
         public static Hagen Instance
         {
             get
@@ -141,25 +142,7 @@ namespace hagen
         }
 
         static Hagen instance;
-
-        public void SaveFocus()
-        {
-            focusedElement = (IntPtr)NativeMethods.GetForegroundWindow();
-        }
-
-        IntPtr focusedElement = IntPtr.Zero;
-
-        public AutomationElement SavedFocusedElement
-        {
-            get
-            {
-                if (focusedElement == IntPtr.Zero)
-                {
-                    return null;
-                }
-                return AutomationElement.FromHandle(focusedElement);
-            }
-        }
+        */
     }
 
     public static class HagenEx

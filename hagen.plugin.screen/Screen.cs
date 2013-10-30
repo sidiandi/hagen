@@ -42,17 +42,19 @@ namespace hagen.ActionSource
         }
          */
 
+        public Hagen Hagen;
+
         [Usage("Create a screen shot mail")]
         public void MailScreenShotPrimaryScreen()
         {
-            var file = Hagen.Instance.CapturePrimaryScreen();
+            var file = Hagen.CapturePrimaryScreen();
             CreateOutlookEmailWithEmbeddedPicture(file);
         }
 
         [Usage("Create a screen shot of active window and prepare an email")]
         public void MailScreenShotActiveWindow()
         {
-            var file = Hagen.Instance.CaptureActiveWindow();
+            var file = Hagen.CaptureActiveWindow();
             CreateOutlookEmailWithEmbeddedPicture(file);
         }
 

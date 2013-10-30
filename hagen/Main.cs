@@ -64,6 +64,7 @@ namespace hagen
             searchBox1 = new SearchBox()
             {
                 Text = "Search",
+                Hagen = this.hagen,
                 Data = actions
             };
             searchBox1.ItemsActivated += new EventHandler(searchBox1_ItemsActivated);
@@ -162,7 +163,7 @@ namespace hagen
         [Usage("Activate the program's main window")]
         public void Popup()
         {
-            hagen.SaveFocus();
+            UserInterfaceState.Instance.SaveFocus();
             WindowState = FormWindowState.Maximized;
             this.Visible = true;
             if (Clipboard.ContainsText())
@@ -241,7 +242,7 @@ namespace hagen
 
         private void statisticsToolStripMenuItem_Click(object sender, EventArgs e)
         {
-            new activityReport.Program().ShowStatisticsWindow();
+            new activityReport.Program(hagen).ShowStatisticsWindow();
         }
 
         private void sqliteConsoleToolStripMenuItem_Click(object sender, EventArgs e)
@@ -255,7 +256,7 @@ namespace hagen
 
         private void reportMailToolStripMenuItem_Click(object sender, EventArgs e)
         {
-            new activityReport.Program().ShowReport();
+            new activityReport.Program(hagen).ShowReport();
         }
 
         private void notifyIcon_MouseDoubleClick(object sender, MouseEventArgs e)
@@ -365,7 +366,7 @@ Hours: {0:G3}",
             [Test, RequiresSTA]
             public void IeLinks()
             {
-                var a = new Main(Hagen.Instance);
+                var a = new Main(new Hagen());
                 a.linksFromInternetExplorerToolStripMenuItem_Click(null, null);
             }
         }

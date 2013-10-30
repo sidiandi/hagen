@@ -41,6 +41,8 @@ namespace hagen
 
         Collection<Action> data;
 
+        public Hagen Hagen { set; get; }
+
         public Collection<Action> Data
         {
             set
@@ -54,7 +56,7 @@ namespace hagen
                     // )
                     // )
                     ,
-                    Plugins.Default
+                    Plugins.GetDefaultPlugins(this.Hagen)
                     );
 
                 asyncQuery = new AsyncQuery(composite);

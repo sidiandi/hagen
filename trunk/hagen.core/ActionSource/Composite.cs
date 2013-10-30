@@ -45,9 +45,7 @@ namespace hagen.ActionSource
                     }
                     catch (Exception ex)
                     {
-                        log.Warn(
-                            String.Format("{0} : query={1}", source, query),
-                            ex);
+                        log.Warn(String.Format("{0} : query={1}", source, query), ex);
                         return new IAction[] { };
                     }
                 })

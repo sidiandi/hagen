@@ -48,14 +48,17 @@ namespace activityReport
 
         static void Main(string[] args)
         {
-            log4net.Config.BasicConfigurator.Configure();
-            Parser.Run(new Program(), args);
+            Parser.Run(new Program(new Hagen()), args);
         }
 
-        public Program()
+        Hagen hagen;
+
+        public Program(Hagen hagen)
         {
+            this.hagen = hagen;
+
             SQLiteFunction.RegisterFunction(typeof(Duration));
-            input = Hagen.Instance.OpenInputs();
+            input = hagen.OpenInputs();
             connection = (System.Data.SQLite.SQLiteConnection)input.Connection;
             dataContext = new DataContext(input.Connection);
         }
@@ -145,10 +148,10 @@ namespace activityReport
         [Usage("Shows a day-by-day worktime report")]
         public void ShowReport()
         {
-            var p = Hagen.Instance.DataDirectory.CatDir("work-time-report.txt");
+            var p = hagen.DataDirectory.CatDir("work-time-report.txt");
             using (var output = new StreamWriter(p))
             {
-                new activityReport.Program().WorktimeReport(output, TimeIntervalExtensions.LastDays(90));
+                new activityReport.Program(this.hagen).WorktimeReport(output, TimeIntervalExtensions.LastDays(90));
             }
             Process.Start("notepad.exe", p.ToString().Quote());
         }
@@ -311,7 +314,7 @@ namespace activityReport
         [Usage("Program use")]
         public void ProgramUse()
         {
-            using (var pu = Hagen.Instance.OpenProgramUses())
+            using (var pu = hagen.OpenProgramUses())
             {
                 var t = TimeIntervalExtensions.LastDays(60);
                 var programs = pu.Query(p => p.Begin > t.Begin && p.Begin < t.End)
@@ -330,7 +333,7 @@ namespace activityReport
         [Usage("Program use")]
         public void Captions()
         {
-            using (var pu = Hagen.Instance.OpenProgramUses())
+            using (var pu = hagen.OpenProgramUses())
             {
                 var t = TimeIntervalExtensions.LastDays(60);
                 var programs = pu.Query(p => p.Begin > t.Begin && p.Begin < t.End)
@@ -468,7 +471,7 @@ namespace activityReport
 
                 main.AddItem("{0:yyyy-MM} Programs".F(m.Begin), () =>
                 {
-                    using (var pu = Hagen.Instance.OpenProgramUses())
+                    using (var pu = hagen.OpenProgramUses())
                     {
                         var programUse = pu
                             .Query(p => p.Begin > m.Begin && p.Begin < m.End && p.File != String.Empty)
@@ -487,7 +490,7 @@ namespace activityReport
 
                 main.AddItem("{0:yyyy-MM} Captions".F(m.Begin), () =>
                 {
-                    using (var pu = Hagen.Instance.OpenProgramUses())
+                    using (var pu = hagen.OpenProgramUses())
                     {
                         var programUse = pu
                         .Query(p => p.Begin > m.Begin && p.Begin < m.End && p.Caption != String.Empty)
@@ -663,19 +666,19 @@ namespace activityReport
             [Test, Explicit("interactive")]
             public void Stats()
             {
-                System.Windows.Forms.Application.Run(new Program().StatisticsWindow());
+                System.Windows.Forms.Application.Run(new Program(new Hagen()).StatisticsWindow());
             }
 
             [Test, Explicit("interactive")]
             public void Report()
             {
-                new Program().Report(Console.Out, TimeIntervalExtensions.LastDays(90));
+                new Program(new Hagen()).Report(Console.Out, TimeIntervalExtensions.LastDays(90));
             }
 
             [Test, Explicit("interactive")]
             public void OfficeReport()
             {
-                var r = new Program();
+                var r = new Program(new Hagen());
                 r.input = new Collection<Input>(@"D:\temp\2010-01-30_worktime\hagen\hagen.sqlite");
                 System.Windows.Forms.Application.Run(r.StatisticsWindow());
             }

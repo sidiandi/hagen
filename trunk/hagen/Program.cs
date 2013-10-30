@@ -53,7 +53,7 @@ namespace hagen
 
             KillAlreadyRunning();
 
-            hagen = Hagen.Instance;
+            hagen = new Hagen();
             main = new Main(hagen);
         }
 

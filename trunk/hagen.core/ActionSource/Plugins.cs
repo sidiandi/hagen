@@ -11,8 +11,10 @@ namespace hagen.ActionSource
 {
     public class Plugins : Composite
     {
-        public Plugins(PathList searchPath)
+        public Plugins(Hagen hagen, PathList searchPath)
         {
+            this.hagen = hagen;
+
             var hagenExe = Assembly.GetEntryAssembly().GetLocalPath();
 
             var assemblyFileExtension = new Sidi.IO.FileType("exe", "dll");
@@ -28,7 +30,9 @@ namespace hagen.ActionSource
                 .ToList();
         }
 
-        static IList<IActionSource> GetPlugins(Assembly assembly)
+        Hagen hagen;
+
+        IList<IActionSource> GetPlugins(Assembly assembly)
         {
             var types = assembly.GetTypes()
                 .Where(t => t.GetConstructor(new Type[] { }) != null)
@@ -42,7 +46,19 @@ namespace hagen.ActionSource
                     .Where(t => t.GetCustomAttributes(typeof(Usage), false).Any())
                     .Select(t =>
                     {
-                        var parser = new Parser(Activator.CreateInstance(t));
+                        object plugin = null;
+                        var hagenCtor = t.GetConstructor(new []{ typeof(Hagen) } );
+                        if (hagenCtor == null)
+                        {
+                            var defaultCtor = t.GetConstructor(new Type[]{});
+                            plugin = defaultCtor.Invoke(new object[]{});
+                        }
+                        else
+                        {
+                            plugin = hagenCtor.Invoke(new object[]{hagen});
+                        }
+
+                        var parser = new Parser(plugin);
                         return new ActionFilter(parser);
                     }))
 
@@ -50,7 +66,7 @@ namespace hagen.ActionSource
                 .ToList();
         }
 
-        static IList<IActionSource> GetPlugins()
+        IList<IActionSource> GetPlugins()
         {
             var extensions = new Sidi.IO.FileType("exe", "dll");
             var assemblies = Sidi.IO.Paths.BinDir.GetFiles()
@@ -63,12 +79,9 @@ namespace hagen.ActionSource
                 .ToList();
         }
 
-        public static IActionSource Default
+        public static IActionSource GetDefaultPlugins(Hagen hagen)
         {
-            get
-            {
-                return new Plugins(new PathList() { Sidi.IO.Paths.BinDir });
-            }
+            return new Plugins(hagen, new PathList() { Sidi.IO.Paths.BinDir });
         }
     }
 }

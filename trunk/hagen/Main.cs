@@ -74,11 +74,11 @@ namespace hagen
             searchBox1.DragEnter += new DragEventHandler(SearchBox_DragEnter);
             searchBox1.DragDrop += new DragEventHandler(SearchBox_DragDrop);
 
-            jobList = new JobList()
+            jobListView = new JobListView()
             {
                 Text = "Jobs"
             };
-            jobList.AsDockContent().Show(dockPanel, DockState.DockBottom);
+            jobListView.AsDockContent().Show(dockPanel, DockState.DockBottom);
 
             var logViewer = new LogViewer2()
             {
@@ -128,7 +128,7 @@ namespace hagen
             CheckWorkTime();
         }
 
-        Sidi.Forms.JobList jobList;
+        Sidi.Forms.JobListView jobListView;
 
         void Main_Load(object sender, EventArgs e)
         {
@@ -204,7 +204,7 @@ namespace hagen
 
         private void updateStartMenuToolStripMenuItem_Click(object sender, EventArgs e)
         {
-            jobList.AddJob("Update start menu", () =>
+            jobListView.JobList.Jobs.Add(new Job("Update start menu", () =>
               {
                     using (var actions = hagen.OpenActions())
                     {
@@ -224,7 +224,7 @@ namespace hagen
 
                         actions.AddOrUpdate(actionsToAdd);
                     }
-              });
+              }));
         }
 
         private void cleanupToolStripMenuItem_Click(object sender, EventArgs e)
@@ -446,7 +446,7 @@ Hours: {0:G3}",
             var pathList = Sidi.IO.PathList.Get(e.Data);
             if (pathList != null)
             {
-                jobList.AddJob(pathList.ToString(), () => { Add(pathList); });
+                jobListView.JobList.Jobs.Add(new Job(pathList.ToString(), () => { Add(pathList); }));
             }
         }
 
@@ -478,7 +478,7 @@ Hours: {0:G3}",
 
         private void updateFilesToolStripMenuItem_Click(object sender, EventArgs e)
         {
-            jobList.AddJob("Update Files", () =>
+            jobListView.JobList.Jobs.Add(new Job("Update Files", () =>
                 {
                     var updateFile = hagen.DataDirectory.CatDir("update.txt");
                     var updater = new Updater(hagen);
@@ -494,7 +494,7 @@ Hours: {0:G3}",
                             p.PrintSampleScript(w);
                         }
                     }
-                });
+                }));
         }
     }
 }

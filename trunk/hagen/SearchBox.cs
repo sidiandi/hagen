@@ -30,6 +30,7 @@ using System.IO;
 using Sidi.IO;
 using hagen.ActionSource;
 using BrightIdeasSoftware;
+using Sidi.Extensions;
 
 namespace hagen
 {
@@ -196,7 +197,7 @@ namespace hagen
 
         void IconCache_EntryUpdated(object sender, LruCacheBackground<Action, Icon>.EntryUpdatedEventArgs arg)
         {
-            itemView.Invalidate();
+            this.BeginInvoke((MethodInvoker)delegate { itemView.BuildList(); });
         }
 
         void itemView_GotFocus(object sender, EventArgs e)

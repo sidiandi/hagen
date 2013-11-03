@@ -35,6 +35,7 @@ namespace hagen
         static Regex regex = new Regex(new[]
         {
             (PathPattern + @"\((?<Line>\d+)\,(?<Column>\d+)\)"),
+            (PathPattern + @"\((?<Line>\d+)\)"),
             (PathPattern + @"\:line\ (?<Line>\d+)"),
             (@"{0}".F(PathPattern)),
         }.Join("|"));

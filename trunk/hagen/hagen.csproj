@@ -67,7 +67,6 @@
     <Compile Include="ClipboardUrl.cs" />
     <Compile Include="ControlExtensions.cs" />
     <Compile Include="DockExtension.cs" />
-    <Compile Include="Extensions.cs" />
     <Compile Include="LogViewer2.cs">
       <SubType>Component</SubType>
     </Compile>

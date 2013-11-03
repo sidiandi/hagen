@@ -20,6 +20,7 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 using Sidi.IO;
+using hagen;
 
 namespace hagen.ActionSource
 {
@@ -39,17 +40,24 @@ namespace hagen.ActionSource
         
         public IEnumerable<IAction> GetActions(string query)
         {
-            string sql;
+            var cmd = actions.Connection.CreateCommand();
+
+            var p = cmd.CreateParameter();
+            p.ParameterName = "$p";
+            p.DbType = System.Data.DbType.String;
+            p.Value = "%" + query.Truncate(0x100) + "%";
+            cmd.Parameters.Add(p);
+
             if (String.IsNullOrEmpty(query) || query.Length <= 2)
             {
-                sql = String.Format("Name like \"%{0}%\" order by LastUseTime desc limit 20", query.EscapeCsharpStringLiteral());
+                cmd.CommandText = String.Format("select oid from {1} where Name like {0} order by LastUseTime desc limit 20", p.ParameterName, actions.Table);
             }
             else
             {
-                sql = String.Format("Name like \"%{0}%\" order by LastUseTime desc", query.EscapeCsharpStringLiteral());
+                cmd.CommandText = String.Format("select oid from {1} where Name like {0} order by LastUseTime desc", p.ParameterName, actions.Tablespie);
             }
 
-            var r = actions.Select(sql);
+            var r = actions.Query(cmd);
             return r.SelectMany(action => ToIActions(action)).ToList();
         }
     }

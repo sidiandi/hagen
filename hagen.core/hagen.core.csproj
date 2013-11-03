@@ -76,6 +76,7 @@
     <Compile Include="Appender.cs" />
     <Compile Include="AutomationEx.cs" />
     <Compile Include="Contract.cs" />
+    <Compile Include="Extensions.cs" />
     <Compile Include="FileActionFactory.cs" />
     <Compile Include="FileGroup.cs" />
     <Compile Include="FileGroupDescriptor.cs" />

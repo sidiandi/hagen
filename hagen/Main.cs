@@ -177,7 +177,7 @@ namespace hagen
                 if (lastCLipboardHash != hash)
                 {
                     lastCLipboardHash = hash;
-                    searchBox1.Query = t.Truncate(256);
+                    searchBox1.Query = t.Truncate(4096);
                 }
             }
             searchBox1.Start();

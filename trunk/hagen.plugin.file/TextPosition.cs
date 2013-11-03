@@ -24,26 +24,26 @@ using System.Text.RegularExpressions;
 using Sidi.IO;
 using Sidi.Util;
 using Sidi.Extensions;
+using Sidi.Test;
 
 namespace hagen
 {
-    class FileLocation
+    public class TextPosition
     {
         private static readonly log4net.ILog log = log4net.LogManager.GetLogger(System.Reflection.MethodBase.GetCurrentMethod().DeclaringType);
 
-        static Regex[] regex = new Regex[]
+        static Regex regex = new Regex(new[]
         {
-            new Regex(@"^\s*(?<Path>{0})\((?<Line>\d+)\,(?<Column>\d+)\)".F(PathPattern)),
-            new Regex(@"(?<Path>[^""\s]+)\s*\((?<Line>\d+)\)".F(PathPattern)),
-            new Regex(@"(?<Path>[A-Z]\:[\\/]{0})".F(PathPattern), RegexOptions.IgnoreCase),
-            new Regex(@"(?<Path>\\{0})".F(PathPattern)),
-        };
+            (PathPattern + @"\((?<Line>\d+)\,(?<Column>\d+)\)"),
+            (PathPattern + @"\:line\ (?<Line>\d+)"),
+            (@"{0}".F(PathPattern)),
+        }.Join("|"));
 
         static string PathPattern
         {
             get
             {
-                return @"[^""]+";
+                return @"(?<Path>\w\:[^\s:""]+)";
                 /*
                 return "[^" + (System.IO.Path.GetInvalidPathChars()
                     .Select(c => Regex.Escape(new string(c, 1)))
@@ -53,34 +53,13 @@ namespace hagen
             }
         }
 
-        public static FileLocation Parse(string spec)
+        static TextPosition FromRegex(Match m)
         {
-            if (LPath.IsValidDriveRoot(spec))
-            {
-                return new FileLocation()
-                {
-                    Path = spec
-                };
-            }
-
-            var candidates = regex.Select(re =>
-            {
-                var m = re.Match(spec);
-                return m.Success ? FromRegex(m) : null;
-            })
-            .ToList();
-
-
-            return candidates.FirstOrDefault(i => i != null && new LPath(i.Path).Exists);
-        }
-
-        public static FileLocation FromRegex(Match m)
-        {
-            return new FileLocation()
+            return new TextPosition()
             {
                 Path = ResolvePath(GetValue(m, "Path", String.Empty)),
-                Line = Int32.Parse(GetValue(m, "Line", "0")),
-                Column = Int32.Parse(GetValue(m, "Column", "0")),
+                Line = Int32.Parse(GetValue(m, "Line", "1")),
+                Column = Int32.Parse(GetValue(m, "Column", "1")),
             };
         }
 
@@ -110,29 +89,46 @@ namespace hagen
         }
 
         public LPath Path;
-        public int Line;
-        public int Column;
+        public int Line = 1;
+        public int Column = 1;
+
+        public override string ToString()
+        {
+            return String.Format("{0}({1},{2})", Path, Line, Column);
+        }
 
         [TestFixture]
-        public class Test
+        public class Test : TestBase
         {
             private static readonly log4net.ILog log = log4net.LogManager.GetLogger(System.Reflection.MethodBase.GetCurrentMethod().DeclaringType);
 
             [Test]
-            public void Parse()
+            public void Extract()
             {
-                Assert.IsTrue(new Regex(FileLocation.PathPattern).IsMatch(@"C:\windows"), regex[0].ToString());
+                var loc = TextPosition.Extract(@"
+
+C:\windows
                 
-                var fl = FileLocation.Parse(@"  C:\work\hagen\hagen\Main.cs(119,34): error CS1002: ; expected");
-                Assert.AreEqual(new LPath(@"C:\work\hagen\hagen\Main.cs"), fl.Path);
-                Assert.AreEqual(119, fl.Line);
+C:\work\hagen\hagen\Main.cs(119,34): error CS1002: ; expected
 
-                fl = FileLocation.Parse(@"C:\Windows");
-                Assert.AreEqual(new LPath(@"C:\Windows"), fl.Path);
+C:/Windows
 
-                fl = FileLocation.Parse(@"C:/Windows");
-                Assert.AreEqual(new LPath(@"C:\Windows"), fl.Path);
+at Sidi.Persistence.Collection`1.Query(SQLiteCommand select) in c:\work\sidi-util\Sidi.Util\Persistence\Collection.cs:line 616
+at Sidi.Persistence.Collection`1.DoSelect(String query) in c:\work\sidi-util\Sidi.Util\Persistence\Collection.cs:line 610
+at hagen.ActionSource.DatabaseLookup.GetActions(String query) in C:\work\hagen\hagen.core\ActionSource\DatabaseLookup.cs:line 52
+at hagen.ActionSource.Composite.<>c__DisplayClass1.<GetActions>b__0(IActionSource source) in C:\work\hagen\hagen.core\ActionSource\Composite.cs:line 44
+
+").ToList();
+                log.Info(loc.ListFormat());
+                Assert.AreEqual(7, loc.Count);
+
             }
+        }
+
+        public static IEnumerable<TextPosition> Extract(string query)
+        {
+            return regex.Matches(query).Cast<Match>()
+                .SafeSelect(m => TextPosition.FromRegex(m));
         }
     }
 }

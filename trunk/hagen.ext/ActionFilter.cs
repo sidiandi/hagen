@@ -75,7 +75,7 @@ namespace hagen
         public IEnumerable<IAction> GetActions(string query)
         {
             return Parser.Actions
-                .Where(i => Parser.IsMatch(query, i.Name) || Regex.IsMatch(i.Name, query, RegexOptions.IgnoreCase))
+                .Where(i => Parser.IsMatch(query, i.Name))
                 .Select(i => ToIAction(i))
                 .ToList();
         }

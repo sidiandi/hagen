@@ -19,6 +19,9 @@ using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Text;
+using NUnit.Framework;
+using Sidi.Test;
+using EnvDTE;
 
 namespace hagen.ActionSource
 {
@@ -26,14 +29,31 @@ namespace hagen.ActionSource
     {
         public IEnumerable<IAction> GetActions(string query)
         {
-            var fl = FileLocation.Parse(query);
-            if (fl != null)
+            return TextPosition.Extract(query)
+                .Select(fl => new SimpleAction(fl.ToString(), () => OpenInVisualStudio(fl)));
+        }
+
+        public static void OpenInVisualStudio(TextPosition fl)
+        {
+            var dte = (EnvDTE80.DTE2) System.Runtime.InteropServices.Marshal.GetActiveObject("VisualStudio.DTE.10.0");
+            var document = dte.Documents.Open(fl.Path);
+            var selection = (TextSelection)document.Selection;
+            selection.GotoLine(fl.Line);
+            selection.MoveToDisplayColumn(fl.Line, fl.Column);
+        }
+
+        [TestFixture]
+        public class Test : TestBase
+        {
+            [Test]
+            public void Open()
             {
-                return new IAction[] { new ShellAction(fl.Path) }.ToList();
-            }
-            else
-            {
-                return new IAction[] { };
+                OpenFile.OpenInVisualStudio(new TextPosition()
+                {
+                    Path = @"C:\work\hagen\hagen\Main.cs",
+                    Line = 119,
+                    Column = 34,
+                });
             }
         }
     }

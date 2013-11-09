@@ -24,6 +24,8 @@ namespace hagen
 {
     public class SimpleAction : IAction
     {
+        private static readonly log4net.ILog log = log4net.LogManager.GetLogger(System.Reflection.MethodBase.GetCurrentMethod().DeclaringType);
+
         System.Action action;
         string name;
 
@@ -35,7 +37,15 @@ namespace hagen
 
         public void Execute()
         {
-            action();
+            try
+            {
+                action();
+
+            }
+            catch (Exception ex)
+            {
+                log.Error(this.Name, ex);
+            }
         }
 
         public string Name

@@ -54,7 +54,7 @@ namespace hagen.ActionSource
             }
             else
             {
-                cmd.CommandText = String.Format("select oid from {1} where Name like {0} order by LastUseTime desc", p.ParameterName, actions.Tablespie);
+                cmd.CommandText = String.Format("select oid from {1} where Name like {0} order by LastUseTime desc", p.ParameterName, actions.Table);
             }
 
             var r = actions.Query(cmd);

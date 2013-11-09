@@ -80,12 +80,14 @@ namespace hagen
             };
             jobListView.AsDockContent().Show(dockPanel, DockState.DockBottom);
 
+            /*
             var logViewer = new LogViewer2()
             {
                 Text = "Log",
             };
             logViewer.AsDockContent().Show(dockPanel, DockState.DockBottom);
             logViewer.AddToRoot();
+            */
 
             this.AllowDrop = true;
             this.Load += new EventHandler(Main_Load);
@@ -113,7 +115,7 @@ namespace hagen
             alertTimer.Start();
         }
 
-        DockPanel dockPanel;
+        public DockPanel dockPanel;
         SearchBox searchBox1;
         Hagen hagen;
 

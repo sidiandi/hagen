@@ -11,23 +11,13 @@ namespace hagen.ActionSource
 {
     public class Plugins : Composite
     {
+        private static readonly log4net.ILog log = log4net.LogManager.GetLogger(System.Reflection.MethodBase.GetCurrentMethod().DeclaringType);
+
         public Plugins(Hagen hagen, PathList searchPath)
         {
             this.hagen = hagen;
 
-            var hagenExe = Assembly.GetEntryAssembly().GetLocalPath();
-
-            var assemblyFileExtension = new Sidi.IO.FileType("exe", "dll");
-            var assemblyFiles = Find.AllFiles(searchPath)
-                .Select(x => x.FullName)
-                .Where(x => assemblyFileExtension.Is(x))
-                .Where(x => !x.Equals(hagenExe))
-                .ToList();
-
-            this.Sources = assemblyFiles
-                .SafeSelect(dll => Assembly.LoadFile(dll))
-                .SelectMany(a => GetPlugins(a))
-                .ToList();
+            this.Sources = GetPlugins(searchPath);
         }
 
         Hagen hagen;
@@ -35,53 +25,72 @@ namespace hagen.ActionSource
         IList<IActionSource> GetPlugins(Assembly assembly)
         {
             var types = assembly.GetTypes()
-                .Where(t => t.GetConstructor(new Type[] { }) != null)
                 .ToList();
-
+            
             return types
-                .Where(t => typeof(IActionSource).IsAssignableFrom(t))
-                .Select(t => (IActionSource)Activator.CreateInstance(t))
+                .Select(t =>
+                    {
+                        if (!typeof(IActionSource).IsAssignableFrom(t))
+                        {
+                            return null;
+                        }
+                        var ctor = t.GetConstructor(new Type[]{});
+                        if (ctor == null)
+                        {
+                            return null;
+                        }
+
+                        return (IActionSource) ctor.Invoke(new object[]{});
+                    })
+                .Where(t => t != null)
 
                 .Concat(types
                     .Where(t => t.GetCustomAttributes(typeof(Usage), false).Any())
                     .Select(t =>
                     {
                         object plugin = null;
-                        var hagenCtor = t.GetConstructor(new []{ typeof(Hagen) } );
-                        if (hagenCtor == null)
+                        var hagenCtor = t.GetConstructor(new Type[]{ typeof(Hagen) } );
+                        if (hagenCtor != null)
                         {
-                            var defaultCtor = t.GetConstructor(new Type[]{});
-                            plugin = defaultCtor.Invoke(new object[]{});
-                        }
-                        else
-                        {
-                            plugin = hagenCtor.Invoke(new object[]{hagen});
+                            plugin = hagenCtor.Invoke(new object[] { hagen });
+                            goto ok;
                         }
 
+                        var defaultCtor = t.GetConstructor(new Type[] { });
+                        if (defaultCtor != null)
+                        {
+                            plugin = defaultCtor.Invoke(new object[] { });
+                            goto ok;
+                        }
+
+                        return null;
+
+                    ok:
                         var parser = new Parser(plugin);
                         return new ActionFilter(parser);
-                    }))
-
+                    })
+                    .Where(x => x != null)
+                    )
 
                 .ToList();
         }
 
-        IList<IActionSource> GetPlugins()
+        IList<IActionSource> GetPlugins(PathList searchPath)
         {
-            var extensions = new Sidi.IO.FileType("exe", "dll");
-            var assemblies = Sidi.IO.Paths.BinDir.GetFiles()
-                .Where(x => extensions.Is(x))
-                .Where(x => !x.FileName.Equals("hagen.exe"));
+            var assemblyFileExtension = new Sidi.IO.FileType("exe", "dll");
+            var hagenExe = Assembly.GetEntryAssembly().GetLocalPath();
 
-            return assemblies
-                .SafeSelect(dll => Assembly.LoadFile(dll))
+            var assemblyFiles = searchPath
+                .SelectMany(x => x.GetFiles())
+                .Where(x => assemblyFileExtension.Is(x))
+                .Where(x => !x.Equals(hagenExe))
+                .ToList();
+
+            return assemblyFiles
+                .Select(dll => { try { return Assembly.LoadFile(dll); } catch { return null; } })
+                .Where(x => x != null)
                 .SelectMany(a => GetPlugins(a))
                 .ToList();
-        }
-
-        public static IActionSource GetDefaultPlugins(Hagen hagen)
-        {
-            return new Plugins(hagen, new PathList() { Sidi.IO.Paths.BinDir });
         }
     }
 }

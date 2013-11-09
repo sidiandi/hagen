@@ -57,7 +57,7 @@ namespace hagen
                     // )
                     // )
                     ,
-                    Plugins.GetDefaultPlugins(this.Hagen)
+                    new Plugins(this.Hagen, new PathList(){ Paths.BinDir })
                     );
 
                 asyncQuery = new AsyncQuery(composite);

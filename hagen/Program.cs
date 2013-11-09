@@ -23,6 +23,7 @@ using System.Diagnostics;
 using System.IO;
 using System.Reflection;
 using Sidi.CommandLine;
+using Sidi.Forms;
 
 namespace hagen
 {
@@ -44,17 +45,25 @@ namespace hagen
 
         public Program()
         {
-            log4net.Config.BasicConfigurator.Configure();
-
-            log.Info("Startup");
-
             Application.EnableVisualStyles();
             Application.SetCompatibleTextRenderingDefault(false);
+
+            log4net.Config.BasicConfigurator.Configure();
+
+            var logViewer = new LogViewer2()
+            {
+                Text = "Log",
+            };
+
+            logViewer.AddToRoot();
+
+            log.Info("Startup");
 
             KillAlreadyRunning();
 
             hagen = new Hagen();
             main = new Main(hagen);
+            logViewer.AsDockContent().Show(main.dockPanel, WeifenLuo.WinFormsUI.Docking.DockState.DockBottom);
         }
 
         public void RunUserInterface()

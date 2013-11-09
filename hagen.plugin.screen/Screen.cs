@@ -33,14 +33,10 @@ namespace hagen.ActionSource
     [Usage("Makes screen shots")]
     public class Screen
     {
-        /*
-        [Usage("Create a screen shot mail")]
-        public void MailScreenshotActiveWindow()
+        public Screen(Hagen hagen)
         {
-            var files = Hagen.Instance.CaptureScreens();
-            Process.Start(files[0].ToString());
+            this.Hagen = hagen;
         }
-         */
 
         public Hagen Hagen;
 

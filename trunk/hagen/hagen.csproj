@@ -35,11 +35,11 @@
       <HintPath>..\lib\ScintillaNET\ScintillaNET.dll</HintPath>
     </Reference>
     <Reference Include="Sidi.Office, Version=1.0.0.0, Culture=neutral, processorArchitecture=MSIL">
-      <HintPath>..\..\nuget-packages\sidi-util.2.5.0.977\lib\net40\Sidi.Office.dll</HintPath>
+      <HintPath>..\..\nuget-packages\sidi-util.2.5.0.981\lib\net40\Sidi.Office.dll</HintPath>
     </Reference>
-    <Reference Include="Sidi.Util, Version=2.5.0.977, Culture=neutral, PublicKeyToken=1e33c1a5eebc53e1, processorArchitecture=MSIL">
+    <Reference Include="Sidi.Util, Version=2.5.0.981, Culture=neutral, PublicKeyToken=1e33c1a5eebc53e1, processorArchitecture=MSIL">
       <SpecificVersion>False</SpecificVersion>
-      <HintPath>..\..\nuget-packages\sidi-util.2.5.0.977\lib\net40\Sidi.Util.dll</HintPath>
+      <HintPath>..\..\nuget-packages\sidi-util.2.5.0.981\lib\net40\Sidi.Util.dll</HintPath>
     </Reference>
     <Reference Include="System" />
     <Reference Include="System.Data" />
@@ -117,7 +117,6 @@
       <DependentUpon>TaskProgress.cs</DependentUpon>
     </EmbeddedResource>
     <None Include="app.config" />
-    <None Include="MSBuild.Community.Tasks.ReadMe.md" />
     <None Include="packages.config" />
     <None Include="Properties\Settings.settings">
       <Generator>SettingsSingleFileGenerator</Generator>

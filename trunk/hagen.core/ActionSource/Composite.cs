@@ -23,6 +23,7 @@ using System.Reflection;
 using Sidi.CommandLine;
 using Sidi.Extensions;
 using Sidi.IO;
+using Sidi.Util;
 
 namespace hagen.ActionSource
 {
@@ -41,7 +42,10 @@ namespace hagen.ActionSource
                 {
                     try
                     {
-                        return source.GetActions(query);
+                        using (new LogScope(log.Info, "{0}: query={1}", source, query))
+                        {
+                            return source.GetActions(query);
+                        }
                     }
                     catch (Exception ex)
                     {

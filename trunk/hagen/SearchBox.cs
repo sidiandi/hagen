@@ -40,33 +40,19 @@ namespace hagen
 
         ObjectListView itemView;
 
-        Collection<Action> data;
-
-        public Hagen Hagen { set; get; }
-
-        public Collection<Action> Data
+        IActionSource m_actionSource;
+        IActionSource ActionSource
         {
             set
             {
-                data = value;
-
-                var composite = new Composite(
-                    // Filters.NoFileAssociation(
-                    // Filters.OpenInVlc(
-                            new DatabaseLookup(value)
-                    // )
-                    // )
-                    ,
-                    new Plugins(this.Hagen, new PathList(){ Paths.BinDir })
-                    );
-
-                asyncQuery = new AsyncQuery(composite);
+                m_actionSource = value;
+                asyncQuery = new AsyncQuery(m_actionSource);
                 asyncQuery.Complete += new EventHandler(asyncQuery_Complete);
             }
 
             get
             {
-                return data;
+                return m_actionSource;
             }
         }
 
@@ -86,8 +72,9 @@ namespace hagen
 
         AsyncQuery asyncQuery;
 
-        public SearchBox()
+        public SearchBox(IActionSource actionSource)
         {
+            ActionSource = actionSource;
             int size = 40;
 
             itemView = new ObjectListView()
@@ -176,15 +163,6 @@ namespace hagen
             e.Item = new ListViewItem(actions[e.ItemIndex].Name);
         }
 
-        List<Action> added = new List<Action>();
-
-        void AddAction(Action action)
-        {
-            data.AddOrUpdate(action);
-            added.Add(action);
-            Actions = new SelectList<Action, IAction>(added, a => new ActionWrapper(a, data));
-        }
-
         IList<IAction> actions;
         IList<IAction> Actions
         {
@@ -248,9 +226,10 @@ namespace hagen
 
         public void Remove()
         {
+            throw new NotImplementedException();
             foreach (var i in itemView.SelectedObjects.OfType<ActionWrapper>())
             {
-                data.Remove(i.Action);
+                i.Data.Remove(i.Action);
             }
             Refresh();
         }

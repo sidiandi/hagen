@@ -95,7 +95,14 @@ namespace hagen
 
         public override string ToString()
         {
-            return String.Format("{0}({1},{2})", Path, Line, Column);
+            if (Line <= 1 && Column <= 1)
+            {
+                return String.Format("{0}", Path);
+            }
+            else
+            {
+                return String.Format("{0}({1},{2})", Path, Line, Column);
+            }
         }
 
         [TestFixture]

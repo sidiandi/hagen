@@ -22,16 +22,24 @@ using System.Text;
 using Sidi.CommandLine;
 using System.Text.RegularExpressions;
 using Sidi.IO;
+using Sidi.Extensions;
+using NUnit.Framework;
+using Sidi.Test;
 
 namespace hagen
 {
     public class ActionFilter : IActionSource
     {
         public Parser Parser;
-
+        
         public ActionFilter(Parser parser)
         {
             this.Parser = parser;
+        }
+
+        public override string ToString()
+        {
+            return Parser.ToString();
         }
 
         static List<string> emptyArgs = new List<string>();
@@ -78,6 +86,23 @@ namespace hagen
                 .Where(i => Parser.IsMatch(query, i.Name))
                 .Select(i => ToIAction(i))
                 .ToList();
+        }
+
+        [Usage("sample app")]
+        public class SampleApp
+        {
+        }
+
+        [TestFixture]
+        public class Test : TestBase
+        {
+            [Test]
+            public void ToString()
+            {
+                var p = Parser.SingleSource(new SampleApp());
+                var af = new ActionFilter(p);
+                Assert.AreEqual("SampleApp", af.ToString());
+            }
         }
     }
 }

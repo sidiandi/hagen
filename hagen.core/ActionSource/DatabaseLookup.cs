@@ -21,11 +21,14 @@ using System.Linq;
 using System.Text;
 using Sidi.IO;
 using hagen;
+using Sidi.Util;
 
 namespace hagen.ActionSource
 {
     public class DatabaseLookup : IActionSource
     {
+        private static readonly log4net.ILog log = log4net.LogManager.GetLogger(System.Reflection.MethodBase.GetCurrentMethod().DeclaringType);
+
         public DatabaseLookup(Sidi.Persistence.Collection<Action> actions)
         {
             this.actions = actions;
@@ -37,28 +40,31 @@ namespace hagen.ActionSource
         {
             yield return new ActionWrapper(action, actions);
         }
-        
+
         public IEnumerable<IAction> GetActions(string query)
         {
-            var cmd = actions.Connection.CreateCommand();
-
-            var p = cmd.CreateParameter();
-            p.ParameterName = "$p";
-            p.DbType = System.Data.DbType.String;
-            p.Value = "%" + query.Truncate(0x100) + "%";
-            cmd.Parameters.Add(p);
-
-            if (String.IsNullOrEmpty(query) || query.Length <= 2)
+            using (new LogScope(log.Info, query))
             {
-                cmd.CommandText = String.Format("select oid from {1} where Name like {0} order by LastUseTime desc limit 20", p.ParameterName, actions.Table);
-            }
-            else
-            {
-                cmd.CommandText = String.Format("select oid from {1} where Name like {0} order by LastUseTime desc", p.ParameterName, actions.Table);
-            }
+                var cmd = actions.Connection.CreateCommand();
 
-            var r = actions.Query(cmd);
-            return r.SelectMany(action => ToIActions(action)).ToList();
+                var p = cmd.CreateParameter();
+                p.ParameterName = "$p";
+                p.DbType = System.Data.DbType.String;
+                p.Value = "%" + query.Truncate(0x100) + "%";
+                cmd.Parameters.Add(p);
+
+                if (String.IsNullOrEmpty(query) || query.Length <= 2)
+                {
+                    cmd.CommandText = String.Format("select oid from {1} where Name like {0} order by LastUseTime desc limit 20", p.ParameterName, actions.Table);
+                }
+                else
+                {
+                    cmd.CommandText = String.Format("select oid from {1} where Name like {0} order by LastUseTime desc", p.ParameterName, actions.Table);
+                }
+
+                var r = actions.Query(cmd);
+                return r.SelectMany(action => ToIActions(action)).ToList();
+            }
         }
     }
 }

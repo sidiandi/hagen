@@ -38,6 +38,7 @@ using BrightIdeasSoftware;
 using Sidi.Test;
 using WeifenLuo.WinFormsUI.Docking;
 using Sidi.CommandLine;
+using hagen.ActionSource;
 
 namespace hagen
 {
@@ -61,11 +62,15 @@ namespace hagen
             };
             this.Controls.Add(dockPanel);
 
-            searchBox1 = new SearchBox()
+            var actions = hagen.OpenActions();
+            var actionSource = new Composite(
+                        new DatabaseLookup(actions),
+                        new Plugins(hagen, new PathList() { Paths.BinDir })
+                );
+
+            searchBox1 = new SearchBox(actionSource)
             {
                 Text = "Search",
-                Hagen = this.hagen,
-                Data = actions
             };
             searchBox1.ItemsActivated += new EventHandler(searchBox1_ItemsActivated);
             searchBox1.AsDockContent().Show(dockPanel, DockState.Document);

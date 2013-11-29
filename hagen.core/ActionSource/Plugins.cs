@@ -66,7 +66,7 @@ namespace hagen.ActionSource
                         return null;
 
                     ok:
-                        var parser = new Parser(plugin);
+                        var parser = Parser.SingleSource(plugin);
                         return new ActionFilter(parser);
                     })
                     .Where(x => x != null)

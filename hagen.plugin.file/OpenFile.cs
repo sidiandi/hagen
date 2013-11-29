@@ -22,6 +22,7 @@ using System.Text;
 using NUnit.Framework;
 using Sidi.Test;
 using EnvDTE;
+using Sidi.IO;
 
 namespace hagen.ActionSource
 {
@@ -30,7 +31,39 @@ namespace hagen.ActionSource
         public IEnumerable<IAction> GetActions(string query)
         {
             return TextPosition.Extract(query)
-                .Select(fl => new SimpleAction(fl.ToString(), () => OpenInVisualStudio(fl)));
+                .SelectMany(fl => new[]
+                    {
+                        new SimpleAction(String.Format("Open in Shell: {0}", fl), () => OpenInShell(fl)),
+                        new SimpleAction(String.Format("Open in Notepad++: {0}", fl), () => OpenInNotepadPlusPlus(fl)),
+                        new SimpleAction(String.Format("Open in Visual Studio: {0}", fl), () => OpenInVisualStudio(fl))
+                    });
+        }
+
+        public static void Open(TextPosition textPosition)
+        {
+            if (textPosition.Path.IsDirectory)
+            {
+                OpenInShell(textPosition);
+            }
+            else
+            {
+                OpenInShell(textPosition);
+            }
+        }
+
+        public static void OpenInShell(TextPosition textPosition)
+        {
+            System.Diagnostics.Process.Start(textPosition.Path);
+        }
+
+        public static void OpenInNotepadPlusPlus(TextPosition fl)
+        {
+            var notepadPlusPlusExe = Paths.GetFolderPath(Environment.SpecialFolder.ProgramFilesX86)
+                .CatDir(@"Notepad++\notepad++.exe");
+
+            System.Diagnostics.Process.Start(
+                notepadPlusPlusExe,
+                String.Format("-n{0} -c{1} {2}", fl.Line, fl.Column, fl.Path.Quote()));
         }
 
         public static void OpenInVisualStudio(TextPosition fl)
@@ -45,15 +78,23 @@ namespace hagen.ActionSource
         [TestFixture]
         public class Test : TestBase
         {
-            [Test]
-            public void Open()
-            {
-                OpenFile.OpenInVisualStudio(new TextPosition()
+            TextPosition exampleTextPosition = new TextPosition()
                 {
                     Path = @"C:\work\hagen\hagen\Main.cs",
                     Line = 119,
                     Column = 34,
-                });
+                };
+
+            [Test]
+            public void Open()
+            {
+                OpenFile.OpenInVisualStudio(exampleTextPosition);
+            }
+
+            [Test]
+            public void OpenInNotepadPlusPlus()
+            {
+                OpenFile.OpenInNotepadPlusPlus(exampleTextPosition);
             }
         }
     }

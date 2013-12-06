@@ -74,7 +74,6 @@ namespace hagen
 
         public SearchBox(IActionSource actionSource)
         {
-            ActionSource = actionSource;
             int size = 40;
 
             itemView = new ObjectListView()
@@ -156,6 +155,8 @@ namespace hagen
             textBoxQuery.KeyDown += new KeyEventHandler(textBoxQuery_KeyDown);
 
             textBoxQuery.TextChanged += new EventHandler(textBoxQuery_TextChanged);
+
+            ActionSource = actionSource;
         }
 
         void itemView_RetrieveVirtualItem(object sender, RetrieveVirtualItemEventArgs e)

@@ -44,7 +44,7 @@ namespace hagen
         {
             get
             {
-                return @"(?<Path>\w\:[^\s:""]+)";
+                return @"(?<Path>[a-zA-Z]\:[^\s:""]+)";
                 /*
                 return "[^" + (System.IO.Path.GetInvalidPathChars()
                     .Select(c => Regex.Escape(new string(c, 1)))

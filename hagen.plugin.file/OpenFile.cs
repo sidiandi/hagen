@@ -23,6 +23,7 @@ using NUnit.Framework;
 using Sidi.Test;
 using EnvDTE;
 using Sidi.IO;
+using Sidi.Forms;
 
 namespace hagen.ActionSource
 {
@@ -31,11 +32,15 @@ namespace hagen.ActionSource
         public IEnumerable<IAction> GetActions(string query)
         {
             return TextPosition.Extract(query)
-                .SelectMany(fl => new[]
+                .SelectMany(fl => new IAction[]
                     {
-                        new SimpleAction(String.Format("Open in Shell: {0}", fl), () => OpenInShell(fl)),
-                        new SimpleAction(String.Format("Open in Notepad++: {0}", fl), () => OpenInNotepadPlusPlus(fl)),
-                        new SimpleAction(String.Format("Open in Visual Studio: {0}", fl), () => OpenInVisualStudio(fl))
+                        new SimpleAction(fl.ToString(), () => ActionChooser.Choose(
+                                new SimpleAction(String.Format("Explorer : {0}", fl), () => OpenInShell(fl)),
+                                new SimpleAction(String.Format("cmd: {0}", fl), () => OpenInCmd(fl.Path)),
+                                new SimpleAction(String.Format("VLC: {0}", fl), () => OpenInVLC(fl.Path)),
+                                new SimpleAction(String.Format("Notepad++: {0}", fl), () => OpenInNotepadPlusPlus(fl)),
+                                new SimpleAction(String.Format("Visual Studio: {0}", fl), () => OpenInVisualStudio(fl))
+                            ))
                     });
         }
 
@@ -73,6 +78,41 @@ namespace hagen.ActionSource
             var selection = (TextSelection)document.Selection;
             selection.GotoLine(fl.Line);
             selection.MoveToDisplayColumn(fl.Line, fl.Column);
+        }
+
+        public static void OpenInCmd(LPath path)
+        {
+            for (var i = path; i != null; i = i.Parent)
+            {
+                if (i.IsDirectory)
+                {
+                    var p = new System.Diagnostics.Process()
+                    {
+                        StartInfo = new System.Diagnostics.ProcessStartInfo()
+                        {
+                            FileName = System.Environment.GetEnvironmentVariable("COMSPEC"),
+                            WorkingDirectory = i
+                        }
+                    };
+
+                    p.Start();
+                    break;
+                }
+            }
+        }
+
+        public static void OpenInVLC(LPath path)
+        {
+            var p = new System.Diagnostics.Process()
+            {
+                StartInfo = new System.Diagnostics.ProcessStartInfo()
+                {
+                    FileName = Paths.GetFolderPath(Environment.SpecialFolder.ProgramFilesX86).CatDir(@"VideoLAN\VLC\vlc.exe"),
+                    Arguments = path.Quote()
+                }
+            };
+
+            p.Start();
         }
 
         [TestFixture]

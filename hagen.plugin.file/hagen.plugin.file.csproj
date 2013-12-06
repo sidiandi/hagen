@@ -54,6 +54,10 @@
       <Project>{9BF01205-1BD3-4121-909D-16CEC6D47143}</Project>
       <Name>hagen.ext</Name>
     </ProjectReference>
+    <ProjectReference Include="..\hagen\hagen.csproj">
+      <Project>{5E196699-E12B-4500-8178-BD38ACC8D362}</Project>
+      <Name>hagen</Name>
+    </ProjectReference>
   </ItemGroup>
   <ItemGroup>
     <COMReference Include="EnvDTE">

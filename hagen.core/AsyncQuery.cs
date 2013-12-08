@@ -24,6 +24,7 @@ using Sidi.Persistence;
 using System.Web;
 using System.Net;
 using L = Sidi.IO;
+using System.Threading.Tasks;
 
 namespace hagen
 {
@@ -146,64 +147,5 @@ namespace hagen
         }
 
         #endregion
-    }
-    
-    public class AsyncQuery
-    {
-        Sidi.Util.AsyncCalculation<string, IList<IAction>> asyncCalculation;
-        
-        
-        public AsyncQuery(IActionSource actionSource)
-        {
-            this.ActionSource = actionSource;
-            asyncCalculation = new Sidi.Util.AsyncCalculation<string, IList<IAction>>(Work);
-            asyncCalculation.Complete += new EventHandler(asyncCalculation_Complete);
-        }
-
-        void asyncCalculation_Complete(object sender, EventArgs e)
-        {
-            if (Complete != null)
-            {
-                Complete(this, EventArgs.Empty);
-            }
-        }
-
-        public IList<IAction> Result
-        {
-            get
-            {
-                return asyncCalculation.Result;
-            }
-        }
-
-        public string Query
-        {
-            set
-            {
-                asyncCalculation.Query = value;
-            }
-        }
-
-        public bool Busy
-        {
-            get
-            {
-                return asyncCalculation.Busy;
-            }
-        }
-
-        public void Refresh()
-        {
-            asyncCalculation.Query = asyncCalculation.Query;
-        }
-
-        public IActionSource ActionSource;
-
-        IList<IAction> Work(string query)
-        {
-            return ActionSource.GetActions(query).ToList();
-        }
-
-        public event EventHandler Complete;
     }
 }

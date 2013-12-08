@@ -63,6 +63,7 @@
     <Compile Include="ActionProperties.Designer.cs">
       <DependentUpon>ActionProperties.cs</DependentUpon>
     </Compile>
+    <Compile Include="AsyncCalculation.cs" />
     <Compile Include="ClipboardUrl.cs" />
     <Compile Include="ControlExtensions.cs" />
     <Compile Include="DockExtension.cs" />

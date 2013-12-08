@@ -34,13 +34,23 @@ namespace hagen.ActionSource
             return TextPosition.Extract(query)
                 .SelectMany(fl => new IAction[]
                     {
-                        new SimpleAction(fl.ToString(), () => ActionChooser.Choose(
-                                new SimpleAction(String.Format("Explorer : {0}", fl), () => OpenInShell(fl)),
-                                new SimpleAction(String.Format("cmd: {0}", fl), () => OpenInCmd(fl.Path)),
-                                new SimpleAction(String.Format("VLC: {0}", fl), () => OpenInVLC(fl.Path)),
-                                new SimpleAction(String.Format("Notepad++: {0}", fl), () => OpenInNotepadPlusPlus(fl)),
-                                new SimpleAction(String.Format("Visual Studio: {0}", fl), () => OpenInVisualStudio(fl))
-                            ))
+                        new SimpleAction(fl.ToString(), () =>
+                            {
+                                var ac = new List<IAction>();
+                                ac.Add(new SimpleAction(String.Format("Explorer : {0}", fl), () => OpenInShell(fl)));
+                                ac.Add(new SimpleAction(String.Format("cmd: {0}", fl), () => OpenInCmd(fl.Path)));
+                                if (fl.Path.IsDirectory)
+                                {
+                                    ac.Add(new SimpleAction(String.Format("VLC: {0}", fl), () => OpenInVLC(fl.Path)));
+                                }
+
+                                if (fl.Path.IsFile)
+                                {
+                                    ac.Add(new SimpleAction(String.Format("Notepad++: {0}", fl), () => OpenInNotepadPlusPlus(fl)));
+                                    ac.Add(new SimpleAction(String.Format("Visual Studio: {0}", fl), () => OpenInVisualStudio(fl)));
+                                }
+                                ActionChooser.Choose(ac);
+                            })
                     });
         }
 

@@ -65,7 +65,7 @@ namespace hagen.ActionSource
                                 FileName = vlcExe
                             }
                         };
-                        return new[] { action, openInVlc };
+                        return new IAction[] { action, openInVlc };
                     }
 
                     return new[] { action };
@@ -104,7 +104,7 @@ namespace hagen.ActionSource
                                 FileName = notepadPlusPlusExe,
                             }
                         };
-                        return new[] { action, openInVlc };
+                        return new IAction[] { action, openInVlc };
                     }
                     return new[] { action };
                 });

@@ -31,31 +31,25 @@ namespace hagen
             }
         }
 
-        public static void Choose(params IAction[] actions)
-        {
-            Choose(new List<IAction>(actions));
-        }
-        
         public static void Choose(IList<IAction> actions)
         {
-            var sb = new SearchBox(new SimpleActionSource(actions));
-            var f = sb.AsForm("Select");
-            f.WindowState = System.Windows.Forms.FormWindowState.Maximized;
-            sb.ItemsActivated += (s, e) =>
+            using (var sb = new SearchBox(new SimpleActionSource(actions)))
             {
-                foreach (var i in sb.SelectedActions)
+                var f = sb.AsForm("Select");
+                f.WindowState = System.Windows.Forms.FormWindowState.Maximized;
+                f.Visible = false;
+                sb.ItemsActivated += (s, e) =>
                 {
-                    i.Execute();
-                }
-                f.Close();
-            };
-
-            f.Shown += (s, e) =>
-                {
-                    sb.Refresh();
+                    foreach (var i in sb.SelectedActions)
+                    {
+                        i.Execute();
+                    }
+                    f.Close();
                 };
 
-            f.ShowDialog();
+                f.Shown += (s, e) => { sb.UpdateResult(); };
+                f.ShowDialog();
+            }
         }
     }
 }

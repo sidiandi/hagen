@@ -19,6 +19,7 @@ using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Text;
+using System.Windows.Forms;
 
 namespace hagen.ActionSource
 {   
@@ -42,7 +43,14 @@ namespace hagen.ActionSource
         
         public void Execute()
         {
-            Action.Execute();
+            if (Control.ModifierKeys == Keys.Control)
+            {
+            }
+            else
+            {
+                Action.Execute();
+            }
+
             Action.LastUseTime = DateTime.Now;
             Data.Update(Action);
         }

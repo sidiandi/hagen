@@ -46,8 +46,6 @@ namespace hagen
             set
             {
                 m_actionSource = value;
-                asyncQuery = new AsyncQuery(m_actionSource);
-                asyncQuery.Complete += new EventHandler(asyncQuery_Complete);
             }
 
             get
@@ -55,14 +53,34 @@ namespace hagen
                 return m_actionSource;
             }
         }
+        
+        protected override void Dispose(bool disposing)
+        {
+          if (!IsDisposed)
+          {
+            if (disposing)
+            {
+                if (components != null)
+                {
+                    components.Dispose();
+                    components = null;
+                }
+                asyncCalculation.Complete -= Query_Complete;
+                Action.IconCache.EntryUpdated -= new EventHandler<LruCacheBackground<Action, Icon>.EntryUpdatedEventArgs>(IconCache_EntryUpdated);
+            }
+            // Free your own state (unmanaged objects).
+            // Set large fields to null.
+          }
+          base.Dispose(disposing);
+        }
 
-        void asyncQuery_Complete(object sender, EventArgs e)
+        void Query_Complete(object sender, EventArgs e)
         {
             this.BeginInvoke(new Action<IList<IAction>>(x =>
                 {
                     Actions = x;
                     SelectItem(0);
-                }), asyncQuery.Result);
+                }), asyncCalculation.Result);
         }
 
         void SelectItem(int index)
@@ -70,7 +88,7 @@ namespace hagen
             itemView.SelectedIndex = index;
         }
 
-        AsyncQuery asyncQuery;
+        AsyncCalculation<IList<IAction>> asyncCalculation = new AsyncCalculation<IList<IAction>>();
 
         public SearchBox(IActionSource actionSource)
         {
@@ -157,6 +175,8 @@ namespace hagen
             textBoxQuery.TextChanged += new EventHandler(textBoxQuery_TextChanged);
 
             ActionSource = actionSource;
+
+            asyncCalculation.Complete += Query_Complete;
         }
 
         void itemView_RetrieveVirtualItem(object sender, RetrieveVirtualItemEventArgs e)
@@ -232,7 +252,7 @@ namespace hagen
             {
                 i.Data.Remove(i.Action);
             }
-            Refresh();
+            UpdateResult();
         }
 
         void textBoxQuery_KeyDown(object sender, KeyEventArgs e)
@@ -269,12 +289,13 @@ namespace hagen
 
         void textBoxQuery_TextChanged(object sender, EventArgs e)
         {
-            Refresh();
+            UpdateResult();
         }
 
-        new public void Refresh()
+        new public void UpdateResult()
         {
-            asyncQuery.Query = textBoxQuery.Text;
+            var query = textBoxQuery.Text;
+            asyncCalculation.Calculate(() => ActionSource.GetActions(query).ToList());
         }
 
         public void Properties()
@@ -288,7 +309,7 @@ namespace hagen
                 {
                     actionWrapper.Data.Update(actionWrapper.Action);
                 }
-                Refresh();
+                UpdateResult();
             }
         }
     }

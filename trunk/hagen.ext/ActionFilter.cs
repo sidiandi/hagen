@@ -52,9 +52,9 @@ namespace hagen
 
         IAction ToIAction(Sidi.CommandLine.Action a)
         {
-            if (TakesPathList(a))
+            if (TakesPathList(a) && UserInfaceState.Instance != null)
             {
-                var pathList = PathList.ReadClipboard();
+                var pathList = CurrentPathList;
                 return new SimpleAction(
                     String.Format("{0}({2}) ({1})", a.Name, a.Usage, pathList),
                     () =>

@@ -57,6 +57,7 @@
     <Compile Include="Properties\AssemblyInfo.cs" />
     <Compile Include="ShellAction.cs" />
     <Compile Include="SimpleAction.cs" />
+    <Compile Include="UserInterfaceState.cs" />
   </ItemGroup>
   <ItemGroup>
     <None Include="packages.config" />

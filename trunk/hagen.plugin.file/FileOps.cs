@@ -4,6 +4,7 @@ using System.Linq;
 using System.Text;
 using Sidi.CommandLine;
 using Sidi.IO;
+using Sidi.Extensions;
 
 namespace hagen
 {
@@ -18,6 +19,12 @@ namespace hagen
             {
                 op.DeleteEmptyDirectories(i);
             }
+        }
+
+        [Usage("Test")]
+        public void Test(PathList paths)
+        {
+            System.Windows.Forms.MessageBox.Show(paths.Join());
         }
     }
 }

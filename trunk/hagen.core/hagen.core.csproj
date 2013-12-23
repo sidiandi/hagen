@@ -109,7 +109,6 @@
     <Compile Include="StringEx.cs" />
     <Compile Include="TimeIntervalExtensions.cs" />
     <Compile Include="Updater.cs" />
-    <Compile Include="UserInterfaceState.cs" />
     <Compile Include="WorkInterval.cs" />
     <EmbeddedResource Include="Properties\Resources.resx">
       <Generator>ResXFileCodeGenerator</Generator>

@@ -52,14 +52,14 @@ namespace hagen
 
         IAction ToIAction(Sidi.CommandLine.Action a)
         {
-            if (TakesPathList(a) && UserInfaceState.Instance != null)
+            if (TakesPathList(a) && hagen.UserInterfaceState.Instance.SelectedPathList != null)
             {
-                var pathList = CurrentPathList;
+                var pathList = UserInterfaceState.Instance.SelectedPathList;
                 return new SimpleAction(
-                    String.Format("{0}({2}) ({1})", a.Name, a.Usage, pathList),
+                    String.Format("{0}({2}) ({1})", a.Name, a.Usage, pathList.JoinTruncated(", ", 80)),
                     () =>
                     {
-                        a.Handle(new List<string>(){pathList.ToString()}, true);
+                        a.Handle(new List<string>() { pathList.ToString() }, true);
                     });
             }
             else

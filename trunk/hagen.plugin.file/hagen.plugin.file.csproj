@@ -44,6 +44,7 @@
   </ItemGroup>
   <ItemGroup>
     <Compile Include="OpenFile.cs" />
+    <Compile Include="SidiTools.cs" />
     <Compile Include="TextPosition.cs" />
     <Compile Include="FileOps.cs" />
     <Compile Include="InsertFilesAsText.cs" />

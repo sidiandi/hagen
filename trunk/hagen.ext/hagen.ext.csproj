@@ -47,6 +47,7 @@
     <Reference Include="Microsoft.CSharp" />
     <Reference Include="System.Data" />
     <Reference Include="System.Xml" />
+    <Reference Include="UIAutomationClient" />
   </ItemGroup>
   <ItemGroup>
     <Compile Include="ActionFilter.cs" />
@@ -54,6 +55,8 @@
     <Compile Include="IActionSource.cs" />
     <Compile Include="IconHelper.cs" />
     <Compile Include="Icons.cs" />
+    <Compile Include="NativeMethods.cs" />
+    <Compile Include="PathListExtension.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
     <Compile Include="ShellAction.cs" />
     <Compile Include="SimpleAction.cs" />

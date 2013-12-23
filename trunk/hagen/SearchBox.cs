@@ -243,7 +243,7 @@ namespace hagen
             {
                 return itemView.SelectedObjects.Cast<IAction>();
             }
-        }
+        }   
 
         public void Remove()
         {

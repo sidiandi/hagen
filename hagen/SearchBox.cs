@@ -247,7 +247,6 @@ namespace hagen
 
         public void Remove()
         {
-            throw new NotImplementedException();
             foreach (var i in itemView.SelectedObjects.OfType<ActionWrapper>())
             {
                 i.Data.Remove(i.Action);

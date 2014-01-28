@@ -16,7 +16,6 @@ namespace hagen
 {
     public partial class TaskProgress : Form
     {
-        private Task t;
         private CancellationTokenSource cancellationTokenSource;
 
         public TaskProgress()

@@ -22,7 +22,7 @@ namespace hagen
         }
 
         [Usage("Test")]
-        public void Test(PathList paths)
+        public void TestSelectedFiles(PathList paths)
         {
             System.Windows.Forms.MessageBox.Show(paths.Join());
         }

@@ -52,7 +52,7 @@ namespace hagen
 
         IAction ToIAction(Sidi.CommandLine.Action a)
         {
-            if (TakesPathList(a) && hagen.UserInterfaceState.Instance.SelectedPathList != null)
+            if (TakesPathList(a) && hagen.UserInterfaceState.Instance.SelectedPathList.Any())
             {
                 var pathList = UserInterfaceState.Instance.SelectedPathList;
                 return new SimpleAction(

@@ -41,6 +41,11 @@ namespace Sidi.Forms
                 //Font = new Font(FontFamily.GenericMonospace, 10.0f),
             };
 
+            textView.StyleNeeded += (s, e) =>
+                {
+                    // e.Range.SetStyle(16);
+                };
+
             this.Controls.Add(textView);
 
             timer = new Timer()
@@ -60,6 +65,7 @@ namespace Sidi.Forms
                 if (output != null)
                 {
                     textView.AppendText(output.ToString());
+                    textView.CurrentPos = textView.TextLength;
                     output.Dispose();
                     output = null;
                 }
@@ -79,12 +85,16 @@ namespace Sidi.Forms
             [Test, RequiresSTA]
             public void List()
             {
-                var lv = new LogViewer2();
+                var lv = new LogViewer2()
+                {
+                    Size = new Size(800, 400)
+                };
                 lv.AddToRoot();
                 log.Error("error");
                 log.Warn("warn");
                 var form = lv.AsForm("Log Viewer");
                 form.Show();
+
                 foreach (var i in Enumerable.Range(0, 100))
                 {
                     log.Info(i);

@@ -291,7 +291,7 @@ namespace hagen
             UpdateResult();
         }
 
-        new public void UpdateResult()
+        public void UpdateResult()
         {
             var query = textBoxQuery.Text;
             asyncCalculation.Calculate(() => ActionSource.GetActions(query).ToList());

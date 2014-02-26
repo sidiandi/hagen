@@ -29,7 +29,6 @@ using Sidi.Extensions;
 using mshtml;
 using Sidi.Util;
 using System.Text.RegularExpressions;
-using Sidi.Extensions;
 
 namespace hagen
 {

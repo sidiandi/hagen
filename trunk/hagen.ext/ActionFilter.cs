@@ -97,7 +97,7 @@ namespace hagen
         public class Test : TestBase
         {
             [Test]
-            public void ToString()
+            public void ToStringTest()
             {
                 var p = Parser.SingleSource(new SampleApp());
                 var af = new ActionFilter(p);

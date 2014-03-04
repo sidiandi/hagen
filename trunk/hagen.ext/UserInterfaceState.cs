@@ -25,8 +25,15 @@ namespace hagen
 
         public void SaveFocus()
         {
-            focusedElement = (IntPtr)NativeMethods.GetForegroundWindow();
-            selectedPathList = PathList.GetFilesSelectedInExplorer();
+            focusedElement = (IntPtr) NativeMethods.GetForegroundWindow();
+            try
+            {
+                selectedPathList = PathList.GetFilesSelectedInExplorer();
+            }
+            catch
+            {
+                selectedPathList = new PathList();
+            }
         }
 
         IntPtr focusedElement = IntPtr.Zero;

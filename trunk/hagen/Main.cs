@@ -390,7 +390,7 @@ Hours: {0:G3}",
         [TestFixture]
         public class Test : TestBase
         {
-            [Test, RequiresSTA]
+            [Test, RequiresSTA, Explicit]
             public void IeLinks()
             {
                 var a = new Main(new Hagen());

@@ -79,11 +79,12 @@ namespace hagen.ActionSource
         {
             var assemblyFileExtension = new Sidi.IO.FileType("exe", "dll");
             var hagenExe = Assembly.GetEntryAssembly().GetLocalPath();
+            var sidiUtil = typeof(Sidi.IO.LPath).Assembly;
 
             var assemblyFiles = searchPath
                 .SelectMany(x => x.GetFiles())
                 .Where(x => assemblyFileExtension.Is(x))
-                .Where(x => !x.Equals(hagenExe))
+                .Where(x => !x.Equals(hagenExe) && !x.Equals(sidiUtil))
                 .ToList();
 
             return assemblyFiles

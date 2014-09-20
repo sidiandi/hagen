@@ -39,7 +39,7 @@ namespace hagen
 
         public override string ToString()
         {
-            return Parser.ToString();
+            return Parser.MainSource.Instance.GetType().Name;
         }
 
         static List<string> emptyArgs = new List<string>();
@@ -82,27 +82,61 @@ namespace hagen
 
         public IEnumerable<IAction> GetActions(string query)
         {
-            return Parser.Actions
+            var a = Parser.Actions.ToList();
+            return a
                 .Where(i => Parser.IsMatch(query, i.Name))
                 .Select(i => ToIAction(i))
                 .ToList();
         }
 
-        [Usage("sample app")]
-        public class SampleApp
-        {
-        }
-
         [TestFixture]
         public class Test : TestBase
         {
+            public Test()
+            {
+                sampleApp = new SampleApp();
+                var p = Parser.SingleSource(sampleApp);
+                af = new ActionFilter(p);
+            }
+
+            SampleApp sampleApp;
+            ActionFilter af;
+            
             [Test]
             public void ToStringTest()
             {
-                var p = Parser.SingleSource(new SampleApp());
-                var af = new ActionFilter(p);
                 Assert.AreEqual("SampleApp", af.ToString());
+            }
+
+            [Test]
+            public void GetActions()
+            {
+                Assert.AreEqual(1, af.GetActions("A").Count());
+                Assert.AreEqual(0, af.GetActions("B").Count());
+
+                af.GetActions("SomeAction").First().Execute();
+                Assert.IsTrue(sampleApp.SomeActionExecuted);
             }
         }
     }
+
+    [Usage("sample app")]
+    public class SampleApp
+    {
+        [Usage("Add two numbers")]
+        public int Add(int a, int b)
+        {
+            return a + b;
+        }
+
+        public bool SomeActionExecuted { get; private set; }
+
+        [Usage("Execute a test action")]
+        public void SomeAction()
+        {
+            SomeActionExecuted = true;
+        }
+    }
+
+
 }

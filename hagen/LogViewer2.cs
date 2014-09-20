@@ -82,7 +82,7 @@ namespace Sidi.Forms
         {
             private static readonly log4net.ILog log = log4net.LogManager.GetLogger(System.Reflection.MethodBase.GetCurrentMethod().DeclaringType);
 
-            [Test, RequiresSTA]
+            [Test, RequiresSTA, Explicit("interactive")]
             public void List()
             {
                 var lv = new LogViewer2()

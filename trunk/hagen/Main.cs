@@ -238,27 +238,7 @@ namespace hagen
         {
             jobListView.JobList.Jobs.Add(new Job("Cleanup", () =>
               {
-                  using (var actions = hagen.OpenActions())
-                  {
-                      var toDelete = actions
-                          .Where(a => a.CommandObject is StartProcess)
-                          .Where(a => 
-                              {
-                                  log.InfoFormat("Check {0}", a);
-                                  return !((StartProcess)a.CommandObject).IsWorking;
-                              })
-                          .ToList();
-
-                      using (var t = actions.BeginTransaction())
-                      {
-                          foreach (var i in toDelete)
-                          {
-                              log.InfoFormat("Delete {0}", i);
-                              actions.Remove(i);
-                          }
-                          t.Commit();
-                      }
-                  }
+                  hagen.Cleanup();
               }));
         }
 

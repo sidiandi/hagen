@@ -31,10 +31,12 @@ namespace hagen
     public abstract class ICommand
     {
         public abstract void Execute();
+
         public virtual System.Drawing.Icon GetIcon()
         {
             return null;
         }
+
         public virtual bool IsWorking
         {
              get { return true; }

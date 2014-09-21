@@ -29,6 +29,7 @@ using Sidi.Extensions;
 using mshtml;
 using Sidi.Util;
 using System.Text.RegularExpressions;
+using Sidi.Test;
 
 namespace hagen
 {
@@ -47,7 +48,6 @@ namespace hagen
                 {
                     new LPath(AllUsersStartMenu),
                     Sidi.IO.Paths.GetFolderPath(Environment.SpecialFolder.StartMenu),
-                    Sidi.IO.Paths.GetFolderPath(Environment.SpecialFolder.Desktop),
                     Sidi.IO.Paths.GetFolderPath(Environment.SpecialFolder.MyDocuments).CatDir("My RoboForm Data")
                 }
                 .Where(x => x.Exists)
@@ -76,7 +76,7 @@ namespace hagen
             FileActionFactory f = new FileActionFactory();
 
             return Enum.GetValues(typeof(Environment.SpecialFolder)).Cast<Environment.SpecialFolder>()
-                .SafeSelect(i => 
+                .SafeSelect(i =>
                 {
                     var a = f.FromFile(Environment.GetFolderPath((Environment.SpecialFolder)i));
                     a.Name = i.ToString();
@@ -100,13 +100,33 @@ namespace hagen
 
         public static void Cleanup(this Collection<Action> actions)
         {
-            var toDelete = actions.Where(x => !x.CommandObject.IsWorking).ToList();
-            
+            var toDelete = actions
+                .Where(a =>
+                {
+                    var ok = a.CommandObject.IsWorking;
+                    log.InfoFormat("{0} is working: {1}", a, ok);
+                    return !ok;
+                })
+                .ToList();
+
+            actions.Delete(toDelete);
+
+            // remove duplicates
+            var duplicates = actions.GroupBy(x => x.CommandDetails)
+                .SelectMany(x => x.OrderByDescending(_ => _.LastUseTime).Skip(1))
+                .ToList();
+
+            actions.Delete(duplicates);
+        }
+
+        public static void Delete(this Collection<Action> actions, IEnumerable<Action> toDelete)
+        {
             using (var t = actions.BeginTransaction())
             {
-                foreach (var a in toDelete)
+                foreach (var i in toDelete)
                 {
-                    actions.Remove(a);
+                    log.InfoFormat("Delete {0}", i);
+                    actions.Remove(i);
                 }
                 t.Commit();
             }
@@ -147,7 +167,7 @@ namespace hagen
                 .Where(ie => ie.IsInternetExplorer())
                 .SelectMany(ie =>
                     {
-                        var d = (IHTMLDocument3) ie.Document;
+                        var d = (IHTMLDocument3)ie.Document;
                         return d.getElementsByTagName("a")
                             .Cast<IHTMLElement>()
                             .Select(a =>
@@ -162,15 +182,35 @@ namespace hagen
         }
 
         [TestFixture]
-        public class Test
+        public class Test : TestBase
         {
             private static readonly log4net.ILog log = log4net.LogManager.GetLogger(System.Reflection.MethodBase.GetCurrentMethod().DeclaringType);
 
+            [Test, Explicit("Internet explorer must be open")]
             public void Links()
             {
                 foreach (var a in GetAllIeLinks())
                 {
                     Console.WriteLine(a);
+                }
+            }
+
+            [Test]
+            public void AddOrUpdate()
+            {
+                var dbPath = TestFile("test_actions.sqlite");
+                dbPath.EnsureFileNotExists();
+                using (var actions = new Collection<Action>(dbPath))
+                {
+                    var f = new FileActionFactory();
+                    var a0 = f.FromFile(dbPath);
+
+                    actions.AddOrUpdate(a0);
+                    Assert.AreEqual(1, actions.Count);
+
+                    var a1 = f.FromFile(dbPath);
+                    actions.AddOrUpdate(a1);
+                    Assert.AreEqual(1, actions.Count);
                 }
             }
         }

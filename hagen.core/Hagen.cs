@@ -32,6 +32,8 @@ namespace hagen
 {
     public class Hagen
     {
+        private static readonly log4net.ILog log = log4net.LogManager.GetLogger(System.Reflection.MethodBase.GetCurrentMethod().DeclaringType);
+
         public Hagen()
         {
             actions = OpenActions();
@@ -69,6 +71,14 @@ namespace hagen
             return new Collection<Action>(DatabasePath);
         }
 
+        public void Cleanup()
+        {
+            using (var actions = OpenActions())
+            {
+                actions.Cleanup();
+            }
+        }
+        
         public DateTime? GetWorkBegin(DateTime time)
         {
             var workDayBegin = time.Date;
@@ -127,22 +137,6 @@ namespace hagen
         {
             return new Collection<Log>(actions.SharedConnection);
         }
-
-        /*
-        public static Hagen Instance
-        {
-            get
-            {
-                if (instance == null)
-                {
-                    instance = new Hagen();
-                }
-                return instance;
-            }
-        }
-
-        static Hagen instance;
-        */
     }
 
     public static class HagenEx

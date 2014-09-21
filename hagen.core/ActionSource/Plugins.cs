@@ -79,7 +79,7 @@ namespace hagen.ActionSource
         {
             var assemblyFileExtension = new Sidi.IO.FileType("exe", "dll");
             var hagenExe = Assembly.GetEntryAssembly().GetLocalPath();
-            var sidiUtil = typeof(Sidi.IO.LPath).Assembly;
+            var sidiUtil = typeof(Sidi.IO.LPath).Assembly.GetLocalPath();
 
             var assemblyFiles = searchPath
                 .SelectMany(x => x.GetFiles())

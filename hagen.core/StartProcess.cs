@@ -29,6 +29,8 @@ using Microsoft.Win32;
 using System.Windows.Automation;
 using System.Windows;
 using Sidi.Extensions;
+using Sidi.Util;
+using Sidi.IO;
 
 namespace hagen
 {
@@ -124,6 +126,27 @@ namespace hagen
         [SettingsBindable(true)]
         public string WorkingDirectory { get; set; }
 
+        LPath GetDefaultWorkingDirectory()
+        {
+            if (String.IsNullOrEmpty(WorkingDirectory))
+            {
+                try
+                {
+                    var s = new Shell();
+                    return s.GetOpenDirectory();
+                }
+                catch
+                {
+                    return Paths.GetFolderPath(System.Environment.SpecialFolder.Personal);
+                }
+            }
+            else
+            {
+                return WorkingDirectory;
+            }
+
+        }
+
         public override void Execute()
         {
             // fill the input box of a file open dialog
@@ -153,7 +176,7 @@ namespace hagen
                     UseShellExecute = true,
                     Verb = Verb,
                     WindowStyle = WindowStyle,
-                    WorkingDirectory = WorkingDirectory
+                    WorkingDirectory = GetDefaultWorkingDirectory()
                 }
             };
 

@@ -4,6 +4,9 @@
     <SolutionDir Condition="$(SolutionDir) == '' Or $(SolutionDir) == '*Undefined*'">..\</SolutionDir>
     <ProjectGuid>{D3E69D04-FEDA-48D8-9498-F41362F7E52A}</ProjectGuid>
   </PropertyGroup>
+  <PropertyGroup Condition="'$(Configuration)|$(Platform)' == 'Debug|AnyCPU'">
+    <UseVSHostingProcess>false</UseVSHostingProcess>
+  </PropertyGroup>
   <Import Project="..\Console.props" />
   <ItemGroup>
     <Reference Include="EntityFramework">

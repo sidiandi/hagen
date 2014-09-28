@@ -22,7 +22,7 @@ namespace hagen.ActionSource
 
         Hagen hagen;
 
-        IList<IActionSource> GetPlugins(Assembly assembly)
+        IList<IActionSource2> GetPlugins(Assembly assembly)
         {
             var types = assembly.GetTypes()
                 .ToList();
@@ -30,17 +30,32 @@ namespace hagen.ActionSource
             return types
                 .Select(t =>
                     {
-                        if (!typeof(IActionSource).IsAssignableFrom(t))
+                        if (typeof(IActionSource2).IsAssignableFrom(t))
                         {
-                            return null;
-                        }
-                        var ctor = t.GetConstructor(new Type[]{});
-                        if (ctor == null)
-                        {
-                            return null;
-                        }
+                            var ctor = t.GetConstructor(new Type[] { });
 
-                        return (IActionSource) ctor.Invoke(new object[]{});
+                            if (ctor == null)
+                            {
+                                return null;
+                            }
+
+                            return (IActionSource2)ctor.Invoke(new object[] { });
+                        } 
+                        else if (typeof(IActionSource).IsAssignableFrom(t))
+                        {
+                            var ctor = t.GetConstructor(new Type[] { });
+                        
+                            if (ctor == null)
+                            {
+                                return null;
+                            }
+
+                            return ((IActionSource)ctor.Invoke(new object[] { })).ToIActionSource2();
+                        }
+                        else
+                        {
+                            return null;
+                        }
                     })
                 .Where(t => t != null)
 
@@ -75,7 +90,7 @@ namespace hagen.ActionSource
                 .ToList();
         }
 
-        IList<IActionSource> GetPlugins(PathList searchPath)
+        IList<IActionSource2> GetPlugins(PathList searchPath)
         {
             var assemblyFileExtension = new Sidi.IO.FileType("exe", "dll");
             var hagenExe = Assembly.GetEntryAssembly().GetLocalPath();

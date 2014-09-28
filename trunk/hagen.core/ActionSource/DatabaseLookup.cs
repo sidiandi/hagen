@@ -22,10 +22,12 @@ using System.Text;
 using Sidi.IO;
 using hagen;
 using Sidi.Util;
+using System.Reactive.Linq;
+using System.Reactive.Concurrency;
 
 namespace hagen.ActionSource
 {
-    public class DatabaseLookup : IActionSource
+    public class DatabaseLookup : IActionSource2
     {
         private static readonly log4net.ILog log = log4net.LogManager.GetLogger(System.Reflection.MethodBase.GetCurrentMethod().DeclaringType);
 
@@ -41,7 +43,7 @@ namespace hagen.ActionSource
             yield return new ActionWrapper(action, actions);
         }
 
-        public IEnumerable<IAction> GetActions(string query)
+        IEnumerable<IAction> GetActionsEnum(string query)
         {
             using (new LogScope(log.Info, query))
             {
@@ -65,6 +67,11 @@ namespace hagen.ActionSource
                 var r = actions.Query(cmd);
                 return r.SelectMany(action => ToIActions(action)).ToList();
             }
+        }
+
+        public IObservable<IAction> GetActions(string query)
+        {
+            return GetActionsEnum(query).ToObservable(Scheduler.ThreadPool);
         }
     }
 }

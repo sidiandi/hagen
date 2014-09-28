@@ -31,6 +31,8 @@ using Sidi.IO;
 using hagen.ActionSource;
 using BrightIdeasSoftware;
 using Sidi.Extensions;
+using System.Reactive.Linq;
+using System.Reactive.Subjects;
 
 namespace hagen
 {
@@ -40,8 +42,8 @@ namespace hagen
 
         ObjectListView itemView;
 
-        IActionSource m_actionSource;
-        IActionSource ActionSource
+        IActionSource2 m_actionSource;
+        IActionSource2 ActionSource
         {
             set
             {
@@ -53,6 +55,8 @@ namespace hagen
                 return m_actionSource;
             }
         }
+
+        IObservable<IAction> incomingActions;
         
         protected override void Dispose(bool disposing)
         {
@@ -65,7 +69,7 @@ namespace hagen
                     components.Dispose();
                     components = null;
                 }
-                asyncCalculation.Complete -= Query_Complete;
+
                 Action.IconCache.EntryUpdated -= new EventHandler<LruCacheBackground<Action, Icon>.EntryUpdatedEventArgs>(IconCache_EntryUpdated);
             }
             // Free your own state (unmanaged objects).
@@ -74,23 +78,12 @@ namespace hagen
           base.Dispose(disposing);
         }
 
-        void Query_Complete(object sender, EventArgs e)
-        {
-            this.BeginInvoke(new Action<IList<IAction>>(x =>
-                {
-                    Actions = x;
-                    SelectItem(0);
-                }), asyncCalculation.Result);
-        }
-
         void SelectItem(int index)
         {
             itemView.SelectedIndex = index;
         }
 
-        AsyncCalculation<IList<IAction>> asyncCalculation = new AsyncCalculation<IList<IAction>>();
-
-        public SearchBox(IActionSource actionSource)
+        public SearchBox(IActionSource2 actionSource)
         {
             int size = 40;
 
@@ -172,12 +165,26 @@ namespace hagen
 
             textBoxQuery.KeyDown += new KeyEventHandler(textBoxQuery_KeyDown);
 
-            textBoxQuery.TextChanged += new EventHandler(textBoxQuery_TextChanged);
-
             ActionSource = actionSource;
 
-            asyncCalculation.Complete += Query_Complete;
+            textBoxQuery.GetTextChangedObservable()
+                .Throttle(TimeSpan.FromMilliseconds(200))
+                .Merge(ManualUpdate)
+                .Select(query => ActionSource.GetActions(query))
+                .ObserveOn(this)
+                .Subscribe(result =>
+                    {
+                        actions = new List<IAction>();
+                        result
+                            .ObserveOn(this)
+                            .Subscribe(_ =>
+                            {
+                                actions.Add(_); itemView.SetObjects(actions);
+                            });
+                    });
         }
+
+        Subject<string> ManualUpdate = new Subject<string>();
 
         void itemView_RetrieveVirtualItem(object sender, RetrieveVirtualItemEventArgs e)
         {
@@ -286,15 +293,9 @@ namespace hagen
             }
         }
 
-        void textBoxQuery_TextChanged(object sender, EventArgs e)
-        {
-            UpdateResult();
-        }
-
         public void UpdateResult()
         {
-            var query = textBoxQuery.Text;
-            asyncCalculation.Calculate(() => ActionSource.GetActions(query).ToList());
+            ManualUpdate.OnNext(textBoxQuery.Text);
         }
 
         public void Properties()

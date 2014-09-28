@@ -25,10 +25,13 @@ using Sidi.IO;
 using Sidi.Extensions;
 using NUnit.Framework;
 using Sidi.Test;
+using System.Reactive.Concurrency;
+using System.Reactive.Subjects;
+using System.Reactive.Linq;
 
 namespace hagen
 {
-    public class ActionFilter : IActionSource
+    public class ActionFilter : IActionSource2
     {
         public Parser Parser;
         
@@ -80,13 +83,17 @@ namespace hagen
             }
         }
 
-        public IEnumerable<IAction> GetActions(string query)
+        public IObservable<IAction> GetActions(string query)
+        {
+            return GetActionsEnum(query).ToObservable(Scheduler.TaskPool);
+        }
+
+        IEnumerable<IAction> GetActionsEnum(string query)
         {
             var a = Parser.Actions.ToList();
             return a
                 .Where(i => Parser.IsMatch(query, i.Name))
-                .Select(i => ToIAction(i))
-                .ToList();
+                .Select(i => ToIAction(i));
         }
 
         [TestFixture]

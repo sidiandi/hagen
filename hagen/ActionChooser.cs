@@ -4,12 +4,13 @@ using System.Linq;
 using System.Text;
 using Sidi.Forms;
 using System.Text.RegularExpressions;
+using System.Reactive.Linq;
 
 namespace hagen
 {
     public class ActionChooser
     {
-        class SimpleActionSource : IActionSource
+        class SimpleActionSource : IActionSource2
         {
             public SimpleActionSource(IList<IAction> actions)
             {
@@ -18,16 +19,16 @@ namespace hagen
 
             IList<IAction> actions;
 
-            public IEnumerable<IAction> GetActions(string query)
+            public IObservable<IAction> GetActions(string query)
             {
                 if (String.IsNullOrEmpty(query))
                 {
-                    return actions;
+                    return actions.ToObservable();
                 }
 
                 var regex = new Regex(Regex.Escape(query), RegexOptions.IgnoreCase);
 
-                return actions.Where(x => regex.IsMatch(x.Name));
+                return actions.Where(x => regex.IsMatch(x.Name)).ToObservable();
             }
         }
 
@@ -47,7 +48,7 @@ namespace hagen
                     f.Close();
                 };
 
-                f.Shown += (s, e) => { sb.UpdateResult(); };
+                f.Shown += (s, e) => { sb.Query = String.Empty; };
                 f.ShowDialog();
             }
         }

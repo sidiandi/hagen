@@ -24,38 +24,24 @@ using Sidi.CommandLine;
 using Sidi.Extensions;
 using Sidi.IO;
 using Sidi.Util;
+using System.Reactive.Linq;
 
 namespace hagen.ActionSource
 {
-    public class Composite : IActionSource
+    public class Composite : IActionSource2
     {
         private static readonly log4net.ILog log = log4net.LogManager.GetLogger(System.Reflection.MethodBase.GetCurrentMethod().DeclaringType);
 
-        public Composite(params IActionSource[] sources)
+        public Composite(params IActionSource2[] sources)
         {
             this.Sources = sources.ToList();
         }
 
-        public IEnumerable<IAction> GetActions(string query)
+        public IObservable<IAction> GetActions(string query)
         {
-            return Sources.SelectMany(source => 
-                {
-                    try
-                    {
-                        using (new LogScope(log.Info, "{0}: query={1}", source, query))
-                        {
-                            return source.GetActions(query);
-                        }
-                    }
-                    catch (Exception ex)
-                    {
-                        log.Warn(String.Format("{0} : query={1}", source, query), ex);
-                        return new IAction[] { };
-                    }
-                })
-                .ToList();
+            return Sources.Select(source => source.GetActions(query)).Merge();
         }
 
-        public IList<IActionSource> Sources;
+        public IList<IActionSource2> Sources;
     }
 }

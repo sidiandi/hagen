@@ -20,11 +20,34 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 using System.IO;
+using Sidi;
+using System.Reactive.Linq;
+using System.Reactive.Concurrency;
 
 namespace hagen
 {
     public static class Extensions
     {
+        class AdapterIActionSource : IActionSource2
+        {
+            public AdapterIActionSource(IActionSource actionSource)
+            {
+                this.actionSource = actionSource;
+            }
+
+            public IActionSource actionSource { get; private set; }
+
+            public IObservable<IAction> GetActions(string query)
+            {
+                return actionSource.GetActions(query).ToObservable(Scheduler.NewThread);
+            }
+        }
+
+        public static IActionSource2 ToIActionSource2(this IActionSource actionSource)
+        {
+            return new AdapterIActionSource(actionSource);
+        }
+
         public static string ReadFixedLengthUnicodeString(this Stream s, int length)
         {
             byte[] fn = new byte[length * 2];

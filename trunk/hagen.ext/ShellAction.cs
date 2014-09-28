@@ -70,7 +70,7 @@ namespace hagen
         {
             System.Drawing.Icon icon = null;
 
-            if (FileName.StartsWith("http://"))
+            if (FileName.StartsWith("http://") || FileName.StartsWith("https://"))
             {
                 return Icons.Browser;
             }

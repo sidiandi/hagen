@@ -38,6 +38,7 @@ namespace hagen.ActionSource
                 yield return WebLookupAction("Translate", "http://translate.google.com/#auto/en/{0}", query);
                 yield return WebLookupAction("Leo", "http://dict.leo.org/?lp=ende&search={0}", query);
                 yield return WebLookupAction("Preis", "http://www.heise.de/preisvergleich/?fs={0}&x=0&y=0&in=", query);
+                yield return WebLookupAction("Contacts", "https://www.google.com/contacts/#contacts/search/{0}", query);
             }
         }
 

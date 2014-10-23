@@ -392,7 +392,7 @@ Hours: {0:G3}",
             if (!notesFile.Exists)
             {
                 notesFile.EnsureParentDirectoryExists();
-                using (var w = LFile.OpenWrite(notesFile))
+                using (var w = notesFile.OpenWrite())
                 {
                     w.Write(new byte[]{ 0xef, 0xbb, 0xbf }, 0, 3);
                     using (var sw = new StreamWriter(w))

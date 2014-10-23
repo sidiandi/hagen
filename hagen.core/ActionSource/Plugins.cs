@@ -26,8 +26,11 @@ namespace hagen.ActionSource
         {
             var types = assembly.GetTypes()
                 .ToList();
+
+            log.Info(types.ListFormat().Add(_ => _.Name));
             
             return types
+                .Where(t => !t.Name.StartsWith("Test_"))
                 .Select(t =>
                     {
                         if (typeof(IActionSource2).IsAssignableFrom(t))

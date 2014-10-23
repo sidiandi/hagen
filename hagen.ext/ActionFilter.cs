@@ -118,9 +118,8 @@ namespace hagen
             [Test]
             public void GetActions()
             {
-                Assert.AreEqual(1, af.GetActions("A").Count());
-                Assert.AreEqual(0, af.GetActions("B").Count());
-
+                Assert.AreEqual(1, af.GetActions("A").ToEnumerable().Count());
+                Assert.AreEqual(0, af.GetActions("B").ToEnumerable().Count());
                 af.GetActions("SomeAction").First().Execute();
                 Assert.IsTrue(sampleApp.SomeActionExecuted);
             }

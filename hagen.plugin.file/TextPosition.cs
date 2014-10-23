@@ -126,6 +126,8 @@ at Sidi.Persistence.Collection`1.DoSelect(String query) in c:\work\sidi-util\Sid
 at hagen.ActionSource.DatabaseLookup.GetActions(String query) in C:\work\hagen\hagen.core\ActionSource\DatabaseLookup.cs:line 52
 at hagen.ActionSource.Composite.<>c__DisplayClass1.<GetActions>b__0(IActionSource source) in C:\work\hagen\hagen.core\ActionSource\Composite.cs:line 44
 
+http://www.site.com/some/path.txt
+
 ").ToList();
                 log.Info(loc.ListFormat());
                 Assert.AreEqual(7, loc.Count);

@@ -30,6 +30,8 @@ namespace hagen
     {
         class AdapterIActionSource : IActionSource2
         {
+            private static readonly log4net.ILog log = log4net.LogManager.GetLogger(System.Reflection.MethodBase.GetCurrentMethod().DeclaringType);
+
             public AdapterIActionSource(IActionSource actionSource)
             {
                 this.actionSource = actionSource;
@@ -37,9 +39,34 @@ namespace hagen
 
             public IActionSource actionSource { get; private set; }
 
+            IEnumerable<IAction> SafeEnum(IEnumerable<IAction> data)
+            {
+                var e = data.GetEnumerator();
+                for (;;)
+                {
+                    IAction x;
+                    try
+                    {
+                        if (!e.MoveNext())
+                        {
+                            break;
+                        }
+
+                        x = e.Current;
+                    }
+                    catch (Exception ex)
+                    {
+                        log.Warn(ex);
+                        break;
+                    }
+
+                    yield return x;
+                }
+            }
+
             public IObservable<IAction> GetActions(string query)
             {
-                return actionSource.GetActions(query).ToObservable(Scheduler.NewThread);
+                return SafeEnum(actionSource.GetActions(query)).ToObservable(Scheduler.NewThread);
             }
         }
 

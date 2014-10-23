@@ -12,7 +12,8 @@ namespace hagen
         public static IObservable<string> GetTextChangedObservable(this TextBox textBox)
         {
             return Observable.FromEventPattern(e => textBox.TextChanged += e, e => textBox.TextChanged -= e)
-                .Select(e => textBox.Text);
+                .Select(e => textBox.Text)
+                .StartWith(textBox.Text);
         }
     }
 }

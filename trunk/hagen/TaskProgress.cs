@@ -47,7 +47,7 @@ namespace hagen
         {
             private static readonly log4net.ILog log = log4net.LogManager.GetLogger(System.Reflection.MethodBase.GetCurrentMethod().DeclaringType);
                 
-            [Test, RequiresSTA]
+            [Test, RequiresSTA, Explicit("interactive")]
             public void Run()
             {
                 var cs = new CancellationTokenSource();

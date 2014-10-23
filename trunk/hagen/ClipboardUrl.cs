@@ -131,8 +131,7 @@ namespace hagen
             [Test]
             public void ReadUrl()
             {
-                string u = ClipboardUrl.ReadUrl(LFile.OpenRead(
-                    Sidi.IO.Paths.BinDir.CatDir(@"unit-test\FileContents")));
+                string u = ClipboardUrl.ReadUrl(Sidi.IO.Paths.BinDir.CatDir(@"unit-test\FileContents").OpenRead());
                 Assert.AreEqual("http://www.mycsharp.de/wbb2/thread.php?threadid=73296", u);
             }
         }

@@ -32,6 +32,7 @@ namespace hagen.ActionSource
         public IEnumerable<IAction> GetActions(string query)
         {
             return TextPosition.Extract(query)
+                .Where(x => x.Path.Exists)
                 .SelectMany(fl => new IAction[]
                     {
                         new SimpleAction(fl.ToString(), () =>
@@ -135,13 +136,13 @@ namespace hagen.ActionSource
                     Column = 34,
                 };
 
-            [Test]
+            [Test, Explicit("interactive")]
             public void Open()
             {
                 OpenFile.OpenInVisualStudio(exampleTextPosition);
             }
 
-            [Test]
+            [Test, Explicit("interactive")]
             public void OpenInNotepadPlusPlus()
             {
                 OpenFile.OpenInNotepadPlusPlus(exampleTextPosition);

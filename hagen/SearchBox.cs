@@ -179,7 +179,10 @@ namespace hagen
                             .ObserveOn(this)
                             .Subscribe(_ =>
                             {
-                                actions.Add(_); itemView.SetObjects(actions);
+                                actions.Add(_);
+                                var si = Math.Max(itemView.SelectedIndex, 0);
+                                itemView.SetObjects(actions);
+                                itemView.SelectedIndex = si;
                             });
                     });
         }

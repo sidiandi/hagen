@@ -7,6 +7,29 @@
   <PropertyGroup Condition="'$(Configuration)|$(Platform)' == 'Debug|AnyCPU'">
     <UseVSHostingProcess>false</UseVSHostingProcess>
   </PropertyGroup>
+  <PropertyGroup Condition="'$(Configuration)|$(Platform)' == 'Debug|x64'">
+    <DebugSymbols>true</DebugSymbols>
+    <OutputPath>bin\x64\Debug\</OutputPath>
+    <DefineConstants>DEBUG;TRACE</DefineConstants>
+    <AllowUnsafeBlocks>true</AllowUnsafeBlocks>
+    <DocumentationFile>\Debug-AnyCPU\hagen.core.xml</DocumentationFile>
+    <NoWarn>1591</NoWarn>
+    <DebugType>full</DebugType>
+    <PlatformTarget>x64</PlatformTarget>
+    <UseVSHostingProcess>false</UseVSHostingProcess>
+    <CodeAnalysisRuleSet>MinimumRecommendedRules.ruleset</CodeAnalysisRuleSet>
+  </PropertyGroup>
+  <PropertyGroup Condition="'$(Configuration)|$(Platform)' == 'Release|x64'">
+    <OutputPath>bin\x64\Release\</OutputPath>
+    <DefineConstants>TRACE</DefineConstants>
+    <AllowUnsafeBlocks>true</AllowUnsafeBlocks>
+    <DocumentationFile>\Release-AnyCPU\hagen.core.xml</DocumentationFile>
+    <Optimize>true</Optimize>
+    <NoWarn>1591</NoWarn>
+    <DebugType>pdbonly</DebugType>
+    <PlatformTarget>x64</PlatformTarget>
+    <CodeAnalysisRuleSet>C:\work\hagen\sidi-util.ruleset</CodeAnalysisRuleSet>
+  </PropertyGroup>
   <Import Project="..\Common.props" />
   <ItemGroup>
     <Reference Include="ICSharpCode.SharpZipLib, Version=0.86.0.518, Culture=neutral, PublicKeyToken=1b03e6acf1164f73, processorArchitecture=MSIL">
@@ -79,6 +102,7 @@
     <Compile Include="ActionSource\Filters.cs" />
     <Compile Include="Activity.cs" />
     <Compile Include="ActivityLogger.cs" />
+    <Compile Include="AggregateUtil.cs" />
     <Compile Include="Appender.cs" />
     <Compile Include="AutomationEx.cs" />
     <Compile Include="Contract.cs" />
@@ -89,14 +113,18 @@
     <Compile Include="globalKeyboardHook.cs" />
     <Compile Include="Hagen.cs" />
     <Compile Include="ICommand.cs" />
+    <Compile Include="InputAggregator.cs" />
     <Compile Include="InputEx.cs" />
     <Compile Include="InsertText.cs" />
-    <Compile Include="InterceptConsole.cs" />
+    <Compile Include="HumanInterfaceDeviceMonitor.cs" />
     <Compile Include="InternetShortcut.cs" />
+    <Compile Include="IObservable.cs" />
     <Compile Include="mshtmlEx.cs" />
     <Compile Include="NativeMethods.cs" />
+    <Compile Include="ObservableTimeInterval.cs" />
     <Compile Include="OutlookDataObject.cs" />
     <Compile Include="ActionSource\Plugins.cs" />
+    <Compile Include="ProgramUseAggregator.cs" />
     <Compile Include="Properties\AssemblyInfo.cs">
       <SubType>Code</SubType>
     </Compile>
@@ -112,11 +140,14 @@
       <DesignTimeSharedInput>True</DesignTimeSharedInput>
     </Compile>
     <Compile Include="AsyncQuery.cs" />
+    <Compile Include="RxExtensions.cs" />
     <Compile Include="ScreenCapture.cs" />
     <Compile Include="StartProcess.cs" />
     <Compile Include="StringEx.cs" />
     <Compile Include="TimeIntervalExtensions.cs" />
     <Compile Include="Updater.cs" />
+    <Compile Include="WindowInformation.cs" />
+    <Compile Include="WinEventHook.cs" />
     <Compile Include="WorkInterval.cs" />
     <EmbeddedResource Include="Properties\Resources.resx">
       <Generator>ResXFileCodeGenerator</Generator>

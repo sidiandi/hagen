@@ -24,11 +24,8 @@ namespace hagen.ActionSource
 
         IList<IActionSource2> GetPlugins(Assembly assembly)
         {
-            var types = assembly.GetTypes()
-                .ToList();
+            var types = assembly.GetTypes();
 
-            log.Info(types.ListFormat().Add(_ => _.Name));
-            
             return types
                 .Where(t => !t.Name.StartsWith("Test_"))
                 .Select(t =>

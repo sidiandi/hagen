@@ -30,6 +30,10 @@ using System.Windows;
 using System.Diagnostics;
 using System.Windows.Forms;
 using Sidi.Util;
+using System.Reactive.Linq;
+using Sidi.Extensions;
+using System.Reactive.Concurrency;
+using System.Reactive.Linq;
 
 namespace hagen
 {
@@ -37,11 +41,11 @@ namespace hagen
     {
         private static readonly log4net.ILog log = log4net.LogManager.GetLogger(System.Reflection.MethodBase.GetCurrentMethod().DeclaringType);
 
+        readonly TimeSpan inputLoggingInterval = TimeSpan.FromMinutes(1);
+        IDisposable subscriptions;
+        Hagen hagen;
         Collection<ProgramUse> programUse;
         Collection<Input> inputs;
-        InputHook interceptConsole;
-        Thread backgroundWorker;
-        Hagen hagen;
 
         public ActivityLogger(Hagen hagen)
         {
@@ -50,48 +54,32 @@ namespace hagen
             programUse = hagen.OpenProgramUses();
             inputs = hagen.OpenInputs();
 
-            backgroundWorker = new Thread(backgroundWorker_DoWork);
-            backgroundWorker.Start();
+            var hidMonitor = new HumanInterfaceDeviceMonitor();
+            var winEventHook = new WinEventHook();
+            var timer = Observable.Interval(this.inputLoggingInterval);
 
-            interceptConsole = new InputHook();
-            interceptConsole.KeyDown += new System.Windows.Forms.KeyEventHandler(KeyboardInput);
-            interceptConsole.MouseMove += new System.Windows.Forms.MouseEventHandler(MouseInput);
+            var inputAggregator = new InputAggregator();
+
+            subscriptions = new System.Reactive.Disposables.CompositeDisposable(
+                ObservableTimeInterval.Get(inputLoggingInterval).Subscribe(inputAggregator.Time),
+                hidMonitor.KeyDown.Subscribe(inputAggregator.KeyDown),
+                hidMonitor.Mouse.Subscribe(inputAggregator.Mouse),
+                inputAggregator.Input.SubscribeOn(TaskPoolScheduler.Default).Subscribe(_ =>
+                    {
+                        inputs.Add(_);
+                        log.Info(_.Details());
+                    }),
+                inputAggregator,
+                inputs,
+                programUse,
+                hidMonitor,
+                winEventHook
+            );
 
             workDayBegin = DateTime.Now.Date;
         }
 
-        Vector? lastMousePos = null;
         DateTime workDayBegin;
-        Input currentInput = null;
-        TimeSpan inputLoggingInterval = new TimeSpan(0, 1, 0);
-
-        void MouseInput(object sender, System.Windows.Forms.MouseEventArgs e)
-        {
-            DateTime n = DateTime.Now;
-            ThreadPool.QueueUserWorkItem(new WaitCallback(x =>
-            {
-                lock (this)
-                {
-                    UpdateInput(n);
-                    var newMousePos = new Vector(e.X, e.Y);
-                    if (lastMousePos == null)
-                    {
-                    }
-                    else
-                    {
-                        double m = (newMousePos - lastMousePos.Value).Length;
-                        currentInput.MouseMove += m;
-                        currentInput.Clicks += e.Clicks;
-                        if (currentProgram != null)
-                        {
-                            currentProgram.MouseMove += m;
-                            currentProgram.Clicks += e.Clicks;
-                        }
-                    }
-                    lastMousePos = newMousePos;
-                }
-            }));
-        }
 
         void HandlePrintScreen(KeyEventArgs e)
         {
@@ -108,159 +96,10 @@ namespace hagen
             }
         }
 
-        void KeyboardInput(object sender, System.Windows.Forms.KeyEventArgs e)
-        {
-            ThreadPool.QueueUserWorkItem(new WaitCallback(x =>
-            {
-                lock (this)
-                {
-                    var keyEvent = (System.Windows.Forms.KeyEventArgs)x;
-                    HandlePrintScreen(keyEvent);
-                    DateTime n = DateTime.Now;
-                    
-                    UpdateInput(n);
-                    ++currentInput.KeyDown;
-
-                    if (currentProgram != null)
-                    {
-                        ++currentProgram.KeyDown;
-                    }
-                }
-            }), e);
-        }
-
-        void CommitInput()
-        {
-            lock (this)
-            {
-                if (currentInput != null)
-                {
-                    currentInput.MouseMove = Math.Round(currentInput.MouseMove);
-                    inputs.Add(currentInput);
-                    currentInput = null;
-                }
-            }
-        }
-
-        void FirstInputToday(DateTime now)
-        {
-            using (var inputs = hagen.OpenInputs())
-            {
-                try
-                {
-                    if (inputs.Range(new TimeInterval(workDayBegin, now)).Any())
-                    {
-                        workDayBegin = DateTime.Now.Date.AddDays(1.0);
-                        return;
-                    }
-
-                    workDayBegin = DateTime.Now.Date.AddDays(1.0);
-                }
-                catch (System.Exception ex)
-                {
-                    log.Error("FirstInputToday", ex);
-                }
-            }
-        }
-
-        void UpdateInput(DateTime n)
-        {
-            lock (this)
-            {
-                if (workDayBegin < n)
-                {
-                    FirstInputToday(n);
-                }
-
-                if (currentInput != null)
-                {
-                    if (currentInput.End <= n)
-                    {
-                        CommitInput();
-                    }
-                }
-
-                if (currentInput == null)
-                {
-                    currentInput = new Input();
-                    currentInput.TerminalServerSession = System.Windows.Forms.SystemInformation.TerminalServerSession;
-                    currentInput.Begin = new DateTime((n.Ticks / inputLoggingInterval.Ticks) * inputLoggingInterval.Ticks);
-                    currentInput.End = currentInput.Begin + inputLoggingInterval;
-                }
-            }
-        }
-
-        bool mustEnd = false;
-
-        void backgroundWorker_DoWork()
-        {
-            lock (this)
-            {
-                for (; ; )
-                {
-                    Monitor.Wait(this, 1000);
-                    if (mustEnd)
-                    {
-                        break;
-                    }
-                    try
-                    {
-                        CheckWindowChanged();
-                    }
-                    catch (Exception ex)
-                    {
-                        log.Error(String.Empty, ex);
-                    }
-                }
-            }
-        }
-
-        ProgramUse currentProgram;
-
-        void CheckWindowChanged()
-        {
-            try
-            {
-                AutomationElement focusedElement = AutomationElement.FocusedElement;
-                var p = Process.GetProcessById(focusedElement.Current.ProcessId);
-                string caption = p.MainWindowTitle;
-                lock (this)
-                {
-                    if (currentProgram == null || currentProgram.Caption != caption)
-                    {
-                        var n = DateTime.Now;
-                        if (currentProgram != null)
-                        {
-                            currentProgram.End = n;
-                            programUse.Add(currentProgram);
-                        }
-
-                        currentProgram = new ProgramUse()
-                        {
-                            Begin = n,
-                            Caption = caption,
-                            File = p.MainModule.FileName
-                        };
-                    }
-                }
-            }
-            catch (Exception)
-            {
-            }
-        }
-
         public void Dispose()
         {
-            CommitInput();
-            interceptConsole.Dispose();
-            interceptConsole = null;
-            lock (this)
-            {
-                mustEnd = true;
-            }
-            backgroundWorker.Join();
-            programUse.Dispose();
-            inputs.Dispose();
+            subscriptions.Dispose();
+            subscriptions = null;
         }
     }
 }

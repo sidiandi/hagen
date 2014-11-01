@@ -64,8 +64,6 @@ namespace hagen
 
         ProgramUse programUse = new ProgramUse();
 
-        Dictionary<WindowInformation, ProgramUse> programs = null;
-
         public void Dispose()
         {
             subscriptions.Dispose();

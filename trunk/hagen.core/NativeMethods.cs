@@ -17,6 +17,7 @@ namespace hagen
         [DllImport("user32.dll")]
         public static extern bool GetGUIThreadInfo(uint idThread, out GUITHREADINFO lpgui);
 
+#pragma warning disable 649
         public struct GUITHREADINFO
         {
             public int cbSize;
@@ -29,6 +30,7 @@ namespace hagen
             public int hwndCaret;
             public System.Drawing.Rectangle rcCaret;
         }
+#pragma warning restore
 
         [DllImport("user32.dll", CharSet = CharSet.Auto)]
         internal static extern int GetWindowTextLength(HandleRef hWnd);

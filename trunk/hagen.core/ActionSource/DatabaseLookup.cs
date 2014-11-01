@@ -71,7 +71,7 @@ namespace hagen.ActionSource
 
         public IObservable<IAction> GetActions(string query)
         {
-            return GetActionsEnum(query).ToObservable(Scheduler.ThreadPool);
+            return GetActionsEnum(query).ToObservable(ThreadPoolScheduler.Instance);
         }
     }
 }

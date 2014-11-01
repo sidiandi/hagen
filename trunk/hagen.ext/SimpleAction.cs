@@ -57,7 +57,5 @@ namespace hagen
         {
             get { return null; }
         }
-
-        public event System.ComponentModel.PropertyChangedEventHandler PropertyChanged;
     }
 }

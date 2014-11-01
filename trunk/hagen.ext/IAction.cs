@@ -23,7 +23,7 @@ using System.ComponentModel;
 
 namespace hagen
 {
-    public interface IAction : INotifyPropertyChanged
+    public interface IAction
     {
         void Execute();
         string Name { get; }

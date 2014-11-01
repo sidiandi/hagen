@@ -56,8 +56,6 @@ namespace hagen
             }
         }
 
-        IObservable<IAction> incomingActions;
-        
         protected override void Dispose(bool disposing)
         {
           if (!IsDisposed)

@@ -66,7 +66,7 @@ namespace hagen
 
             public IObservable<IAction> GetActions(string query)
             {
-                return SafeEnum(actionSource.GetActions(query)).ToObservable(Scheduler.NewThread);
+                return SafeEnum(actionSource.GetActions(query)).ToObservable(ThreadPoolScheduler.Instance);
             }
         }
 

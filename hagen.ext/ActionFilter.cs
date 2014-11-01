@@ -85,7 +85,7 @@ namespace hagen
 
         public IObservable<IAction> GetActions(string query)
         {
-            return GetActionsEnum(query).ToObservable(Scheduler.TaskPool);
+            return GetActionsEnum(query).ToObservable(ThreadPoolScheduler.Instance);
         }
 
         IEnumerable<IAction> GetActionsEnum(string query)

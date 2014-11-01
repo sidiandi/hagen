@@ -33,7 +33,6 @@ using Sidi.Util;
 using System.Reactive.Linq;
 using Sidi.Extensions;
 using System.Reactive.Concurrency;
-using System.Reactive.Linq;
 
 namespace hagen
 {

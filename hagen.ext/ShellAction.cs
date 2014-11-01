@@ -64,8 +64,6 @@ namespace hagen
             get { return GetIcon(startInfo.FileName); }
         }
 
-        public event System.ComponentModel.PropertyChangedEventHandler PropertyChanged;
-
         public static System.Drawing.Icon GetIcon(string FileName)
         {
             System.Drawing.Icon icon = null;

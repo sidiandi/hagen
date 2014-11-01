@@ -67,8 +67,8 @@ namespace Sidi
             [Test]
             public void Window()
             {
-                var timeIntervals = Observable.Interval(TimeSpan.FromMilliseconds(1000), Scheduler.NewThread);
-                var events = Observable.Interval(TimeSpan.FromMilliseconds(2), Scheduler.NewThread);
+                var timeIntervals = Observable.Interval(TimeSpan.FromMilliseconds(1000), NewThreadScheduler.Default);
+                var events = Observable.Interval(TimeSpan.FromMilliseconds(2), NewThreadScheduler.Default);
 
                 CountActivity(timeIntervals, events).Subscribe(_1 => log.Info(_1));
 

@@ -56,6 +56,6 @@ namespace hagen
                 return selectedPathList;
             }
         }
-        PathList selectedPathList;
+        PathList selectedPathList = new PathList();
     }
 }

@@ -55,7 +55,8 @@ namespace hagen
 
         IAction ToIAction(Sidi.CommandLine.Action a)
         {
-            if (TakesPathList(a) && hagen.UserInterfaceState.Instance.SelectedPathList.Any())
+            var uiState =hagen.UserInterfaceState.Instance;
+            if (TakesPathList(a) && uiState.SelectedPathList != null && uiState.SelectedPathList.Any())
             {
                 var pathList = UserInterfaceState.Instance.SelectedPathList;
                 return new SimpleAction(

@@ -6,7 +6,7 @@
 	<MSBuildExtensionsPath>$(MSBuildProjectDirectory)\.build</MSBuildExtensionsPath>
         <ProjectName>hagen</ProjectName>
         <Major>0</Major>
-        <Minor>3</Minor>
+        <Minor>4</Minor>
         <Build>0</Build>
     </PropertyGroup>
 

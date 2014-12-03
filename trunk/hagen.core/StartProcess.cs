@@ -128,23 +128,30 @@ namespace hagen
 
         LPath GetDefaultWorkingDirectory()
         {
-            if (String.IsNullOrEmpty(WorkingDirectory))
-            {
-                try
-                {
-                    var s = new Shell();
-                    return s.GetOpenDirectory();
-                }
-                catch
-                {
-                    return Paths.GetFolderPath(System.Environment.SpecialFolder.Personal);
-                }
-            }
-            else
+            if (!String.IsNullOrEmpty(WorkingDirectory))
             {
                 return WorkingDirectory;
             }
 
+            try
+            {
+                var dte = (EnvDTE.DTE)System.Runtime.InteropServices.Marshal.GetActiveObject("VisualStudio.DTE");
+                var dir = new LPath(dte.ActiveDocument.FullName).Parent;
+                return dir;
+            }
+            catch
+            {
+            }
+            
+            try
+            {
+                var s = new Shell();
+                return s.GetOpenDirectory();
+            }
+            catch
+            {
+                return Paths.GetFolderPath(System.Environment.SpecialFolder.Personal);
+            }
         }
 
         public override void Execute()

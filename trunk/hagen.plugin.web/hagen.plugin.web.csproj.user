@@ -4,4 +4,8 @@
     <StartAction>Program</StartAction>
     <StartProgram>C:\work\nuget-packages\NUnit.Runners.2.6.2\tools\nunit.exe</StartProgram>
   </PropertyGroup>
+  <PropertyGroup Condition="'$(Configuration)|$(Platform)' == 'Debug|x64'">
+    <StartProgram>C:\work\nuget-packages\NUnit.Runners.2.6.2\tools\nunit.exe</StartProgram>
+    <StartAction>Program</StartAction>
+  </PropertyGroup>
 </Project>

@@ -10,7 +10,7 @@
         <Build>0</Build>
     </PropertyGroup>
 
-  <Import Project="Common.Targets"/>
+  <Import Project="Common.props"/>
   <Import Project="$(MSBuildExtensionsPath)\google.code.Targets"/>
 
 </Project>

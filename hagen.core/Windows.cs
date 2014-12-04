@@ -142,7 +142,7 @@ namespace Sidi
                 log.Info(windows.ListFormat().Add(_ => _.Class, _ => _.Text));
             }
 
-            [Test]
+            [Test, Explicit]
             public void Dte()
             {
                 var dte = (EnvDTE.DTE)System.Runtime.InteropServices.Marshal.GetActiveObject("VisualStudio.DTE");

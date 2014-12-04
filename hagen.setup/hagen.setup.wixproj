@@ -34,6 +34,11 @@
     <Compile Include="Product.wxs" />
   </ItemGroup>
   <Import Project="$(WixTargetsPath)" />
+	<Target Name="BeforeBuild">
+		<CreateProperty Condition="$(BuildDirectory) != ''" Value="BuildDirectory=$(BuildDirectory);$(DefineConstants)">
+			<Output TaskParameter="Value" PropertyName="DefineConstants" />
+		</CreateProperty>
+	</Target>
   <!--
 	To modify your build process, add your task inside one of the targets below and uncomment it.
 	Other similar extension points exist, see Wix.targets.

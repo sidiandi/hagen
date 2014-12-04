@@ -84,7 +84,7 @@ namespace hagen
         [TestFixture]
         public class Test : TestBase
         {
-            [Test]
+            [Test, Explicit("interactive, runs 60 seconds")]
             public void ShowMessages()
             {
                 using (var wih = new WinEventHook())

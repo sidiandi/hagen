@@ -14,7 +14,7 @@
     <NUnitBin>$(RootDir)\packages\NUnit.Runners.2.6.3\tools</NUnitBin>
     <NUnitConsole>$(NUnitBin)\nunit-console-x86.exe</NUnitConsole>
     <OutputRoot>$(RootDir)\..\..\build\$(ProjectName)</OutputRoot>
-    <OutputDir>$(OutputRoot)\Release</OutputDir>
+    <OutputDir>$(OutputRoot)\Release-AnyCPU</OutputDir>
     <TestDir>$(OutputRoot)\test</TestDir>
     <PackageDir>$(OutputRoot)\pack</PackageDir>
     <StageDir>$(OutputRoot)\stage</StageDir>
@@ -87,7 +87,7 @@
   <Target Name="Documentation" DependsOnTargets="Build">
   </Target>
 
-  <Target Name="Package" DependsOnTargets="CreateVersion;Build;UnitTest;SourceIndex;Documentation">
+  <Target Name="Package" DependsOnTargets="Build">
     <CreateItem Include="$(OutputDir)\**\*.*" Exclude="$(OutputDir)\unit-test\*.*" >
       <Output TaskParameter="Include" ItemName="ZipFiles"/>
     </CreateItem>
@@ -98,10 +98,19 @@
         ZipFileName="$(PackageDir)\$(ProjectName)-$(Version).zip" />
   </Target>
 
-  <Target Name="Upload" DependsOnTargets="Release">
+  <Target Name="MakeSetup" DependsOnTargets="">
+    <MSBuild
+        Projects="$(ProjectName).setup\$(ProjectName).setup.wixproj" 
+		Properties="BuildDirectory=C:\build\hagen\Release-AnyCPU"
+		>
+      <Output ItemName="Msi" TaskParameter="TargetOutputs"/>
+    </MSBuild>
+  </Target>
+
+  <Target Name="Upload" DependsOnTargets="Package">
     <GoogleCode.Upload
         ProjectName="$(ProjectName)"
-        LocalFile="$(PackageDir)\$(ProjectName)-$(Version).zip"
+        LocalFile="$(ZipFileName)"
         RemoteFile="$(ProjectName)-$(Version).zip"
         Summary="Build for Version $(Version)"
             />

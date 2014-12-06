@@ -101,7 +101,7 @@
   <Target Name="MakeSetup" DependsOnTargets="">
     <MSBuild
         Projects="$(ProjectName).setup\$(ProjectName).setup.wixproj" 
-		Properties="BuildDirectory=C:\build\hagen\Release-AnyCPU"
+		Properties="BuildDirectory=$(OutputDir)"
 		>
       <Output ItemName="Msi" TaskParameter="TargetOutputs"/>
     </MSBuild>

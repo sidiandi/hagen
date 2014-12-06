@@ -44,7 +44,7 @@ namespace hagen
         {
             get
             {
-                return @"(?<Path>[a-zA-Z]\:[^\s:""]+)";
+                return @"\b(?<Path>[a-zA-Z]\:[^\s:""]+)";
                 /*
                 return "[^" + (System.IO.Path.GetInvalidPathChars()
                     .Select(c => Regex.Escape(new string(c, 1)))
@@ -129,9 +129,7 @@ at hagen.ActionSource.Composite.<>c__DisplayClass1.<GetActions>b__0(IActionSourc
 http://www.site.com/some/path.txt
 
 ").ToList();
-                log.Info(loc.ListFormat());
                 Assert.AreEqual(7, loc.Count);
-
             }
         }
 

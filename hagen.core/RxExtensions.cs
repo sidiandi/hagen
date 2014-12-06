@@ -64,7 +64,7 @@ namespace Sidi
                 return activities;
             }
 
-            [Test]
+            [Test, Explicit("too long")]
             public void Window()
             {
                 var timeIntervals = Observable.Interval(TimeSpan.FromMilliseconds(1000), NewThreadScheduler.Default);
@@ -73,6 +73,7 @@ namespace Sidi
                 CountActivity(timeIntervals, events).Subscribe(_1 => log.Info(_1));
 
                 Thread.Sleep(TimeSpan.FromSeconds(10));
+                log.Info("test complete");
             }
         }
     }

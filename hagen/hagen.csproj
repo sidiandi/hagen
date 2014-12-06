@@ -47,7 +47,7 @@
       <HintPath>..\packages\log4net.2.0.3\lib\net40-full\log4net.dll</HintPath>
     </Reference>
     <Reference Include="ManagedWinapi">
-      <HintPath>..\packages\ManagedWinapi.0.3\ManagedWinapi.dll</HintPath>
+      <HintPath>..\..\nuget-packages\ManagedWinapi.0.3\ManagedWinapi.dll</HintPath>
     </Reference>
     <Reference Include="nunit.framework, Version=2.6.3.13283, Culture=neutral, PublicKeyToken=96d09a1eb7f44a77, processorArchitecture=MSIL">
       <HintPath>..\..\nuget-packages\NUnit.2.6.3\lib\nunit.framework.dll</HintPath>

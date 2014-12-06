@@ -54,9 +54,6 @@
                 <Component Id="cmpFB2EB3E933A510B2F8B969F3AC38EE0C" Guid="*">
                     <File Id="fil1CF40911AF7D00D58739FF1A4D4D59B5" KeyPath="yes" Source="$(var.BuildDirectory)\hagen.plugin.web.dll.config" />
                 </Component>
-                <Component Id="cmp8BCE6B08912291B99029CB195E9C9520" Guid="*">
-                    <File Id="fil70B54A3352D2D9B1F3DEA729B5FFDEC0" KeyPath="yes" Source="$(var.BuildDirectory)\hagen.vshost.exe" />
-                </Component>
                 <Component Id="cmp22D6440C136EBB2E1934BDBA86016683" Guid="*">
                     <File Id="filBAF7382EBE50D8BA07B3978C6D2E1295" KeyPath="yes" Source="$(var.BuildDirectory)\ICSharpCode.SharpZipLib.dll" />
                 </Component>
@@ -166,7 +163,6 @@
             <ComponentRef Id="cmp4322B4D7CA020055F1236AEE4F6C9D17" />
             <ComponentRef Id="cmpD485B6117CAB52D416905CC55673A6B5" />
             <ComponentRef Id="cmpFB2EB3E933A510B2F8B969F3AC38EE0C" />
-            <ComponentRef Id="cmp8BCE6B08912291B99029CB195E9C9520" />
             <ComponentRef Id="cmp22D6440C136EBB2E1934BDBA86016683" />
             <ComponentRef Id="cmp939C5C3925623AFBE5071BF4DF7CB425" />
             <ComponentRef Id="cmpDED094E99949F270E791BA5072B2DF4D" />

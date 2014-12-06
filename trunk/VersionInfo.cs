@@ -11,7 +11,7 @@
 [assembly: System.Reflection.AssemblyCopyright("Copyright (c) Andreas Grimme 2008-2014")]
 [assembly: System.Reflection.AssemblyCompany("sidi")]
 [assembly: System.Reflection.AssemblyProduct("sidi-util")]
-[assembly: System.Reflection.AssemblyVersion("0.5.0.2")]
-[assembly: System.Reflection.AssemblyFileVersion("0.5.0.2")]
+[assembly: System.Reflection.AssemblyVersion("0.5.0.3")]
+[assembly: System.Reflection.AssemblyFileVersion("0.5.0.3")]
 
 

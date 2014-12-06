@@ -129,12 +129,17 @@ namespace Sidi
             return r != null && handle == r.handle;
         }
 
+        public override int GetHashCode()
+        {
+            return handle.ToInt32();
+        }
+
         [TestFixture]
         public class Test : TestBase
         {
             private static readonly log4net.ILog log = log4net.LogManager.GetLogger(System.Reflection.MethodBase.GetCurrentMethod().DeclaringType);
 
-            [Test]
+            [Test, Explicit]
             public void GetZOrder()
             {
                 var desktop = Window.GetDesktopWindow();

@@ -25,11 +25,14 @@ using System.Drawing;
 using NUnit.Framework;
 using System.Runtime.InteropServices;
 using System.Windows.Automation;
+using Sidi.Test;
 
 namespace hagen
 {
     public class ScreenCapture
     {
+        private static readonly log4net.ILog log = log4net.LogManager.GetLogger(System.Reflection.MethodBase.GetCurrentMethod().DeclaringType);
+
         public IList<LPath> CaptureAll(LPath destinationDirectory)
         {
             var now = DateTime.Now;
@@ -65,7 +68,7 @@ namespace hagen
         }
 
         [TestFixture]
-        public class Test
+        public class Test : TestBase
         {
             [Test]
             public void Filename()
@@ -80,7 +83,7 @@ namespace hagen
             public void CaptureActiveWindow()
             {
                 var s = new ScreenCapture();
-                s.CaptureWindow(new LPath(@"C:\temp\cap"), AutomationElement.FocusedElement);
+                s.CaptureWindow(TestFile("capture"), AutomationElement.FocusedElement);
             }
 
             [Test]
@@ -136,6 +139,7 @@ namespace hagen
             using (var b = Capture(ToRectangle(window.Current.BoundingRectangle)))
             {
                 var file = directory.CatDir(GetCaptureFilename(window, DateTime.Now));
+                log.Info(file);
                 file.EnsureParentDirectoryExists();
                 b.Save(file.ToString());
                 return file;

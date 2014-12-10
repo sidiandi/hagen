@@ -10,4 +10,8 @@
 		<InitialRevision>217</InitialRevision>
 	</PropertyGroup>
 	<Import Project="svn-msi.Targets" />
+	
+	<Target Name="Dropbox" DependsOnTargets="Release" >
+		<Copy SourceFiles="$(SetupFile)" DestinationFolder="$(USERPROFILE)\Dropbox\bin" />
+	</Target>
 </Project>

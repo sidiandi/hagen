@@ -22,6 +22,9 @@
     <DefineConstants>DEBUG;TRACE</DefineConstants>
     <DebugType>full</DebugType>
   </PropertyGroup>
+  <ItemGroup>
+    <Compile Condition="Exists($(IntermediateOutputPath)VersionInfo.cs)" Include="$(IntermediateOutputPath)VersionInfo.cs" />
+  </ItemGroup>
   <PropertyGroup Condition="'$(Configuration)|$(Platform)' == 'Release|AnyCPU'">
     <CodeAnalysisRuleSet>$(SolutionDir)sidi-util.ruleset</CodeAnalysisRuleSet>
     <DefineConstants>TRACE</DefineConstants>

@@ -5,7 +5,7 @@
 	<PropertyGroup>
         <ProjectName>hagen</ProjectName>
         <Major>0</Major>
-        <Minor>5</Minor>
+        <Minor>6</Minor>
         <Build>0</Build>
 		<InitialRevision>217</InitialRevision>
 	</PropertyGroup>

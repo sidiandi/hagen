@@ -1,0 +1,13 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<!--Copyright (c) 2014, Andreas Grimme (http://andreas-grimme.gmxhome.de/)
+-->
+<Project DefaultTargets="Release" xmlns="http://schemas.microsoft.com/developer/msbuild/2003">
+	<PropertyGroup>
+        <ProjectName>hagen</ProjectName>
+        <Major>0</Major>
+        <Minor>6</Minor>
+        <Build>0</Build>
+		<InitialRevision>217</InitialRevision>
+	</PropertyGroup>
+	<Import Project="svn-msi.Targets" />
+</Project>

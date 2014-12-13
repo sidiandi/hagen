@@ -11,7 +11,8 @@
 	</PropertyGroup>
 	<Import Project="svn-msi.Targets" />
 	
-	<Target Name="Dropbox" DependsOnTargets="Release" >
+	<Target Name="Dropbo" DependsOnTargets="BuildSetup" >
+		<Message Text="$(SetupFile)" />
 		<Copy SourceFiles="$(SetupFile)" DestinationFolder="$(USERPROFILE)\Dropbox\bin" />
 	</Target>
 </Project>

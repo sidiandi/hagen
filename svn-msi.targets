@@ -118,7 +118,7 @@ along with sidi-util. If not, see <http://www.gnu.org/licenses/>.-->
 
   <Target Name="CopyToDropbox" DependsOnTargets="BuildSetup" >
 	<MakeDir Directories="$(USERPROFILE)\Dropbox\bin" />
-	<Copy SourceFiles="$(SetupFile)" DestinationFolder="$(USERPROFILE)\Dropbox\bin" />
+	<Copy SourceFiles="@(SetupFile, ' ')" DestinationFolder="$(USERPROFILE)\Dropbox\bin" />
   </Target>
 
   <Target Name="Publish" DependsOnTargets="Release;CopyToDropbox" />

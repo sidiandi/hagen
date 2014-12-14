@@ -86,7 +86,7 @@ along with sidi-util. If not, see <http://www.gnu.org/licenses/>.-->
     <RemoveDir Directories="$(TestDir)" />
   </Target>
 
-  <Target Name="BuildWxsInstaller" DependsOnTargets="Build" Condition="Exists(wix\setup.wixproj)>
+  <Target Name="BuildWxsInstaller" DependsOnTargets="Build" Condition="Exists(wix\setup.wixproj)" >
     <MSBuild
         Projects="wix\setup.wixproj" Properties="Configuration=Release;Platform=Any CPU;OutputPath=$(OutputDir)-setup;BuildDirectory=$(OutputDir);Version=$(Version);ProductName=$(ProjectName)">
       <Output ItemName="SetupFile" TaskParameter="TargetOutputs"/>

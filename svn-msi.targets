@@ -96,19 +96,19 @@ along with sidi-util. If not, see <http://www.gnu.org/licenses/>.-->
     <RemoveDir Directories="$(TestDir)" />
   </Target>
 
-  <Target Name="BuildWxsInstaller" DependsOnTargets="Build" Condition="Exists($(WixProject))" >
+  <Target Name="BuildWixInstaller" DependsOnTargets="GetVersion" Condition="Exists($(WixProject))" >
     <MSBuild
-        Projects="wix\setup.wixproj" Properties="Configuration=Release;Platform=Any CPU;OutputPath=$(OutputPath)-setup;OutputPath=$(OutputPath);Version=$(Version);ProductName=$(ProjectName)">
+        Projects="wix\setup.wixproj" Properties="OutputPath=$(OutputPath)-setup;Version=$(Version);ProductName=$(ProjectName);BuildDirectory=$(OutputPath)">
       <Output ItemName="SetupFile" TaskParameter="TargetOutputs"/>
     </MSBuild>
   </Target>
   
-  <Target Name="Install" DependsOnTargets="BuildWxsInstaller">
+  <Target Name="Install" DependsOnTargets="BuildWixInstaller">
     <Message Text="@(SetupFile, ' ')" />
 	<Exec Command="@(SetupFile, ' ')" />
   </Target>
   
-  <Target Name="Release" DependsOnTargets="CreateVersion;UnitTest;BuildWxsInstaller;NugetPushLocal;LabelVersion" />
+  <Target Name="Release" DependsOnTargets="CreateVersion;UnitTest;BuildWixInstaller;NugetPushLocal;LabelVersion" />
 
   <Target Name="NugetPack" DependsOnTargets="GetVersion;Build" Condition="Exists($(NuSpec))" >
     <MakeDir Directories="$(PackageDir)"/>
@@ -126,7 +126,7 @@ along with sidi-util. If not, see <http://www.gnu.org/licenses/>.-->
     <Exec WorkingDirectory="$(ReleaseDir)" Command="$(Nuget) push -Source $(NugetLocalFeed) $(Nupkg)" />
   </Target>
 
-  <Target Name="CopyInstallerToDropbox" DependsOnTargets="BuildWxsInstaller" >
+  <Target Name="CopyInstallerToDropbox" DependsOnTargets="BuildWixInstaller" >
 	<MakeDir Directories="$(USERPROFILE)\Dropbox\bin" />
 	<Copy SourceFiles="@(SetupFile, ' ')" DestinationFolder="$(USERPROFILE)\Dropbox\bin" />
   </Target>

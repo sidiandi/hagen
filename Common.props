@@ -16,6 +16,7 @@
     <TargetFrameworkVersion>v4.5.1</TargetFrameworkVersion>
     <RestorePackages>true</RestorePackages>
     <DocumentationFile>$(OutputPath)\$(AssemblyName).xml</DocumentationFile>
+    <CodeAnalysisRuleSet>$(SolutionDir)CodeAnalysis.ruleset</CodeAnalysisRuleSet>
 	</PropertyGroup>
   <PropertyGroup Condition="'$(Configuration)|$(Platform)' == 'Debug|AnyCPU'">
     <DebugSymbols>true</DebugSymbols>
@@ -26,7 +27,6 @@
     <Compile Condition="Exists($(VersionInfoFile))" Include="$(VersionInfoFile)" />
   </ItemGroup>
   <PropertyGroup Condition="'$(Configuration)|$(Platform)' == 'Release|AnyCPU'">
-    <CodeAnalysisRuleSet>$(SolutionDir)sidi-util.ruleset</CodeAnalysisRuleSet>
     <DefineConstants>TRACE</DefineConstants>
     <Optimize>true</Optimize>
     <DebugType>pdbonly</DebugType>

@@ -1,0 +1,27 @@
+<?xml version="1.0" encoding="utf-8"?>
+<!-- Do not remove this test for UTF-8: if ??? doesn?t appear as greek uppercase omega letter enclosed in quotation marks, you should use an editor that supports UTF-8, not this one. -->
+<package xmlns="http://schemas.microsoft.com/packaging/2010/07/nuspec.xsd">
+  <metadata>
+    <!-- Read this before publishing packages to chocolatey.org: https://github.com/chocolatey/chocolatey/wiki/CreatePackages -->
+    <id>hagen.install</id>
+    <title>__REPLACE__ (Install)</title>
+    <version>__REPLACE__</version>
+    <authors>__REPLACE__</authors>
+    <owners>__CHOCO_PKG_MAINTAINER_NAME__</owners>
+    <summary>__REPLACE__</summary>
+    <description>__REPLACE__</description>
+    <projectUrl>__REPLACE__</projectUrl>
+    <tags>hagen admin</tags>
+    <copyright></copyright>
+    <licenseUrl>__REPLACE__</licenseUrl>
+    <requireLicenseAcceptance>false</requireLicenseAcceptance>
+    <!--<iconUrl>http://cdn.rawgit.com/__CHOCO_PKG_MAINTAINER_REPO__/master/icons/hagen.png</iconUrl>-->
+    <!--<dependencies>
+      <dependency id="" version="" />
+    </dependencies>-->
+    <releaseNotes></releaseNotes>
+  </metadata>
+  <files>
+    <file src="tools\**" target="tools" />
+  </files>
+</package>

@@ -86,9 +86,9 @@ along with sidi-util. If not, see <http://www.gnu.org/licenses/>.-->
     <RemoveDir Directories="$(TestDir)" />
   </Target>
 
-  <Target Name="BuildSetup" DependsOnTargets="Build">
+  <Target Name="BuildWxsInstaller" DependsOnTargets="Build" Condition="Exists(wix\setup.wixproj)>
     <MSBuild
-        Projects="setup\setup.wixproj" Properties="Configuration=Release;Platform=Any CPU;OutputPath=$(OutputDir)-setup;BuildDirectory=$(OutputDir);Version=$(Version);ProductName=$(ProjectName)">
+        Projects="wix\setup.wixproj" Properties="Configuration=Release;Platform=Any CPU;OutputPath=$(OutputDir)-setup;BuildDirectory=$(OutputDir);Version=$(Version);ProductName=$(ProjectName)">
       <Output ItemName="SetupFile" TaskParameter="TargetOutputs"/>
     </MSBuild>
   </Target>
@@ -98,7 +98,7 @@ along with sidi-util. If not, see <http://www.gnu.org/licenses/>.-->
 	<Exec Command="@(SetupFile, ' ')" />
   </Target>
   
-  <Target Name="Release" DependsOnTargets="CreateVersion;UnitTest;BuildSetup;NugetPushLocal" />
+  <Target Name="Release" DependsOnTargets="CreateVersion;UnitTest;BuildWxsInstaller;NugetPushLocal" />
 
   <Target Name="NugetPack" DependsOnTargets="GetVersion;Build;UnitTest" Condition="Exists($(NuSpec))" >
     <MakeDir Directories="$(PackageDir)"/>
@@ -116,7 +116,7 @@ along with sidi-util. If not, see <http://www.gnu.org/licenses/>.-->
     <Exec WorkingDirectory="$(ReleaseDir)" Command="$(Nuget) push -Source $(NugetLocalFeed) $(Nupkg)" />
   </Target>
 
-  <Target Name="CopyToDropbox" DependsOnTargets="BuildSetup" >
+  <Target Name="CopyInstallerToDropbox" DependsOnTargets="BuildWxsInstaller" >
 	<MakeDir Directories="$(USERPROFILE)\Dropbox\bin" />
 	<Copy SourceFiles="@(SetupFile, ' ')" DestinationFolder="$(USERPROFILE)\Dropbox\bin" />
   </Target>

@@ -98,9 +98,9 @@ along with sidi-util. If not, see <http://www.gnu.org/licenses/>.-->
 	<Exec Command="@(SetupFile, ' ')" />
   </Target>
   
-  <Target Name="Release" DependsOnTargets="CreateVersion;UnitTest;BuildSetup" />
+  <Target Name="Release" DependsOnTargets="CreateVersion;UnitTest;BuildSetup;NugetPushLocal" />
 
-  <Target Name="NugetPack" DependsOnTargets="GetVersion;Build;UnitTest" >
+  <Target Name="NugetPack" DependsOnTargets="GetVersion;Build;UnitTest" Condition="Exists($(NuSpec))" >
     <MakeDir Directories="$(PackageDir)"/>
     <Exec WorkingDirectory="$(ReleaseDir)" Command="$(Nuget) pack $(NuSpec) -Version $(Version) -Verbosity detailed -OutputDirectory $(PackageDir) -BasePath $(OutputDir) -Properties RootDir=$(RootDir)" />
     <CreateProperty Value="$(PackageDir)\$(ProjectName).$(Version).nupkg">
@@ -108,11 +108,11 @@ along with sidi-util. If not, see <http://www.gnu.org/licenses/>.-->
     </CreateProperty>
   </Target>
 
-  <Target Name="NugetPush" DependsOnTargets="NugetPack">
+  <Target Name="NugetPush" DependsOnTargets="NugetPack" Condition="Exists($(NuSpec))" >
     <Exec WorkingDirectory="$(ReleaseDir)" Command="$(Nuget) push $(Nupkg)" />
   </Target>
 
-  <Target Name="NugetPushLocal" DependsOnTargets="NugetPack">
+  <Target Name="NugetPushLocal" DependsOnTargets="NugetPack" Condition="Exists($(NuSpec))">
     <Exec WorkingDirectory="$(ReleaseDir)" Command="$(Nuget) push -Source $(NugetLocalFeed) $(Nupkg)" />
   </Target>
 
@@ -121,6 +121,6 @@ along with sidi-util. If not, see <http://www.gnu.org/licenses/>.-->
 	<Copy SourceFiles="@(SetupFile, ' ')" DestinationFolder="$(USERPROFILE)\Dropbox\bin" />
   </Target>
 
-  <Target Name="Publish" DependsOnTargets="Release;CopyToDropbox" />
+  <Target Name="Publish" DependsOnTargets="Release;NugetPush;CopyToDropbox" />
 
 </Project>

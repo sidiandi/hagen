@@ -61,7 +61,7 @@ along with sidi-util. If not, see <http://www.gnu.org/licenses/>.-->
     <Message Text="Version is $(Version)" />
     <MakeDir Directories="$([System.IO.Path]::GetDirectoryName($(VersionInfoFile)))"/>
     <AssemblyInfo CodeLanguage="CS"
-        AssemblyCopyright = "Copyright (c) Andreas Grimme 2008-$([System.DateTime]::Now.ToString(`yyyy`))"
+        AssemblyCopyright = "Copyright (c) Andreas Grimme 2008-$([System.DateTime]::UtcNow.ToString(`yyyy`))"
         AssemblyCompany="sidi"
         AssemblyProduct="sidi-util"
         OutputFile="$(VersionInfoFile)"
@@ -81,7 +81,7 @@ along with sidi-util. If not, see <http://www.gnu.org/licenses/>.-->
     <SvnCopy
 		SourcePath="$(SvnRoot)/trunk"
 		DestinationPath="$(SvnRoot)/tags/$(Version)"
-		Message="Automatic build of $(ProjectName)" />
+		Message="Sucessful release build on $([System.DateTime]::UtcNow.ToString()" />
   </Target>
 
   <Target Name="Build" DependsOnTargets="GetVersion">

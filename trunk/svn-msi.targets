@@ -69,15 +69,11 @@ along with sidi-util. If not, see <http://www.gnu.org/licenses/>.-->
         AssemblyFileVersion="$(Version)" />
   </Target>
 
-  <Target Name="CreateVersion" DependsOnTargets="GetVersion">
+  <Target Name="CreateVersion" >
     <SvnCommit Targets="." Message="Automatic build of $(ProjectName)" />
-    <SvnCopy
-		SourcePath="$(SvnRoot)/trunk"
-		DestinationPath="$(SvnRoot)/tags/$(Version)"
-		Message="Automatic build of $(ProjectName)" />
   </Target>
 
-  <Target Name="LabelVersion" DependsOnTargets="CreateVersion">
+  <Target Name="LabelVersion" DependsOnTargets="CreateVersion;GetVersion">
     <SvnCopy
 		SourcePath="$(SvnRoot)/trunk"
 		DestinationPath="$(SvnRoot)/tags/$(Version)"

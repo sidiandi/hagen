@@ -2,8 +2,7 @@
 <Project ToolsVersion="4.0" DefaultTargets="Build" xmlns="http://schemas.microsoft.com/developer/msbuild/2003">
   <PropertyGroup>
     <PlatformTarget>x86</PlatformTarget>
-	  <BuildDirectory Condition="$(BuildDirectory)==''" >\build\$(SolutionName)</BuildDirectory>
-    <OutputPath>$(BuildDirectory)\$(Configuration)-$(Platform)</OutputPath>
+    <OutputPath Condition="$(OutputPath) == ''">$(BuildDirectory)\$(Configuration)-$(Platform)</OutputPath>
     <IntermediateOutputPath>$(TEMP)\build\$(AssemblyName)\obj\$(Configuration)-$(Platform)\</IntermediateOutputPath>
 	<VersionInfoFile>$(TEMP)\build\$(SolutionName)\VersionInfo.cs</VersionInfoFile>
     <LibDir>$(SolutionDir)lib\</LibDir>

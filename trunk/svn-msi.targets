@@ -34,6 +34,8 @@ along with sidi-util. If not, see <http://www.gnu.org/licenses/>.-->
 		<Nuget>$(RootDir)\.nuget\NuGet.exe</Nuget>
 		<NuSpec>$(RootDir)\$(ProjectName).nuspec</NuSpec>
 		<PackageDir>$(OutputRoot)\pack</PackageDir>
+		
+		<WixProject>$(RootDir)\wix\setup.wixproj</WixProject>
   </PropertyGroup>
 
 	<PropertyGroup>
@@ -93,7 +95,7 @@ along with sidi-util. If not, see <http://www.gnu.org/licenses/>.-->
     <RemoveDir Directories="$(TestDir)" />
   </Target>
 
-  <Target Name="BuildWxsInstaller" DependsOnTargets="Build" Condition="Exists(wix\\setup.wixproj)" >
+  <Target Name="BuildWxsInstaller" DependsOnTargets="Build" Condition="Exists($(WixProject))" >
     <MSBuild
         Projects="wix\setup.wixproj" Properties="Configuration=Release;Platform=Any CPU;OutputPath=$(OutputDir)-setup;BuildDirectory=$(OutputDir);Version=$(Version);ProductName=$(ProjectName)">
       <Output ItemName="SetupFile" TaskParameter="TargetOutputs"/>

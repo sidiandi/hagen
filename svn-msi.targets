@@ -31,12 +31,12 @@ along with sidi-util. If not, see <http://www.gnu.org/licenses/>.-->
 		<NUnitConsole>$(NUnitBin)\nunit-console-x86.exe</NUnitConsole>
 		
 		<OutputRoot>$(USERPROFILE)\build\$(ProjectName)</OutputRoot>
-		<OutputDir>$(OutputRoot)\$(Configuration)-$(Platform)</OutputDir>
+		<OutputPath>$(OutputRoot)\$(Configuration)-$(Platform)</OutputPath>
 		<TestDir>$(OutputRoot)\test</TestDir>
 
 		<Nuget>$(RootDir)\.nuget\NuGet.exe</Nuget>
 		<NuSpec>$(RootDir)\$(ProjectName).nuspec</NuSpec>
-		<PackageDir>$(OutputDir)-nuget-pack</PackageDir>
+		<NugetPackOutputDirectory>$(OutputPath)-NugetPack</NugetPackOutputDirectory>
 		<NugetLocalFeed Condition="$(NugetLocalFeed)==''">$(USERPROFILE)\Dropbox\nuget</NugetLocalFeed>
 		
 		<!-- if a wix installer project is found here, it will be used to package the product -->
@@ -86,7 +86,7 @@ along with sidi-util. If not, see <http://www.gnu.org/licenses/>.-->
 
   <Target Name="Build" DependsOnTargets="GetVersion">
     <MSBuild
-        Projects="$(ProjectName).sln" Properties="Configuration=Release;Platform=Any CPU;OutputPath=$(OutputDir)">
+        Projects="$(ProjectName).sln" Properties="Configuration=Release;Platform=Any CPU;OutputPath=$(OutputPath)">
       <Output ItemName="Targets" TaskParameter="TargetOutputs"/>
     </MSBuild>
   </Target>
@@ -98,7 +98,7 @@ along with sidi-util. If not, see <http://www.gnu.org/licenses/>.-->
 
   <Target Name="BuildWxsInstaller" DependsOnTargets="Build" Condition="Exists($(WixProject))" >
     <MSBuild
-        Projects="wix\setup.wixproj" Properties="Configuration=Release;Platform=Any CPU;OutputPath=$(OutputDir)-setup;BuildDirectory=$(OutputDir);Version=$(Version);ProductName=$(ProjectName)">
+        Projects="wix\setup.wixproj" Properties="Configuration=Release;Platform=Any CPU;OutputPath=$(OutputPath)-setup;OutputPath=$(OutputPath);Version=$(Version);ProductName=$(ProjectName)">
       <Output ItemName="SetupFile" TaskParameter="TargetOutputs"/>
     </MSBuild>
   </Target>
@@ -112,7 +112,7 @@ along with sidi-util. If not, see <http://www.gnu.org/licenses/>.-->
 
   <Target Name="NugetPack" DependsOnTargets="GetVersion;Build" Condition="Exists($(NuSpec))" >
     <MakeDir Directories="$(PackageDir)"/>
-    <Exec WorkingDirectory="$(ReleaseDir)" Command="$(Nuget) pack hagen.ext\hagen.ext.csproj -Verbosity detailed -OutputDirectory $(PackageDir) -BasePath $(OutputDir) -Properties RootDir=$(RootDir);Configuration=$(Configuration);Platform=$(Platform);SolutionName=hagen" />
+    <Exec WorkingDirectory="$(ReleaseDir)" Command="$(Nuget) pack hagen.ext\hagen.ext.csproj -Verbosity detailed -OutputDirectory $(NugetPackOutputDirectory) -BasePath $(OutputPath) -Properties RootDir=$(RootDir);Configuration=$(Configuration);Platform=$(Platform);SolutionName=hagen" />
     <CreateProperty Value="$(PackageDir)\hagen.ext.$(Version).nupkg">
       <Output PropertyName="Nupkg" TaskParameter="Value"/>
     </CreateProperty>

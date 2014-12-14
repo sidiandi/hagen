@@ -74,6 +74,13 @@ along with sidi-util. If not, see <http://www.gnu.org/licenses/>.-->
 		Message="Automatic build of $(ProjectName)" />
   </Target>
 
+  <Target Name="LabelVersion" DependsOnTargets="CreateVersion">
+    <SvnCopy
+		SourcePath="$(SvnRoot)/trunk"
+		DestinationPath="$(SvnRoot)/tags/$(Version)"
+		Message="Automatic build of $(ProjectName)" />
+  </Target>
+
   <Target Name="Build" DependsOnTargets="GetVersion">
     <MSBuild
         Projects="$(ProjectName).sln" Properties="Configuration=Release;Platform=Any CPU">
@@ -86,7 +93,7 @@ along with sidi-util. If not, see <http://www.gnu.org/licenses/>.-->
     <RemoveDir Directories="$(TestDir)" />
   </Target>
 
-  <Target Name="BuildWxsInstaller" DependsOnTargets="Build" Condition="Exists(wix\setup.wixproj)" >
+  <Target Name="BuildWxsInstaller" DependsOnTargets="Build" Condition="Exists(wix\\setup.wixproj)" >
     <MSBuild
         Projects="wix\setup.wixproj" Properties="Configuration=Release;Platform=Any CPU;OutputPath=$(OutputDir)-setup;BuildDirectory=$(OutputDir);Version=$(Version);ProductName=$(ProjectName)">
       <Output ItemName="SetupFile" TaskParameter="TargetOutputs"/>
@@ -98,7 +105,7 @@ along with sidi-util. If not, see <http://www.gnu.org/licenses/>.-->
 	<Exec Command="@(SetupFile, ' ')" />
   </Target>
   
-  <Target Name="Release" DependsOnTargets="CreateVersion;UnitTest;BuildWxsInstaller;NugetPushLocal" />
+  <Target Name="Release" DependsOnTargets="CreateVersion;UnitTest;BuildWxsInstaller;NugetPushLocal;LabelVersion" />
 
   <Target Name="NugetPack" DependsOnTargets="GetVersion;Build;UnitTest" Condition="Exists($(NuSpec))" >
     <MakeDir Directories="$(PackageDir)"/>

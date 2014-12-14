@@ -30,7 +30,7 @@ along with sidi-util. If not, see <http://www.gnu.org/licenses/>.-->
 		<NUnitBin>$(NugetPackagesDirectory)\NUnit.Runners.2.6.3\tools</NUnitBin>
 		<NUnitConsole>$(NUnitBin)\nunit-console-x86.exe</NUnitConsole>
 		
-		<OutputRoot>\build\$(ProjectName)</OutputRoot>
+		<OutputRoot>$(USERPROFILE)\build\$(ProjectName)</OutputRoot>
 		<OutputDir>$(OutputRoot)\$(Configuration)-$(Platform)</OutputDir>
 		<TestDir>$(OutputRoot)\test</TestDir>
 

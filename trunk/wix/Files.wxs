@@ -1,215 +1,333 @@
 ﻿<?xml version="1.0" encoding="utf-8"?>
 <Wix xmlns="http://schemas.microsoft.com/wix/2006/wi">
     <Fragment>
-        <DirectoryRef Id="INSTALLFOLDER">
-            <Directory Id="dir916B8FC3FDE13F8CCB2AA0A2BD5BFBD1" Name="hagen">
-                <Component Id="cmpC4141E25742F261C541BF3B162EFD1A9" Guid="*">
-                    <File Id="fil0610F602F882E6181DCCDBDA8E569F2A" KeyPath="yes" Source="$(var.BuildDirectory)\activityReport.exe" />
+        <DirectoryRef>INSTALLFOLDER
+            <Directory>dir8F6C4C9CDCF14C98A648EBEA4F7ACC09Release-AnyCPU
+                <Component>cmp514EF5AEF39CD5715AE2C9491AAAD7D6*
+                    <File>fil8FA189D629B92F32949D7287A7D3E0B9yes$(var.BuildDirectory)\activityReport.exe</File>
                 </Component>
-                <Component Id="cmp6012D1F70DF4F1FC7CFA801C4EA230F6" Guid="*">
-                    <File Id="filE3237B1D9C46E18D237612EB7590BBD2" KeyPath="yes" Source="$(var.BuildDirectory)\activityReport.exe.config" />
+                <Component>cmp3C427964995BA76453C3909FEE56F174*
+                    <File>filA8C541A693B094D1C05BE4E0E20E60F8yes$(var.BuildDirectory)\activityReport.exe.config</File>
                 </Component>
-                <Component Id="cmp72B2A5489ED4792358BD8FAEABF82F01" Guid="*">
-                    <File Id="fil853695B9DCF50AE19F96D057766F0A6A" KeyPath="yes" Source="$(var.BuildDirectory)\Castle.Core.dll" />
+                <Component>cmp386EAA29C7B951CB93133B216B7C2F6D*
+                    <File>fil11ABE390657EA2F8B1494FDDEFCA2E3Byes$(var.BuildDirectory)\activityReport.pdb</File>
                 </Component>
-                <Component Id="cmp6F5E2AE54AC895C08C46E26791D13297" Guid="*">
-                    <File Id="fil9439ED72AC249E37A3E51AEAAE8D93A8" KeyPath="yes" Source="$(var.BuildDirectory)\Google.GData.Client.dll" />
+                <Component>cmp56E2BDA48593EEEAA1CA3CF4C57802B1*
+                    <File>fil6BDE7EFA3129D7010BD9F8A4148F1845yes$(var.BuildDirectory)\activityReport.xml</File>
                 </Component>
-                <Component Id="cmp06DAF4A502926EC44C1365B25B931EEE" Guid="*">
-                    <File Id="filEC9A1DD6B66CF4C7060D78108B22FAC7" KeyPath="yes" Source="$(var.BuildDirectory)\Google.GData.Contacts.dll" />
+                <Component>cmp29F075B66362F2E78D937928AE88A84A*
+                    <File>fil94C5AD240BDB85FCC7A62C5FE82AD38Byes$(var.BuildDirectory)\Castle.Core.dll</File>
                 </Component>
-                <Component Id="cmpCDE8C2BFF13E9B1366DF422D27D92359" Guid="*">
-                    <File Id="filAF792B752F9D8807E055EA6222EB2F9C" KeyPath="yes" Source="$(var.BuildDirectory)\Google.GData.Extensions.dll" />
+                <Component>cmp17DB02D83C228AC36208CF8B17F233D4*
+                    <File>fil014FC0D732C9720AEB570E39F0448213yes$(var.BuildDirectory)\Castle.Core.xml</File>
                 </Component>
-                <Component Id="cmpF6F105A75052008A884EFF589D5F227B" Guid="*">
-                    <File Id="filB8B05CF2ABE51A96B530C51577816551" KeyPath="yes" Source="$(var.BuildDirectory)\hagen.core.dll" />
+                <Component>cmp01F7BADFE60B27311029383395DE5C04*
+                    <File>fil74279B048B507909D1DE307A0666E58Byes$(var.BuildDirectory)\Google.GData.Client.dll</File>
                 </Component>
-                <Component Id="cmp2C6A1DFF9B6B81AC26A2E04913048F6C" Guid="*">
-                    <File Id="filDA8A99E34B9192ADFE9A2D4175352535" KeyPath="yes" Source="$(var.BuildDirectory)\hagen.core.dll.config" />
+                <Component>cmpB6493ABDD61F354813976B093135241C*
+                    <File>fil62F3141B3CAE17FFA3CDA63616AEDA4Fyes$(var.BuildDirectory)\Google.GData.Contacts.dll</File>
                 </Component>
-                <Component Id="cmp39D08EBF688E7DA5F805DF45F5465838" Guid="*">
-                    <File Id="fil6A5D200C5B444E23A68F9E9F6F89327B" KeyPath="yes" Source="$(var.BuildDirectory)\hagen.exe" />
+                <Component>cmp31CA40660B1C7D6C7AEE1EC8DEEE4637*
+                    <File>fil3F7B45181D39DCD66A0D13BA56CDF581yes$(var.BuildDirectory)\Google.GData.Extensions.dll</File>
                 </Component>
-                <Component Id="cmp3A3F84318C542CF458F75FFA82131335" Guid="*">
-                    <File Id="filE75FB8A68F48CF24AF2909DBD0249428" KeyPath="yes" Source="$(var.BuildDirectory)\hagen.exe.config" />
+                <Component>cmpD235E4664231DA0BB4864DC42D545832*
+                    <File>fil813FD6915286F9E45BA0A265EBEAB014yes$(var.BuildDirectory)\hagen.core.dll</File>
                 </Component>
-                <Component Id="cmp41EA0347FC3341A984AB3C830A0B1CEB" Guid="*">
-                    <File Id="filCE5B7DC74C2134A58BBF5FF5AFA2D6CE" KeyPath="yes" Source="$(var.BuildDirectory)\hagen.ext.dll" />
+                <Component>cmp267EC2980CF5D6E9434B89B0652B7534*
+                    <File>fil50A46B7C4B7AD59D53CFADF32BF469F5yes$(var.BuildDirectory)\hagen.core.dll.config</File>
                 </Component>
-                <Component Id="cmp0B22E2904A2E0366BF20BE5F41B11383" Guid="*">
-                    <File Id="fil2205B3651381E525C190CD7DAEB9F068" KeyPath="yes" Source="$(var.BuildDirectory)\hagen.ext.dll.config" />
+                <Component>cmpE680E04F4E50952D1D55EA90091FE918*
+                    <File>fil0154D4F46350AA6ABEFD84FB788A2CBFyes$(var.BuildDirectory)\hagen.core.pdb</File>
                 </Component>
-                <Component Id="cmpE56C0304E47CDD51EC0A2D8CAC8ACD50" Guid="*">
-                    <File Id="fil5E3F4A6174E67379EF54FD11DED7BBB8" KeyPath="yes" Source="$(var.BuildDirectory)\hagen.plugin.file.dll" />
+                <Component>cmpAA9B4EA4427C026795DB78BF5BE8D992*
+                    <File>fil2538723AC4080FE86EC006DB59F96FA9yes$(var.BuildDirectory)\hagen.core.xml</File>
                 </Component>
-                <Component Id="cmp82DA04BF11CAA996BDDF81C930DED160" Guid="*">
-                    <File Id="fil68656262FDE663E7B09CA0C1AA0F3963" KeyPath="yes" Source="$(var.BuildDirectory)\hagen.plugin.file.dll.config" />
+                <Component>cmpFF08B04754C87538375982A81248F0E0*
+                    <File>fil401D711D8F9112E5ED33E1B1F7174398yes$(var.BuildDirectory)\hagen.exe</File>
                 </Component>
-                <Component Id="cmp38D5CF664559D196FAB5A4563D90813C" Guid="*">
-                    <File Id="filA875A52D9ACB0D29FECA76686F14FBD1" KeyPath="yes" Source="$(var.BuildDirectory)\hagen.plugin.screen.dll" />
+                <Component>cmp110F781585272BAB05511D85DFCC72EB*
+                    <File>fil8236DA55D061358B9FA87DC77A5C4300yes$(var.BuildDirectory)\hagen.exe.config</File>
                 </Component>
-                <Component Id="cmp4322B4D7CA020055F1236AEE4F6C9D17" Guid="*">
-                    <File Id="fil7EF95956D7520023F984D754389CCAFB" KeyPath="yes" Source="$(var.BuildDirectory)\hagen.plugin.screen.dll.config" />
+                <Component>cmpF331D902E462401CAE9E8AC53B793EFB*
+                    <File>fil0A6EA96830F7C216AC57287708CB5655yes$(var.BuildDirectory)\hagen.ext.dll</File>
                 </Component>
-                <Component Id="cmpD485B6117CAB52D416905CC55673A6B5" Guid="*">
-                    <File Id="fil5DF635E7C3FA201F49817DFDD90E1D49" KeyPath="yes" Source="$(var.BuildDirectory)\hagen.plugin.web.dll" />
+                <Component>cmp97878B91D0B4BE8DA7DA3415FF019278*
+                    <File>fil2FE4AD4263FF9118031CC99560B796B3yes$(var.BuildDirectory)\hagen.ext.dll.config</File>
                 </Component>
-                <Component Id="cmpFB2EB3E933A510B2F8B969F3AC38EE0C" Guid="*">
-                    <File Id="fil1CF40911AF7D00D58739FF1A4D4D59B5" KeyPath="yes" Source="$(var.BuildDirectory)\hagen.plugin.web.dll.config" />
+                <Component>cmp427CF603FC5046EC2561AE04133C8585*
+                    <File>filCD6A805CABCACB774FAF08CCD8BB7BBEyes$(var.BuildDirectory)\hagen.ext.pdb</File>
                 </Component>
-                <Component Id="cmp8BCE6B08912291B99029CB195E9C9520" Guid="*">
-                    <File Id="fil70B54A3352D2D9B1F3DEA729B5FFDEC0" KeyPath="yes" Source="$(var.BuildDirectory)\hagen.vshost.exe" />
+                <Component>cmp6257CF4B8E7B399AB044C55BA3CD7879*
+                    <File>fil800BD03A3AD0581883AD671F67D6DAF9yes$(var.BuildDirectory)\hagen.ext.xml</File>
                 </Component>
-                <Component Id="cmp61C405A4478F5D43D04526582B748974" Guid="*">
-                    <File Id="fil7A1A2AC7ED47973E9AD1AA8A88644CD4" KeyPath="yes" Source="$(var.BuildDirectory)\hagen.vshost.exe.config" />
+                <Component>cmpA27FB29AC32FDDE538D84F19282D3A7E*
+                    <File>filC4C972D27BFAEBCC0B17BFA321B94491yes$(var.BuildDirectory)\hagen.pdb</File>
                 </Component>
-                <Component Id="cmpB108D54951D4634A7BD6BF44B1F77538" Guid="*">
-                    <File Id="filB8CB08F3853DD4CF66726FEDBD111E79" KeyPath="yes" Source="$(var.BuildDirectory)\hagen.vshost.exe.manifest" />
+                <Component>cmpB39749C662F8ED3C5287924BF84D3266*
+                    <File>filD67DA80FFF8317BB488A93B357779ABByes$(var.BuildDirectory)\hagen.plugin.file.dll</File>
                 </Component>
-                <Component Id="cmp22D6440C136EBB2E1934BDBA86016683" Guid="*">
-                    <File Id="filBAF7382EBE50D8BA07B3978C6D2E1295" KeyPath="yes" Source="$(var.BuildDirectory)\ICSharpCode.SharpZipLib.dll" />
+                <Component>cmp5DB8C403FAE5D4815E999ECBD6100E0D*
+                    <File>filF07BCA4CBA56FC0C5DB39C650647EE7Byes$(var.BuildDirectory)\hagen.plugin.file.dll.config</File>
                 </Component>
-                <Component Id="cmp939C5C3925623AFBE5071BF4DF7CB425" Guid="*">
-                    <File Id="fil8D2DE35D3ADF865E04A293115336738B" KeyPath="yes" Source="$(var.BuildDirectory)\Interop.IWshRuntimeLibrary.dll" />
+                <Component>cmp339F3A02D2D3FBA810642C41FB0CE19C*
+                    <File>fil743C79D349B19C64FE1819374223254Fyes$(var.BuildDirectory)\hagen.plugin.file.pdb</File>
                 </Component>
-                <Component Id="cmpDED094E99949F270E791BA5072B2DF4D" Guid="*">
-                    <File Id="filA3D14CE1B0C100E97F39E40B6F9775EF" KeyPath="yes" Source="$(var.BuildDirectory)\log4net.dll" />
+                <Component>cmpCD88B4D8482CFD312EC501A3A53098B7*
+                    <File>filE45F93251EF8C035C15083E90FA93B9Ayes$(var.BuildDirectory)\hagen.plugin.file.xml</File>
                 </Component>
-                <Component Id="cmpA157E143732DEEE46007028573529144" Guid="*">
-                    <File Id="fil0D5B59A89646B6A909D5332E642C4DEE" KeyPath="yes" Source="$(var.BuildDirectory)\ManagedWinapi.dll" />
+                <Component>cmp2704AE9FDC3D64C584FB9CDE0210EF1E*
+                    <File>fil1B8029AF6B941261E2DE8083F3267E95yes$(var.BuildDirectory)\hagen.plugin.screen.dll</File>
                 </Component>
-                <Component Id="cmp960C98ECEE2C46AB711EE84D3E588CB5" Guid="*">
-                    <File Id="fil3C88FD32B580E57E671A063B5D0CEA6F" KeyPath="yes" Source="$(var.BuildDirectory)\Newtonsoft.Json.dll" />
+                <Component>cmp006CEFF47C06EA017D79EFC3E4EC9E2B*
+                    <File>filA3176B8D8D169780207A825A5F291C11yes$(var.BuildDirectory)\hagen.plugin.screen.dll.config</File>
                 </Component>
-                <Component Id="cmpAF41C54ABB0D3FDE1DE71F641A13F552" Guid="*">
-                    <File Id="filD8E315A1DC647AEFAEF9B010FFC55925" KeyPath="yes" Source="$(var.BuildDirectory)\nunit.framework.dll" />
+                <Component>cmp9A12DF9061A22669BFEF95A70A56386A*
+                    <File>fil027D52B7DD546AF1592B07ED7A669AECyes$(var.BuildDirectory)\hagen.plugin.screen.pdb</File>
                 </Component>
-                <Component Id="cmp52036CDE798728FCDF8B674A0D39D010" Guid="*">
-                    <File Id="fil2FB7FD4CC71500A518C438446F15D9E7" KeyPath="yes" Source="$(var.BuildDirectory)\ObjectListView.dll" />
+                <Component>cmp226B8A721A0439ACFD27D86261B5A077*
+                    <File>filCA3D42039E0FBB793AE55F1612E77DACyes$(var.BuildDirectory)\hagen.plugin.screen.xml</File>
                 </Component>
-                <Component Id="cmp08989762B4EDE0332714DD1810FBEFF1" Guid="*">
-                    <File Id="fil9CAC233A00C9D85F0493EE888F1C6B25" KeyPath="yes" Source="$(var.BuildDirectory)\SciLexer.dll" />
+                <Component>cmp05764772EA55B659EFD07E6B6421E48F*
+                    <File>filFBC05B55FAF2E4C5FF4F4ED7076B8FDDyes$(var.BuildDirectory)\hagen.plugin.web.dll</File>
                 </Component>
-                <Component Id="cmp125FBD49DE40E7F710F7FB57CD272974" Guid="*">
-                    <File Id="fil08A82E9EC45D6E696A14F01A7EEF2997" KeyPath="yes" Source="$(var.BuildDirectory)\SciLexer64.dll" />
+                <Component>cmpF35D95F06702D65FD0C414DEC3CE4995*
+                    <File>filCEAFF736BBFD24CC4EEEA5C34988535Fyes$(var.BuildDirectory)\hagen.plugin.web.dll.config</File>
                 </Component>
-                <Component Id="cmp07DE945C9BAD3999C8A4FE6F103D84E4" Guid="*">
-                    <File Id="filCA5620C66D56BD79FFB2E5B9B7337F9B" KeyPath="yes" Source="$(var.BuildDirectory)\ScintillaNET.dll" />
+                <Component>cmp69A8D6216E25A3F4C99E3644BCAD9B9E*
+                    <File>fil03FCC0E75A17767B20B22B5A9B4A7533yes$(var.BuildDirectory)\hagen.plugin.web.pdb</File>
                 </Component>
-                <Component Id="cmp0F9F8C98A5A0F40B83BB267709613FD4" Guid="*">
-                    <File Id="filFEE87E38652EC72B790FDA033F3C030E" KeyPath="yes" Source="$(var.BuildDirectory)\Sidi.Office.dll" />
+                <Component>cmp61C7F6B62F613CA414B396E2DD29DFCB*
+                    <File>filA9371306ED7DE684DAEA9704ED749B15yes$(var.BuildDirectory)\hagen.plugin.web.xml</File>
                 </Component>
-                <Component Id="cmpA278A8B01D4D2CBA44669BF87B4D0807" Guid="*">
-                    <File Id="filA8A2FEB30E2B20901248E7773A5DA09D" KeyPath="yes" Source="$(var.BuildDirectory)\Sidi.Util.dll" />
+                <Component>cmp50AF09C1CCB4D7534EFE6804C1E5AF47*
+                    <File>filF702775C7C564302522EBC72ABB2985Ayes$(var.BuildDirectory)\hagen.xml</File>
                 </Component>
-                <Component Id="cmp7D9F8FE712E88B920833E8F1284CEFA0" Guid="*">
-                    <File Id="fil70D8BA95ACEBAD7BE805BC2C273E5278" KeyPath="yes" Source="$(var.BuildDirectory)\sqlite3.exe" />
+                <Component>cmpF1F766BAD187A0ABB54319AAE3F98ABC*
+                    <File>fil51938EEA40D817AD91B1DCB48D4F2BF0yes$(var.BuildDirectory)\ICSharpCode.SharpZipLib.dll</File>
                 </Component>
-                <Component Id="cmp4AAFD0221FB2729284F660E38A007FEE" Guid="*">
-                    <File Id="filB7AC3B699031145784EC9C58D746FA60" KeyPath="yes" Source="$(var.BuildDirectory)\System.Data.SQLite.dll" />
+                <Component>cmp1A2CA5F6EA8AE69D1ADD3E15D19C203B*
+                    <File>fil89BA67ACE7A03AF129B67DD822C6830Fyes$(var.BuildDirectory)\Interop.IWshRuntimeLibrary.dll</File>
                 </Component>
-                <Component Id="cmpA459D0D8FA761724EE1BD2B6715806EC" Guid="*">
-                    <File Id="filAD720313579DEFFE29FDEA596781A4A3" KeyPath="yes" Source="$(var.BuildDirectory)\System.Reactive.Core.dll" />
+                <Component>cmp1AF0129711C81ABCBB16407F30B2CBFA*
+                    <File>fil5BEECCEBBC5940874E51773A13416D19yes$(var.BuildDirectory)\log4net.dll</File>
                 </Component>
-                <Component Id="cmp22AB6697445264842CDEDD1C7746A0F8" Guid="*">
-                    <File Id="fil27A411693CAE4183BAB6B8D98BAED94F" KeyPath="yes" Source="$(var.BuildDirectory)\System.Reactive.Interfaces.dll" />
+                <Component>cmp446FBA4BE46C8802B99B845A267FBDB4*
+                    <File>fil6F2C725B6356581521310D1FE8266C32yes$(var.BuildDirectory)\log4net.xml</File>
                 </Component>
-                <Component Id="cmpD5E217864F0B099BF9E2C84D6FCE53A2" Guid="*">
-                    <File Id="filA6253BFB60AB69FC89E26D59A3496725" KeyPath="yes" Source="$(var.BuildDirectory)\System.Reactive.Linq.dll" />
+                <Component>cmpC4A479314F6E28CF6F72A39965858EE4*
+                    <File>fil40A2E312AB2BB3AC74152CE66F7ED30Dyes$(var.BuildDirectory)\ManagedWinapi.dll</File>
                 </Component>
-                <Component Id="cmp152A62B10AC7E22FF5CA2501527A053C" Guid="*">
-                    <File Id="fil351E8A0B939461BDC55B9C069BE65D1E" KeyPath="yes" Source="$(var.BuildDirectory)\System.Reactive.PlatformServices.dll" />
+                <Component>cmpF2BB659D437A3651E5CCAA972C7D995F*
+                    <File>fil56C7E935CE3B68AAB6F241E56D309B39yes$(var.BuildDirectory)\ManagedWinapi.pdb</File>
                 </Component>
-                <Component Id="cmpF0F72B17E70A358BE0499322B7A65E7E" Guid="*">
-                    <File Id="fil25C1339858840381631F22BAA0B94277" KeyPath="yes" Source="$(var.BuildDirectory)\System.Reactive.Windows.Forms.dll" />
+                <Component>cmpA7D815B5C8FD18661E1C41474AC4F3E2*
+                    <File>fil3BAAB240CA2A8959CB4FAB8EEA31CCBAyes$(var.BuildDirectory)\ManagedWinapi.xml</File>
                 </Component>
-                <Component Id="cmpFDAF2425CB8D4109D6BD65D05E812B5E" Guid="*">
-                    <File Id="fil96A38536F4FF9411D5C6301CAF742412" KeyPath="yes" Source="$(var.BuildDirectory)\TestStack.White.dll" />
+                <Component>cmp98AAABE57A1D10F0EB6B35C858E59796*
+                    <File>filB29922E4F4767A5323E58A5472C37998yes$(var.BuildDirectory)\Newtonsoft.Json.dll</File>
                 </Component>
-                <Component Id="cmp5AB53AF6248893C11726033A08DD85CF" Guid="*">
-                    <File Id="filC8CEC53188879AEE0F018E15546BF23F" KeyPath="yes" Source="$(var.BuildDirectory)\WeifenLuo.WinFormsUI.Docking.dll" />
+                <Component>cmp1D1D4151278DD4191AB0713EB67EA904*
+                    <File>filBBB78AE65E667B3762C7E791D049D3BByes$(var.BuildDirectory)\Newtonsoft.Json.xml</File>
                 </Component>
-                <Directory Id="dir0E76998BDA0860E04453B6797A71CA68" Name="unit-test">
-                    <Component Id="cmpF1EF22C0A655F0D6C411DB73B5FF59A6" Guid="*">
-                        <File Id="fil32757DCDE8736147DDEB17C0D0A7612B" KeyPath="yes" Source="$(var.BuildDirectory)\unit-test\FileContents" />
-                    </Component>
-                    <Component Id="cmpBA8F485E62EF46D00A783E1A9D9D05BA" Guid="*">
-                        <File Id="filA8F15EDFBAF729B360B4F06B35F5DCF7" KeyPath="yes" Source="$(var.BuildDirectory)\unit-test\FileGroupDescriptor" />
-                    </Component>
-                    <Component Id="cmp07895743AB8D7050F67EB438B2E05DD8" Guid="*">
-                        <File Id="fil102A1C79669A9F8463DEFCF264227773" KeyPath="yes" Source="$(var.BuildDirectory)\unit-test\FileGroupDescriptorW" />
-                    </Component>
-                    <Component Id="cmp256349AB14F041D065C0801B6B11AA98" Guid="*">
-                        <File Id="fil51E833653C96E5FA087C35869B12FFE1" KeyPath="yes" Source="$(var.BuildDirectory)\unit-test\UniformResourceLocator" />
-                    </Component>
-                    <Component Id="cmp237EFEBDD31DE0B5F98BCC8D9DCD5287" Guid="*">
-                        <File Id="filFF7E6994D86B4228437B5443DB4AA3D7" KeyPath="yes" Source="$(var.BuildDirectory)\unit-test\UniformResourceLocatorW" />
+                <Component>cmp077C00F35CC9B775A195F86FF86ED5EF*
+                    <File>fil988E7673FEF2E3247E5740D70D5DE133yes$(var.BuildDirectory)\nunit.framework.dll</File>
+                </Component>
+                <Component>cmp6C677E78E3D130C606FA73B6F549E261*
+                    <File>fil803469F2B2F6A421B17986189C476F1Byes$(var.BuildDirectory)\nunit.framework.xml</File>
+                </Component>
+                <Component>cmp97052393C06366A00D18B0B972A13664*
+                    <File>fil68BAC5B25594273A034F3652A720814Dyes$(var.BuildDirectory)\ObjectListView.dll</File>
+                </Component>
+                <Component>cmpA549C07CD1A82D6FAEE984C5FE7384F7*
+                    <File>filEE90F167DFD243CCCE943464AFFC0C02yes$(var.BuildDirectory)\SciLexer.dll</File>
+                </Component>
+                <Component>cmp58DAE952494646C8FC0FE4C85C726565*
+                    <File>filD43608E03BFA3421E258C2B0CB15F349yes$(var.BuildDirectory)\SciLexer64.dll</File>
+                </Component>
+                <Component>cmp89A33AF6380EFF680B6F1034F7888B2A*
+                    <File>fil328D5946E42A35CCCD9144756F52CAEEyes$(var.BuildDirectory)\ScintillaNET.dll</File>
+                </Component>
+                <Component>cmp48AFE80E81763F11E13B7DE8F7CBD2A2*
+                    <File>fil657CF473C08EAC4B845BE62BFDA8895Fyes$(var.BuildDirectory)\ScintillaNET.pdb</File>
+                </Component>
+                <Component>cmp10DB73BE2B858BDDB615717DF46E3C2A*
+                    <File>filE6B73F8CEF0930796675BF534D91B71Eyes$(var.BuildDirectory)\ScintillaNET.xml</File>
+                </Component>
+                <Component>cmp36149C8CA91CF7EC29CF4D6E4BF3B103*
+                    <File>fil064861B962DBD75807A22DCA99352345yes$(var.BuildDirectory)\Sidi.Office.dll</File>
+                </Component>
+                <Component>cmp1ED504246085B6CCF90CFE8B0A58E622*
+                    <File>fil8CD321FC811353BACAF24532619C58B4yes$(var.BuildDirectory)\Sidi.Office.pdb</File>
+                </Component>
+                <Component>cmp71E22575F2D874DA471855E5D4A8E69B*
+                    <File>filCE316251E828CBB435CD2DEBEB73AF9Cyes$(var.BuildDirectory)\Sidi.Office.xml</File>
+                </Component>
+                <Component>cmp85A9E8E4BF356E0CFDF5E5300B8B456C*
+                    <File>fil1673DCDE8AE6F26A0C85F04DBA201EF3yes$(var.BuildDirectory)\Sidi.Util.dll</File>
+                </Component>
+                <Component>cmp75AE6237CF9BED63168772F6284C8555*
+                    <File>filB3E248954C0C2AD67724ABB77BA6E326yes$(var.BuildDirectory)\Sidi.Util.pdb</File>
+                </Component>
+                <Component>cmpC820E1DFF56424C405D639DFB00868CA*
+                    <File>filABEC59C81A181539C09E0DBC138C7763yes$(var.BuildDirectory)\Sidi.Util.xml</File>
+                </Component>
+                <Component>cmpA1369CE0A214412D33C7FCED266BB8C2*
+                    <File>fil8A67A979FBFA719BB24421269AE94908yes$(var.BuildDirectory)\sqlite3.exe</File>
+                </Component>
+                <Component>cmpF7564CFD8D702BABECD7EE0E06043670*
+                    <File>fil67A9D920532151A367111696F7ADD826yes$(var.BuildDirectory)\System.Data.SQLite.dll</File>
+                </Component>
+                <Component>cmp86269F1DB4EEE182676733EBED5A6347*
+                    <File>fil1B3F2D78292A8616D31EFE0F2191FBB4yes$(var.BuildDirectory)\System.Data.SQLite.xml</File>
+                </Component>
+                <Component>cmpA1C9929D3780A9F58AD0FB9286395004*
+                    <File>fil4ECB351202D61C3254AE5B9B47B6CD50yes$(var.BuildDirectory)\System.Reactive.Core.dll</File>
+                </Component>
+                <Component>cmpEAAA55B896AD626A175E1DDBAC9C5B61*
+                    <File>fil4EAB8A77C35F6D5CB4C7B647C64684BEyes$(var.BuildDirectory)\System.Reactive.Core.xml</File>
+                </Component>
+                <Component>cmp54F0DE4B0C1BFA91BD18FA2CADF66C08*
+                    <File>fil30DD69DAEB2F24D1DAF15703280F500Ayes$(var.BuildDirectory)\System.Reactive.Interfaces.dll</File>
+                </Component>
+                <Component>cmp11152833ADDA30611A4AAF81EF7A393F*
+                    <File>fil2E945BBB2F50C35A5FA5515C71932911yes$(var.BuildDirectory)\System.Reactive.Interfaces.xml</File>
+                </Component>
+                <Component>cmpD87D1C0CAB43E3E0364900EBD0C3B93A*
+                    <File>fil4809065F6EE2E97E3F2F12722D660B7Cyes$(var.BuildDirectory)\System.Reactive.Linq.dll</File>
+                </Component>
+                <Component>cmp58352471FD876AA05B23C2DA364D342C*
+                    <File>filC711DCBA3372EC139DCB0EF1B223725Byes$(var.BuildDirectory)\System.Reactive.Linq.xml</File>
+                </Component>
+                <Component>cmpAAB53A6B16FFD6511CC31658BF68A1EF*
+                    <File>filDAA03B9D7B2A31567E9CB711BFE8C435yes$(var.BuildDirectory)\System.Reactive.PlatformServices.dll</File>
+                </Component>
+                <Component>cmp107428CDAB13EB134C83977D11CFF3A0*
+                    <File>fil242BDBCC1F0BD9AB277C3FC0647B2FBDyes$(var.BuildDirectory)\System.Reactive.PlatformServices.xml</File>
+                </Component>
+                <Component>cmpE2E6C4A1E667642226B7AC76511D30FF*
+                    <File>fil2DC0E073384F67F7E5E2151681371ADCyes$(var.BuildDirectory)\System.Reactive.Windows.Forms.dll</File>
+                </Component>
+                <Component>cmpAAC8FFA6374213A84E3B5D7C74AF17EE*
+                    <File>filE286CD4EC4CA2568A9BE023EDCA77228yes$(var.BuildDirectory)\System.Reactive.Windows.Forms.xml</File>
+                </Component>
+                <Component>cmp151AABC625FCCAF90F2E9D513C299AD2*
+                    <File>fil8EBEBE146B3E7287F9630642D0C4CA5Ayes$(var.BuildDirectory)\TestStack.White.dll</File>
+                </Component>
+                <Component>cmpBE1F77FA34AE244E70A6E5F8CB1E08B8*
+                    <File>fil80174EACF716B342537D4750277CDC9Ayes$(var.BuildDirectory)\TestStack.White.pdb</File>
+                </Component>
+                <Component>cmp0CD61FDB323C96F1035A7C968D83B471*
+                    <File>fil7B3F41C149EFB0E72692D04671076D07yes$(var.BuildDirectory)\TestStack.White.xml</File>
+                </Component>
+                <Component>cmpDD58E8495A6A667FA0D5535DCC050008*
+                    <File>filEBFBEAF42C8606F1543BDFA6727383FFyes$(var.BuildDirectory)\WeifenLuo.WinFormsUI.Docking.dll</File>
+                </Component>
+                <Directory>dir55C010C03879FB6F032ECA14858E37BCtest
+                    <Component>cmp52B2F96AFF8CF0E83F45720B63B258E8*
+                        <File>fil314FAD70F096F636AD92AE07EF7CA36Cyes$(var.BuildDirectory)\test\sections.txt</File>
                     </Component>
                 </Directory>
-                <Directory Id="dir0778A42808B5AF44FC6B24684ECE0C60" Name="x64">
-                    <Component Id="cmpE2FB6C743E6047B5A10913A206D8868C" Guid="*">
-                        <File Id="fil03CF8759B71BE0949142EC33064432E0" KeyPath="yes" Source="$(var.BuildDirectory)\x64\SQLite.Interop.dll" />
+                <Directory>dirDC0349C6EFF79BC3329DEE190FD0579Bunit-test
+                    <Component>cmpE46DBC401C7A81CBB931687943262A20*
+                        <File>filBDD46E2654FAE8ED0A7629D7322FBCC5yes$(var.BuildDirectory)\unit-test\FileContents</File>
                     </Component>
-                </Directory>
-                <Directory Id="dir09493FE67E56CBB05F19DD00202D166D" Name="x86">
-                    <Component Id="cmp8F6E51E0ECE080B46C18D509469172FE" Guid="*">
-                        <File Id="fil02A2BA20C646B5D0D7491C88BC2086F8" KeyPath="yes" Source="$(var.BuildDirectory)\x86\SQLite.Interop.dll" />
+                    <Component>cmp0E2741106CD626E77266B6390AFCAC42*
+                        <File>filB9FD906FC6857DA9A34654F03B280FFAyes$(var.BuildDirectory)\unit-test\FileGroupDescriptor</File>
+                    </Component>
+                    <Component>cmpA73D9792BCE6F36EABD44F9EB20F0383*
+                        <File>fil942EB0718F63A4455BA47845AAAEE10Byes$(var.BuildDirectory)\unit-test\FileGroupDescriptorW</File>
+                    </Component>
+                    <Component>cmpF45DCBB12DCF94A87D5B42DAF5C249F4*
+                        <File>filC454792656156244691278CFA1ACD18Cyes$(var.BuildDirectory)\unit-test\UniformResourceLocator</File>
+                    </Component>
+                    <Component>cmp09EC04263C9017A3765F3E586BCE3D8B*
+                        <File>fil669F68A964AE32D7DE99408F51599401yes$(var.BuildDirectory)\unit-test\UniformResourceLocatorW</File>
                     </Component>
                 </Directory>
             </Directory>
         </DirectoryRef>
     </Fragment>
     <Fragment>
-        <ComponentGroup Id="ProductComponents">
-            <ComponentRef Id="cmpC4141E25742F261C541BF3B162EFD1A9" />
-            <ComponentRef Id="cmp6012D1F70DF4F1FC7CFA801C4EA230F6" />
-            <ComponentRef Id="cmp72B2A5489ED4792358BD8FAEABF82F01" />
-            <ComponentRef Id="cmp6F5E2AE54AC895C08C46E26791D13297" />
-            <ComponentRef Id="cmp06DAF4A502926EC44C1365B25B931EEE" />
-            <ComponentRef Id="cmpCDE8C2BFF13E9B1366DF422D27D92359" />
-            <ComponentRef Id="cmpF6F105A75052008A884EFF589D5F227B" />
-            <ComponentRef Id="cmp2C6A1DFF9B6B81AC26A2E04913048F6C" />
-            <ComponentRef Id="cmp39D08EBF688E7DA5F805DF45F5465838" />
-            <ComponentRef Id="cmp3A3F84318C542CF458F75FFA82131335" />
-            <ComponentRef Id="cmp41EA0347FC3341A984AB3C830A0B1CEB" />
-            <ComponentRef Id="cmp0B22E2904A2E0366BF20BE5F41B11383" />
-            <ComponentRef Id="cmpE56C0304E47CDD51EC0A2D8CAC8ACD50" />
-            <ComponentRef Id="cmp82DA04BF11CAA996BDDF81C930DED160" />
-            <ComponentRef Id="cmp38D5CF664559D196FAB5A4563D90813C" />
-            <ComponentRef Id="cmp4322B4D7CA020055F1236AEE4F6C9D17" />
-            <ComponentRef Id="cmpD485B6117CAB52D416905CC55673A6B5" />
-            <ComponentRef Id="cmpFB2EB3E933A510B2F8B969F3AC38EE0C" />
-            <ComponentRef Id="cmp8BCE6B08912291B99029CB195E9C9520" />
-            <ComponentRef Id="cmp61C405A4478F5D43D04526582B748974" />
-            <ComponentRef Id="cmpB108D54951D4634A7BD6BF44B1F77538" />
-            <ComponentRef Id="cmp22D6440C136EBB2E1934BDBA86016683" />
-            <ComponentRef Id="cmp939C5C3925623AFBE5071BF4DF7CB425" />
-            <ComponentRef Id="cmpDED094E99949F270E791BA5072B2DF4D" />
-            <ComponentRef Id="cmpA157E143732DEEE46007028573529144" />
-            <ComponentRef Id="cmp960C98ECEE2C46AB711EE84D3E588CB5" />
-            <ComponentRef Id="cmpAF41C54ABB0D3FDE1DE71F641A13F552" />
-            <ComponentRef Id="cmp52036CDE798728FCDF8B674A0D39D010" />
-            <ComponentRef Id="cmp08989762B4EDE0332714DD1810FBEFF1" />
-            <ComponentRef Id="cmp125FBD49DE40E7F710F7FB57CD272974" />
-            <ComponentRef Id="cmp07DE945C9BAD3999C8A4FE6F103D84E4" />
-            <ComponentRef Id="cmp0F9F8C98A5A0F40B83BB267709613FD4" />
-            <ComponentRef Id="cmpA278A8B01D4D2CBA44669BF87B4D0807" />
-            <ComponentRef Id="cmp7D9F8FE712E88B920833E8F1284CEFA0" />
-            <ComponentRef Id="cmp4AAFD0221FB2729284F660E38A007FEE" />
-            <ComponentRef Id="cmpA459D0D8FA761724EE1BD2B6715806EC" />
-            <ComponentRef Id="cmp22AB6697445264842CDEDD1C7746A0F8" />
-            <ComponentRef Id="cmpD5E217864F0B099BF9E2C84D6FCE53A2" />
-            <ComponentRef Id="cmp152A62B10AC7E22FF5CA2501527A053C" />
-            <ComponentRef Id="cmpF0F72B17E70A358BE0499322B7A65E7E" />
-            <ComponentRef Id="cmpFDAF2425CB8D4109D6BD65D05E812B5E" />
-            <ComponentRef Id="cmp5AB53AF6248893C11726033A08DD85CF" />
-            <ComponentRef Id="cmpF1EF22C0A655F0D6C411DB73B5FF59A6" />
-            <ComponentRef Id="cmpBA8F485E62EF46D00A783E1A9D9D05BA" />
-            <ComponentRef Id="cmp07895743AB8D7050F67EB438B2E05DD8" />
-            <ComponentRef Id="cmp256349AB14F041D065C0801B6B11AA98" />
-            <ComponentRef Id="cmp237EFEBDD31DE0B5F98BCC8D9DCD5287" />
-            <ComponentRef Id="cmpE2FB6C743E6047B5A10913A206D8868C" />
-            <ComponentRef Id="cmp8F6E51E0ECE080B46C18D509469172FE" />
+        <ComponentGroup>ProductComponents
+            <ComponentRef>cmp514EF5AEF39CD5715AE2C9491AAAD7D6</ComponentRef>
+            <ComponentRef>cmp3C427964995BA76453C3909FEE56F174</ComponentRef>
+            <ComponentRef>cmp386EAA29C7B951CB93133B216B7C2F6D</ComponentRef>
+            <ComponentRef>cmp56E2BDA48593EEEAA1CA3CF4C57802B1</ComponentRef>
+            <ComponentRef>cmp29F075B66362F2E78D937928AE88A84A</ComponentRef>
+            <ComponentRef>cmp17DB02D83C228AC36208CF8B17F233D4</ComponentRef>
+            <ComponentRef>cmp01F7BADFE60B27311029383395DE5C04</ComponentRef>
+            <ComponentRef>cmpB6493ABDD61F354813976B093135241C</ComponentRef>
+            <ComponentRef>cmp31CA40660B1C7D6C7AEE1EC8DEEE4637</ComponentRef>
+            <ComponentRef>cmpD235E4664231DA0BB4864DC42D545832</ComponentRef>
+            <ComponentRef>cmp267EC2980CF5D6E9434B89B0652B7534</ComponentRef>
+            <ComponentRef>cmpE680E04F4E50952D1D55EA90091FE918</ComponentRef>
+            <ComponentRef>cmpAA9B4EA4427C026795DB78BF5BE8D992</ComponentRef>
+            <ComponentRef>cmpFF08B04754C87538375982A81248F0E0</ComponentRef>
+            <ComponentRef>cmp110F781585272BAB05511D85DFCC72EB</ComponentRef>
+            <ComponentRef>cmpF331D902E462401CAE9E8AC53B793EFB</ComponentRef>
+            <ComponentRef>cmp97878B91D0B4BE8DA7DA3415FF019278</ComponentRef>
+            <ComponentRef>cmp427CF603FC5046EC2561AE04133C8585</ComponentRef>
+            <ComponentRef>cmp6257CF4B8E7B399AB044C55BA3CD7879</ComponentRef>
+            <ComponentRef>cmpA27FB29AC32FDDE538D84F19282D3A7E</ComponentRef>
+            <ComponentRef>cmpB39749C662F8ED3C5287924BF84D3266</ComponentRef>
+            <ComponentRef>cmp5DB8C403FAE5D4815E999ECBD6100E0D</ComponentRef>
+            <ComponentRef>cmp339F3A02D2D3FBA810642C41FB0CE19C</ComponentRef>
+            <ComponentRef>cmpCD88B4D8482CFD312EC501A3A53098B7</ComponentRef>
+            <ComponentRef>cmp2704AE9FDC3D64C584FB9CDE0210EF1E</ComponentRef>
+            <ComponentRef>cmp006CEFF47C06EA017D79EFC3E4EC9E2B</ComponentRef>
+            <ComponentRef>cmp9A12DF9061A22669BFEF95A70A56386A</ComponentRef>
+            <ComponentRef>cmp226B8A721A0439ACFD27D86261B5A077</ComponentRef>
+            <ComponentRef>cmp05764772EA55B659EFD07E6B6421E48F</ComponentRef>
+            <ComponentRef>cmpF35D95F06702D65FD0C414DEC3CE4995</ComponentRef>
+            <ComponentRef>cmp69A8D6216E25A3F4C99E3644BCAD9B9E</ComponentRef>
+            <ComponentRef>cmp61C7F6B62F613CA414B396E2DD29DFCB</ComponentRef>
+            <ComponentRef>cmp50AF09C1CCB4D7534EFE6804C1E5AF47</ComponentRef>
+            <ComponentRef>cmpF1F766BAD187A0ABB54319AAE3F98ABC</ComponentRef>
+            <ComponentRef>cmp1A2CA5F6EA8AE69D1ADD3E15D19C203B</ComponentRef>
+            <ComponentRef>cmp1AF0129711C81ABCBB16407F30B2CBFA</ComponentRef>
+            <ComponentRef>cmp446FBA4BE46C8802B99B845A267FBDB4</ComponentRef>
+            <ComponentRef>cmpC4A479314F6E28CF6F72A39965858EE4</ComponentRef>
+            <ComponentRef>cmpF2BB659D437A3651E5CCAA972C7D995F</ComponentRef>
+            <ComponentRef>cmpA7D815B5C8FD18661E1C41474AC4F3E2</ComponentRef>
+            <ComponentRef>cmp98AAABE57A1D10F0EB6B35C858E59796</ComponentRef>
+            <ComponentRef>cmp1D1D4151278DD4191AB0713EB67EA904</ComponentRef>
+            <ComponentRef>cmp077C00F35CC9B775A195F86FF86ED5EF</ComponentRef>
+            <ComponentRef>cmp6C677E78E3D130C606FA73B6F549E261</ComponentRef>
+            <ComponentRef>cmp97052393C06366A00D18B0B972A13664</ComponentRef>
+            <ComponentRef>cmpA549C07CD1A82D6FAEE984C5FE7384F7</ComponentRef>
+            <ComponentRef>cmp58DAE952494646C8FC0FE4C85C726565</ComponentRef>
+            <ComponentRef>cmp89A33AF6380EFF680B6F1034F7888B2A</ComponentRef>
+            <ComponentRef>cmp48AFE80E81763F11E13B7DE8F7CBD2A2</ComponentRef>
+            <ComponentRef>cmp10DB73BE2B858BDDB615717DF46E3C2A</ComponentRef>
+            <ComponentRef>cmp36149C8CA91CF7EC29CF4D6E4BF3B103</ComponentRef>
+            <ComponentRef>cmp1ED504246085B6CCF90CFE8B0A58E622</ComponentRef>
+            <ComponentRef>cmp71E22575F2D874DA471855E5D4A8E69B</ComponentRef>
+            <ComponentRef>cmp85A9E8E4BF356E0CFDF5E5300B8B456C</ComponentRef>
+            <ComponentRef>cmp75AE6237CF9BED63168772F6284C8555</ComponentRef>
+            <ComponentRef>cmpC820E1DFF56424C405D639DFB00868CA</ComponentRef>
+            <ComponentRef>cmpA1369CE0A214412D33C7FCED266BB8C2</ComponentRef>
+            <ComponentRef>cmpF7564CFD8D702BABECD7EE0E06043670</ComponentRef>
+            <ComponentRef>cmp86269F1DB4EEE182676733EBED5A6347</ComponentRef>
+            <ComponentRef>cmpA1C9929D3780A9F58AD0FB9286395004</ComponentRef>
+            <ComponentRef>cmpEAAA55B896AD626A175E1DDBAC9C5B61</ComponentRef>
+            <ComponentRef>cmp54F0DE4B0C1BFA91BD18FA2CADF66C08</ComponentRef>
+            <ComponentRef>cmp11152833ADDA30611A4AAF81EF7A393F</ComponentRef>
+            <ComponentRef>cmpD87D1C0CAB43E3E0364900EBD0C3B93A</ComponentRef>
+            <ComponentRef>cmp58352471FD876AA05B23C2DA364D342C</ComponentRef>
+            <ComponentRef>cmpAAB53A6B16FFD6511CC31658BF68A1EF</ComponentRef>
+            <ComponentRef>cmp107428CDAB13EB134C83977D11CFF3A0</ComponentRef>
+            <ComponentRef>cmpE2E6C4A1E667642226B7AC76511D30FF</ComponentRef>
+            <ComponentRef>cmpAAC8FFA6374213A84E3B5D7C74AF17EE</ComponentRef>
+            <ComponentRef>cmp151AABC625FCCAF90F2E9D513C299AD2</ComponentRef>
+            <ComponentRef>cmpBE1F77FA34AE244E70A6E5F8CB1E08B8</ComponentRef>
+            <ComponentRef>cmp0CD61FDB323C96F1035A7C968D83B471</ComponentRef>
+            <ComponentRef>cmpDD58E8495A6A667FA0D5535DCC050008</ComponentRef>
+            <ComponentRef>cmp52B2F96AFF8CF0E83F45720B63B258E8</ComponentRef>
+            <ComponentRef>cmpE46DBC401C7A81CBB931687943262A20</ComponentRef>
+            <ComponentRef>cmp0E2741106CD626E77266B6390AFCAC42</ComponentRef>
+            <ComponentRef>cmpA73D9792BCE6F36EABD44F9EB20F0383</ComponentRef>
+            <ComponentRef>cmpF45DCBB12DCF94A87D5B42DAF5C249F4</ComponentRef>
+            <ComponentRef>cmp09EC04263C9017A3765F3E586BCE3D8B</ComponentRef>
         </ComponentGroup>
     </Fragment>
 </Wix>

@@ -17,6 +17,9 @@ You should have received a copy of the GNU Lesser General Public License
 along with sidi-util. If not, see <http://www.gnu.org/licenses/>.-->
 <Project xmlns="http://schemas.microsoft.com/developer/msbuild/2003">
 	<PropertyGroup>
+		<Configuration>Release</Configuration>
+		<Platform>AnyCPU</Platform>
+		
 		<RootDir>$(MSBuildProjectDirectory)</RootDir>
 		<SolutionName>$(ProjectName)</SolutionName>
 		
@@ -28,12 +31,13 @@ along with sidi-util. If not, see <http://www.gnu.org/licenses/>.-->
 		<NUnitConsole>$(NUnitBin)\nunit-console-x86.exe</NUnitConsole>
 		
 		<OutputRoot>$(RootDir)\..\..\build\$(ProjectName)</OutputRoot>
-		<OutputDir>$(OutputRoot)\Release-AnyCPU</OutputDir>
+		<OutputDir>$(OutputRoot)\$(Configuration)-$(Platform)</OutputDir>
 		<TestDir>$(OutputRoot)\test</TestDir>
 
 		<Nuget>$(RootDir)\.nuget\NuGet.exe</Nuget>
 		<NuSpec>$(RootDir)\$(ProjectName).nuspec</NuSpec>
-		<PackageDir>$(OutputRoot)\pack</PackageDir>
+		<PackageDir>$(OutputDir)-nuget-pack</PackageDir>
+		<NugetLocalFeed Condition="$(NugetLocalFeed)==''">$(USERPROFILE)\Dropbox\nuget</NugetLocalFeed>
 		
 		<!-- if a wix installer project is found here, it will be used to package the product -->
 		<WixProject>$(RootDir)\wix\setup.wixproj</WixProject>
@@ -99,17 +103,17 @@ along with sidi-util. If not, see <http://www.gnu.org/licenses/>.-->
     </MSBuild>
   </Target>
   
-  <Target Name="Install" DependsOnTargets="BuildSetup">
+  <Target Name="Install" DependsOnTargets="BuildWxsInstaller">
     <Message Text="@(SetupFile, ' ')" />
 	<Exec Command="@(SetupFile, ' ')" />
   </Target>
   
   <Target Name="Release" DependsOnTargets="CreateVersion;UnitTest;BuildWxsInstaller;NugetPushLocal;LabelVersion" />
 
-  <Target Name="NugetPack" DependsOnTargets="GetVersion;Build;UnitTest" Condition="Exists($(NuSpec))" >
+  <Target Name="NugetPack" DependsOnTargets="GetVersion;Build" Condition="Exists($(NuSpec))" >
     <MakeDir Directories="$(PackageDir)"/>
-    <Exec WorkingDirectory="$(ReleaseDir)" Command="$(Nuget) pack $(NuSpec) -Version $(Version) -Verbosity detailed -OutputDirectory $(PackageDir) -BasePath $(OutputDir) -Properties RootDir=$(RootDir)" />
-    <CreateProperty Value="$(PackageDir)\$(ProjectName).$(Version).nupkg">
+    <Exec WorkingDirectory="$(ReleaseDir)" Command="$(Nuget) pack hagen.ext\hagen.ext.csproj -Verbosity detailed -OutputDirectory $(PackageDir) -BasePath $(OutputDir) -Properties RootDir=$(RootDir);Configuration=$(Configuration);Platform=$(Platform);SolutionName=hagen" />
+    <CreateProperty Value="$(PackageDir)\hagen.ext.$(Version).nupkg">
       <Output PropertyName="Nupkg" TaskParameter="Value"/>
     </CreateProperty>
   </Target>

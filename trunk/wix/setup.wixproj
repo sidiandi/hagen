@@ -60,7 +60,6 @@
 			SuppressCom = "true"
 			SuppressRegistry = "true"
 			DirectoryRefId = "INSTALLFOLDER"
-			<!-- Transforms = "ExcludePdb.xsl" -->
 			/>
 	</Target>
   <!--

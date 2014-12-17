@@ -37,7 +37,7 @@ along with sidi-util. If not, see <http://www.gnu.org/licenses/>.-->
 
 		<Nuget>$(RootDir)\.nuget\NuGet.exe</Nuget>
 		<NuSpec>$(RootDir)\$(ProjectName).nuspec</NuSpec>
-		<NugetPackOutputDirectory>$(OutputPath)-NugetPack</NugetPackOutputDirectory>
+		<NugetPackOutputDirectory>$(OutputRoot)\NugetPack</NugetPackOutputDirectory>
 		<NugetLocalFeed Condition="$(NugetLocalFeed)==''">$(USERPROFILE)\Dropbox\nuget</NugetLocalFeed>
 		
 		<!-- if a wix installer project is found here, it will be used to package the product -->
@@ -99,7 +99,7 @@ along with sidi-util. If not, see <http://www.gnu.org/licenses/>.-->
 
   <Target Name="BuildWixInstaller" DependsOnTargets="Build" Condition="Exists($(WixProject))" >
     <MSBuild
-        Projects="wix\setup.wixproj" Properties="OutputPath=$(OutputPath)-setup;Version=$(Version);ProductName=$(ProjectName);BuildDirectory=$(OutputPath);UpgradeCode=$(UpgradeCode);Manufacturer=$(Manufacturer)">
+        Projects="wix\setup.wixproj" Properties="OutputPath=$(OutputPath)\msi;Version=$(Version);ProductName=$(ProjectName);BuildDirectory=$(OutputPath);UpgradeCode=$(UpgradeCode);Manufacturer=$(Manufacturer)">
       <Output ItemName="SetupFile" TaskParameter="TargetOutputs"/>
     </MSBuild>
   </Target>

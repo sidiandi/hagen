@@ -4,6 +4,7 @@
     <PlatformTarget>x86</PlatformTarget>
 	<OutputRoot Condition="$(OutputRoot) == ''" >$(USERPROFILE)\build\$(ProjectName)\$(Configuration)-$(Platform)</OutputRoot>
 	<OutputPath>$(OutputRoot)\bin</OutputPath>
+	<TestDirectory>$(OutputRoot)\test</TestDirectory>
 	<IntermediateOutputPath>$(OutputRoot)\obj</IntermediateOutputPath>
 	<VersionInfoFile>$(IntermediateOutputPath)\VersionInfo.cs</VersionInfoFile>
     <LibDir>$(SolutionDir)lib\</LibDir>
@@ -32,4 +33,14 @@
     <Optimize>true</Optimize>
     <DebugType>pdbonly</DebugType>
   </PropertyGroup>
+ <ItemGroup>
+	<TestFiles Include="test\**\*.*" />
+ </ItemGroup>
+ <Target Name="AfterBuild">
+	<Copy 
+		SourceFiles = "@(TestFiles)"
+		DestinationFolder = "$(TestDirectory)"
+		UseHardlinksIfPossible = "true"
+	/>
+  </Target>
 </Project>

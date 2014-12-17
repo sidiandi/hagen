@@ -221,6 +221,14 @@
             <Component Id="cmp2C9ADE433A5BF4F58225CCF53E6E4CF8" Guid="*">
                 <File Id="filC0D8F251E1F2B460F224CE244ACA81F1" KeyPath="yes" Source="$(var.BuildDirectory)\WeifenLuo.WinFormsUI.Docking.dll" />
             </Component>
+            <Directory Id="dirB15C94509BF3B84236E56311F7CDBC3D" Name="msi">
+                <Component Id="cmpA59573F5EF1C0CDEA7ABF5521139D4F2" Guid="*">
+                    <File Id="fil1237CF7D89A5F69EEF066B5298986C78" KeyPath="yes" Source="$(var.BuildDirectory)\msi\hagen-0.6.0.78.msi" />
+                </Component>
+                <Component Id="cmp5F1D294F08004E20D75EB0A6895FD01E" Guid="*">
+                    <File Id="filF03632C8ABA3FBC3F33477616C6983E4" KeyPath="yes" Source="$(var.BuildDirectory)\msi\hagen-0.6.0.78.wixpdb" />
+                </Component>
+            </Directory>
             <Directory Id="dir43FCCFA109FBF584D9155DCE31E452EB" Name="x64">
                 <Component Id="cmp19F6DF8A2ABC78D782D76F1EEC9A5800" Guid="*">
                     <File Id="filC7EA62E1AC64247AFBE682E8631402B8" KeyPath="yes" Source="$(var.BuildDirectory)\x64\SQLite.Interop.dll" />
@@ -308,6 +316,8 @@
             <ComponentRef Id="cmp0FDFF31653CD8F9C0B92BB558EA880E0" />
             <ComponentRef Id="cmpE6D192F25374CF54FC0BB5E14F6B838F" />
             <ComponentRef Id="cmp2C9ADE433A5BF4F58225CCF53E6E4CF8" />
+            <ComponentRef Id="cmpA59573F5EF1C0CDEA7ABF5521139D4F2" />
+            <ComponentRef Id="cmp5F1D294F08004E20D75EB0A6895FD01E" />
             <ComponentRef Id="cmp19F6DF8A2ABC78D782D76F1EEC9A5800" />
             <ComponentRef Id="cmp77484AF39EF2F8BD64E876C33A1C3E49" />
         </ComponentGroup>

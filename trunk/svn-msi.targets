@@ -25,14 +25,15 @@ along with sidi-util. If not, see <http://www.gnu.org/licenses/>.-->
 		
 		<SvnRoot>https://$(ProjectName).googlecode.com/svn</SvnRoot>
 		<NugetPackagesDirectory>$(RootDir)\..\nuget-packages</NugetPackagesDirectory>
-		<VersionInfoFile>$(TEMP)\build\$(SolutionName)\VersionInfo.cs</VersionInfoFile>
 		
 		<NUnitBin>$(NugetPackagesDirectory)\NUnit.Runners.2.6.3\tools</NUnitBin>
 		<NUnitConsole>$(NUnitBin)\nunit-console-x86.exe</NUnitConsole>
 		
-		<OutputRoot>$(USERPROFILE)\build\$(ProjectName)</OutputRoot>
-		<OutputPath>$(OutputRoot)\$(Configuration)-$(Platform)</OutputPath>
+		<OutputRoot>$(USERPROFILE)\build\$(ProjectName)\$(Configuration)-$(Platform)</OutputRoot>
+		<OutputPath>$(OutputRoot)\bin</OutputPath>
+		<IntermediateOutputPath>$(OutputRoot)\obj</IntermediateOutputPath>
 		<TestDir>$(OutputRoot)\test</TestDir>
+		<VersionInfoFile>$(IntermediateOutputPath)\VersionInfo.cs</VersionInfoFile>
 
 		<Nuget>$(RootDir)\.nuget\NuGet.exe</Nuget>
 		<NuSpec>$(RootDir)\$(ProjectName).nuspec</NuSpec>
@@ -86,7 +87,7 @@ along with sidi-util. If not, see <http://www.gnu.org/licenses/>.-->
 
   <Target Name="Build" DependsOnTargets="GetVersion">
     <MSBuild
-        Projects="$(ProjectName).sln" Properties="Configuration=Release;Platform=Any CPU;OutputPath=$(OutputPath)">
+        Projects="$(ProjectName).sln" Properties="Configuration=Release;Platform=Any CPU;OutputRoot=$(OutputRoot)">
       <Output ItemName="Targets" TaskParameter="TargetOutputs"/>
     </MSBuild>
   </Target>

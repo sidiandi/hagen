@@ -96,9 +96,9 @@ along with sidi-util. If not, see <http://www.gnu.org/licenses/>.-->
     <RemoveDir Directories="$(TestDir)" />
   </Target>
 
-  <Target Name="BuildWixInstaller" DependsOnTargets="GetVersion" Condition="Exists($(WixProject))" >
+  <Target Name="BuildWixInstaller" DependsOnTargets="Build" Condition="Exists($(WixProject))" >
     <MSBuild
-        Projects="wix\setup.wixproj" Properties="OutputPath=$(OutputPath)-setup;Version=$(Version);ProductName=$(ProjectName);BuildDirectory=$(OutputPath)">
+        Projects="wix\setup.wixproj" Properties="OutputPath=$(OutputPath)-setup;Version=$(Version);ProductName=$(ProjectName);BuildDirectory=$(OutputPath);UpgradeCode=$(UpgradeCode);Manufacturer=$(Manufacturer)">
       <Output ItemName="SetupFile" TaskParameter="TargetOutputs"/>
     </MSBuild>
   </Target>

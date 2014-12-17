@@ -1,6 +1,6 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <Wix xmlns="http://schemas.microsoft.com/wix/2006/wi">
-  <Product Id="*" Name="hagen" Language="1033" Version="$(var.Version)" Manufacturer="Andreas Grimme" UpgradeCode="d98a61bf-12b2-45df-a4e1-3b88104d8d70">
+  <Product Id="*" Name="$(var.ProductName)" Language="1033" Version="$(var.Version)" Manufacturer="$(var.Manufacturer)" UpgradeCode="$(var.UpgradeCode)">
 
 		<Package InstallerVersion="200" Compressed="yes" InstallScope="perMachine" />
 
@@ -17,7 +17,9 @@
   <Fragment>
     <Directory Id="TARGETDIR" Name="SourceDir">
       <Directory Id="ProgramFilesFolder">
-        <Directory Id="INSTALLFOLDER" Name="!(bind.property.Manufacturer)">
+        <Directory Id="ManufacturerFolder" Name="!(bind.property.Manufacturer)">
+			<Directory Id="INSTALLFOLDER" Name="!(bind.property.ProductName)">
+			</Directory>
         </Directory>
       </Directory>
     </Directory>

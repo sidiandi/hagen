@@ -221,26 +221,14 @@
             <Component Id="cmp2C9ADE433A5BF4F58225CCF53E6E4CF8" Guid="*">
                 <File Id="filC0D8F251E1F2B460F224CE244ACA81F1" KeyPath="yes" Source="$(var.BuildDirectory)\WeifenLuo.WinFormsUI.Docking.dll" />
             </Component>
-            <Directory Id="dirBD05F93FAACA1E21CF0BA649E9D66F5F" Name="test">
-                <Component Id="cmpFD54D010D75974E2CE9A8FB7C4881062" Guid="*">
-                    <File Id="fil8CD437DB8BD1999995629D0F7A111DD5" KeyPath="yes" Source="$(var.BuildDirectory)\test\sections.txt" />
+            <Directory Id="dir43FCCFA109FBF584D9155DCE31E452EB" Name="x64">
+                <Component Id="cmp19F6DF8A2ABC78D782D76F1EEC9A5800" Guid="*">
+                    <File Id="filC7EA62E1AC64247AFBE682E8631402B8" KeyPath="yes" Source="$(var.BuildDirectory)\x64\SQLite.Interop.dll" />
                 </Component>
             </Directory>
-            <Directory Id="dir1388B7F38BFEF49DFBA2737076FF6D20" Name="unit-test">
-                <Component Id="cmpC2A4C255FB4E25E26681320D872A6495" Guid="*">
-                    <File Id="filD94A8FDB965D28EB61A4671C09461FA4" KeyPath="yes" Source="$(var.BuildDirectory)\unit-test\FileContents" />
-                </Component>
-                <Component Id="cmpBA115C08E5BC14C20ACA1757ED45EDFB" Guid="*">
-                    <File Id="fil95DC46E76F55E0A08636DEBACE1980D1" KeyPath="yes" Source="$(var.BuildDirectory)\unit-test\FileGroupDescriptor" />
-                </Component>
-                <Component Id="cmpBAECDB3490672597F58BD96EB38DAB35" Guid="*">
-                    <File Id="fil4DAA07ACB5840A30207D5C6AFAE903BC" KeyPath="yes" Source="$(var.BuildDirectory)\unit-test\FileGroupDescriptorW" />
-                </Component>
-                <Component Id="cmp26B1A1D0988F133C932A9293AF3D7C51" Guid="*">
-                    <File Id="filB7EC1C08E020C4FB0685C43AE105FB2C" KeyPath="yes" Source="$(var.BuildDirectory)\unit-test\UniformResourceLocator" />
-                </Component>
-                <Component Id="cmp4C84199DCB12DEB18637F83AEBD817A0" Guid="*">
-                    <File Id="fil3E44D95F0B1FFA5DFAA40DF86ED2D6FC" KeyPath="yes" Source="$(var.BuildDirectory)\unit-test\UniformResourceLocatorW" />
+            <Directory Id="dir97F42FF68945B97AAE670945C4FDAE93" Name="x86">
+                <Component Id="cmp77484AF39EF2F8BD64E876C33A1C3E49" Guid="*">
+                    <File Id="filD2ACACD0EBAF09B1953E9C3793C13C69" KeyPath="yes" Source="$(var.BuildDirectory)\x86\SQLite.Interop.dll" />
                 </Component>
             </Directory>
         </DirectoryRef>
@@ -320,12 +308,8 @@
             <ComponentRef Id="cmp0FDFF31653CD8F9C0B92BB558EA880E0" />
             <ComponentRef Id="cmpE6D192F25374CF54FC0BB5E14F6B838F" />
             <ComponentRef Id="cmp2C9ADE433A5BF4F58225CCF53E6E4CF8" />
-            <ComponentRef Id="cmpFD54D010D75974E2CE9A8FB7C4881062" />
-            <ComponentRef Id="cmpC2A4C255FB4E25E26681320D872A6495" />
-            <ComponentRef Id="cmpBA115C08E5BC14C20ACA1757ED45EDFB" />
-            <ComponentRef Id="cmpBAECDB3490672597F58BD96EB38DAB35" />
-            <ComponentRef Id="cmp26B1A1D0988F133C932A9293AF3D7C51" />
-            <ComponentRef Id="cmp4C84199DCB12DEB18637F83AEBD817A0" />
+            <ComponentRef Id="cmp19F6DF8A2ABC78D782D76F1EEC9A5800" />
+            <ComponentRef Id="cmp77484AF39EF2F8BD64E876C33A1C3E49" />
         </ComponentGroup>
     </Fragment>
 </Wix>

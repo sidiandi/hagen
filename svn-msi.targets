@@ -112,9 +112,9 @@ along with sidi-util. If not, see <http://www.gnu.org/licenses/>.-->
   <Target Name="Release" DependsOnTargets="CreateVersion;UnitTest;BuildWixInstaller;NugetPushLocal;LabelVersion" />
 
   <Target Name="NugetPack" DependsOnTargets="GetVersion;Build" Condition="Exists($(NuSpec))" >
-    <MakeDir Directories="$(PackageDir)"/>
+    <MakeDir Directories="$(NugetPackOutputDirectory)"/>
     <Exec WorkingDirectory="$(ReleaseDir)" Command="$(Nuget) pack hagen.ext\hagen.ext.csproj -Verbosity detailed -OutputDirectory $(NugetPackOutputDirectory) -BasePath $(OutputPath) -Properties RootDir=$(RootDir);Configuration=$(Configuration);Platform=$(Platform);SolutionName=hagen" />
-    <CreateProperty Value="$(PackageDir)\hagen.ext.$(Version).nupkg">
+    <CreateProperty Value="$(NugetPackOutputDirectory)\hagen.ext.$(Version).nupkg">
       <Output PropertyName="Nupkg" TaskParameter="Value"/>
     </CreateProperty>
   </Target>

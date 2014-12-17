@@ -26,7 +26,7 @@
     <DebugType>full</DebugType>
   </PropertyGroup>
   <ItemGroup>
-    <Compile Condition="Exists($(VersionInfoFile))" Include="$(VersionInfoFile)" />
+    <Compile Include="$(VersionInfoFile)" />
   </ItemGroup>
   <PropertyGroup Condition="'$(Configuration)|$(Platform)' == 'Release|AnyCPU'">
     <DefineConstants>TRACE</DefineConstants>

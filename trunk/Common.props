@@ -36,7 +36,13 @@
  <ItemGroup>
 	<TestFiles Include="test\**\*.*" />
  </ItemGroup>
- <Target Name="AfterBuild">
+  <PropertyGroup>
+    <BuildDependsOn>
+      $(BuildDependsOn);
+      CopyTestFiles;
+    </BuildDependsOn>
+  </PropertyGroup>
+ <Target Name="CopyTestFiles">
 	<Copy 
 		SourceFiles = "@(TestFiles)"
 		DestinationFolder = "$(TestDirectory)"

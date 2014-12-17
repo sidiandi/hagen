@@ -25,6 +25,7 @@ using System.IO;
 using Sidi.IO;
 using System.Text.RegularExpressions;
 using L = Sidi.IO;
+using Sidi.Test;
 
 namespace hagen
 {
@@ -118,20 +119,19 @@ namespace hagen
 
 
         [TestFixture]
-        public class Test
+        public class Test : TestBase
         {
             [Test]
             public void ReadFileDescriptor()
             {
-                string fn = ClipboardUrl.ReadFileDescriptorW(System.IO.File.OpenRead(
-                    Sidi.IO.Paths.BinDir.CatDir(@"unit-test\FileGroupDescriptorW")));
+                string fn = ClipboardUrl.ReadFileDescriptorW(System.IO.File.OpenRead(TestFile(@"FileGroupDescriptorW")));
                 Assert.AreEqual("myCSharp.de - DIE C#- und .NET Community - GUI Windows-Forms Email aus Clipboard auslesen.URL", fn);
             }
 
             [Test]
             public void ReadUrl()
             {
-                string u = ClipboardUrl.ReadUrl(Sidi.IO.Paths.BinDir.CatDir(@"unit-test\FileContents").OpenRead());
+                string u = ClipboardUrl.ReadUrl(TestFile(@"FileContents").OpenRead());
                 Assert.AreEqual("http://www.mycsharp.de/wbb2/thread.php?threadid=73296", u);
             }
         }

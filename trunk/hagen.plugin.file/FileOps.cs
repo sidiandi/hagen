@@ -5,15 +5,17 @@ using System.Text;
 using Sidi.CommandLine;
 using Sidi.IO;
 using Sidi.Extensions;
+using SHDocVw;
 
 namespace hagen
 {
     [Usage("File system operations")]
     public class FileOps
     {
-        [Usage("Removes empty direcories")]
-        public void RemoveEmptyDirectories(PathList paths)
+        [Usage("Removes empty direcories"), ForegroundWindowMustBeExplorer]
+        public void RemoveEmptyDirectories()
         {
+            var paths = new Sidi.Util.Shell().SelectedFiles;
             var op = new Operation();
             foreach (var i in paths)
             {
@@ -21,9 +23,10 @@ namespace hagen
             }
         }
 
-        [Usage("Test")]
-        public void TestSelectedFiles(PathList paths)
+        [Usage("Test"), ForegroundWindowMustBeExplorer]
+        public void TestSelectedFiles()
         {
+            var paths = new Sidi.Util.Shell().SelectedFiles;
             System.Windows.Forms.MessageBox.Show(paths.Join());
         }
     }

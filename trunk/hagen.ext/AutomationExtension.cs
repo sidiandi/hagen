@@ -23,7 +23,7 @@ using System.Windows.Automation;
 
 namespace hagen
 {
-    public static class AutomationEx
+    public static class AutomationExtension
     {
         public static AutomationElement GetTopLevelElement(this AutomationElement e)
         {

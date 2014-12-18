@@ -2,7 +2,7 @@
 <Project ToolsVersion="4.0" DefaultTargets="Build" xmlns="http://schemas.microsoft.com/developer/msbuild/2003">
   <PropertyGroup>
     <PlatformTarget>x86</PlatformTarget>
-	<OutputRoot Condition="$(OutputRoot) == ''" >$(USERPROFILE)\build\$(ProjectName)\$(Configuration)-$(Platform)</OutputRoot>
+	<OutputRoot Condition="$(OutputRoot) == ''" >$(USERPROFILE)\build\$(SolutionName)\$(Configuration)-$(Platform)</OutputRoot>
 	<OutputPath>$(OutputRoot)\bin</OutputPath>
 	<TestDirectory>$(OutputRoot)\test</TestDirectory>
 	<IntermediateOutputPath>$(OutputRoot)\obj</IntermediateOutputPath>

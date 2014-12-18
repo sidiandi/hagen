@@ -31,6 +31,23 @@ using System.Reactive.Linq;
 
 namespace hagen
 {
+    public class VisibilityConditionAttribute : Attribute
+    {
+        public virtual bool GetIsVisible()
+        {
+            return true;
+        }
+    }
+
+    [AttributeUsage(AttributeTargets.Method)]
+    public class ForegroundWindowMustBeExplorerAttribute : VisibilityConditionAttribute
+    {
+        public override bool GetIsVisible()
+        {
+            return false;
+        }
+    }
+    
     public class ActionFilter : IActionSource2
     {
         public Parser Parser;
@@ -53,10 +70,17 @@ namespace hagen
             return pi.Length == 1 && pi[0].ParameterType == typeof(PathList);
         }
 
+        static bool IsVisible(Sidi.CommandLine.Action a)
+        {
+            var m = a.MethodInfo;
+            var visibilityCondition = (VisibilityConditionAttribute) m.GetCustomAttributes(typeof(VisibilityConditionAttribute), false).FirstOrDefault();
+            return visibilityCondition != null && visibilityCondition.GetIsVisible();
+        }
+
         IAction ToIAction(Sidi.CommandLine.Action a)
         {
             var uiState =hagen.UserInterfaceState.Instance;
-            if (TakesPathList(a) && uiState.SelectedPathList != null && uiState.SelectedPathList.Any())
+            if (IsVisible(a) && uiState.SelectedPathList != null && uiState.SelectedPathList.Any())
             {
                 var pathList = UserInterfaceState.Instance.SelectedPathList;
                 return new SimpleAction(

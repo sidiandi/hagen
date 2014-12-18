@@ -4,6 +4,7 @@ using System.Linq;
 using System.Text;
 using System.Windows.Automation;
 using Sidi.IO;
+using System.Windows.Forms;
 
 namespace hagen
 {
@@ -18,6 +19,29 @@ namespace hagen
                     instance = new UserInterfaceState();
                 }
                 return instance;
+            }
+        }
+
+        public void InsertText(string text)
+        {
+            if (IsConsole)
+            {
+                SendKeys.Send(text);
+            }
+            else
+            {
+                Clipboard.SetText(text);
+                SendKeys.Send("+{INS}");
+            }
+        }
+
+
+        public bool IsConsole
+        {
+            get
+            {
+                var className = SavedFocusedElement.GetTopLevelElement().Current.ClassName;
+                return object.Equals(className, "ConsoleWindowClass");
             }
         }
 

@@ -50,11 +50,12 @@
       <HintPath>..\packages\NUnit.2.6.3\lib\nunit.framework.dll</HintPath>
     </Reference>
     <Reference Include="Sidi.Office, Version=1.0.0.0, Culture=neutral, PublicKeyToken=1e33c1a5eebc53e1, processorArchitecture=MSIL">
-      <HintPath>..\..\nuget-packages\sidi-util.3.0.0.41\lib\net40\Sidi.Office.dll</HintPath>
-    </Reference>
-    <Reference Include="Sidi.Util, Version=3.0.0.41, Culture=neutral, PublicKeyToken=1e33c1a5eebc53e1, processorArchitecture=MSIL">
       <SpecificVersion>False</SpecificVersion>
-      <HintPath>..\..\nuget-packages\sidi-util.3.0.0.41\lib\net40\Sidi.Util.dll</HintPath>
+      <HintPath>..\..\nuget-packages\sidi-util.3.0.0.46\lib\net40\Sidi.Office.dll</HintPath>
+    </Reference>
+    <Reference Include="Sidi.Util, Version=3.0.0.46, Culture=neutral, PublicKeyToken=1e33c1a5eebc53e1, processorArchitecture=MSIL">
+      <SpecificVersion>False</SpecificVersion>
+      <HintPath>..\..\nuget-packages\sidi-util.3.0.0.46\lib\net40\Sidi.Util.dll</HintPath>
     </Reference>
     <Reference Include="System" />
     <Reference Include="System.ComponentModel.DataAnnotations" />
@@ -109,7 +110,6 @@
     <Compile Include="ActivityLogger.cs" />
     <Compile Include="AggregateUtil.cs" />
     <Compile Include="Appender.cs" />
-    <Compile Include="AutomationEx.cs" />
     <Compile Include="Contract.cs" />
     <Compile Include="Extensions.cs" />
     <Compile Include="FileActionFactory.cs" />
@@ -297,6 +297,6 @@
   </Target>
   -->
   <Target Name="AfterBuild">
-	<Message Text="$(MSBuildToolsPath)" />
+    <Message Text="$(MSBuildToolsPath)" />
   </Target>
 </Project>

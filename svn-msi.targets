@@ -36,6 +36,7 @@ along with sidi-util. If not, see <http://www.gnu.org/licenses/>.-->
 		<VersionInfoFile>$(IntermediateOutputPath)\VersionInfo.cs</VersionInfoFile>
 
 		<Nuget>$(RootDir)\.nuget\NuGet.exe</Nuget>
+		<NugetOptions>-Verbosity detailed</NugetOptions>
 		<NuSpec>$(RootDir)\$(ProjectName).nuspec</NuSpec>
 		<NugetPackOutputDirectory>$(OutputRoot)\NugetPack</NugetPackOutputDirectory>
 		<NugetLocalFeed Condition="$(NugetLocalFeed)==''">$(USERPROFILE)\Dropbox\nuget</NugetLocalFeed>
@@ -113,18 +114,20 @@ along with sidi-util. If not, see <http://www.gnu.org/licenses/>.-->
 
   <Target Name="NugetPack" DependsOnTargets="GetVersion;Build" Condition="Exists($(NuSpec))" >
     <MakeDir Directories="$(NugetPackOutputDirectory)"/>
-    <Exec WorkingDirectory="$(ReleaseDir)" Command="$(Nuget) pack hagen.ext\hagen.ext.csproj -Verbosity detailed -OutputDirectory $(NugetPackOutputDirectory) -BasePath $(OutputPath) -Properties RootDir=$(RootDir);Configuration=$(Configuration);Platform=$(Platform);SolutionName=hagen" />
+    <Exec 
+		WorkingDirectory="$(ReleaseDir)" 
+		Command="$(Nuget) pack $(NugetOptions) hagen.ext\hagen.ext.csproj -Version $(Version) -OutputDirectory $(NugetPackOutputDirectory) -BasePath $(OutputPath) -Properties RootDir=$(RootDir);Configuration=$(Configuration);Platform=$(Platform);SolutionName=hagen $(NugetOptions)" />
     <CreateProperty Value="$(NugetPackOutputDirectory)\hagen.ext.$(Version).nupkg">
       <Output PropertyName="Nupkg" TaskParameter="Value"/>
     </CreateProperty>
   </Target>
 
   <Target Name="NugetPush" DependsOnTargets="NugetPack" Condition="Exists($(NuSpec))" >
-    <Exec WorkingDirectory="$(ReleaseDir)" Command="$(Nuget) push $(Nupkg)" />
+    <Exec WorkingDirectory="$(ReleaseDir)" Command="$(Nuget) push $(NugetOptions) $(Nupkg)" />
   </Target>
 
   <Target Name="NugetPushLocal" DependsOnTargets="NugetPack" Condition="Exists($(NuSpec))">
-    <Exec WorkingDirectory="$(ReleaseDir)" Command="$(Nuget) push -Source $(NugetLocalFeed) $(Nupkg)" />
+    <Exec WorkingDirectory="$(ReleaseDir)" Command="$(Nuget) push $(NugetOptions) -Source $(NugetLocalFeed) $(Nupkg)" />
   </Target>
 
   <Target Name="CopyInstallerToDropbox" DependsOnTargets="BuildWixInstaller" >

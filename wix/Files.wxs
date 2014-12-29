@@ -222,11 +222,11 @@
                 <File Id="filC0D8F251E1F2B460F224CE244ACA81F1" KeyPath="yes" Source="$(var.BuildDirectory)\WeifenLuo.WinFormsUI.Docking.dll" />
             </Component>
             <Directory Id="dirB15C94509BF3B84236E56311F7CDBC3D" Name="msi">
-                <Component Id="cmpF7EFB8D5F99CA591E5195AA88B8B46B0" Guid="*">
-                    <File Id="fil05C551F2B7D15CB6C82F0DC251A7CF61" KeyPath="yes" Source="$(var.BuildDirectory)\msi\hagen-0.6.0.79.msi" />
+                <Component Id="cmpB17DE427874593DB57469AEA72575A08" Guid="*">
+                    <File Id="fil101DF48CC031EBAB0A767A36D855F298" KeyPath="yes" Source="$(var.BuildDirectory)\msi\hagen-0.6.0.80.msi" />
                 </Component>
-                <Component Id="cmp589E1267E1D378F9B37010ADFB3DFBA7" Guid="*">
-                    <File Id="fil892FCCB26F9C09CF569E3B7B9972FFEC" KeyPath="yes" Source="$(var.BuildDirectory)\msi\hagen-0.6.0.79.wixpdb" />
+                <Component Id="cmp3179EEA375916A47BD39F08DFD450975" Guid="*">
+                    <File Id="fil960F1F50B4CC10B5C10C7EE14EB68FCC" KeyPath="yes" Source="$(var.BuildDirectory)\msi\hagen-0.6.0.80.wixpdb" />
                 </Component>
             </Directory>
             <Directory Id="dir43FCCFA109FBF584D9155DCE31E452EB" Name="x64">
@@ -316,8 +316,8 @@
             <ComponentRef Id="cmp0FDFF31653CD8F9C0B92BB558EA880E0" />
             <ComponentRef Id="cmpE6D192F25374CF54FC0BB5E14F6B838F" />
             <ComponentRef Id="cmp2C9ADE433A5BF4F58225CCF53E6E4CF8" />
-            <ComponentRef Id="cmpF7EFB8D5F99CA591E5195AA88B8B46B0" />
-            <ComponentRef Id="cmp589E1267E1D378F9B37010ADFB3DFBA7" />
+            <ComponentRef Id="cmpB17DE427874593DB57469AEA72575A08" />
+            <ComponentRef Id="cmp3179EEA375916A47BD39F08DFD450975" />
             <ComponentRef Id="cmp19F6DF8A2ABC78D782D76F1EEC9A5800" />
             <ComponentRef Id="cmp77484AF39EF2F8BD64E876C33A1C3E49" />
         </ComponentGroup>

@@ -1,0 +1,13 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<!--Copyright (c) 2014, Andreas Grimme (http://andreas-grimme.gmxhome.de/) -->
+<Project xmlns="http://schemas.microsoft.com/developer/msbuild/2003">
+	<PropertyGroup>
+		<CompanyName>Andreas Grimme</CompanyName>
+        <ProductName>hagen</ProductName>
+        <Major>0</Major>
+        <Minor>6</Minor>
+        <Build>0</Build>
+		<InitialRevision>217</InitialRevision>
+		<UpgradeCode>57CAC978-D1D8-4375-A93F-E906E4E66D60</UpgradeCode>
+	</PropertyGroup>
+</Project>

@@ -43,7 +43,7 @@ along with sidi-util. If not, see <http://www.gnu.org/licenses/>.-->
 	<Target Name="CopyTestFiles" >
 	<Copy
 		SourceFiles="@(TestFiles)"
-		DestinationFolder="$(TestDirectory)\%(RecursiveDir)"
+		DestinationFolder="$(TestDir)\%(RecursiveDir)"
 		Retries="0"
 		OverwriteReadOnlyFiles="true"
 		SkipUnchangedFiles="true"

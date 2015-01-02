@@ -26,11 +26,14 @@ using Sidi.IO;
 using System.Text.RegularExpressions;
 using L = Sidi.IO;
 using Sidi.Test;
+using Sidi.Extensions;
 
 namespace hagen
 {
     public class ClipboardUrl
     {
+        private static readonly log4net.ILog log = log4net.LogManager.GetLogger(System.Reflection.MethodBase.GetCurrentMethod().DeclaringType);
+
         const string FileGroupDescriptorWFormat = "FileGroupDescriptorW";
         const string FileContentsFormat = "FileContents";
         const string UniformResourceLocatorWFormat = "UniformResourceLocatorW";
@@ -39,6 +42,8 @@ namespace hagen
         {
             try
             {
+                log.Info(data.GetFormats().ListFormat());
+
                 var c = new ClipboardUrl();
                 var d = data.GetData(FileGroupDescriptorWFormat);
                 c.Title = System.IO.Path.GetFileNameWithoutExtension(ReadFileDescriptorW((MemoryStream)d));

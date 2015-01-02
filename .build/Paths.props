@@ -2,12 +2,13 @@
 <Project ToolsVersion="4.0" DefaultTargets="Build" xmlns="http://schemas.microsoft.com/developer/msbuild/2003">
   <Import Project="..\Build.props" />
   <PropertyGroup>
-	<BuildDir Condition="$(BuildDir) == ''">$(USERPROFILE)\build\$(ProductName)\$(Configuration)-$(Platform)</BuildDir>
+	<BuildDir>$(OutDir)</BuildDir>
+	<BuildDir Condition="$(OutDir) == ''" >$(USERPROFILE)\build\$(ProductName)\$(Configuration)-$(Platform)</BuildDir>
 	<OutDir>$(BuildDir)\bin</OutDir>
 	<OutputPath>$(OutDir)</OutputPath>
-	<TestDirectory>$(BuildDir)\test</TestDirectory>
 	<BaseIntermediateOutputPath>$(BuildDir)\obj</BaseIntermediateOutputPath>
 	<VersionInfoFile>$(BaseIntermediateOutputPath)\VersionInfo.cs</VersionInfoFile>
     <LibDir>$(SolutionDir)lib\</LibDir>
+	<TestDir>$(BuildDir)\test</TestDir>
   </PropertyGroup>
 </Project>

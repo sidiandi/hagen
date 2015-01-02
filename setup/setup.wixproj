@@ -34,6 +34,9 @@
     <Compile Include="Files.wxs" />
     <Compile Include="Product.wxs" />
   </ItemGroup>
+	<ItemGroup>
+		<HeatDirectories Include="$(BinDir)" />
+	</ItemGroup>
   <ItemGroup>
     <WixExtension Include="WixUIExtension">
       <HintPath>$(WixExtDir)\WixUIExtension.dll</HintPath>
@@ -42,26 +45,30 @@
   </ItemGroup>
   <Import Project="$(WixTargetsPath)" />
   <Target Name="BeforeBuild">
-    <CreateProperty Condition="$(BuildDirectory) != ''" Value="Version=$(Version);ProductName=$(ProductName);BuildDirectory=$(BuildDirectory);Manufacturer=$(Manufacturer);UpgradeCode=$(UpgradeCode);$(DefineConstants)">
+    <CreateProperty Value="
+			Version=$(Version);
+			CompanyName=$(CompanyName);
+			ProductName=$(ProductName);
+			BinDir=$(BinDir);
+			Manufacturer=$(CompanyName);
+			UpgradeCode=$(UpgradeCode);
+			$(DefineConstants)">
       <Output TaskParameter="Value" PropertyName="DefineConstants" />
     </CreateProperty>
-	<CreateItem Include="$(BuildDirectory)">
-		<Output TaskParameter="Include" ItemName="HeatDirectories"/>
-	</CreateItem>
-		<HeatDirectory 
-			Directory="@(HeatDirectories)"
-			VerboseOutput="true" 
-			OutputFile="Files.wxs"
-			ComponentGroupName="ProductComponents"
-			AutogenerateGuids="true"
-			SuppressFragments="true"
-			PreprocessorVariable="var.BuildDirectory"
-			ToolPath ="$(WixToolPath)"
-			SuppressCom = "true"
-			SuppressRegistry = "true"
-			DirectoryRefId = "INSTALLFOLDER"
-			SuppressRootDirectory = "true"
-			/>
+	<HeatDirectory 
+		Directory="@(HeatDirectories)"
+		VerboseOutput="true" 
+		OutputFile="Files.wxs"
+		ComponentGroupName="ProductComponents"
+		AutogenerateGuids="true"
+		SuppressFragments="true"
+		PreprocessorVariable="var.BinDir"
+		ToolPath ="$(WixToolPath)"
+		SuppressCom = "true"
+		SuppressRegistry = "true"
+		DirectoryRefId = "INSTALLFOLDER"
+		SuppressRootDirectory = "true"
+		/>
 	</Target>
   <!--
 	To modify your build process, add your task inside one of the targets below and uncomment it.

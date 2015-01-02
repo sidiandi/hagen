@@ -476,14 +476,8 @@ Hours: {0:G3}",
 
         void SearchBox_DragEnter(object sender, DragEventArgs e)
         {
-            if ((e.KeyState & 2) != 0)
-            {
-                e.Effect = DragDropEffects.Link;
-            }
-            else
-            {
-                e.Effect = DragDropEffects.Copy;
-            }
+            log.Info(e.Data.GetFormats().ListFormat());
+            e.Effect = e.AllowedEffect;
         }
 
         private void updateFilesToolStripMenuItem_Click(object sender, EventArgs e)

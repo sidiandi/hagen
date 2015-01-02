@@ -10,7 +10,7 @@ set SourceDir=%~dp0.
 call :file_name_from_path DirName %SourceDir%
 set BuildDir=%USERPROFILE%\build\%DirName%
 mkdir %BuildDir%
-%msbuild% %SourceDir%\.build\Build.proj /t:%Target% /fileLoggerParameters:LogFile=%BuildDir%\build.log;Verbosity=diagnostic;Encoding=UTF-8
+%msbuild% %SourceDir%\.build\Build.proj /t:StartWrapper /p:BuildTarget=%Target%
 goto :eof
 
 :file_name_from_path <resultVar> <pathVar>
@@ -20,4 +20,3 @@ goto :eof
 )
 
 :eof
-endlocal

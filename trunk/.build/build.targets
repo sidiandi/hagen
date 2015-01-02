@@ -18,12 +18,6 @@ along with sidi-util. If not, see <http://www.gnu.org/licenses/>.-->
 <Project xmlns="http://schemas.microsoft.com/developer/msbuild/2003">
 	<PropertyGroup>
 		<SourceDir>$([System.IO.Directory]::GetParent($(MSBuildProjectDirectory)))</SourceDir>
-		<BuildDir>$(USERPROFILE)\build\$(ProductName)\$(Configuration)-$(Platform)</BuildDir>
-	</PropertyGroup>
-
-	<Import Project="Paths.props" />
-	
-	<PropertyGroup>
 		<SvnRoot Condition="$(SvnRoot) == ''">https://$(ProductName).googlecode.com/svn</SvnRoot>
 
 		<NugetPackagesDir>$(SourceDir)\..\nuget-packages</NugetPackagesDir>
@@ -83,13 +77,23 @@ along with sidi-util. If not, see <http://www.gnu.org/licenses/>.-->
   </Target>
 
   <Target Name="Test" DependsOnTargets="Build">
-    <Exec Command="$(NUnitConsole) /labels @(Targets, ' ')" />
-    <RemoveDir Directories="$(TestDir)" />
+    <Exec Command="$(NUnitConsole) /xml=$(TestDir)\TestResult.xml /labels @(Targets, ' ')" />
   </Target>
 
-  <Target Name="BuildSetup" DependsOnTargets="Build">
+  <Target Name="BuildSetup" DependsOnTargets="GetVersion">
     <MSBuild
-        Projects="$(SourceDir)\setup\setup.wixproj" Properties="Configuration=Release;Platform=Any CPU;Product=$(ProductName);Version=$(Version);OutputPath=$(BuildDir)\setup;BinDir=$(OutDir);IntermediateOutputPath=$(BaseIntermediateOutputPath)\setup\">
+        Projects="$(SourceDir)\setup\setup.wixproj" Properties="
+			CompanyName=$(CompanyName);
+			ProductName=$(ProductName);
+			Version=$(Version);
+			Configuration=Release;
+			Platform=Any CPU;
+			Version=$(Version);
+			OutputPath=$(BuildDir)\setup;
+			BinDir=$(OutDir);
+			UpgradeCode=$(UpgradeCode);
+			IntermediateOutputPath=$(BaseIntermediateOutputPath)\setup\
+			">
       <Output ItemName="SetupFile" TaskParameter="TargetOutputs"/>
     </MSBuild>
   </Target>
@@ -118,5 +122,12 @@ along with sidi-util. If not, see <http://www.gnu.org/licenses/>.-->
   </Target>
 
   <Target Name="Publish" DependsOnTargets="Release;NugetPush" />
+  
+  <!-- This target puts the build.log file into the build directory -->
+  <Target Name="StartWrapper" >
+    <Exec
+		Command="&quot;$(MSBuildBinPath)\msbuild.exe&quot; &quot;$(MSBuildProjectFullPath)&quot; /t:$(BuildTarget) &quot;/fileLoggerParameters:LogFile=$(BuildDir)\build.log;Verbosity=diagnostic;Encoding=UTF-8&quot;"
+		/>
+  </Target>
 
 </Project>

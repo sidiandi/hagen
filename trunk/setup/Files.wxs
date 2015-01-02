@@ -3,240 +3,232 @@
     <Fragment>
         <DirectoryRef Id="INSTALLFOLDER">
             <Component Id="cmp93D462E31D0CC999C310513CF4613324" Guid="*">
-                <File Id="fil0F2C6E826B58E3C4EAE149732485CF5D" KeyPath="yes" Source="$(var.BuildDirectory)\activityReport.exe" />
+                <File Id="fil0F2C6E826B58E3C4EAE149732485CF5D" KeyPath="yes" Source="$(var.BinDir)\activityReport.exe" />
             </Component>
             <Component Id="cmpF5A5E046C32B84140B2E8C45864163EF" Guid="*">
-                <File Id="filA8AF2BDC3AEEDA0E0B48F235C25812CE" KeyPath="yes" Source="$(var.BuildDirectory)\activityReport.exe.config" />
+                <File Id="filA8AF2BDC3AEEDA0E0B48F235C25812CE" KeyPath="yes" Source="$(var.BinDir)\activityReport.exe.config" />
             </Component>
             <Component Id="cmp26E40F7974888E8DA3C95221D09279C2" Guid="*">
-                <File Id="fil37B896EA0618A1925229894725484CB5" KeyPath="yes" Source="$(var.BuildDirectory)\activityReport.pdb" />
+                <File Id="fil37B896EA0618A1925229894725484CB5" KeyPath="yes" Source="$(var.BinDir)\activityReport.pdb" />
             </Component>
             <Component Id="cmp5A577AB7028B538BD3FE4279AF1A38EA" Guid="*">
-                <File Id="fil321C00BC3B5990C93436C4C917B8AA5C" KeyPath="yes" Source="$(var.BuildDirectory)\activityReport.xml" />
+                <File Id="fil321C00BC3B5990C93436C4C917B8AA5C" KeyPath="yes" Source="$(var.BinDir)\activityReport.xml" />
             </Component>
             <Component Id="cmp7CC2A6AC4220DAC7231BB5E9C94B83A4" Guid="*">
-                <File Id="fil28C4D02BAEC848ED4EF2F5CC9892E41E" KeyPath="yes" Source="$(var.BuildDirectory)\Castle.Core.dll" />
+                <File Id="fil28C4D02BAEC848ED4EF2F5CC9892E41E" KeyPath="yes" Source="$(var.BinDir)\Castle.Core.dll" />
             </Component>
             <Component Id="cmpC371EB75C60C25C482FBFBBF7A609933" Guid="*">
-                <File Id="fil3002ACCAF16F94AF7229E89D98563396" KeyPath="yes" Source="$(var.BuildDirectory)\Castle.Core.xml" />
+                <File Id="fil3002ACCAF16F94AF7229E89D98563396" KeyPath="yes" Source="$(var.BinDir)\Castle.Core.xml" />
             </Component>
             <Component Id="cmpB4CD932B7D397593F49ED2EF8AC3AEC1" Guid="*">
-                <File Id="filEF2559E154C4B96C34663224E7996AF7" KeyPath="yes" Source="$(var.BuildDirectory)\Google.GData.Client.dll" />
+                <File Id="filEF2559E154C4B96C34663224E7996AF7" KeyPath="yes" Source="$(var.BinDir)\Google.GData.Client.dll" />
             </Component>
             <Component Id="cmp2A98B7DB096EC5E884F253F5BA2ED7AA" Guid="*">
-                <File Id="filE983BFC8D59FBA2C452B042089A648DF" KeyPath="yes" Source="$(var.BuildDirectory)\Google.GData.Contacts.dll" />
+                <File Id="filE983BFC8D59FBA2C452B042089A648DF" KeyPath="yes" Source="$(var.BinDir)\Google.GData.Contacts.dll" />
             </Component>
             <Component Id="cmp02703C19457B334F38D9C9FEA6EE7A32" Guid="*">
-                <File Id="filA096ABDC47C6DDE9D039037E75EBD74D" KeyPath="yes" Source="$(var.BuildDirectory)\Google.GData.Extensions.dll" />
+                <File Id="filA096ABDC47C6DDE9D039037E75EBD74D" KeyPath="yes" Source="$(var.BinDir)\Google.GData.Extensions.dll" />
             </Component>
             <Component Id="cmp4F76E1894FA7166A5184480C0E102E4E" Guid="*">
-                <File Id="filDF89728C68BFF1B8B1F076937A8DD66F" KeyPath="yes" Source="$(var.BuildDirectory)\hagen.core.dll" />
+                <File Id="filDF89728C68BFF1B8B1F076937A8DD66F" KeyPath="yes" Source="$(var.BinDir)\hagen.core.dll" />
             </Component>
             <Component Id="cmpE4B0DD62552F3F8E2B7763C3109D5CBC" Guid="*">
-                <File Id="fil7D0F2F8C2BB5E4F2F0D253BA0AB18DFF" KeyPath="yes" Source="$(var.BuildDirectory)\hagen.core.dll.config" />
+                <File Id="fil7D0F2F8C2BB5E4F2F0D253BA0AB18DFF" KeyPath="yes" Source="$(var.BinDir)\hagen.core.dll.config" />
             </Component>
             <Component Id="cmp27FB00E1F790D4B91BEA5FD8567B24DB" Guid="*">
-                <File Id="filD8EE7886F42F7830BBEDA9D5BB04DF46" KeyPath="yes" Source="$(var.BuildDirectory)\hagen.core.pdb" />
+                <File Id="filD8EE7886F42F7830BBEDA9D5BB04DF46" KeyPath="yes" Source="$(var.BinDir)\hagen.core.pdb" />
             </Component>
             <Component Id="cmpE0F38FFBE7B21BF8DF71F55C3572E868" Guid="*">
-                <File Id="filD5EA6B0AE492ECC0445498A62E8AD3DF" KeyPath="yes" Source="$(var.BuildDirectory)\hagen.core.xml" />
+                <File Id="filD5EA6B0AE492ECC0445498A62E8AD3DF" KeyPath="yes" Source="$(var.BinDir)\hagen.core.xml" />
             </Component>
             <Component Id="cmpB0F3EA83BCAA62E36637E7D203E17A7C" Guid="*">
-                <File Id="filCADD6ACD650D2362D78D09F17E9F63C4" KeyPath="yes" Source="$(var.BuildDirectory)\hagen.exe" />
+                <File Id="filCADD6ACD650D2362D78D09F17E9F63C4" KeyPath="yes" Source="$(var.BinDir)\hagen.exe" />
             </Component>
             <Component Id="cmpAE2667297C60ED29A9E1C5110462F1FA" Guid="*">
-                <File Id="fil3C71A0373881B1AA6640CE5502184254" KeyPath="yes" Source="$(var.BuildDirectory)\hagen.exe.config" />
+                <File Id="fil3C71A0373881B1AA6640CE5502184254" KeyPath="yes" Source="$(var.BinDir)\hagen.exe.config" />
             </Component>
             <Component Id="cmp27E72D75FABD68B8B483BF5A50C3E0CF" Guid="*">
-                <File Id="filD9D981F915C7376128F10F9873F7540F" KeyPath="yes" Source="$(var.BuildDirectory)\hagen.ext.dll" />
+                <File Id="filD9D981F915C7376128F10F9873F7540F" KeyPath="yes" Source="$(var.BinDir)\hagen.ext.dll" />
             </Component>
             <Component Id="cmpA58FF34498FBA18AE2AB845B1FFCBC49" Guid="*">
-                <File Id="filB0F0A8DC326F57585D4D2E129609F407" KeyPath="yes" Source="$(var.BuildDirectory)\hagen.ext.dll.config" />
+                <File Id="filB0F0A8DC326F57585D4D2E129609F407" KeyPath="yes" Source="$(var.BinDir)\hagen.ext.dll.config" />
             </Component>
             <Component Id="cmpFDE6A096F63DF4DB9FBDCBF87016BA44" Guid="*">
-                <File Id="fil988F24D1F1A11D8906E5398FF0CCA6B7" KeyPath="yes" Source="$(var.BuildDirectory)\hagen.ext.pdb" />
+                <File Id="fil988F24D1F1A11D8906E5398FF0CCA6B7" KeyPath="yes" Source="$(var.BinDir)\hagen.ext.pdb" />
             </Component>
             <Component Id="cmp1B66E00C0723326023246191F4E455BE" Guid="*">
-                <File Id="fil9F025DB4E01E03BA23EA7EF22E122652" KeyPath="yes" Source="$(var.BuildDirectory)\hagen.ext.xml" />
+                <File Id="fil9F025DB4E01E03BA23EA7EF22E122652" KeyPath="yes" Source="$(var.BinDir)\hagen.ext.xml" />
             </Component>
             <Component Id="cmpF9EDD38B52F46D0463ED2193991CF5A9" Guid="*">
-                <File Id="fil1469D6373A2BF119438AC206B433EC90" KeyPath="yes" Source="$(var.BuildDirectory)\hagen.pdb" />
+                <File Id="fil1469D6373A2BF119438AC206B433EC90" KeyPath="yes" Source="$(var.BinDir)\hagen.pdb" />
             </Component>
             <Component Id="cmp624D4936AD416CD0A2C032078D350D7D" Guid="*">
-                <File Id="fil0A551B20249F965D29F15D873AF011CC" KeyPath="yes" Source="$(var.BuildDirectory)\hagen.plugin.file.dll" />
+                <File Id="fil0A551B20249F965D29F15D873AF011CC" KeyPath="yes" Source="$(var.BinDir)\hagen.plugin.file.dll" />
             </Component>
             <Component Id="cmp8B29A8802BBEF828E154EF7C47C6B371" Guid="*">
-                <File Id="fil635D1C6AF3EF52C90B2BB60003EB4B85" KeyPath="yes" Source="$(var.BuildDirectory)\hagen.plugin.file.dll.config" />
+                <File Id="fil635D1C6AF3EF52C90B2BB60003EB4B85" KeyPath="yes" Source="$(var.BinDir)\hagen.plugin.file.dll.config" />
             </Component>
             <Component Id="cmp91C36754F53015008CB9C796615C44D0" Guid="*">
-                <File Id="filE95631AC55CB736E086437F01EDA3AAA" KeyPath="yes" Source="$(var.BuildDirectory)\hagen.plugin.file.pdb" />
+                <File Id="filE95631AC55CB736E086437F01EDA3AAA" KeyPath="yes" Source="$(var.BinDir)\hagen.plugin.file.pdb" />
             </Component>
             <Component Id="cmp1B526E81F1FB7E44E17F8A003A68C62B" Guid="*">
-                <File Id="fil3A961323FE1D405E7CB8DC83E5D5202E" KeyPath="yes" Source="$(var.BuildDirectory)\hagen.plugin.file.xml" />
+                <File Id="fil3A961323FE1D405E7CB8DC83E5D5202E" KeyPath="yes" Source="$(var.BinDir)\hagen.plugin.file.xml" />
             </Component>
             <Component Id="cmpDAF9F8ED77C249224B397C9AE6A2E947" Guid="*">
-                <File Id="filFECDED35AF4D367778F62CE9E73C30CB" KeyPath="yes" Source="$(var.BuildDirectory)\hagen.plugin.screen.dll" />
+                <File Id="filFECDED35AF4D367778F62CE9E73C30CB" KeyPath="yes" Source="$(var.BinDir)\hagen.plugin.screen.dll" />
             </Component>
             <Component Id="cmp416040AD141607C3389F7B34EEBA85B0" Guid="*">
-                <File Id="fil2FE4F4279D6070A308E0638AAAE4AE0B" KeyPath="yes" Source="$(var.BuildDirectory)\hagen.plugin.screen.dll.config" />
+                <File Id="fil2FE4F4279D6070A308E0638AAAE4AE0B" KeyPath="yes" Source="$(var.BinDir)\hagen.plugin.screen.dll.config" />
             </Component>
             <Component Id="cmp807A62CD70F33226F565FC584E563A03" Guid="*">
-                <File Id="fil834359438803F059D739A3E3C2B4F532" KeyPath="yes" Source="$(var.BuildDirectory)\hagen.plugin.screen.pdb" />
+                <File Id="fil834359438803F059D739A3E3C2B4F532" KeyPath="yes" Source="$(var.BinDir)\hagen.plugin.screen.pdb" />
             </Component>
             <Component Id="cmp555536AA47ECC43819B7D7D7E390B8AC" Guid="*">
-                <File Id="fil6FB9597BA076FEAE81AEFF3E89403726" KeyPath="yes" Source="$(var.BuildDirectory)\hagen.plugin.screen.xml" />
+                <File Id="fil6FB9597BA076FEAE81AEFF3E89403726" KeyPath="yes" Source="$(var.BinDir)\hagen.plugin.screen.xml" />
             </Component>
             <Component Id="cmp0B22BBB5FFFDAA04CD73763AEAA2C3F7" Guid="*">
-                <File Id="filD400201BC04F44A9739BFD5533715D41" KeyPath="yes" Source="$(var.BuildDirectory)\hagen.plugin.web.dll" />
+                <File Id="filD400201BC04F44A9739BFD5533715D41" KeyPath="yes" Source="$(var.BinDir)\hagen.plugin.web.dll" />
             </Component>
             <Component Id="cmpB6F6538429821B85CEB0C7BA372C29F6" Guid="*">
-                <File Id="fil259B066D09C6C7F10C783693C2375CD9" KeyPath="yes" Source="$(var.BuildDirectory)\hagen.plugin.web.dll.config" />
+                <File Id="fil259B066D09C6C7F10C783693C2375CD9" KeyPath="yes" Source="$(var.BinDir)\hagen.plugin.web.dll.config" />
             </Component>
             <Component Id="cmp261D7356F61575ED75B0512A6060ADA5" Guid="*">
-                <File Id="fil22635C8688B03425A16891DD70E48D60" KeyPath="yes" Source="$(var.BuildDirectory)\hagen.plugin.web.pdb" />
+                <File Id="fil22635C8688B03425A16891DD70E48D60" KeyPath="yes" Source="$(var.BinDir)\hagen.plugin.web.pdb" />
             </Component>
             <Component Id="cmp6AF52D47252B393D25EAF5E5B5C6FAC1" Guid="*">
-                <File Id="fil23ABFF0706227BDF0E493458E2616179" KeyPath="yes" Source="$(var.BuildDirectory)\hagen.plugin.web.xml" />
+                <File Id="fil23ABFF0706227BDF0E493458E2616179" KeyPath="yes" Source="$(var.BinDir)\hagen.plugin.web.xml" />
             </Component>
             <Component Id="cmp78AD23A65B000551B27C50B2F250FD51" Guid="*">
-                <File Id="fil85FAC0DE02B3D5F978EBF912FA0D1F67" KeyPath="yes" Source="$(var.BuildDirectory)\hagen.xml" />
+                <File Id="fil85FAC0DE02B3D5F978EBF912FA0D1F67" KeyPath="yes" Source="$(var.BinDir)\hagen.xml" />
             </Component>
             <Component Id="cmp28F47D9A07DA0DB70D726116C5513C1D" Guid="*">
-                <File Id="filFBF72465D947A4CEAA8F094AB2ABC988" KeyPath="yes" Source="$(var.BuildDirectory)\ICSharpCode.SharpZipLib.dll" />
+                <File Id="filFBF72465D947A4CEAA8F094AB2ABC988" KeyPath="yes" Source="$(var.BinDir)\ICSharpCode.SharpZipLib.dll" />
             </Component>
             <Component Id="cmp4CDC6E9977EC72FC12718F8878E696A1" Guid="*">
-                <File Id="fil9BFF2E84E07B0047AC90A52304E88708" KeyPath="yes" Source="$(var.BuildDirectory)\Interop.IWshRuntimeLibrary.dll" />
+                <File Id="fil9BFF2E84E07B0047AC90A52304E88708" KeyPath="yes" Source="$(var.BinDir)\Interop.IWshRuntimeLibrary.dll" />
             </Component>
             <Component Id="cmp13D58469BCB864EB53214ED46E622188" Guid="*">
-                <File Id="fil28F7A9478894C77C5F6C2A95DAA4B459" KeyPath="yes" Source="$(var.BuildDirectory)\log4net.dll" />
+                <File Id="fil28F7A9478894C77C5F6C2A95DAA4B459" KeyPath="yes" Source="$(var.BinDir)\log4net.dll" />
             </Component>
             <Component Id="cmp742785C9A7B88BE6B2E81C2322E3D2EE" Guid="*">
-                <File Id="filA307C00D897BECB908C510DE71A3AD29" KeyPath="yes" Source="$(var.BuildDirectory)\log4net.xml" />
+                <File Id="filA307C00D897BECB908C510DE71A3AD29" KeyPath="yes" Source="$(var.BinDir)\log4net.xml" />
             </Component>
             <Component Id="cmp32A85726D982E3C57F5BC37E8114CB7B" Guid="*">
-                <File Id="filA92D89868B1D33C1A931C0BD3AF8E56B" KeyPath="yes" Source="$(var.BuildDirectory)\ManagedWinapi.dll" />
+                <File Id="filA92D89868B1D33C1A931C0BD3AF8E56B" KeyPath="yes" Source="$(var.BinDir)\ManagedWinapi.dll" />
             </Component>
             <Component Id="cmpC5D74BC569C39EDCE63A055BEA48211C" Guid="*">
-                <File Id="fil94B9D556F27882C24E0A223A36F35BE6" KeyPath="yes" Source="$(var.BuildDirectory)\ManagedWinapi.pdb" />
+                <File Id="fil94B9D556F27882C24E0A223A36F35BE6" KeyPath="yes" Source="$(var.BinDir)\ManagedWinapi.pdb" />
             </Component>
             <Component Id="cmp937096A84F884442324EDEF705AE7ECD" Guid="*">
-                <File Id="filE944F460448199E2DE19191DEA40D816" KeyPath="yes" Source="$(var.BuildDirectory)\ManagedWinapi.xml" />
+                <File Id="filE944F460448199E2DE19191DEA40D816" KeyPath="yes" Source="$(var.BinDir)\ManagedWinapi.xml" />
             </Component>
             <Component Id="cmpBC4FC00A26E7D32479D42D3411317FC5" Guid="*">
-                <File Id="fil90A8AAD9FC612906D405476D61CEA3F4" KeyPath="yes" Source="$(var.BuildDirectory)\Newtonsoft.Json.dll" />
+                <File Id="fil90A8AAD9FC612906D405476D61CEA3F4" KeyPath="yes" Source="$(var.BinDir)\Newtonsoft.Json.dll" />
             </Component>
             <Component Id="cmp125C379E185231EFADA4CB4301BD0A9E" Guid="*">
-                <File Id="fil3A2F44A7730E98D18E0948B3261DFABD" KeyPath="yes" Source="$(var.BuildDirectory)\Newtonsoft.Json.xml" />
+                <File Id="fil3A2F44A7730E98D18E0948B3261DFABD" KeyPath="yes" Source="$(var.BinDir)\Newtonsoft.Json.xml" />
             </Component>
             <Component Id="cmp7FBBFC727329AAA372231FA34295C0C6" Guid="*">
-                <File Id="fil4700965FE3AC93623CB2D45CAFDE9A63" KeyPath="yes" Source="$(var.BuildDirectory)\nunit.framework.dll" />
+                <File Id="fil4700965FE3AC93623CB2D45CAFDE9A63" KeyPath="yes" Source="$(var.BinDir)\nunit.framework.dll" />
             </Component>
             <Component Id="cmpB92DF3B9C359B83A9BA4E27C5DBD40E1" Guid="*">
-                <File Id="filCCD055F61AE65252A5472B26C3AD9DB0" KeyPath="yes" Source="$(var.BuildDirectory)\nunit.framework.xml" />
+                <File Id="filCCD055F61AE65252A5472B26C3AD9DB0" KeyPath="yes" Source="$(var.BinDir)\nunit.framework.xml" />
             </Component>
             <Component Id="cmp7219299C1DFD6E86228C460F02846E19" Guid="*">
-                <File Id="fil411D2D21DD3FDFF0571E5511223284F0" KeyPath="yes" Source="$(var.BuildDirectory)\ObjectListView.dll" />
+                <File Id="fil411D2D21DD3FDFF0571E5511223284F0" KeyPath="yes" Source="$(var.BinDir)\ObjectListView.dll" />
             </Component>
             <Component Id="cmpC80ADC21DF1316EE7C265958C73AB64D" Guid="*">
-                <File Id="filE0582058E72F3E3B667BE9E38D319B4C" KeyPath="yes" Source="$(var.BuildDirectory)\SciLexer.dll" />
+                <File Id="filE0582058E72F3E3B667BE9E38D319B4C" KeyPath="yes" Source="$(var.BinDir)\SciLexer.dll" />
             </Component>
             <Component Id="cmpF2D23AAA869973A3774E275C31B3A277" Guid="*">
-                <File Id="filA80214361E923890982D592DF14E38F8" KeyPath="yes" Source="$(var.BuildDirectory)\SciLexer64.dll" />
+                <File Id="filA80214361E923890982D592DF14E38F8" KeyPath="yes" Source="$(var.BinDir)\SciLexer64.dll" />
             </Component>
             <Component Id="cmp658C98C0E84723AB62B81DEC00E9BAFA" Guid="*">
-                <File Id="filF94A6D023B07951F7D55DC1E2864FCC4" KeyPath="yes" Source="$(var.BuildDirectory)\ScintillaNET.dll" />
+                <File Id="filF94A6D023B07951F7D55DC1E2864FCC4" KeyPath="yes" Source="$(var.BinDir)\ScintillaNET.dll" />
             </Component>
             <Component Id="cmpC495939F29352109992E58BC805CEFAB" Guid="*">
-                <File Id="fil19C2764C19041BA3F72D996FC21FBA7E" KeyPath="yes" Source="$(var.BuildDirectory)\ScintillaNET.pdb" />
+                <File Id="fil19C2764C19041BA3F72D996FC21FBA7E" KeyPath="yes" Source="$(var.BinDir)\ScintillaNET.pdb" />
             </Component>
             <Component Id="cmp41D88919D97ABF34D594A4BBF063255F" Guid="*">
-                <File Id="fil31ED5844E8ECA47381F5095C2F2A423C" KeyPath="yes" Source="$(var.BuildDirectory)\ScintillaNET.xml" />
+                <File Id="fil31ED5844E8ECA47381F5095C2F2A423C" KeyPath="yes" Source="$(var.BinDir)\ScintillaNET.xml" />
             </Component>
             <Component Id="cmp07DD140BDA7F38274565F344DE1BA965" Guid="*">
-                <File Id="filA1FD66EBEE3C5BE062D82AAE49AADA6A" KeyPath="yes" Source="$(var.BuildDirectory)\Sidi.Office.dll" />
+                <File Id="filA1FD66EBEE3C5BE062D82AAE49AADA6A" KeyPath="yes" Source="$(var.BinDir)\Sidi.Office.dll" />
             </Component>
             <Component Id="cmp1860257ACA31D955D2D5EDF166BC048C" Guid="*">
-                <File Id="fil76B32D36C35F1B088D2897A4C0D4FFC3" KeyPath="yes" Source="$(var.BuildDirectory)\Sidi.Office.pdb" />
+                <File Id="fil76B32D36C35F1B088D2897A4C0D4FFC3" KeyPath="yes" Source="$(var.BinDir)\Sidi.Office.pdb" />
             </Component>
             <Component Id="cmp36C66BC40DFE38CB505F8B45DF265913" Guid="*">
-                <File Id="fil3BE95714515BE16A30D5D8DE600CA28B" KeyPath="yes" Source="$(var.BuildDirectory)\Sidi.Office.xml" />
+                <File Id="fil3BE95714515BE16A30D5D8DE600CA28B" KeyPath="yes" Source="$(var.BinDir)\Sidi.Office.xml" />
             </Component>
             <Component Id="cmp9D803AF885CD309E8C56C8CFD7524014" Guid="*">
-                <File Id="fil9C11F9CCDBC39F08FA2EE2EC183FD3D6" KeyPath="yes" Source="$(var.BuildDirectory)\Sidi.Util.dll" />
+                <File Id="fil9C11F9CCDBC39F08FA2EE2EC183FD3D6" KeyPath="yes" Source="$(var.BinDir)\Sidi.Util.dll" />
             </Component>
             <Component Id="cmp724D9816BA5036E3762FEF9BABADD7FC" Guid="*">
-                <File Id="fil33BD96A33989247D3BD9E18C481A82CF" KeyPath="yes" Source="$(var.BuildDirectory)\Sidi.Util.pdb" />
+                <File Id="fil33BD96A33989247D3BD9E18C481A82CF" KeyPath="yes" Source="$(var.BinDir)\Sidi.Util.pdb" />
             </Component>
             <Component Id="cmpA308F11AC1A0C43BE9E94C8319E7B7FE" Guid="*">
-                <File Id="fil1948DDD9A4BD72B7A0675E18565964B7" KeyPath="yes" Source="$(var.BuildDirectory)\Sidi.Util.xml" />
+                <File Id="fil1948DDD9A4BD72B7A0675E18565964B7" KeyPath="yes" Source="$(var.BinDir)\Sidi.Util.xml" />
             </Component>
             <Component Id="cmp94443F251C7A409D2D55887AFD9D01F9" Guid="*">
-                <File Id="filE4363E03998332262DBD99EC9C6EE4FE" KeyPath="yes" Source="$(var.BuildDirectory)\sqlite3.exe" />
+                <File Id="filE4363E03998332262DBD99EC9C6EE4FE" KeyPath="yes" Source="$(var.BinDir)\sqlite3.exe" />
             </Component>
             <Component Id="cmp6B7CE49F5F3A518047B74FB6AC2251C5" Guid="*">
-                <File Id="fil86030949C08D40073D1F77D572C14B0D" KeyPath="yes" Source="$(var.BuildDirectory)\System.Data.SQLite.dll" />
+                <File Id="fil86030949C08D40073D1F77D572C14B0D" KeyPath="yes" Source="$(var.BinDir)\System.Data.SQLite.dll" />
             </Component>
             <Component Id="cmpB0D00055965EDE11CC624747CE56C686" Guid="*">
-                <File Id="fil1AD5F5CE645B996B33CF1EF5C058BA4F" KeyPath="yes" Source="$(var.BuildDirectory)\System.Data.SQLite.xml" />
+                <File Id="fil1AD5F5CE645B996B33CF1EF5C058BA4F" KeyPath="yes" Source="$(var.BinDir)\System.Data.SQLite.xml" />
             </Component>
             <Component Id="cmp33A2E0CDCB2457FD07A5EB7CD43D89DA" Guid="*">
-                <File Id="fil846A953AFF86FEE17DA23C0C138E1A63" KeyPath="yes" Source="$(var.BuildDirectory)\System.Reactive.Core.dll" />
+                <File Id="fil846A953AFF86FEE17DA23C0C138E1A63" KeyPath="yes" Source="$(var.BinDir)\System.Reactive.Core.dll" />
             </Component>
             <Component Id="cmp658FF4AFD87816984B60B23176838707" Guid="*">
-                <File Id="filBFD9F16646CC705968A1EADF0D6EF5D3" KeyPath="yes" Source="$(var.BuildDirectory)\System.Reactive.Core.xml" />
+                <File Id="filBFD9F16646CC705968A1EADF0D6EF5D3" KeyPath="yes" Source="$(var.BinDir)\System.Reactive.Core.xml" />
             </Component>
             <Component Id="cmpE39668959EEE73724DCF95607C11909E" Guid="*">
-                <File Id="fil089FEF1B09CE2D4674666B7E9AF34C95" KeyPath="yes" Source="$(var.BuildDirectory)\System.Reactive.Interfaces.dll" />
+                <File Id="fil089FEF1B09CE2D4674666B7E9AF34C95" KeyPath="yes" Source="$(var.BinDir)\System.Reactive.Interfaces.dll" />
             </Component>
             <Component Id="cmpFD0F2B89F46954E97B5CAE900E0E7970" Guid="*">
-                <File Id="fil8B7049F5D719FE5E381569DB12CFA271" KeyPath="yes" Source="$(var.BuildDirectory)\System.Reactive.Interfaces.xml" />
+                <File Id="fil8B7049F5D719FE5E381569DB12CFA271" KeyPath="yes" Source="$(var.BinDir)\System.Reactive.Interfaces.xml" />
             </Component>
             <Component Id="cmpCBA72DF99C219D453FAFC3E749DA1F01" Guid="*">
-                <File Id="fil95A058622AFC42820C25EF2E63A647E8" KeyPath="yes" Source="$(var.BuildDirectory)\System.Reactive.Linq.dll" />
+                <File Id="fil95A058622AFC42820C25EF2E63A647E8" KeyPath="yes" Source="$(var.BinDir)\System.Reactive.Linq.dll" />
             </Component>
             <Component Id="cmpC79022383BA180BE267D30BFF993D878" Guid="*">
-                <File Id="fil240B9A058EAA1D783F64F2597CE83EDD" KeyPath="yes" Source="$(var.BuildDirectory)\System.Reactive.Linq.xml" />
+                <File Id="fil240B9A058EAA1D783F64F2597CE83EDD" KeyPath="yes" Source="$(var.BinDir)\System.Reactive.Linq.xml" />
             </Component>
             <Component Id="cmp1BC932B8353CD8372E8E42D3CA6CBB11" Guid="*">
-                <File Id="fil6E825004F8F872DFE6F7A33919E147A0" KeyPath="yes" Source="$(var.BuildDirectory)\System.Reactive.PlatformServices.dll" />
+                <File Id="fil6E825004F8F872DFE6F7A33919E147A0" KeyPath="yes" Source="$(var.BinDir)\System.Reactive.PlatformServices.dll" />
             </Component>
             <Component Id="cmp310738C5DD47548F0B834F8343BC44E5" Guid="*">
-                <File Id="filCF758A33CFDB2E9A03775DD7D33D67C0" KeyPath="yes" Source="$(var.BuildDirectory)\System.Reactive.PlatformServices.xml" />
+                <File Id="filCF758A33CFDB2E9A03775DD7D33D67C0" KeyPath="yes" Source="$(var.BinDir)\System.Reactive.PlatformServices.xml" />
             </Component>
             <Component Id="cmp6B3A90C65D0052F7AA87D6CBA7A47431" Guid="*">
-                <File Id="filB4B223D042EB19855C9A7AF7CA4CD2CB" KeyPath="yes" Source="$(var.BuildDirectory)\System.Reactive.Windows.Forms.dll" />
+                <File Id="filB4B223D042EB19855C9A7AF7CA4CD2CB" KeyPath="yes" Source="$(var.BinDir)\System.Reactive.Windows.Forms.dll" />
             </Component>
             <Component Id="cmp96652979B553135C8913541FDE367690" Guid="*">
-                <File Id="fil41A6578DD24B3C9B8215EC200049C8F6" KeyPath="yes" Source="$(var.BuildDirectory)\System.Reactive.Windows.Forms.xml" />
+                <File Id="fil41A6578DD24B3C9B8215EC200049C8F6" KeyPath="yes" Source="$(var.BinDir)\System.Reactive.Windows.Forms.xml" />
             </Component>
             <Component Id="cmp9D32426AF5003F162432A45C32619E14" Guid="*">
-                <File Id="filC8E8ACCFA3438BB8508802D31ED38A57" KeyPath="yes" Source="$(var.BuildDirectory)\TestStack.White.dll" />
+                <File Id="filC8E8ACCFA3438BB8508802D31ED38A57" KeyPath="yes" Source="$(var.BinDir)\TestStack.White.dll" />
             </Component>
             <Component Id="cmp0FDFF31653CD8F9C0B92BB558EA880E0" Guid="*">
-                <File Id="filD6F3414FC4D1EA1C7A2A46C0E936A7E0" KeyPath="yes" Source="$(var.BuildDirectory)\TestStack.White.pdb" />
+                <File Id="filD6F3414FC4D1EA1C7A2A46C0E936A7E0" KeyPath="yes" Source="$(var.BinDir)\TestStack.White.pdb" />
             </Component>
             <Component Id="cmpE6D192F25374CF54FC0BB5E14F6B838F" Guid="*">
-                <File Id="filA112669477C4B05EE2FC4529DA1EBAB9" KeyPath="yes" Source="$(var.BuildDirectory)\TestStack.White.xml" />
+                <File Id="filA112669477C4B05EE2FC4529DA1EBAB9" KeyPath="yes" Source="$(var.BinDir)\TestStack.White.xml" />
             </Component>
             <Component Id="cmp2C9ADE433A5BF4F58225CCF53E6E4CF8" Guid="*">
-                <File Id="filC0D8F251E1F2B460F224CE244ACA81F1" KeyPath="yes" Source="$(var.BuildDirectory)\WeifenLuo.WinFormsUI.Docking.dll" />
+                <File Id="filC0D8F251E1F2B460F224CE244ACA81F1" KeyPath="yes" Source="$(var.BinDir)\WeifenLuo.WinFormsUI.Docking.dll" />
             </Component>
-            <Directory Id="dirB15C94509BF3B84236E56311F7CDBC3D" Name="msi">
-                <Component Id="cmpB17DE427874593DB57469AEA72575A08" Guid="*">
-                    <File Id="fil101DF48CC031EBAB0A767A36D855F298" KeyPath="yes" Source="$(var.BuildDirectory)\msi\hagen-0.6.0.80.msi" />
-                </Component>
-                <Component Id="cmp3179EEA375916A47BD39F08DFD450975" Guid="*">
-                    <File Id="fil960F1F50B4CC10B5C10C7EE14EB68FCC" KeyPath="yes" Source="$(var.BuildDirectory)\msi\hagen-0.6.0.80.wixpdb" />
-                </Component>
-            </Directory>
             <Directory Id="dir43FCCFA109FBF584D9155DCE31E452EB" Name="x64">
                 <Component Id="cmp19F6DF8A2ABC78D782D76F1EEC9A5800" Guid="*">
-                    <File Id="filC7EA62E1AC64247AFBE682E8631402B8" KeyPath="yes" Source="$(var.BuildDirectory)\x64\SQLite.Interop.dll" />
+                    <File Id="filC7EA62E1AC64247AFBE682E8631402B8" KeyPath="yes" Source="$(var.BinDir)\x64\SQLite.Interop.dll" />
                 </Component>
             </Directory>
             <Directory Id="dir97F42FF68945B97AAE670945C4FDAE93" Name="x86">
                 <Component Id="cmp77484AF39EF2F8BD64E876C33A1C3E49" Guid="*">
-                    <File Id="filD2ACACD0EBAF09B1953E9C3793C13C69" KeyPath="yes" Source="$(var.BuildDirectory)\x86\SQLite.Interop.dll" />
+                    <File Id="filD2ACACD0EBAF09B1953E9C3793C13C69" KeyPath="yes" Source="$(var.BinDir)\x86\SQLite.Interop.dll" />
                 </Component>
             </Directory>
         </DirectoryRef>
@@ -316,8 +308,6 @@
             <ComponentRef Id="cmp0FDFF31653CD8F9C0B92BB558EA880E0" />
             <ComponentRef Id="cmpE6D192F25374CF54FC0BB5E14F6B838F" />
             <ComponentRef Id="cmp2C9ADE433A5BF4F58225CCF53E6E4CF8" />
-            <ComponentRef Id="cmpB17DE427874593DB57469AEA72575A08" />
-            <ComponentRef Id="cmp3179EEA375916A47BD39F08DFD450975" />
             <ComponentRef Id="cmp19F6DF8A2ABC78D782D76F1EEC9A5800" />
             <ComponentRef Id="cmp77484AF39EF2F8BD64E876C33A1C3E49" />
         </ComponentGroup>

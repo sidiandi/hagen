@@ -9,5 +9,7 @@
         <Build>0</Build>
 		<InitialRevision>217</InitialRevision>
 		<UpgradeCode>57CAC978-D1D8-4375-A93F-E906E4E66D60</UpgradeCode>
+		<Configuration>Release</Configuration>
+		<Platform>AnyCPU</Platform>
 	</PropertyGroup>
 </Project>

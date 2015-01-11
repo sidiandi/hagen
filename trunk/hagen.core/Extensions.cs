@@ -28,53 +28,6 @@ namespace hagen
 {
     public static class Extensions
     {
-        class AdapterIActionSource : IActionSource2
-        {
-            private static readonly log4net.ILog log = log4net.LogManager.GetLogger(System.Reflection.MethodBase.GetCurrentMethod().DeclaringType);
-
-            public AdapterIActionSource(IActionSource actionSource)
-            {
-                this.actionSource = actionSource;
-            }
-
-            public IActionSource actionSource { get; private set; }
-
-            IEnumerable<IAction> SafeEnum(IEnumerable<IAction> data)
-            {
-                var e = data.GetEnumerator();
-                for (;;)
-                {
-                    IAction x;
-                    try
-                    {
-                        if (!e.MoveNext())
-                        {
-                            break;
-                        }
-
-                        x = e.Current;
-                    }
-                    catch (Exception ex)
-                    {
-                        log.Warn(ex);
-                        break;
-                    }
-
-                    yield return x;
-                }
-            }
-
-            public IObservable<IAction> GetActions(string query)
-            {
-                return SafeEnum(actionSource.GetActions(query)).ToObservable(ThreadPoolScheduler.Instance);
-            }
-        }
-
-        public static IActionSource2 ToIActionSource2(this IActionSource actionSource)
-        {
-            return new AdapterIActionSource(actionSource);
-        }
-
         public static string ReadFixedLengthUnicodeString(this Stream s, int length)
         {
             byte[] fn = new byte[length * 2];

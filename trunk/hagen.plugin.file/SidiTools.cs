@@ -30,7 +30,7 @@ namespace hagen
                 "TreeMap"
             };
 
-            var paths = UserInterfaceState.Instance.SelectedPathList;
+            var paths = context.SelectedPathList;
             if (!paths.Any())
             {
                 return Enumerable.Empty<IAction>();

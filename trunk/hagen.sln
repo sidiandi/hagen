@@ -17,7 +17,7 @@ Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "hagen", "hagen\hagen.csproj
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "hagen.core", "hagen.core\hagen.core.csproj", "{B8A11330-3766-4244-9962-8B0D25E98005}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "hagen.ext", "hagen.ext\hagen.ext.csproj", "{9BF01205-1BD3-4121-909D-16CEC6D47143}"
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "hagen.plugin", "hagen.ext\hagen.plugin.csproj", "{9BF01205-1BD3-4121-909D-16CEC6D47143}"
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "hagen.plugin.web", "hagen.plugin.web\hagen.plugin.web.csproj", "{D54AAAE7-E7AA-4A1D-A045-9E70853B7040}"
 EndProject

@@ -14,11 +14,18 @@ namespace hagen
     {
         private static readonly log4net.ILog log = log4net.LogManager.GetLogger(System.Reflection.MethodBase.GetCurrentMethod().DeclaringType);
 
+        public AutoText(IContext context)
+        {
+            this.context = context;
+        }
+
+        readonly IContext context;
+
         [Usage("insert date")]
         public void Today()
         {
             DateTime date = DateTime.Today;
-            UserInterfaceState.Instance.InsertText(date.ToString("yyyy-MM-dd"));
+            context.InsertText(date.ToString("yyyy-MM-dd"));
         }
     }
 }

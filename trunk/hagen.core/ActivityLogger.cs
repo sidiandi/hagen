@@ -83,21 +83,6 @@ namespace hagen
 
         DateTime workDayBegin;
 
-        void HandlePrintScreen(KeyEventArgs e)
-        {
-            if (e.KeyCode == System.Windows.Forms.Keys.PrintScreen)
-            {
-                if ((Control.ModifierKeys & Keys.Alt) == Keys.Alt)
-                {
-                    hagen.CaptureActiveWindow();
-                }
-                else
-                {
-                    hagen.CaptureScreens();
-                }
-            }
-        }
-
         public void Dispose()
         {
             subscriptions.Dispose();

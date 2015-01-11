@@ -63,10 +63,12 @@ namespace hagen
             this.Controls.Add(dockPanel);
 
             var actions = hagen.OpenActions();
+
+            var pluginProvider = new PluginProvider(hagen, new PathList() { Paths.BinDir });
+
             var actionSource = new Composite(
-                        new DatabaseLookup(actions),
-                        new Plugins(hagen, new PathList() { Paths.BinDir })
-                );
+                        new IActionSource2[] {new DatabaseLookup(actions) }
+                        .Concat(pluginProvider.GetActionSources()).ToArray());
 
             searchBox1 = new SearchBox(actionSource)
             {
@@ -123,6 +125,7 @@ namespace hagen
         public DockPanel dockPanel;
         SearchBox searchBox1;
         Hagen hagen;
+        UserInterfaceState context = new UserInterfaceState();
 
         public Main(Hagen hagen)
         {
@@ -174,7 +177,7 @@ namespace hagen
         [Usage("Activate the program's main window")]
         public void Popup()
         {
-            UserInterfaceState.Instance.SaveFocus();
+            this.context.SaveFocus();
             WindowState = FormWindowState.Maximized;
             this.Visible = true;
             if (Clipboard.ContainsText())

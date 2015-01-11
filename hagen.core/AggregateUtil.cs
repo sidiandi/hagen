@@ -31,12 +31,6 @@ namespace hagen
                 .Select(b => 
                     {
                         var d = Distance(b[0].Location, b[1].Location);
-                        if (d >100)
-                        {
-                            log.Info(b[0].Details());
-                            log.Info(b[1].Details());
-                            log.Info(d);
-                        }
                         return d;
                     });
         }

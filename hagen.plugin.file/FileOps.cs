@@ -63,11 +63,15 @@ namespace hagen
         public void Flatten()
         {
             var paths = new Sidi.Util.Shell().SelectedFiles;
-            if (paths.Count() != 1)
+            var op = new Operation();
+            foreach (var i in paths)
             {
-                return;
+                Flatten(op, i);
             }
-            var directory = paths.First();
+        }
+
+        void Flatten(Operation op, LPath directory)
+        {
             if (!directory.IsDirectory)
             {
                 return;
@@ -80,6 +84,25 @@ namespace hagen
             {
                 var destination = GetNonExistingPath(directory.CatDir(source.FileName));
                 source.Move(destination);
+            }
+            op.DeleteEmptyDirectories(directory);
+        }
+
+        [Usage("Merge selected directories"), ForegroundWindowMustBeExplorer]
+        public void Merge()
+        {
+            var directories = new Sidi.Util.Shell().SelectedFiles.Where(x => x.IsDirectory).ToList();
+            LPath root = directories.First().Parent;
+
+            foreach (var d in directories)
+            {
+                var temp = GetNonExistingPath(d.Parent.CatDir(LPath.GetRandomFileName()));
+                d.Move(temp);
+                foreach (var c in temp.GetChildren())
+                {
+                    var dest = GetNonExistingPath(root.CatDir(c.FileName));
+                    c.Move(dest);
+                }
             }
         }
 

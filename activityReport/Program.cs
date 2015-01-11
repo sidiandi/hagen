@@ -355,6 +355,9 @@ namespace activityReport
             System.Windows.Forms.Application.Run(StatisticsWindow());
         }
 
+        readonly Color idleColor = Color.FromArgb(0xee, 0xee, 0xff);
+        readonly Color activeColor = Color.Blue;
+        
         public Form StatisticsWindow()
         {
             var main = new ListDetail();
@@ -374,13 +377,13 @@ namespace activityReport
                     };
                     chart.ChartAreas.Add(ca);
                     
-                    var a = new Dvc.Series()
+                    var active = new Dvc.Series()
                     {
                         Name = "Activity",
                         ChartType = Dvc.SeriesChartType.RangeBar,
                     };
 
-                    chart.Series.Add(a);
+                    chart.Series.Add(active);
 
                     var refday = m.Begin.Date;
                     ca.AxisY.Maximum = refday.AddDays(1).ToOADate();
@@ -407,12 +410,20 @@ namespace activityReport
                     ca.AxisY.IntervalType = DateTimeIntervalType.Hours;
                     ca.AxisY.Interval = 1;
 
-                    foreach (var i in Summarize(input.Range(m)))
+                    var bars = Summarize(input.Range(m));
+                    log.Info(bars.ListFormat().AllPublic());
+                    
+                    foreach (var i in bars)
                     {
-                        a.Points.AddXY(
-                            i.Begin.Date,
-                            refday + i.Begin.TimeOfDay,
-                            refday + i.End.TimeOfDay);
+                        foreach (var t in i.TimeInterval.SplitToDays())
+                        {
+                            var y0 = (refday + t.Begin.TimeOfDay).ToOADate();
+                            var y1 = y0 + t.Duration.TotalDays;
+                            // log.DebugFormat("{0} {1} {2}", t, y0, y1);
+                            var p = new DataPoint(t.Begin.Date.ToOADate(), new[] { y0, y1 });
+                            p.Color = i.IsActive ? activeColor : idleColor;
+                            active.Points.Add(p);
+                        }
                     }
 
                     return chart;
@@ -628,40 +639,44 @@ namespace activityReport
         }
         */
 
+        void Add(ref Input sum, Input i)
+        {
+            if (sum == null)
+            {
+                sum = new Input();
+                sum.TerminalServerSession = i.TerminalServerSession;
+                sum.Begin = i.Begin;
+            }
+            sum.End = i.End;
+            sum.Clicks += i.Clicks;
+            sum.KeyDown += i.KeyDown;
+            sum.MouseMove += i.MouseMove;
+        }
+        
         IEnumerable<Input> Summarize(IEnumerable<Input> raw)
         {
             Input s = null;
             foreach (var i in raw)
             {
-                if (s == null)
+                if (s != null)
                 {
-                    s = new Input();
-                    s.TerminalServerSession = i.TerminalServerSession;
-                    s.Begin = i.Begin;
-                    s.End = i.End;
-                }
-                else
-                {
-                    if (s.TerminalServerSession != i.TerminalServerSession || s.End != i.Begin)
+                    if (
+                        s.TerminalServerSession != i.TerminalServerSession || 
+                        s.End != i.Begin ||
+                        s.IsActive != i.IsActive
+                        )
                     {
                         yield return s;
                         s = null;
                     }
-                    else
-                    {
-                        s.End = i.End;
-                    }
                 }
-            }
 
-            if (s != null)
-            {
-                yield return s;
+                Add(ref s, i);
             }
         }
 
         [TestFixture]
-        public class Test
+        public class Test : Sidi.Test.TestBase
         {
             [Test, Explicit("interactive")]
             public void Stats()
@@ -669,10 +684,28 @@ namespace activityReport
                 System.Windows.Forms.Application.Run(new Program(new Hagen()).StatisticsWindow());
             }
 
-            [Test, Explicit("interactive")]
+            [Test]
             public void Report()
             {
-                new Program(new Hagen()).Report(Console.Out, TimeIntervalExtensions.LastDays(90));
+                new Program(new Hagen()).Report(Console.Out, TimeIntervalExtensions.LastDays(30));
+            }
+
+            [Test, Explicit("interactive")]
+            public void Summarize()
+            {
+                var hagen = new Hagen();
+                var p = new Program(hagen);
+                
+                using (var inputs = hagen.OpenInputs())
+                {
+                    var raw = inputs.Range(new TimeInterval(new DateTime(2015, 1, 8), new DateTime(2015, 1, 9)));
+                    raw.ListFormat()
+                        .Add(_=> _.Begin, _=>_.End, _ => _.TimeInterval.Duration.TotalHours, _=>_.IsActive)
+                        .RenderText();
+                    var sum = p.Summarize(raw);
+                    sum.ListFormat()
+                        .Add(_=> _.Begin, _=>_.End, _ => _.TimeInterval.Duration.TotalHours, _=>_.IsActive).RenderText();
+                }
             }
 
             [Test, Explicit("interactive")]

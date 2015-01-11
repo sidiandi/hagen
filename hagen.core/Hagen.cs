@@ -37,6 +37,7 @@ namespace hagen
         public Hagen()
         {
             actions = OpenActions();
+            this.Context = new UserInterfaceState();
         }
 
         Collection<Action> actions;
@@ -71,7 +72,7 @@ namespace hagen
             return new Collection<Action>(DatabasePath);
         }
 
-        public IContext Context { get; private set; }
+        public UserInterfaceState Context { get; private set; }
 
         public void Cleanup()
         {

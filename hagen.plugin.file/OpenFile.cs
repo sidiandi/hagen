@@ -29,13 +29,20 @@ namespace hagen.ActionSource
 {
     public class OpenFile : IActionSource
     {
+        public OpenFile(IContext context)
+        {
+            this.context = context;
+        }
+
+        IContext context;
+
         public IEnumerable<IAction> GetActions(string query)
         {
             return TextPosition.Extract(query)
                 .Where(x => x.Path.Exists)
                 .SelectMany(fl => new IAction[]
                     {
-                        new ActionChoice(fl.ToString(), () =>
+                        context.CreateChoice(fl.ToString(), () =>
                             {
                                 var ac = new List<IAction>();
                                 ac.Add(new SimpleAction(String.Format("Explorer : {0}", fl), () => OpenInShell(fl)));

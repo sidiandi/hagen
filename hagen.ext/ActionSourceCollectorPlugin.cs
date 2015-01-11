@@ -5,11 +5,14 @@ using System.Linq;
 using System.Reflection;
 using System.Text;
 using System.Threading.Tasks;
+using Sidi.Extensions;
 
 namespace hagen
 {
     public class ActionSourceCollector : IPlugin
     {
+        private static readonly log4net.ILog log = log4net.LogManager.GetLogger(System.Reflection.MethodBase.GetCurrentMethod().DeclaringType);
+
         IContext Context { get; set; }
 
         public virtual void Init(IContext context)
@@ -17,35 +20,41 @@ namespace hagen
             Context = context;
         }
 
+        T Create<T>(Type t)
+        {
+            object plugin = null;
+            var contextCtor = t.GetConstructor(new Type[] { typeof(IContext) });
+            if (contextCtor != null)
+            {
+                return (T) contextCtor.Invoke(new object[] { this.Context });
+            }
+
+            var defaultCtor = t.GetConstructor(new Type[] { });
+            if (defaultCtor != null)
+            {
+                return (T) defaultCtor.Invoke(new object[] { });
+            }
+
+            return default(T);
+        }
+
         public virtual IEnumerable<IActionSource2> GetActionSources()
         {
-            var types = GetType().Assembly.GetTypes();
+            var assembly = GetType().Assembly;
+            log.InfoFormat("Looking for action sources in {0}", assembly);
+            var types = assembly.GetTypes();
 
-            return types
+            var actionSources = types
                 .Where(t => !t.Name.StartsWith("Test_"))
                 .Select(t =>
                     {
                         if (typeof(IActionSource2).IsAssignableFrom(t))
                         {
-                            var ctor = t.GetConstructor(new Type[] { });
-
-                            if (ctor == null)
-                            {
-                                return null;
-                            }
-
-                            return (IActionSource2)ctor.Invoke(new object[] { });
+                            return Create<IActionSource2>(t);
                         } 
                         else if (typeof(IActionSource).IsAssignableFrom(t))
                         {
-                            var ctor = t.GetConstructor(new Type[] { });
-                        
-                            if (ctor == null)
-                            {
-                                return null;
-                            }
-
-                            return ((IActionSource)ctor.Invoke(new object[] { })).ToIActionSource2();
+                            return Create<IActionSource>(t).ToIActionSource2();
                         }
                         else
                         {
@@ -58,24 +67,12 @@ namespace hagen
                     .Where(t => t.GetCustomAttributes(typeof(Usage), false).Any())
                     .Select(t =>
                     {
-                        object plugin = null;
-                        var contextCtor = t.GetConstructor(new Type[]{ typeof(IContext) } );
-                        if (contextCtor != null)
+                        object plugin = Create<object>(t);
+                        if (plugin == null)
                         {
-                            plugin = contextCtor.Invoke(new object[] { this.Context });
-                            goto ok;
+                            return null;
                         }
 
-                        var defaultCtor = t.GetConstructor(new Type[] { });
-                        if (defaultCtor != null)
-                        {
-                            plugin = defaultCtor.Invoke(new object[] { });
-                            goto ok;
-                        }
-
-                        return null;
-
-                    ok:
                         var parser = Parser.SingleSource(plugin);
                         return new ActionFilter(this.Context, parser);
                     })
@@ -83,6 +80,9 @@ namespace hagen
                     )
 
                 .ToList();
+
+            log.Info(actionSources.ListFormat());
+            return actionSources;
         }
     }
 }

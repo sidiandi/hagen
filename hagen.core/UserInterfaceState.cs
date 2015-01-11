@@ -80,5 +80,12 @@ namespace hagen
             }
         }
         PathList selectedPathList = new PathList();
+
+        public IAction CreateChoice(string name, Func<IEnumerable<IAction>> actionProvider)
+        {
+            return new ActionChoice(name, actionProvider, Choose);
+        }
+
+        public System.Action<IList<IAction>> Choose;
     }
 }

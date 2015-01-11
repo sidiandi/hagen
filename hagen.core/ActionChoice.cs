@@ -8,17 +8,20 @@ namespace hagen
 {
     public class ActionChoice : IAction
     {
-        public ActionChoice(string name, Func<IEnumerable<IAction>> actionProvider)
+        public ActionChoice(string name, Func<IEnumerable<IAction>> actionProvider, System.Action<IList<IAction>> choose)
         {
             this.Name = name;
             this.actionProvider = actionProvider;
+            this.choose = choose;
         }
 
         Func<IEnumerable<IAction>> actionProvider;
+        System.Action<IList<IAction>> choose;
 
         public void Execute()
         {
             var actions = actionProvider().ToList();
+            choose(actions);
         }
 
         public string Name

@@ -51,7 +51,6 @@
     <Reference Include="UIAutomationClient" />
   </ItemGroup>
   <ItemGroup>
-    <Compile Include="ActionChoice.cs" />
     <Compile Include="ActionFilter.cs" />
     <Compile Include="ActionSourceCollectorPlugin.cs" />
     <Compile Include="AdapterIActionSource.cs" />

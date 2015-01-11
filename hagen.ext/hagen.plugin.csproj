@@ -51,19 +51,23 @@
     <Reference Include="UIAutomationClient" />
   </ItemGroup>
   <ItemGroup>
+    <Compile Include="ActionChoice.cs" />
     <Compile Include="ActionFilter.cs" />
+    <Compile Include="ActionSourceCollectorPlugin.cs" />
+    <Compile Include="AdapterIActionSource.cs" />
     <Compile Include="AutomationExtension.cs" />
     <Compile Include="IAction.cs" />
     <Compile Include="IActionSource.cs" />
     <Compile Include="IActionSource2.cs" />
     <Compile Include="IconHelper.cs" />
     <Compile Include="Icons.cs" />
+    <Compile Include="IContext.cs" />
+    <Compile Include="IPlugin.cs" />
     <Compile Include="NativeMethods.cs" />
     <Compile Include="PathListExtension.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
     <Compile Include="ShellAction.cs" />
     <Compile Include="SimpleAction.cs" />
-    <Compile Include="UserInterfaceState.cs" />
   </ItemGroup>
   <ItemGroup>
     <None Include="App.config" />

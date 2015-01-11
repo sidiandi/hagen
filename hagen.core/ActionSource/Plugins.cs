@@ -9,23 +9,41 @@ using Sidi.CommandLine;
 
 namespace hagen.ActionSource
 {
-    public class Plugins : Composite
+    public class PluginProvider
     {
         private static readonly log4net.ILog log = log4net.LogManager.GetLogger(System.Reflection.MethodBase.GetCurrentMethod().DeclaringType);
 
-        public Plugins(Hagen hagen, PathList searchPath)
+        public PluginProvider(Hagen hagen, PathList searchPath)
         {
             this.hagen = hagen;
 
-            this.Sources = GetPlugins(searchPath);
+            this.Plugins = GetPlugins(searchPath);
         }
 
         Hagen hagen;
 
-        IList<IActionSource2> GetPlugins(Assembly assembly)
-        {
-            var types = assembly.GetTypes();
+        public IList<IPlugin> Plugins { get; private set; }
 
+        public IEnumerable<IActionSource2> GetActionSources()
+        {
+            return Plugins.SelectMany(p => p.GetActionSources())
+                .Where(x => x != null)
+                .ToList();
+        }
+
+        IList<IPlugin> GetPlugins(Assembly assembly)
+        {
+            return assembly.GetTypes()
+                .Where(t => typeof(IPlugin).IsAssignableFrom(t) && !object.Equals(typeof(IPlugin), t))
+                .Select(t =>
+                    {
+                        var plugin = (IPlugin) t.GetConstructor(new Type[]{}).Invoke(new object[]{});
+                        plugin.Init(hagen.Context);
+                        return plugin;
+                    })
+                .ToList();
+
+           /*
             return types
                 .Where(t => !t.Name.StartsWith("Test_"))
                 .Select(t =>
@@ -88,9 +106,10 @@ namespace hagen.ActionSource
                     )
 
                 .ToList();
+             */
         }
 
-        IList<IActionSource2> GetPlugins(PathList searchPath)
+        IList<IPlugin> GetPlugins(PathList searchPath)
         {
             var assemblyFileExtension = new Sidi.IO.FileType("exe", "dll");
             var hagenExe = Assembly.GetEntryAssembly().GetLocalPath();

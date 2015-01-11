@@ -27,30 +27,90 @@ using System.Runtime.InteropServices;
 using Microsoft.Office.Interop.Outlook;
 using NUnit.Framework;
 using System.Web;
+using System.Reflection;
 
 namespace hagen.ActionSource
 {
     [Usage("Makes screen shots")]
     public class Screen
     {
-        public Screen(Hagen hagen)
+        private static readonly log4net.ILog log = log4net.LogManager.GetLogger(System.Reflection.MethodBase.GetCurrentMethod().DeclaringType);
+
+        readonly IContext context;
+        
+        public Screen(IContext context)
         {
-            this.Hagen = hagen;
+            this.context = context;
         }
 
-        public Hagen Hagen;
+        void HandlePrintScreen(KeyEventArgs e)
+        {
+            if (e.KeyCode == System.Windows.Forms.Keys.PrintScreen)
+            {
+                if ((Control.ModifierKeys & Keys.Alt) == Keys.Alt)
+                {
+                    CaptureActiveWindow();
+                }
+                else
+                {
+                    CaptureScreens();
+                }
+            }
+        }
+
+        [Usage("Capture active window")]
+        public LPath CaptureActiveWindow()
+        {
+            var sc = new ScreenCapture();
+            var dir = ScreenCaptureDirectory;
+            var fe = context.SavedFocusedElement;
+            if (fe == null)
+            {
+                throw new System.Exception("Not active window");
+            }
+            return sc.CaptureWindow(dir, fe.GetTopLevelElement());
+        }
+
+        [Usage("Capture all screens")]
+        public IList<LPath> CaptureScreens()
+        {
+            var sc = new ScreenCapture();
+            var dir = ScreenCaptureDirectory;
+            return sc.CaptureAll(dir);
+        }
+
+        LPath ScreenCaptureDirectory
+        {
+            get
+            {
+                var d = Paths.GetFolderPath(System.Environment.SpecialFolder.MyDocuments).CatDir(
+                    LPath.GetValidFilename(GetType().Assembly.GetCustomAttribute<AssemblyProductAttribute>().Product),
+                    "screen");
+
+                log.InfoFormat("ScreenCaptureDirectory: {0}", d);
+                return d;
+            }
+        }
+
+        [Usage("Capture the primary screen")]
+        public LPath CapturePrimaryScreen()
+        {
+            var sc = new ScreenCapture();
+            var dir = ScreenCaptureDirectory;
+            return sc.CaptureToDirectory(System.Windows.Forms.Screen.PrimaryScreen, dir);
+        }
 
         [Usage("Create a screen shot mail")]
         public void MailScreenShotPrimaryScreen()
         {
-            var file = Hagen.CapturePrimaryScreen();
+            var file = CapturePrimaryScreen();
             CreateOutlookEmailWithEmbeddedPicture(file);
         }
 
         [Usage("Create a screen shot of active window and prepare an email")]
         public void MailScreenShotActiveWindow()
         {
-            var file = Hagen.CaptureActiveWindow();
+            var file = CaptureActiveWindow();
             CreateOutlookEmailWithEmbeddedPicture(file);
         }
 

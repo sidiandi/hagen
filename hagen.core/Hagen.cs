@@ -71,6 +71,8 @@ namespace hagen
             return new Collection<Action>(DatabasePath);
         }
 
+        public IContext Context { get; private set; }
+
         public void Cleanup()
         {
             using (var actions = OpenActions())
@@ -95,32 +97,6 @@ namespace hagen
                     return b.Begin;
                 }
             }
-        }
-
-        public LPath CaptureActiveWindow()
-        {
-            var sc = new ScreenCapture();
-            var dir = ScreenCaptureDirectory;
-            var fe = UserInterfaceState.Instance.SavedFocusedElement;
-            if (fe == null)
-            {
-                throw new Exception("Not active window");
-            }
-            return sc.CaptureWindow(dir, fe.GetTopLevelElement());
-        }
-
-        public IList<LPath> CaptureScreens()
-        {
-            var sc = new ScreenCapture();
-            var dir = ScreenCaptureDirectory;
-            return sc.CaptureAll(dir);
-        }
-
-        public LPath CapturePrimaryScreen()
-        {
-            var sc = new ScreenCapture();
-            var dir = ScreenCaptureDirectory;
-            return sc.CaptureToDirectory(Screen.PrimaryScreen, dir);
         }
 
         public Collection<Input> OpenInputs()

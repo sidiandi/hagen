@@ -48,12 +48,14 @@ namespace hagen
         }
     }
     
-    public class ActionFilter : IActionSource2
+    class ActionFilter : IActionSource2
     {
+        IContext context;
         public Parser Parser;
         
-        public ActionFilter(Parser parser)
+        public ActionFilter(IContext context, Parser parser)
         {
+            this.context = context;
             this.Parser = parser;
         }
 
@@ -79,10 +81,9 @@ namespace hagen
 
         IAction ToIAction(Sidi.CommandLine.Action a)
         {
-            var uiState =hagen.UserInterfaceState.Instance;
-            if (IsVisible(a) && uiState.SelectedPathList != null && uiState.SelectedPathList.Any())
+            if (IsVisible(a) && context.SelectedPathList != null && context.SelectedPathList.Any())
             {
-                var pathList = UserInterfaceState.Instance.SelectedPathList;
+                var pathList = context.SelectedPathList;
                 return new SimpleAction(
                     String.Format("{0}({2}) ({1})", a.Name, a.Usage, pathList.JoinTruncated(", ", 80)),
                     () =>
@@ -128,7 +129,7 @@ namespace hagen
             {
                 sampleApp = new SampleApp();
                 var p = Parser.SingleSource(sampleApp);
-                af = new ActionFilter(p);
+                af = new ActionFilter(null, p);
             }
 
             SampleApp sampleApp;

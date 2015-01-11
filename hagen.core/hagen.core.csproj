@@ -145,11 +145,11 @@
     </Compile>
     <Compile Include="AsyncQuery.cs" />
     <Compile Include="RxExtensions.cs" />
-    <Compile Include="ScreenCapture.cs" />
     <Compile Include="StartProcess.cs" />
     <Compile Include="StringEx.cs" />
     <Compile Include="TimeIntervalExtensions.cs" />
     <Compile Include="Updater.cs" />
+    <Compile Include="UserInterfaceState.cs" />
     <Compile Include="WindowInformation.cs" />
     <Compile Include="Windows.cs" />
     <Compile Include="WinEventHook.cs" />
@@ -279,9 +279,9 @@
     </BootstrapperPackage>
   </ItemGroup>
   <ItemGroup>
-    <ProjectReference Include="..\hagen.ext\hagen.ext.csproj">
+    <ProjectReference Include="..\hagen.ext\hagen.plugin.csproj">
       <Project>{9BF01205-1BD3-4121-909D-16CEC6D47143}</Project>
-      <Name>hagen.ext</Name>
+      <Name>hagen.plugin</Name>
     </ProjectReference>
   </ItemGroup>
   <ItemGroup>

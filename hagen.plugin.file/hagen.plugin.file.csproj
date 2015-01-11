@@ -67,20 +67,17 @@
     <Compile Include="AlwaysCrash.cs" />
     <Compile Include="AutoText.cs" />
     <Compile Include="OpenFile.cs" />
-    <Compile Include="SidiTools.cs" />
+    <Compile Include="Plugin.cs" />
+    <None Include="SidiTools.cs" />
     <Compile Include="TextPosition.cs" />
     <Compile Include="FileOps.cs" />
     <Compile Include="InsertFilesAsText.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
   </ItemGroup>
   <ItemGroup>
-    <ProjectReference Include="..\hagen.ext\hagen.ext.csproj">
+    <ProjectReference Include="..\hagen.ext\hagen.plugin.csproj">
       <Project>{9BF01205-1BD3-4121-909D-16CEC6D47143}</Project>
-      <Name>hagen.ext</Name>
-    </ProjectReference>
-    <ProjectReference Include="..\hagen\hagen.csproj">
-      <Project>{5e196699-e12b-4500-8178-bd38acc8d362}</Project>
-      <Name>hagen</Name>
+      <Name>hagen.plugin</Name>
     </ProjectReference>
   </ItemGroup>
   <ItemGroup>

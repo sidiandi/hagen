@@ -8,7 +8,7 @@ using System.Windows.Forms;
 
 namespace hagen
 {
-    public class UserInterfaceState
+    public class UserInterfaceState : IContext
     {
         public static UserInterfaceState Instance
         {
@@ -34,7 +34,6 @@ namespace hagen
                 SendKeys.Send("+{INS}");
             }
         }
-
 
         public bool IsConsole
         {

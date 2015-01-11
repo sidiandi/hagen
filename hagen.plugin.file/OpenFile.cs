@@ -35,7 +35,7 @@ namespace hagen.ActionSource
                 .Where(x => x.Path.Exists)
                 .SelectMany(fl => new IAction[]
                     {
-                        new SimpleAction(fl.ToString(), () =>
+                        new ActionChoice(fl.ToString(), () =>
                             {
                                 var ac = new List<IAction>();
                                 ac.Add(new SimpleAction(String.Format("Explorer : {0}", fl), () => OpenInShell(fl)));
@@ -50,7 +50,7 @@ namespace hagen.ActionSource
                                     ac.Add(new SimpleAction(String.Format("Notepad++: {0}", fl), () => OpenInNotepadPlusPlus(fl)));
                                     ac.Add(new SimpleAction(String.Format("Visual Studio: {0}", fl), () => OpenInVisualStudio(fl)));
                                 }
-                                ActionChooser.Choose(ac);
+                                return ac;
                             })
                     });
         }

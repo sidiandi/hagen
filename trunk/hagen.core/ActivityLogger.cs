@@ -40,7 +40,10 @@ namespace hagen
     {
         private static readonly log4net.ILog log = log4net.LogManager.GetLogger(System.Reflection.MethodBase.GetCurrentMethod().DeclaringType);
 
-        readonly TimeSpan inputLoggingInterval = TimeSpan.FromMinutes(1);
+        readonly TimeSpan inputLoggingInterval =
+            TimeSpan.FromMinutes(1);
+            // TimeSpan.FromSeconds(1);
+
         IDisposable subscriptions;
         Hagen hagen;
         Collection<ProgramUse> programUse;
@@ -66,7 +69,7 @@ namespace hagen
                 inputAggregator.Input.SubscribeOn(TaskPoolScheduler.Default).Subscribe(_ =>
                     {
                         inputs.Add(_);
-                        log.Info(_.Details());
+                        log.InfoFormat("Input: {0} clicks, {1} keys", _.Clicks, _.KeyDown);
                     }),
                 inputAggregator,
                 inputs,

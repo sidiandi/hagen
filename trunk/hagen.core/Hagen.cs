@@ -151,9 +151,23 @@ namespace hagen
             public bool TerminalServerSession { set; get; }
         }
     
+        public static IEnumerable<TimeInterval> SplitToDays(this TimeInterval interval)
+        {
+            for (var i = interval.Begin; i < interval.End;)
+            {
+                var e = i.Date.AddDays(1);
+                if (e > interval.End)
+                {
+                    e = interval.End;
+                }
+                yield return new TimeInterval(i, e);
+                i = e;
+            }
+        }
+        
         public static IEnumerable<Input> Range(this Collection<Input> inputs, TimeInterval range)
         {
-            string q = "select oid as Id, * from input where begin >= {0} and begin <= {1}".F(
+            string q = "select oid as Id, * from input where begin >= {0} and end <= {1}".F(
                 range.Begin.ToString(dateFmt).Quote(),
                 range.End.ToString(dateFmt).Quote());
 

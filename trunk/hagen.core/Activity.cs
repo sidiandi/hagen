@@ -20,6 +20,7 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 using Sidi.Persistence;
+using Sidi.Util;
 
 namespace hagen
 {
@@ -46,6 +47,14 @@ namespace hagen
 
         [Data]
         public DateTime End { set; get; }
+
+        public TimeInterval TimeInterval
+        {
+            get
+            {
+                return new TimeInterval(Begin, End);
+            }
+        }
     }
 
     public class Input : Activity
@@ -61,6 +70,14 @@ namespace hagen
 
         [Data]
         public bool TerminalServerSession;
+
+        public bool IsActive
+        {
+            get
+            {
+                return KeyDown > 0 || MouseMove > 0 || Clicks > 0;
+            }
+        }
     }
 
     public class ProgramUse : Input

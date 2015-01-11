@@ -14,5 +14,7 @@ namespace hagen
         bool IsConsole { get; }
         AutomationElement SavedFocusedElement { get; }
         PathList SelectedPathList { get; }
+
+        IAction CreateChoice(string name, Func<IEnumerable<IAction>> actionProvider);
     }
 }

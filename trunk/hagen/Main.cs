@@ -125,7 +125,6 @@ namespace hagen
         public DockPanel dockPanel;
         SearchBox searchBox1;
         Hagen hagen;
-        UserInterfaceState context = new UserInterfaceState();
 
         public Main(Hagen hagen)
         {
@@ -177,7 +176,7 @@ namespace hagen
         [Usage("Activate the program's main window")]
         public void Popup()
         {
-            this.context.SaveFocus();
+            this.hagen.Context.SaveFocus();
             WindowState = FormWindowState.Maximized;
             this.Visible = true;
             if (Clipboard.ContainsText())

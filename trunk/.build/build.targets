@@ -27,7 +27,7 @@ along with sidi-util. If not, see <http://www.gnu.org/licenses/>.-->
 		
 		<Nuget>$(SourceDir)\.nuget\NuGet.exe</Nuget>
 		<NuSpec>$(SourceDir)\$(ProductName).nuspec</NuSpec>
-		<NugetPackDir>$(OutDir)\NugetPack</NugetPackDir>
+		<NugetPackDir>$(OutDir)\..\NugetPack</NugetPackDir>
   </PropertyGroup>
 
 	<PropertyGroup>
@@ -105,10 +105,10 @@ along with sidi-util. If not, see <http://www.gnu.org/licenses/>.-->
   
   <Target Name="Release" DependsOnTargets="Build;Test;BuildSetup" />
 
-  <Target Name="NugetPack" DependsOnTargets="GetVersion;Build;Test" >
-    <MakeDir Directories="$(PackageDir)"/>
-    <Exec WorkingDirectory="$(ReleaseDir)" Command="$(Nuget) pack $(NuSpec) -Version $(Version) -Verbosity detailed -OutputDirectory $(NugetPackDir) -BasePath $(OutputDir) -Properties RootDir=$(SourceDir)" />
-    <CreateProperty Value="$(PackageDir)\$(ProductName).$(Version).nupkg">
+  <Target Name="NugetPack" DependsOnTargets="GetVersion;Build" >
+    <MakeDir Directories="$(NugetPackDir)"/>
+    <Exec WorkingDirectory="$(ReleaseDir)" Command="$(Nuget) pack $(NuSpec) -Version $(Version) -Verbosity detailed -OutputDirectory $(NugetPackDir) -BasePath $(OutDir) -Properties RootDir=$(SourceDir)" />
+    <CreateProperty Value="$(NugetPackDir)\$(ProductName).$(Version).nupkg">
       <Output PropertyName="Nupkg" TaskParameter="Value"/>
     </CreateProperty>
   </Target>
@@ -125,6 +125,7 @@ along with sidi-util. If not, see <http://www.gnu.org/licenses/>.-->
   
   <!-- This target puts the build.log file into the build directory -->
   <Target Name="StartWrapper" >
+    <MakeDir Directories="$(BuildDir)"/>
     <Exec
 		Command="&quot;$(MSBuildBinPath)\msbuild.exe&quot; &quot;$(MSBuildProjectFullPath)&quot; /t:$(BuildTarget) &quot;/fileLoggerParameters:LogFile=$(BuildDir)\build.log;Verbosity=diagnostic;Encoding=UTF-8&quot;"
 		/>

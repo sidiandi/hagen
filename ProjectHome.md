@@ -1,0 +1,1 @@
+To start a program just hit Ctrl+Alt+Space and type the first letters of the program name. Also logs your activities.

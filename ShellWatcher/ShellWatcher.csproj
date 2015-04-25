@@ -1,6 +1,6 @@
 ﻿<?xml version="1.0" encoding="utf-8"?>
 <Project ToolsVersion="3.5" DefaultTargets="Build" xmlns="http://schemas.microsoft.com/developer/msbuild/2003">
-  <Import Project="..\.build\Common.props" />
+  <Import Project="..\build\Common.props" />
   <ItemGroup>
     <Reference Include="System" />
     <Reference Include="System.Core">
@@ -27,7 +27,7 @@
     <Compile Include="ShellWatcherTest.cs" />
   </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
-  <Import Project="..\.build\Common.targets" />
+  <Import Project="..\build\Common.targets" />
   <!-- To modify your build process, add your task inside one of the targets below and uncomment it. 
        Other similar extension points exist, see Microsoft.Common.targets.
   <Target Name="BeforeBuild">

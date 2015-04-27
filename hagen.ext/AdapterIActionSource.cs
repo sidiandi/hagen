@@ -14,6 +14,10 @@ namespace hagen
 
         public AdapterIActionSource(IActionSource actionSource)
         {
+            if (actionSource == null)
+            {
+                throw new ArgumentNullException("actionSource");
+            }
             this.actionSource = actionSource;
         }
 

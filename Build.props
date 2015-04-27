@@ -4,12 +4,13 @@
 	<PropertyGroup>
 		<CompanyName>Andreas Grimme</CompanyName>
         <ProductName>hagen</ProductName>
-        <Major>0</Major>
-        <Minor>6</Minor>
-        <Build>0</Build>
-		<InitialRevision>217</InitialRevision>
 		<UpgradeCode>57CAC978-D1D8-4375-A93F-E906E4E66D60</UpgradeCode>
 		<Configuration>Release</Configuration>
 		<Platform>AnyCPU</Platform>
+		<NugetLocalFeed>$(USERPROFILE)\Dropbox\nuget</NugetLocalFeed>
 	</PropertyGroup>
+
+	<ItemGroup>
+		<Package Include="hagen.plugin" />
+	</ItemGroup>
 </Project>

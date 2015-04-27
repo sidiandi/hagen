@@ -54,7 +54,12 @@ namespace hagen
                         } 
                         else if (typeof(IActionSource).IsAssignableFrom(t))
                         {
-                            return Create<IActionSource>(t).ToIActionSource2();
+                            var a = Create<IActionSource>(t);
+                            if (a == null)
+                            {
+                                return null;
+                            }
+                            return a.ToIActionSource2();
                         }
                         else
                         {

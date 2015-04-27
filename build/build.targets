@@ -19,9 +19,10 @@ along with sidi-util. If not, see <http://www.gnu.org/licenses/>.-->
 	<PropertyGroup>
 		<NUnitBin>$(NugetPackagesDir)\NUnit.Runners.2.6.4\tools</NUnitBin>
 		<NUnitConsole>$(NUnitBin)\nunit-console-x86.exe</NUnitConsole>
+		<Nuget>$(SourceDir)\.nuget\NuGet.exe</Nuget>
   </PropertyGroup>
+  
   <Import Project="Paths.props" />
-
   <Import Project="$(NugetPackagesDir)\GitVersionTask.2.0.1\Build\GitVersionTask.targets" Condition="Exists('..\..\nuget-packages\GitVersionTask.2.0.1\Build\GitVersionTask.targets')" />
 
   <Target Name="GetVersion">
@@ -53,22 +54,18 @@ along with sidi-util. If not, see <http://www.gnu.org/licenses/>.-->
     <MSBuild Projects="$(SourceDir)\$(ProductName).sln" Properties="Configuration=$(Configuration);Platform=Any CPU;BuildDir=$(BuildDir)">
 		<Output ItemName="Targets" TaskParameter="TargetOutputs"/>
     </MSBuild>
-	<ItemGroup>
-		<Package Include="$(OutDir)\sidi-util.$(GfvAssemblySemVer)" />
-	</ItemGroup>
   </Target>
 
   <Target Name="Test" DependsOnTargets="Build">
     <Exec Command="$(NUnitConsole) /xml=$(TestDir)\TestResult.xml /labels @(Targets, ' ')" />
   </Target>
 
-  <Target Name="PushLocal" DependsOnTargets="Build;GetVersion">
-    <Exec WorkingDirectory="$(ReleaseDir)" Command="$(Nuget) push -Source $(NugetLocalFeed) %(Package.Identity).symbols.nupkg" />
-    <Exec WorkingDirectory="$(ReleaseDir)" Command="$(Nuget) push -Source $(NugetLocalFeed) %(Package.Identity).nupkg" />
+  <Target Name="PushLocal" DependsOnTargets="Build">
+    <Exec WorkingDirectory="$(ReleaseDir)" Command="$(Nuget) push -Source $(NugetLocalFeed) $(OutDir)\%(Package.Identity).$(GfvAssemblySemVer).nupkg" />
   </Target>
 
   <Target Name="Push" DependsOnTargets="Test">
-    <Exec WorkingDirectory="$(ReleaseDir)" Command="$(Nuget) push %(Package.Identity).nupkg" />
+    <Exec WorkingDirectory="$(ReleaseDir)" Command="$(Nuget) push $(OutDir)\%(Package.Identity).$(GfvAssemblySemVer).nupkg" />
   </Target>
 
   <Target Name="BuildSetup" DependsOnTargets="Build">

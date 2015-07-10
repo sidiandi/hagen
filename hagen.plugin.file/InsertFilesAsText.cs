@@ -36,9 +36,30 @@ namespace hagen
             if (Clipboard.ContainsFileDropList())
             {
                 var text = Clipboard.GetFileDropList().Cast<string>().Join();
-                Clipboard.SetText(text);
-                SendKeys.Send("+{INS}");
+                InsertText(text);
             }
+        }
+
+        void InsertText(string text)
+        {
+            Clipboard.SetText(text);
+            SendKeys.Send("+{INS}");
+        }
+
+        [Usage("Inserts the currenct date")]
+        public void InsertDate()
+        {
+            InsertText(DateTime.Now.ToString("yyyy-MM-dd"));
+        }   
+
+        [Usage("Inserts a random password")]
+        public void InsertPassword()
+        {
+            var r = new Random();
+            var text = Enumerable.Range(0, 4)
+                .Select(p => new string(Enumerable.Range(0, 4).Select(c => (char)('a' + r.Next('z' - 'a'))).ToArray()))
+                .Join(" ");
+            InsertText(text);
         }
     }
 }

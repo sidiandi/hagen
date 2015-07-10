@@ -68,15 +68,14 @@ along with sidi-util. If not, see <http://www.gnu.org/licenses/>.-->
     <Exec WorkingDirectory="$(ReleaseDir)" Command="$(Nuget) push $(OutDir)\%(Package.Identity).$(GfvAssemblySemVer).nupkg" />
   </Target>
 
-  <Target Name="BuildSetup" DependsOnTargets="Build">
-    <MSBuild
+  <Target Name="BuildSetup" DependsOnTargets="GetVersion">
+	<MSBuild
         Projects="$(SourceDir)\setup\setup.wixproj" Properties="
 			CompanyName=$(CompanyName);
 			ProductName=$(ProductName);
-			Version=$(Version);
+			Version=$(GfvSemVer);
 			Configuration=Release;
 			Platform=Any CPU;
-			Version=$(Version);
 			OutputPath=$(BuildDir)\setup;
 			BinDir=$(OutDir);
 			UpgradeCode=$(UpgradeCode);

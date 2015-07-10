@@ -7,6 +7,7 @@ using System.Windows.Forms;
 using Sidi.Extensions;
 using System.Windows;
 using System.Reactive.Linq;
+using Sidi.Util;
 
 namespace hagen
 {
@@ -22,7 +23,7 @@ namespace hagen
 
         public static string Details(this object x)
         {
-            return StringExtensions.ToString(o => x.DumpProperties(o));
+            return Dumper.Instance.ToString(x);
         }
 
         public static IObservable<double> ToDistance(this IObservable<MouseEventArgs> e)

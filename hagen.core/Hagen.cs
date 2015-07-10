@@ -27,6 +27,7 @@ using Sidi.Extensions;
 using System.Windows.Forms;
 using System.Windows.Automation;
 using System.Runtime.InteropServices;
+using System.Data.Common;
 
 namespace hagen
 {
@@ -118,13 +119,15 @@ namespace hagen
 
     public static class HagenEx
     {
+        private static readonly log4net.ILog log = log4net.LogManager.GetLogger(System.Reflection.MethodBase.GetCurrentMethod().DeclaringType);
+
         class InputL
         {
             public DateTime End { set; get;}
             public DateTime Begin { set; get; }
-            public int KeyDown { set; get; }
-            public double MouseMove { set; get; }
-            public int Clicks { set; get; }
+            public long KeyDown { set; get; }
+            public long MouseMove { set; get; }
+            public long Clicks { set; get; }
             public bool TerminalServerSession { set; get; }
         }
     
@@ -144,25 +147,34 @@ namespace hagen
         
         public static IEnumerable<Input> Range(this Collection<Input> inputs, TimeInterval range)
         {
-            string q = "select oid as Id, * from input where begin >= {0} and end <= {1}".F(
+            string q = "select Begin, End, KeyDown, MouseMove, Clicks, TerminalServerSession from input where begin >= {0} and end <= {1}".F(
                 range.Begin.ToString(dateFmt).Quote(),
                 range.End.ToString(dateFmt).Quote());
 
-            var cmd = inputs.Connection.CreateCommand();
-            cmd.CommandText = q;
+            using (var cmd = inputs.Connection.CreateCommand())
+            {
+                cmd.CommandText = q;
 
-            var dc = new DataContext(inputs.Connection);
-            return dc.Translate<InputL>(cmd.ExecuteReader()).Select(x =>
+                using (var r = cmd.ExecuteReader())
                 {
-                    var y = new Input();
-                    y.End = x.End;
-                    y.Begin = x.Begin;
-                    y.KeyDown = x.KeyDown;
-                    y.MouseMove = x.MouseMove;
-                    y.Clicks = x.Clicks;
-                    y.TerminalServerSession = x.TerminalServerSession;
-                    return y;
-                }).ToList();
+                    return ReadInputs(r).ToList();
+                }
+            }
+        }
+
+        static IEnumerable<Input> ReadInputs(DbDataReader r)
+        {
+            for (; r.Read();)
+            {
+                var input = new Input();
+                input.Begin = r.GetDateTime(0);
+                input.End = r.GetDateTime(1);
+                input.KeyDown = (int) r.GetInt64(2);
+                input.MouseMove = r.GetDouble(3);
+                input.Clicks = (int) r.GetInt64(4);
+                input.TerminalServerSession = r.GetBoolean(5);
+                yield return input;
+            }
         }
 
         const string dateFmt = "yyyy-MM-dd HH:mm:ss";

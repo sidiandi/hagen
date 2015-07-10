@@ -45,16 +45,17 @@
   </ItemGroup>
   <Import Project="$(WixTargetsPath)" />
   <Target Name="BeforeBuild">
-    <CreateProperty Value="
+    <PropertyGroup>
+		<DefineConstants>
 			Version=$(Version);
 			CompanyName=$(CompanyName);
 			ProductName=$(ProductName);
 			BinDir=$(BinDir);
 			Manufacturer=$(CompanyName);
 			UpgradeCode=$(UpgradeCode);
-			$(DefineConstants)">
-      <Output TaskParameter="Value" PropertyName="DefineConstants" />
-    </CreateProperty>
+			$(DefineConstants)
+		</DefineConstants>
+	</PropertyGroup>
 	<HeatDirectory 
 		Directory="@(HeatDirectories)"
 		VerboseOutput="true" 

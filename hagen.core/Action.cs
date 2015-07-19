@@ -20,7 +20,6 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 using Sidi.Persistence;
-using NUnit.Framework;
 using System.Windows.Media.Imaging;
 using System.Windows.Interop;
 using System.Windows;

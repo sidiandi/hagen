@@ -55,8 +55,7 @@ namespace hagen
         {
             get
             {
-                return Sidi.IO.Paths.GetFolderPath(Environment.SpecialFolder.LocalApplicationData)
-                    .CatDir("hagen");
+                return Sidi.IO.Paths.GetFolderPath(Environment.SpecialFolder.MyDocuments).CatDir("hagen");
             }
         }
 

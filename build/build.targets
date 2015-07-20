@@ -99,6 +99,30 @@ along with sidi-util. If not, see <http://www.gnu.org/licenses/>.-->
     <Exec WorkingDirectory="$(ReleaseDir)" Command="$(Nuget) push $(OutDir)\%(Package.Identity).$(GfvNuGetVersion).symbols.nupkg" />
   </Target>
 
+  <Target Name="BuildSetup" DependsOnTargets="GetVersion">
+	<MSBuild
+        Projects="$(SourceDir)\setup\setup.wixproj" Properties="
+			CompanyName=$(CompanyName);
+			ProductName=$(ProductName);
+			Version=$(GfvSemVer);
+			Configuration=Release;
+			Platform=Any CPU;
+			OutputPath=$(BuildDir)\setup;
+			BinDir=$(OutDir);
+			UpgradeCode=$(UpgradeCode);
+			IntermediateOutputPath=$(BaseIntermediateOutputPath)\setup\
+			">
+      <Output ItemName="SetupFile" TaskParameter="TargetOutputs"/>
+    </MSBuild>
+  </Target>
+  
+  <Target Name="Install" DependsOnTargets="BuildSetup">
+    <Message Text="@(SetupFile, ' ')" />
+	<Exec Command="@(SetupFile, ' ')" />
+  </Target>
+  
+  <Target Name="Release" DependsOnTargets="Build;Test;BuildSetup" />
+
   <!-- This target puts the build.log file into the build directory -->
   <Target Name="StartWrapper" >
 	<MakeDir Directories="$(BuildDir)"/>

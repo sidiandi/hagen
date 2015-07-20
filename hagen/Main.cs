@@ -47,7 +47,7 @@ namespace hagen
     {
         private static readonly log4net.ILog log = log4net.LogManager.GetLogger(System.Reflection.MethodBase.GetCurrentMethod().DeclaringType);
 
-        Shortcut.HotkeyBinder hotkeyBinder;
+        Shortcut.HotkeyBinder hotkeyBinder = new Shortcut.HotkeyBinder();
         Collection<Action> actions;
         
         void InitUserInterface()
@@ -102,7 +102,8 @@ namespace hagen
             this.KeyDown += new KeyEventHandler(Main_KeyDown);
             this.KeyPreview = true;
 
-            hotkeyBinder.Bind(Shortcut.Modifiers.Alt | Shortcut.Modifiers.Control, Keys.Space).To(Popup);
+            var binding = hotkeyBinder.Bind(Shortcut.Modifiers.Alt | Shortcut.Modifiers.Control, Keys.Space);
+            binding.To(Popup);
 
             alertTimer = new System.Windows.Forms.Timer()
             {

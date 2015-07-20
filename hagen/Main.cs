@@ -47,7 +47,7 @@ namespace hagen
     {
         private static readonly log4net.ILog log = log4net.LogManager.GetLogger(System.Reflection.MethodBase.GetCurrentMethod().DeclaringType);
 
-        ManagedWinapi.Hotkey hotkey;
+        Shortcut.HotkeyBinder hotkeyBinder;
         Collection<Action> actions;
         
         void InitUserInterface()
@@ -102,14 +102,7 @@ namespace hagen
             this.KeyDown += new KeyEventHandler(Main_KeyDown);
             this.KeyPreview = true;
 
-            hotkey = new ManagedWinapi.Hotkey()
-            {
-                Alt = true,
-                Ctrl = true,
-                KeyCode = System.Windows.Forms.Keys.Space,
-                Enabled = true
-            };
-            hotkey.HotkeyPressed += new EventHandler(hotkey_HotkeyPressed);
+            hotkeyBinder.Bind(Shortcut.Modifiers.Alt | Shortcut.Modifiers.Control, Keys.Space).To(Popup);
 
             alertTimer = new System.Windows.Forms.Timer()
             {
@@ -120,6 +113,7 @@ namespace hagen
                 CheckWorkTime();
             });
             alertTimer.Start();
+
         }
 
         public DockPanel dockPanel;
@@ -166,11 +160,6 @@ namespace hagen
             a.Execute();
         }
 
-        void hotkey_HotkeyPressed(object sender, EventArgs e)
-        {
-            Popup();
-        }
-
         int lastCLipboardHash = 0;
 
         [Usage("Activate the program's main window")]
@@ -197,8 +186,7 @@ namespace hagen
         protected override void OnClosed(EventArgs e)
         {
             base.OnClosed(e);
-            hotkey.Dispose();
-            hotkey = null;
+            hotkeyBinder.Dispose();
         }
 
         [TestFixture]

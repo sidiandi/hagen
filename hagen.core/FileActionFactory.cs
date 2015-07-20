@@ -34,7 +34,7 @@ namespace hagen
         {
             var action = new Action()
             {
-                Name = file.FileName,
+                Name = file.IsRoot ? file.StringRepresentation : file.FileName,
                 CommandObject = StartProcess.FromFileName(file),
                 LastUseTime = file.Info.LastWriteTimeUtc,
             };

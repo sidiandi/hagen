@@ -4,7 +4,6 @@
     <SolutionDir Condition="$(SolutionDir) == '' Or $(SolutionDir) == '*Undefined*'">..\</SolutionDir>
     <ProjectGuid>{9BF01205-1BD3-4121-909D-16CEC6D47143}</ProjectGuid>
     <NuGetPackageImportStamp>187fa8e4</NuGetPackageImportStamp>
-    <BuildPackage>true</BuildPackage>
   </PropertyGroup>
   <Import Project="..\build\Common.props" />
   <ItemGroup>

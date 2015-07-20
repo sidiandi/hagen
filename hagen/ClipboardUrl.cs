@@ -45,8 +45,11 @@ namespace hagen
                 log.Info(data.GetFormats().ListFormat());
 
                 var c = new ClipboardUrl();
-                var d = data.GetData(FileGroupDescriptorWFormat);
-                c.Title = System.IO.Path.GetFileNameWithoutExtension(ReadFileDescriptorW((MemoryStream)d));
+                if (data.GetDataPresent(FileGroupDescriptorWFormat))
+                {
+                    var d = data.GetData(FileGroupDescriptorWFormat);
+                    c.Title = System.IO.Path.GetFileNameWithoutExtension(ReadFileDescriptorW((MemoryStream)d));
+                }
                 if (data.GetDataPresent(UniformResourceLocatorWFormat))
                 {
                     c.Url = ((Stream)data.GetData(UniformResourceLocatorWFormat))
@@ -58,7 +61,7 @@ namespace hagen
                 }
 
                 clipboardUrl = c;
-                return true;
+                return c.Url != null;
             }
             catch (Exception)
             {

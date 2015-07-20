@@ -17,13 +17,23 @@ You should have received a copy of the GNU Lesser General Public License
 along with sidi-util. If not, see <http://www.gnu.org/licenses/>.-->
 <Project xmlns="http://schemas.microsoft.com/developer/msbuild/2003">
 	<PropertyGroup>
+		<SourceDir>$([System.IO.Directory]::GetParent($(MSBuildProjectDirectory)))</SourceDir>
+
+		<NugetPackagesDir>$(SourceDir)\..\nuget-packages</NugetPackagesDir>
+		
 		<NUnitBin>$(NugetPackagesDir)\NUnit.Runners.2.6.4\tools</NUnitBin>
 		<NUnitConsole>$(NUnitBin)\nunit-console-x86.exe</NUnitConsole>
+		
 		<Nuget>$(SourceDir)\.nuget\NuGet.exe</Nuget>
   </PropertyGroup>
+
+	<PropertyGroup>
+	<MSBuildCommunityTasksPath>$(SourceDir)\build</MSBuildCommunityTasksPath>
+  </PropertyGroup>
   
-  <Import Project="Paths.props" />
-  <Import Project="..\..\nuget-packages\GitVersionTask.3.0.0-beta0004\Build\GitVersionTask.targets" Condition="Exists('..\..\nuget-packages\GitVersionTask.3.0.0-beta0004\Build\GitVersionTask.targets')" />
+  <Import Project="$(MSBuildCommunityTasksPath)\MSBuild.Community.Tasks.Targets" />
+  <Import Project="$(NugetPackagesDir)\GitVersionTask.3.0.0-beta0002\Build\GitVersionTask.targets" Condition="Exists('..\..\nuget-packages\GitVersionTask.3.0.0-beta0002\Build\GitVersionTask.targets')" />
+  <Import Project="C:\work\nugetPackSymbols\CreateNugetSymbolsPackage\bin\Debug\Build\CreateNugetSymbolsPackage.targets" />
 
   <Target Name="GetVersion">
 		<GetVersion SolutionDirectory="$(SolutionDir)">
@@ -59,49 +69,39 @@ along with sidi-util. If not, see <http://www.gnu.org/licenses/>.-->
     <Exec Command="$(NUnitConsole) /xml=$(TestDir)\TestResult.xml /labels @(Targets, ' ')" />
   </Target>
 
-  <Target Name="PushLocal" DependsOnTargets="Build">
-    <Exec WorkingDirectory="$(ReleaseDir)" Command="$(Nuget) push -Source $(NugetLocalFeed) $(OutDir)\%(Package.Identity).$(GfvAssemblySemVer).nupkg" />
+  <Target Name="Pack" DependsOnTargets="GetVersion">
+    <PropertyGroup>
+		<PackageDir>$(BuildDir)\package</PackageDir>
+	</PropertyGroup>
+	<RemoveDir Directories="$(PackageDir)"/>
+	<MakeDir Directories="$(PackageDir)" />
+	<Exec WorkingDirectory="$(ReleaseDir)" Command="$(Nuget) pack $(SourceDir)\%(PackageProjects.Identity) -OutputDirectory $(PackageDir) -Version $(GfvNuGetVersion)" />
+	<ItemGroup>
+		<PackageFiles Include="$(PackageDir)\sidi-util.$(GfvNuGetVersion).nupkg" />
+	</ItemGroup>
+	<CreateNugetSymbolsPackage
+		Package = "%(PackageFiles.Identity)"
+		BinDir = "$(OutDir)"
+		/>
   </Target>
 
-  <Target Name="Push" DependsOnTargets="Test">
-    <Exec WorkingDirectory="$(ReleaseDir)" Command="$(Nuget) push $(OutDir)\%(Package.Identity).$(GfvAssemblySemVer).nupkg" />
+  <Target Name="PushLocal" DependsOnTargets="Test;Pack">
+    <Exec WorkingDirectory="$(ReleaseDir)" Command="$(Nuget) push -Source $(NugetLocalFeed) %(PackageFiles.Identity)" />
+    <Exec WorkingDirectory="$(ReleaseDir)" Command="$(Nuget) push -Source $(NugetLocalFeed) %(PackageFiles.RootDir)%(PackageFiles.Directory)%(PackageFiles.Filename).symbols.nupkg" />
   </Target>
 
-  <Target Name="BuildSetup" DependsOnTargets="GetVersion">
-	<MSBuild
-        Projects="$(SourceDir)\setup\setup.wixproj" Properties="
-			CompanyName=$(CompanyName);
-			ProductName=$(ProductName);
-			Version=$(GfvSemVer);
-			Configuration=Release;
-			Platform=Any CPU;
-			OutputPath=$(BuildDir)\setup;
-			BinDir=$(OutDir);
-			UpgradeCode=$(UpgradeCode);
-			IntermediateOutputPath=$(BaseIntermediateOutputPath)\setup\
-			">
-      <Output ItemName="SetupFile" TaskParameter="TargetOutputs"/>
-    </MSBuild>
+  <Target Name="Push" DependsOnTargets="Test;Pack">
+    <Exec WorkingDirectory="$(ReleaseDir)" Command="$(Nuget) push %(PackageFiles.Identity)" />
+    <Exec WorkingDirectory="$(ReleaseDir)" Command="$(Nuget) push %(PackageFiles.RootDir)%(PackageFiles.Directory)%(PackageFiles.Filename).symbols.nupkg" />
   </Target>
-  
-  <Target Name="Install" DependsOnTargets="BuildSetup">
-    <Message Text="@(SetupFile, ' ')" />
-	<Exec Command="@(SetupFile, ' ')" />
-  </Target>
-  
-  <Target Name="Release" DependsOnTargets="Build;Test;BuildSetup" />
 
-  <Target Name="NugetPack" DependsOnTargets="GetVersion;Build" >
-    <MakeDir Directories="$(NugetPackDir)"/>
-    <Exec WorkingDirectory="$(ReleaseDir)" Command="$(Nuget) pack $(NuSpec) -Version $(Version) -Verbosity detailed -OutputDirectory $(NugetPackDir) -BasePath $(OutDir) -Properties RootDir=$(SourceDir)" />
-    <CreateProperty Value="$(NugetPackDir)\$(ProductName).$(Version).nupkg">
-      <Output PropertyName="Nupkg" TaskParameter="Value"/>
-    </CreateProperty>
+  <Target Name="TestPush" DependsOnTargets="Build">
+    <Exec WorkingDirectory="$(ReleaseDir)" Command="$(Nuget) push $(OutDir)\%(Package.Identity).$(GfvNuGetVersion).symbols.nupkg" />
   </Target>
 
   <!-- This target puts the build.log file into the build directory -->
   <Target Name="StartWrapper" >
-    <MakeDir Directories="$(BuildDir)"/>
+	<MakeDir Directories="$(BuildDir)"/>
     <Exec
 		Command="&quot;$(MSBuildBinPath)\msbuild.exe&quot; &quot;$(MSBuildProjectFullPath)&quot; /t:$(BuildTarget) &quot;/fileLoggerParameters:LogFile=$(BuildDir)\build.log;Verbosity=diagnostic;Encoding=UTF-8&quot;"
 		/>

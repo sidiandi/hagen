@@ -17,7 +17,7 @@ Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "hagen", "hagen\hagen.csproj
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "hagen.core", "hagen.core\hagen.core.csproj", "{B8A11330-3766-4244-9962-8B0D25E98005}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "hagen.plugin", "hagen.ext\hagen.plugin.csproj", "{9BF01205-1BD3-4121-909D-16CEC6D47143}"
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "hagen.plugin", "hagen.plugin\hagen.plugin.csproj", "{9BF01205-1BD3-4121-909D-16CEC6D47143}"
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "hagen.plugin.web", "hagen.plugin.web\hagen.plugin.web.csproj", "{D54AAAE7-E7AA-4A1D-A045-9E70853B7040}"
 EndProject
@@ -30,12 +30,6 @@ Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = ".nuget", ".nuget", "{BFA352
 		.nuget\NuGet.exe = .nuget\NuGet.exe
 		.nuget\NuGet.targets = .nuget\NuGet.targets
 		.nuget\packages.config = .nuget\packages.config
-	EndProjectSection
-EndProject
-Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = ".build", ".build", "{350A78FE-EA91-4000-8720-BEA4BA5F5EFC}"
-	ProjectSection(SolutionItems) = preProject
-		Build.proj = Build.proj
-		svn-msi.targets = svn-msi.targets
 	EndProjectSection
 EndProject
 Global

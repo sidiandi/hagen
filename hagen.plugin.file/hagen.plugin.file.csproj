@@ -97,7 +97,7 @@
     <Compile Include="Properties\AssemblyInfo.cs" />
   </ItemGroup>
   <ItemGroup>
-    <ProjectReference Include="..\hagen.ext\hagen.plugin.csproj">
+    <ProjectReference Include="..\hagen.plugin\hagen.plugin.csproj">
       <Project>{9BF01205-1BD3-4121-909D-16CEC6D47143}</Project>
       <Name>hagen.plugin</Name>
     </ProjectReference>

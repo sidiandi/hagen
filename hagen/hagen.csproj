@@ -181,7 +181,7 @@
       <Project>{B8A11330-3766-4244-9962-8B0D25E98005}</Project>
       <Name>hagen.core</Name>
     </ProjectReference>
-    <ProjectReference Include="..\hagen.ext\hagen.plugin.csproj">
+    <ProjectReference Include="..\hagen.plugin\hagen.plugin.csproj">
       <Project>{9BF01205-1BD3-4121-909D-16CEC6D47143}</Project>
       <Name>hagen.plugin</Name>
     </ProjectReference>

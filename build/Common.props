@@ -9,8 +9,9 @@
     <AssemblyName>$(MSBuildProjectName)</AssemblyName>
     <OutputType>Library</OutputType>
     <AppDesignerFolder>Properties</AppDesignerFolder>
-    <RootNamespace>$(SolutionName)</RootNamespace>
+    <RootNamespace>Sidi</RootNamespace>
     <SignAssembly>true</SignAssembly>
+    <AssemblyOriginatorKeyFile>$(SolutionDir)key.snk</AssemblyOriginatorKeyFile>
     <TargetFrameworkVersion>v4.5.1</TargetFrameworkVersion>
     <RestorePackages>true</RestorePackages>
     <DocumentationFile>$(OutputPath)\$(AssemblyName).xml</DocumentationFile>
@@ -27,10 +28,14 @@
     <Optimize>true</Optimize>
     <DebugType>pdbonly</DebugType>
   </PropertyGroup>
+  <PropertyGroup Condition="'$(Configuration)|$(Platform)' == 'Release|AnyCPU'">
+    <CodeAnalysisRuleSet>..\sidi-util.ruleset</CodeAnalysisRuleSet>
+    <RunCodeAnalysis>false</RunCodeAnalysis>
+  </PropertyGroup>
   <ItemGroup>
     <CodeAnalysisDictionary Include="CustomDictionary.xml" />
   </ItemGroup>
   <ItemGroup>
-    <Compile Include="$(VersionInfoFile)" />
-	</ItemGroup>
+    <Compile Include="..\CommonAssemblyInfo.cs" />
+  </ItemGroup>
 </Project>

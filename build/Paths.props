@@ -11,6 +11,5 @@
     <LibDir>$(SolutionDir)lib\</LibDir>
 	<TestDir>$(BuildDir)\test-data</TestDir>
 	<SetupWixproj>$(SourceDir)\setup\setup.wixproj</SetupWixproj>
-	<NugetPackagesDir>$(SourceDir)\..\nuget-packages</NugetPackagesDir>
   </PropertyGroup>
 </Project>

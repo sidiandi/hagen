@@ -42,14 +42,17 @@ namespace activityReport
 
         private void List_SelectedIndexChanged(object sender, EventArgs e)
         {
-            var c = List.FocusedItem.Tag as Func<Control>;
-            Splitter.Panel2.Controls.Clear();
-            if (c != null)
+            if (List.SelectedItems.Count > 0)
             {
-                Control d = c();
-                d.Dock = DockStyle.Fill;
-                d.Visible = true;
-                Splitter.Panel2.Controls.Add(d);
+                var c = List.SelectedItems[0].Tag as Func<Control>;
+                Splitter.Panel2.Controls.Clear();
+                if (c != null)
+                {
+                    Control d = c();
+                    d.Dock = DockStyle.Fill;
+                    d.Visible = true;
+                    Splitter.Panel2.Controls.Add(d);
+                }
             }
         }
     }

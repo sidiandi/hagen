@@ -1,3 +1,7 @@
 TODO:
-import timesidi
 screenshots as powerpoint
+
+DONE:
+improved activity charts
+expand property grid
+do not add hidden files

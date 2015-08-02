@@ -35,27 +35,45 @@ namespace hagen
     {
         private static readonly log4net.ILog log = log4net.LogManager.GetLogger(System.Reflection.MethodBase.GetCurrentMethod().DeclaringType);
 
-        public Hagen()
+        public Hagen(LPath dataDirectory = null)
         {
+            if (dataDirectory == null)
+            {
+                dataDirectory = DefaultDataDirectory;
+            }
+
+            this.dataDirectory = dataDirectory;
+
             actions = OpenActions();
             this.Context = new UserInterfaceState();
         }
 
         Collection<Action> actions;
 
-        public LPath DatabasePath
+        public LPath ActionsDatabasePath
         {
             get
             {
-                return DataDirectory.CatDir("hagen.sqlite");
+                return DataDirectory.CatDir("actions.sqlite");
             }
         }
 
-        public LPath DataDirectory
+        LPath LogDatabasePath
         {
             get
             {
-                return Sidi.IO.Paths.GetFolderPath(Environment.SpecialFolder.MyDocuments).CatDir("hagen");
+                return DataDirectory.CatDir("log.sqlite");
+            }
+        }
+
+        public LPath DataDirectory { get { return dataDirectory; } }
+        readonly LPath dataDirectory;
+
+        public static LPath DefaultDataDirectory
+        {
+            get
+            {
+                return Sidi.IO.Paths.GetFolderPath(Environment.SpecialFolder.LocalApplicationData).CatDir("hagen");
             }
         }
 
@@ -69,7 +87,7 @@ namespace hagen
 
         public Collection<Action> OpenActions()
         {
-            return new Collection<Action>(DatabasePath);
+            return new Collection<Action>(ActionsDatabasePath);
         }
 
         public UserInterfaceState Context { get; private set; }
@@ -102,17 +120,17 @@ namespace hagen
 
         public Collection<Input> OpenInputs()
         {
-            return new Collection<Input>(actions.SharedConnection);
+            return new Collection<Input>(LogDatabasePath);
         }
 
         public Collection<ProgramUse> OpenProgramUses()
         {
-            return new Collection<ProgramUse>(actions.SharedConnection);
+            return new Collection<ProgramUse>(LogDatabasePath);
         }
 
         public Collection<Log> OpenLogs()
         {
-            return new Collection<Log>(actions.SharedConnection);
+            return new Collection<Log>(LogDatabasePath);
         }
     }
 
@@ -146,6 +164,8 @@ namespace hagen
         
         public static IEnumerable<Input> Range(this Collection<Input> inputs, TimeInterval range)
         {
+            var maxDuration = TimeSpan.FromMinutes(2);
+
             string q = "select Begin, End, KeyDown, MouseMove, Clicks, TerminalServerSession from input where begin >= {0} and end <= {1}".F(
                 range.Begin.ToString(dateFmt).Quote(),
                 range.End.ToString(dateFmt).Quote());
@@ -156,7 +176,9 @@ namespace hagen
 
                 using (var r = cmd.ExecuteReader())
                 {
-                    return ReadInputs(r).ToList();
+                    return ReadInputs(r)
+                        .Where(_ => _.TimeInterval.Duration < maxDuration)
+                        .ToList();
                 }
             }
         }

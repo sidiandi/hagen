@@ -12,5 +12,5 @@ mode: ContinuousDeployment
 #    tag: alpha
 branches:
   master:
-    increment: Patch
+    mode: ContinuousDeployment
 

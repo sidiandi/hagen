@@ -38,6 +38,9 @@ using L = Sidi.IO;
 using Dvc = System.Windows.Forms.DataVisualization.Charting;
 using System.Windows.Forms.DataVisualization.Charting;
 using System.Diagnostics;
+using OxyPlot.Axes;
+using OxyPlot;
+using OxyPlot.Series;
 
 namespace activityReport
 {
@@ -157,9 +160,9 @@ namespace activityReport
         }
 
         [Usage("Show statistics window")]
-        public void ShowStatisticsWindow()
+        public void Stats()
         {
-            StatisticsWindow().Show();
+            Application.Run(StatisticsWindow());
         }
 
         [Usage("Prints a day-by-day work time report")]
@@ -350,13 +353,13 @@ namespace activityReport
         }
 
         [Usage("Graphical reports")]
-        public void GraphicalUserInterface()
+        public void Statistics()
         {
             System.Windows.Forms.Application.Run(StatisticsWindow());
         }
 
-        readonly Color idleColor = Color.FromArgb(0xee, 0xee, 0xff);
-        readonly Color activeColor = Color.Blue;
+        readonly Color idleColor = Color.Gray;
+        readonly Color activeColor = Color.Red;
         
         public Form StatisticsWindow()
         {
@@ -367,118 +370,9 @@ namespace activityReport
             foreach (var mi in all.Months.Reverse())
             {
                 TimeInterval m = mi;
-                main.AddItem("{0:yyyy-MM} Overview".F(m.Begin), () =>
-                {
-                    var chart = new Dvc.Chart();
 
-                    var ca = new Dvc.ChartArea()
-                    {
-                        Name = "Overview",
-                    };
-                    chart.ChartAreas.Add(ca);
-                    
-                    var active = new Dvc.Series()
-                    {
-                        Name = "Activity",
-                        ChartType = Dvc.SeriesChartType.RangeBar,
-                    };
-
-                    chart.Series.Add(active);
-
-                    var refday = m.Begin.Date;
-                    ca.AxisY.Maximum = refday.AddDays(1).ToOADate();
-                    ca.AxisY.Minimum = refday.ToOADate();
-
-                    var stripLine = new StripLine()
-                    {
-                        IntervalOffsetType = DateTimeIntervalType.Days,
-                        IntervalType = DateTimeIntervalType.Weeks,
-                        StripWidthType = DateTimeIntervalType.Days,
-
-                        Interval = 1,
-                        StripWidth = 2,
-                        BackColor = Color.LightGray,
-                        IntervalOffset = -1.5,
-                    };
-
-                    ca.AxisX.StripLines.Add(stripLine);
-                    ca.AxisX.LabelStyle.Format = "ddd dd.MM.yyyy";
-                    ca.AxisX.IntervalType = DateTimeIntervalType.Days;
-                    ca.AxisX.Interval = 1;
-
-                    ca.AxisY.LabelStyle.Format = "HH:mm";
-                    ca.AxisY.IntervalType = DateTimeIntervalType.Hours;
-                    ca.AxisY.Interval = 1;
-
-                    var bars = Summarize(input.Range(m));
-                    log.Info(bars.ListFormat().AllPublic());
-                    
-                    foreach (var i in bars)
-                    {
-                        foreach (var t in i.TimeInterval.SplitToDays())
-                        {
-                            var y0 = (refday + t.Begin.TimeOfDay).ToOADate();
-                            var y1 = y0 + t.Duration.TotalDays;
-                            // log.DebugFormat("{0} {1} {2}", t, y0, y1);
-                            var p = new DataPoint(t.Begin.Date.ToOADate(), new[] { y0, y1 });
-                            p.Color = i.IsActive ? activeColor : idleColor;
-                            active.Points.Add(p);
-                        }
-                    }
-
-                    return chart;
-                });
-
-                main.AddItem("{0:yyyy-MM} Hours".F(m.Begin), () =>
-                {
-                    var c = new Dvc.Chart();
-
-                    var ca = new Dvc.ChartArea("Activity");
-                    c.ChartAreas.Add(ca);
-
-                    var a = new Dvc.Series()
-                    {
-                        Name = "Activity",
-                        ChartType = Dvc.SeriesChartType.StackedColumn
-                    };
-
-                    var t = new Dvc.Series()
-                    {
-                        Name = "Presence",
-                        ChartType = Dvc.SeriesChartType.StackedColumn
-                    };
-
-                    var w = m.Days.Select(x => input.Range(x)).ToList();
-
-                    ca.AxisY.Title = "Hours";
-
-                    foreach (var i in w)
-                    {
-                        if (!i.Any())
-                        {
-                            continue;
-                        }
-
-                        var x = i.First().Begin.Date;
-                        var active = i.Sum(j => (j.End - j.Begin).TotalHours);
-                        var total = (i.Last().End - i.First().Begin).TotalHours;
-                        total -= active;
-
-                        a.Points.AddXY(x, active);
-                        t.Points.AddXY(x, total);
-                    }
-
-                    c.Series.Add(a);
-                    c.Series.Add(t);
-                    
-                    c.Legends.Add(new Dvc.Legend()
-                    {
-                        LegendStyle = Dvc.LegendStyle.Row,
-                        Docking = Dvc.Docking.Top
-                    });
-
-                    return c;
-                });
+                main.AddItem("{0:yyyy-MM} Overview".F(m.Begin), () => Overview(m));
+                main.AddItem("{0:yyyy-MM} Hours".F(m.Begin), () => Hours(m));
 
                 main.AddItem("{0:yyyy-MM} Programs".F(m.Begin), () =>
                 {
@@ -587,7 +481,153 @@ namespace activityReport
                 });
             }
 
+            
+            main.List.FocusedItem = main.List.Items[0];
+            main.List.Items[0].Selected = true;
+            
             return main;
+        }
+
+        const double daySep = 0.3;
+
+        Control Overview(TimeInterval m)
+        {
+            var model = new OxyPlot.PlotModel()
+            {
+                Title = "Overview",
+                Background = OxyColors.White,
+                DefaultFont = "Arial",
+                DefaultFontSize = 10.0
+            };
+
+            model.Axes.Add(new DateTimeAxis(AxisPosition.Left)
+            {
+                MajorGridlineStyle = LineStyle.Solid,
+                // MinorGridlineStyle = LineStyle.Dot,
+                MajorStep = 1,
+                MinorStep = 1.0/4.0,
+                Minimum = DateTimeAxis.ToDouble(m.Begin.AddDays(-1)),
+                Maximum = DateTimeAxis.ToDouble(m.End)
+            });
+            model.Axes.Add(new TimeSpanAxis(AxisPosition.Bottom)
+            {
+                MajorGridlineStyle = LineStyle.Solid,
+                MinorGridlineStyle = LineStyle.Dot,
+                StringFormat = "h:mm",
+                Minimum = TimeSpan.Zero.TotalSeconds,
+                Maximum = TimeSpan.FromDays(1).TotalSeconds
+            });
+
+            var bars = Summarize(input.Range(m));
+
+            var activity = new OxyPlot.Series.RectangleBarSeries()
+            {
+                TrackerFormatString = "{2} - {3}",
+                StrokeThickness = 0
+            };
+
+            foreach (var i in bars)
+            {
+                foreach (var t in i.TimeInterval.SplitToDays())
+                {
+                    var refDay = t.Begin.Date;
+                    var y0 = DateTimeAxis.ToDouble(refDay);
+                    var x0 = (t.Begin - refDay).TotalSeconds;
+                    var x1 = (t.End - refDay).TotalSeconds;
+                    activity.Items.Add(new OxyPlot.Series.RectangleBarItem(x0, y0 - daySep, x1, y0 + daySep)
+                    {
+                        Color = OxyPlot.OxyColor.FromUInt32((uint)(i.IsActive ? activeColor : idleColor).ToArgb())
+                    });
+                }
+            }
+
+            model.Series.Add(activity);
+
+            /*
+            var keys = new OxyPlot.Series.ScatterSeries()
+            {
+                MarkerType = MarkerType.Circle,
+                        
+            };
+
+            foreach (var i in input.Range(m))
+            {
+                if (i.KeyDown > 0)
+                {
+                    keys.Points.Add(new OxyPlot.Series.ScatterPoint(
+                        i.TimeInterval.Begin.ToLocalTime().TimeOfDay.TotalSeconds,
+                        i.TimeInterval.Begin.ToLocalTime().Date.ToOADate()));
+                }
+            }
+
+            model.Series.Add(keys);
+            */
+
+            var plotView = new OxyPlot.WindowsForms.PlotView()
+            {
+                Model = model
+            };
+
+            return plotView;
+        }
+
+        Control Hours(TimeInterval m)
+        {
+            var model = new OxyPlot.PlotModel()
+            {
+                Title = "Hours",
+                Background = OxyColors.White,
+                DefaultFont = "Arial",
+                DefaultFontSize = 10.0
+            };
+
+            model.Axes.Add(new DateTimeAxis(AxisPosition.Left)
+            {
+                MajorGridlineStyle = LineStyle.Solid,
+                // MinorGridlineStyle = LineStyle.Dot,
+                MajorStep = 1,
+                Minimum = DateTimeAxis.ToDouble(m.Begin.AddDays(-1)),
+                Maximum = DateTimeAxis.ToDouble(m.End)
+            });
+            model.Axes.Add(new TimeSpanAxis(AxisPosition.Bottom)
+            {
+                MajorGridlineStyle = LineStyle.Solid,
+                MinorGridlineStyle = LineStyle.Dot,
+                StringFormat = "h:mm",
+            });
+
+            var w = input.Range(m)
+                .GroupBy(x => x.TimeInterval.Begin.Date)
+                .Select(g => new
+                    {
+                        Day = g.Key,
+                        Active = g.Where(_ => _.IsActive).Sum(_ => _.TimeInterval.Duration.TotalSeconds),
+                        On = g.Sum(_ => _.TimeInterval.Duration.TotalSeconds)
+                    })
+                    .ToList();
+
+            var activity = new OxyPlot.Series.RectangleBarSeries()
+            {
+                TrackerFormatString = "{2} - {3}",
+                StrokeThickness = 0
+            };
+
+            foreach (var i in w)
+            {
+                var refDay = i.Day;
+                var y = DateTimeAxis.ToDouble(refDay);
+                activity.Items.Add(new RectangleBarItem(0, y - daySep, i.On, y + daySep) { Color = OxyPlot.OxyColor.FromUInt32((uint)(idleColor).ToArgb())});
+                activity.Items.Add(new RectangleBarItem(0, y - daySep, i.Active, y + daySep) { Color = OxyPlot.OxyColor.FromUInt32((uint)(activeColor).ToArgb())});
+            }
+
+            model.Series.Add(activity);
+
+            var plotView = new OxyPlot.WindowsForms.PlotView()
+            {
+                Model = model
+            };
+
+            return plotView;
         }
 
         /*

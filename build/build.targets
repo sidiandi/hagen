@@ -121,7 +121,9 @@ along with sidi-util. If not, see <http://www.gnu.org/licenses/>.-->
 	<Exec Command="@(SetupFile, ' ')" />
   </Target>
   
-  <Target Name="Release" DependsOnTargets="Build;Test;BuildSetup" />
+  <Target Name="Publish" DependsOnTargets="Build;Test;BuildSetup" >
+	<Copy Source="$(SetupFile)"  DestinationFolder="C:\Users\Andreas\Dropbox\bin\hagen" />
+  </Target>
 
   <!-- This target puts the build.log file into the build directory -->
   <Target Name="StartWrapper" >

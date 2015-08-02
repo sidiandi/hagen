@@ -75,7 +75,7 @@ namespace hagen
         {
             get
             {
-                return KeyDown > 0 || MouseMove > 0 || Clicks > 0;
+                return KeyDown > 0;
             }
         }
     }

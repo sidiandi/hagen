@@ -240,14 +240,14 @@ namespace hagen
 
         private void statisticsToolStripMenuItem_Click(object sender, EventArgs e)
         {
-            new activityReport.Program(hagen).ShowStatisticsWindow();
+            new activityReport.Program(hagen).StatisticsWindow().Show();
         }
 
         private void sqliteConsoleToolStripMenuItem_Click(object sender, EventArgs e)
         {
             Process p = new Process();
             p.StartInfo.FileName = L.Paths.BinDir.CatDir("sqlite3.exe");
-            p.StartInfo.Arguments = hagen.DatabasePath.Quote();
+            p.StartInfo.Arguments = hagen.ActionsDatabasePath.Quote();
             p.StartInfo.CreateNoWindow = false;
             p.Start();
         }
@@ -456,7 +456,8 @@ Hours: {0:G3}",
             using (var actions = hagen.OpenActions())
             {
                 FileActionFactory f = new FileActionFactory();
-                foreach (var i in paths)
+                foreach (var i in paths
+                    .Where(p => p.Exists && !p.Info.IsHidden))
                 {
                     log.Info(i);
                     var action = f.FromFile(i);

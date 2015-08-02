@@ -4,7 +4,7 @@
     <StartArguments>gui</StartArguments>
   </PropertyGroup>
   <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Debug|AnyCPU' ">
-    <StartArguments>program</StartArguments>
+    <StartArguments>Statistics</StartArguments>
   </PropertyGroup>
   <PropertyGroup>
     <PublishUrlHistory />
@@ -17,7 +17,7 @@
     <VerifyUploadedFiles>false</VerifyUploadedFiles>
   </PropertyGroup>
   <PropertyGroup Condition="'$(Configuration)|$(Platform)' == 'Debug|x86'">
-    <StartArguments>GraphicalUserInterface</StartArguments>
+    <StartArguments>stats</StartArguments>
   </PropertyGroup>
   <PropertyGroup Condition="'$(Configuration)|$(Platform)' == 'Debug|x64'">
     <StartArguments>program</StartArguments>

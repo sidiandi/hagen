@@ -43,6 +43,10 @@ namespace hagen
             set
             {
                 propertyGrid.SelectedObject = value;
+                propertyGrid.ExpandAllGridItems();
+                var sel = propertyGrid.EnumerateAllItems().FirstOrDefault(i => i.Label.Equals("Name"));
+                sel.Select();
+                propertyGrid.Select();
             }
         }
     }

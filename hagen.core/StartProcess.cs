@@ -133,6 +133,7 @@ namespace hagen
                 return WorkingDirectory;
             }
 
+            /*
             try
             {
                 var dte = (EnvDTE.DTE)System.Runtime.InteropServices.Marshal.GetActiveObject("VisualStudio.DTE");
@@ -142,6 +143,7 @@ namespace hagen
             catch
             {
             }
+            */
             
             try
             {

@@ -60,7 +60,6 @@ namespace activityReport
         {
             this.hagen = hagen;
 
-            SQLiteFunction.RegisterFunction(typeof(Duration));
             input = hagen.OpenInputs();
             connection = (System.Data.SQLite.SQLiteConnection)input.Connection;
             dataContext = new DataContext(input.Connection);
@@ -113,23 +112,6 @@ namespace activityReport
             public DateTime Go(DataContext dataContext)
             {
                 return dataContext.ExecuteQuery<DateTime>("select Begin from input where Begin < {0} order by Begin desc limit 1", DateTime.Parse(Day).AddDays(1)).First();
-            }
-        }
-
-        [SQLiteFunction(Arguments = 2, FuncType = FunctionType.Scalar, Name = "Duration")]
-        public class Duration : SQLiteFunction
-        {
-            public override object Invoke(object[] args)
-            {
-                if (args.Length != 2)
-                {
-                    throw new IndexOutOfRangeException();
-                }
-                var s0 = (string)args[0];
-                var s1 = (string)args[1];
-                var d0 = DateTime.Parse(s0);
-                var d1 = DateTime.Parse(s1);
-                return (d1 - d0).TotalSeconds;
             }
         }
 

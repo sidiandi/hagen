@@ -19,7 +19,7 @@ along with sidi-util. If not, see <http://www.gnu.org/licenses/>.-->
 	<PropertyGroup>
 		<SourceDir>$([System.IO.Directory]::GetParent($(MSBuildProjectDirectory)))</SourceDir>
 
-		<NugetPackagesDir>$(SourceDir)\..\nuget-packages</NugetPackagesDir>
+		<NugetPackagesDir>$(SourceDir)\packages</NugetPackagesDir>
 		
 		<NUnitBin>$(NugetPackagesDir)\NUnit.Runners.2.6.4\tools</NUnitBin>
 		<NUnitConsole>$(NUnitBin)\nunit-console-x86.exe</NUnitConsole>
@@ -31,8 +31,8 @@ along with sidi-util. If not, see <http://www.gnu.org/licenses/>.-->
 	<MSBuildCommunityTasksPath>$(SourceDir)\build</MSBuildCommunityTasksPath>
   </PropertyGroup>
   
+  <Import Project="$(NugetPackagesDir)\GitVersionTask.3.1.1\Build\portable-net+sl+win+wpa+wp\GitVersionTask.targets" />
   <Import Project="$(MSBuildCommunityTasksPath)\MSBuild.Community.Tasks.Targets" />
-  <Import Project="$(NugetPackagesDir)\GitVersionTask.3.0.0-beta0002\Build\GitVersionTask.targets" Condition="Exists('..\..\nuget-packages\GitVersionTask.3.0.0-beta0002\Build\GitVersionTask.targets')" />
   <Import Project="C:\work\nugetPackSymbols\CreateNugetSymbolsPackage\bin\Debug\Build\CreateNugetSymbolsPackage.targets" />
 
   <Target Name="GetVersion">

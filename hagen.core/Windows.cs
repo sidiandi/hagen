@@ -5,8 +5,6 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
-using TestStack.White;
-using TestStack.White.UIItems.WindowItems;
 using Sidi.Extensions;
 using System.Windows.Forms;
 using System.Runtime.InteropServices;
@@ -147,12 +145,14 @@ namespace Sidi
                 log.Info(windows.ListFormat().Add(_ => _.Class, _ => _.Text));
             }
 
+            /*
             [Test, Explicit]
             public void Dte()
             {
                 var dte = (EnvDTE.DTE)System.Runtime.InteropServices.Marshal.GetActiveObject("VisualStudio.DTE");
                 log.Info(dte.ActiveWindow.Caption);
             }
+            */
         }
     }
 }

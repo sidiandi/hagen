@@ -31,9 +31,35 @@ using System.Data.Common;
 
 namespace hagen
 {
+    [System.Data.SQLite.SQLiteFunction(Arguments = 2, FuncType = System.Data.SQLite.FunctionType.Scalar, Name = "Duration")]
+    public class Duration : System.Data.SQLite.SQLiteFunction
+    {
+        public override object Invoke(object[] args)
+        {
+            if (args.Length != 2)
+            {
+                throw new IndexOutOfRangeException();
+            }
+            var s0 = (string)args[0];
+            var s1 = (string)args[1];
+            var d0 = DateTime.Parse(s0);
+            var d1 = DateTime.Parse(s1);
+            return (d1 - d0).TotalSeconds;
+        }
+    }
+
     public class Hagen
     {
         private static readonly log4net.ILog log = log4net.LogManager.GetLogger(System.Reflection.MethodBase.GetCurrentMethod().DeclaringType);
+
+        static Hagen()
+        {
+            try
+            {
+                System.Data.SQLite.SQLiteFunction.RegisterFunction(typeof(Duration));
+            }
+            catch (System.ArgumentException) { }
+        }
 
         public Hagen(LPath dataDirectory = null)
         {

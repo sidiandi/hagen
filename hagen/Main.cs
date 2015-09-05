@@ -240,7 +240,8 @@ namespace hagen
 
         private void statisticsToolStripMenuItem_Click(object sender, EventArgs e)
         {
-            new activityReport.Program(hagen).StatisticsWindow().Show();
+            // todo
+            // new activityReport.Program(hagen).StatisticsWindow().Show();
         }
 
         private void sqliteConsoleToolStripMenuItem_Click(object sender, EventArgs e)
@@ -254,7 +255,8 @@ namespace hagen
 
         private void reportMailToolStripMenuItem_Click(object sender, EventArgs e)
         {
-            new activityReport.Program(hagen).ShowReport();
+            // todo
+            // new activityReport.Program(hagen).ShowReport();
         }
 
         private void notifyIcon_MouseDoubleClick(object sender, MouseEventArgs e)

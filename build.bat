@@ -5,11 +5,9 @@ if "%Target%" == "" (
 	set Target=Release
 )
 
-set msbuild="%ProgramFiles(x86)%\MSBuild\12.0\Bin\msbuild.exe"
+set msbuild="%ProgramFiles(x86)%\MSBuild\14.0\Bin\msbuild.exe"
 set SourceDir=%~dp0.
 call :file_name_from_path DirName %SourceDir%
-set BuildDir=%USERPROFILE%\build\%DirName%
-mkdir %BuildDir%
 %msbuild% %SourceDir%\build\Build.proj /t:StartWrapper /p:BuildTarget=%Target%
 goto :eof
 

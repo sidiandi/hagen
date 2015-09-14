@@ -58,7 +58,10 @@ namespace hagen
             {
                 System.Data.SQLite.SQLiteFunction.RegisterFunction(typeof(Duration));
             }
-            catch (System.ArgumentException) { }
+            catch (System.ArgumentException ex)
+            {
+                log.Warn(ex);
+            }
         }
 
         public Hagen(LPath dataDirectory = null)

@@ -122,7 +122,7 @@ along with sidi-util. If not, see <http://www.gnu.org/licenses/>.-->
   </Target>
   
   <Target Name="Publish" DependsOnTargets="Build;Test;BuildSetup" >
-	<Copy Source="$(SetupFile)"  DestinationFolder="C:\Users\Andreas\Dropbox\bin\hagen" />
+	<Copy SourceFiles="$(SetupFile)"  DestinationFolder="C:\Users\Andreas\Dropbox\bin\hagen" />
   </Target>
 
   <!-- This target puts the build.log file into the build directory -->

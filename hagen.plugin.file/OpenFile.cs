@@ -34,7 +34,7 @@ namespace hagen.ActionSource
             this.context = context;
         }
 
-        IContext context;
+        readonly IContext context;
 
         public IEnumerable<IAction> GetActions(string query)
         {
@@ -45,17 +45,17 @@ namespace hagen.ActionSource
                         context.CreateChoice(fl.ToString(), () =>
                             {
                                 var ac = new List<IAction>();
-                                ac.Add(new SimpleAction(String.Format("Explorer : {0}", fl), () => OpenInShell(fl)));
-                                ac.Add(new SimpleAction(String.Format("cmd: {0}", fl), () => OpenInCmd(fl.Path)));
+                                ac.Add(new SimpleAction(context.LastExecutedStore, "Explorer", String.Format("Explorer : {0}", fl), () => OpenInShell(fl)));
+                                ac.Add(new SimpleAction(context.LastExecutedStore, "cmd", String.Format("cmd: {0}", fl), () => OpenInCmd(fl.Path)));
                                 if (fl.Path.IsDirectory)
                                 {
-                                    ac.Add(new SimpleAction(String.Format("VLC: {0}", fl), () => OpenInVLC(fl.Path)));
+                                    ac.Add(new SimpleAction(context.LastExecutedStore, "vlc", String.Format("VLC: {0}", fl), () => OpenInVLC(fl.Path)));
                                 }
 
                                 if (fl.Path.IsFile)
                                 {
-                                    ac.Add(new SimpleAction(String.Format("Notepad++: {0}", fl), () => OpenInNotepadPlusPlus(fl)));
-                                    ac.Add(new SimpleAction(String.Format("Visual Studio: {0}", fl), () => OpenInVisualStudio(fl)));
+                                    ac.Add(new SimpleAction(context.LastExecutedStore, "Notepad++", String.Format("Notepad++: {0}", fl), () => OpenInNotepadPlusPlus(fl)));
+                                    ac.Add(new SimpleAction(context.LastExecutedStore, "Visual Studio", String.Format("Visual Studio: {0}", fl), () => OpenInVisualStudio(fl)));
                                 }
                                 return ac;
                             })

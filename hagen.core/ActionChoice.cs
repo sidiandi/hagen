@@ -34,5 +34,21 @@ namespace hagen
         {
             get { return null; }
         }
+
+        public string Id
+        {
+            get
+            {
+                return "Choice";
+            }
+        }
+
+        public DateTime LastExecuted
+        {
+            get
+            {
+                return DateTime.UtcNow;
+            }
+        }
     }
 }

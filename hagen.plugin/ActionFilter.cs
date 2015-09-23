@@ -85,6 +85,8 @@ namespace hagen
             {
                 var pathList = context.SelectedPathList;
                 return new SimpleAction(
+                    context.LastExecutedStore,
+                    a.Name,
                     String.Format("{0}({2}) ({1})", a.Name, a.Usage, pathList.JoinTruncated(", ", 80)),
                     () =>
                     {
@@ -94,6 +96,8 @@ namespace hagen
             else
             {
                 return new SimpleAction(
+                    context.LastExecutedStore,
+                    a.Name,
                     String.Format("{0} ({1})", a.Name, a.Usage),
                     () =>
                     {

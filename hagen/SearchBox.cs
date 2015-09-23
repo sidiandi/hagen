@@ -129,12 +129,16 @@ namespace hagen
                 });
 
             itemView.Columns.Add(new OLVColumn()
+            {
+                Name = "Name",
+                AspectGetter = _ =>
                 {
-                    Name = "Name",
-                    AspectGetter = x => ((IAction)x).Name,
-                    WordWrap = true,
-                    FillsFreeSpace = true,
-                });
+                    var a = (IAction)_;
+                    return String.Format("{0} {1}", a.Name, a.LastExecuted);
+                },
+                WordWrap = true,
+                FillsFreeSpace = true,
+            });
 
             Action.IconCache.EntryUpdated +=new EventHandler<LruCacheBackground<Action,Icon>.EntryUpdatedEventArgs>(IconCache_EntryUpdated);
 
@@ -177,7 +181,7 @@ namespace hagen
                             .ObserveOn(this)
                             .Subscribe(_ =>
                             {
-                                actions.Add(_);
+                                actions = actions.Concat(new IAction[] { _ }).OrderByDescending(x => x.LastExecuted).ToList();
                                 var si = Math.Max(itemView.SelectedIndex, 0);
                                 itemView.SetObjects(actions);
                                 itemView.SelectedIndex = si;

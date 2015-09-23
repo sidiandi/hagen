@@ -74,7 +74,7 @@ namespace hagen
             this.dataDirectory = dataDirectory;
 
             actions = OpenActions();
-            this.Context = new UserInterfaceState();
+            this.Context = new Context(this);
         }
 
         Collection<Action> actions;
@@ -114,12 +114,17 @@ namespace hagen
             }
         }
 
+        public ILastExecutedStore OpenLastExecutedStore()
+        {
+            return new LastExecutedDbStore(ActionsDatabasePath, "LastExecuted");
+        }
+
         public Collection<Action> OpenActions()
         {
             return new Collection<Action>(ActionsDatabasePath);
         }
 
-        public UserInterfaceState Context { get; private set; }
+        public Context Context { get; private set; }
 
         public void Cleanup()
         {

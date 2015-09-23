@@ -19,6 +19,7 @@ using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Text;
+using System.Text.RegularExpressions;
 
 namespace hagen.ActionSource
 {
@@ -44,9 +45,23 @@ namespace hagen.ActionSource
 
         IAction WebLookupAction(string title, string urlTemplate, string query)
         {
+            var lastUsed = DateTime.MinValue;
+
+            // try to parse query
+            var p = Regex.Split(query, @"\s+");
+
+            if (p.Length >= 2 && title.StartsWith(p[0], StringComparison.InvariantCultureIgnoreCase))
+            {
+                lastUsed = DateTime.UtcNow;
+                query = String.Join(" ", p.Skip(1));
+            }
+
             return new ShellAction(
                 String.Format(urlTemplate, System.Web.HttpUtility.UrlEncode(query)),
-                String.Format("{0} \"{1}\"", title, query));
+                String.Format("{0} \"{1}\"", title, query))
+            {
+                LastExecuted = lastUsed
+            };
         }
     }
 }

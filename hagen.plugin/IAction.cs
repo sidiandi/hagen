@@ -28,5 +28,15 @@ namespace hagen
         void Execute();
         string Name { get; }
         System.Drawing.Icon Icon { get; }
+        
+        /// <summary>
+        /// Unique Identifier
+        /// </summary>
+        string Id { get; }
+
+        /// <summary>
+        /// Last time when Execute was called on this action
+        /// </summary>
+        DateTime LastExecuted { get; }
     }
 }

@@ -27,18 +27,23 @@ namespace hagen
         private static readonly log4net.ILog log = log4net.LogManager.GetLogger(System.Reflection.MethodBase.GetCurrentMethod().DeclaringType);
 
         System.Action action;
-        string name;
+        readonly string name;
+        readonly string id;
+        readonly ILastExecutedStore lastExecutedStore;
 
-        public SimpleAction(string name, System.Action action)
+        public SimpleAction(ILastExecutedStore lastExecutedStore, string id, string name, System.Action action)
         {
+            this.id = id;
             this.name = name;
             this.action = action;
+            this.lastExecutedStore = lastExecutedStore;
         }
 
         public void Execute()
         {
             try
             {
+                lastExecutedStore.Set(id);
                 action();
 
             }
@@ -56,6 +61,22 @@ namespace hagen
         public System.Drawing.Icon Icon
         {
             get { return null; }
+        }
+
+        public string Id
+        {
+            get
+            {
+                return id;
+            }
+        }
+
+        public DateTime LastExecuted
+        {
+            get
+            {
+                return lastExecutedStore.Get(id);
+            }
         }
     }
 }

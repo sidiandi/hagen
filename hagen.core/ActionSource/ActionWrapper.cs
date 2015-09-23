@@ -51,7 +51,6 @@ namespace hagen.ActionSource
                 Action.Execute();
             }
 
-            Action.LastUseTime = DateTime.Now;
             Data.Update(Action);
         }
 
@@ -66,6 +65,23 @@ namespace hagen.ActionSource
         public System.Drawing.Icon Icon
         {
             get { return Action.Icon; }
+        }
+
+        public string Id
+        {
+            get
+            {
+                var ia = (IAction)Action;
+                return ia.Id;
+            }
+        }
+
+        public DateTime LastExecuted
+        {
+            get
+            {
+                return this.Action.LastExecuted;
+            }
         }
 
         public event System.ComponentModel.PropertyChangedEventHandler PropertyChanged;

@@ -33,6 +33,7 @@ namespace hagen
         {
             this.startInfo = new ProcessStartInfo() { FileName = command };
             this.name = command;
+            this.LastExecuted = DateTime.MinValue;
         }
 
         public ShellAction(string command, string name)
@@ -62,6 +63,20 @@ namespace hagen
         public System.Drawing.Icon Icon
         {
             get { return GetIcon(startInfo.FileName); }
+        }
+
+        public string Id
+        {
+            get
+            {
+                return name;
+            }
+        }
+
+        public DateTime LastExecuted
+        {
+            get;
+            set;
         }
 
         public static System.Drawing.Icon GetIcon(string FileName)

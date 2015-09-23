@@ -18,6 +18,7 @@
     <Compile Include="IconHelper.cs" />
     <Compile Include="Icons.cs" />
     <Compile Include="IContext.cs" />
+    <Compile Include="ILastExecutedStore.cs" />
     <Compile Include="IPlugin.cs" />
     <Compile Include="NativeMethods.cs" />
     <Compile Include="PathListExtension.cs" />
@@ -57,8 +58,8 @@
       <HintPath>..\packages\protobuf-net.2.0.0.668\lib\net40\protobuf-net.dll</HintPath>
       <Private>True</Private>
     </Reference>
-    <Reference Include="Sidi.Util, Version=5.5.0.0, Culture=neutral, PublicKeyToken=1e33c1a5eebc53e1, processorArchitecture=MSIL">
-      <HintPath>..\packages\sidi-util.5.5.0\lib\net45\Sidi.Util.dll</HintPath>
+    <Reference Include="Sidi.Util, Version=5.5.2.0, Culture=neutral, PublicKeyToken=1e33c1a5eebc53e1, processorArchitecture=MSIL">
+      <HintPath>..\packages\sidi-util.5.5.2\lib\net45\Sidi.Util.dll</HintPath>
       <Private>True</Private>
     </Reference>
     <Reference Include="System">

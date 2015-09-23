@@ -158,8 +158,10 @@ namespace hagen
 
         public override void Execute()
         {
+            // TODO
+            /* 
             // fill the input box of a file open dialog
-            var focus = UserInterfaceState.Instance.SavedFocusedElement;
+            var focus = Context.Instance.SavedFocusedElement;
             if (focus != null)
             {
                 var name = (string)focus.GetCurrentPropertyValue(AutomationElement.NameProperty);
@@ -174,6 +176,7 @@ namespace hagen
                     }
                 }
             }
+            */
 
             Process p = new Process()
             {

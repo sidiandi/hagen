@@ -8,18 +8,12 @@ using System.Windows.Forms;
 
 namespace hagen
 {
-    public class UserInterfaceState : IContext
+    public class Context : IContext
     {
-        public static UserInterfaceState Instance
+        private static readonly log4net.ILog log = log4net.LogManager.GetLogger(System.Reflection.MethodBase.GetCurrentMethod().DeclaringType);
+        public Context(Hagen hagen)
         {
-            get
-            {
-                if (instance == null)
-                {
-                    instance = new UserInterfaceState();
-                }
-                return instance;
-            }
+            lastExecutedStore = hagen.OpenLastExecutedStore();
         }
 
         public void InsertText(string text)
@@ -43,8 +37,6 @@ namespace hagen
                 return object.Equals(className, "ConsoleWindowClass");
             }
         }
-
-        static UserInterfaceState instance;
 
         public void SaveFocus()
         {
@@ -87,5 +79,9 @@ namespace hagen
         }
 
         public System.Action<IList<IAction>> Choose;
+
+        public ILastExecutedStore LastExecutedStore { get { return lastExecutedStore; } }
+
+        readonly ILastExecutedStore lastExecutedStore;
     }
 }

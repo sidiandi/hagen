@@ -16,5 +16,7 @@ namespace hagen
         PathList SelectedPathList { get; }
 
         IAction CreateChoice(string name, Func<IEnumerable<IAction>> actionProvider);
+
+        ILastExecutedStore LastExecutedStore { get; }
     }
 }

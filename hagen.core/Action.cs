@@ -166,10 +166,27 @@ namespace hagen
             }
         }
 
+        string IAction.Id
+        {
+            get
+            {
+                return String.Format("db-{0}", this.Id);
+            }
+        }
+
+        public DateTime LastExecuted
+        {
+            get
+            {
+                return this.LastUseTime;
+            }
+        }
+
         public void Execute()
         {
             try
             {
+                this.LastUseTime = DateTime.UtcNow;
                 commandObject.Execute();
             }
             catch (Exception e)

@@ -25,6 +25,7 @@ along with sidi-util. If not, see <http://www.gnu.org/licenses/>.-->
 		<NUnitConsole>$(NUnitBin)\nunit-console-x86.exe</NUnitConsole>
 		
 		<Nuget>$(SourceDir)\.nuget\NuGet.exe</Nuget>
+		<Git>git</Git>
   </PropertyGroup>
 
 	<PropertyGroup>

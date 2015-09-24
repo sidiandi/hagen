@@ -65,6 +65,10 @@ along with sidi-util. If not, see <http://www.gnu.org/licenses/>.-->
     </MSBuild>
   </Target>
 
+  <Target Name="Tag" DependsOnTargets="GetVersion">
+	<Exec WorkingDirectory="$(SourceDir)" Command="$(Git) tag --force v$(GfvSemVer)" />
+  </Target>
+
   <Target Name="Test" DependsOnTargets="Build">
     <Exec Command="$(NUnitConsole) /xml=$(TestDir)\TestResult.xml /labels @(Targets, ' ')" />
   </Target>
@@ -99,7 +103,7 @@ along with sidi-util. If not, see <http://www.gnu.org/licenses/>.-->
     <Exec WorkingDirectory="$(ReleaseDir)" Command="$(Nuget) push $(OutDir)\%(Package.Identity).$(GfvNuGetVersion).symbols.nupkg" />
   </Target>
 
-  <Target Name="BuildSetup" DependsOnTargets="GetVersion">
+  <Target Name="BuildSetup" DependsOnTargets="GetVersion;Tag">
 	<MSBuild
         Projects="$(SourceDir)\setup\setup.wixproj" Properties="
 			CompanyName=$(CompanyName);

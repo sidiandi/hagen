@@ -58,9 +58,8 @@
       <HintPath>..\packages\protobuf-net.2.0.0.668\lib\net40\protobuf-net.dll</HintPath>
       <Private>True</Private>
     </Reference>
-    <Reference Include="Sidi.Util, Version=5.5.2.0, Culture=neutral, PublicKeyToken=1e33c1a5eebc53e1, processorArchitecture=MSIL">
-      <HintPath>..\packages\sidi-util.5.5.2\lib\net45\Sidi.Util.dll</HintPath>
-      <Private>True</Private>
+    <Reference Include="Sidi.Util">
+      <HintPath>..\packages\sidi-util.6.1.2\lib\net45\Sidi.Util.dll</HintPath>
     </Reference>
     <Reference Include="System">
       <HintPath>..\..\..\Program Files (x86)\Reference Assemblies\Microsoft\Framework\.NETFramework\v4.5.1\System.dll</HintPath>

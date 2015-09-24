@@ -178,8 +178,9 @@
       <SpecificVersion>False</SpecificVersion>
       <HintPath>..\lib\Shortcut.dll</HintPath>
     </Reference>
-    <Reference Include="Sidi.Util">
-      <HintPath>..\packages\sidi-util.6.1.2\lib\net45\Sidi.Util.dll</HintPath>
+    <Reference Include="Sidi.Util, Version=6.2.0.0, Culture=neutral, PublicKeyToken=1e33c1a5eebc53e1, processorArchitecture=MSIL">
+      <HintPath>..\packages\sidi-util.6.2.0\lib\net45\Sidi.Util.dll</HintPath>
+      <Private>True</Private>
     </Reference>
     <Reference Include="SparkleLibrary, Version=1.0.0.0, Culture=neutral, processorArchitecture=MSIL">
       <HintPath>..\packages\ObjectListView.2.7.1\lib\SparkleLibrary.dll</HintPath>

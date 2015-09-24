@@ -28,6 +28,7 @@ using Sidi.Test;
 using System.Reactive.Concurrency;
 using System.Reactive.Subjects;
 using System.Reactive.Linq;
+using System.Windows.Automation;
 
 namespace hagen
 {
@@ -133,7 +134,7 @@ namespace hagen
             {
                 sampleApp = new SampleApp();
                 var p = Parser.SingleSource(sampleApp);
-                af = new ActionFilter(null, p);
+                af = new ActionFilter(new hagen.Test.ContextMock(), p);
             }
 
             SampleApp sampleApp;

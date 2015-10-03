@@ -6,6 +6,9 @@
     <NuGetPackageImportStamp>
     </NuGetPackageImportStamp>
   </PropertyGroup>
+  <PropertyGroup Condition="'$(Configuration)|$(Platform)' == 'Debug|AnyCPU'">
+    <UseVSHostingProcess>true</UseVSHostingProcess>
+  </PropertyGroup>
   <Import Project="..\build\Common.props" />
   <ItemGroup>
     <Compile Include="ActionFilter.cs" />

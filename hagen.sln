@@ -35,6 +35,8 @@ Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "hagen.plugin.file", "hagen.
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "hagen.plugin.db", "hagen.plugin.db\hagen.plugin.db.csproj", "{C6160D7A-D2A6-421D-A16E-0974A285D56C}"
 EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "hagen.plugin.google", "hagen.plugin.google\hagen.plugin.google.csproj", "{DCCF9122-A232-46E8-BC4E-608533BEABAC}"
+EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		Debug|Any CPU = Debug|Any CPU
@@ -143,6 +145,22 @@ Global
 		{C6160D7A-D2A6-421D-A16E-0974A285D56C}.Release|x64.Build.0 = Release|Any CPU
 		{C6160D7A-D2A6-421D-A16E-0974A285D56C}.Release|x86.ActiveCfg = Release|Any CPU
 		{C6160D7A-D2A6-421D-A16E-0974A285D56C}.Release|x86.Build.0 = Release|Any CPU
+		{DCCF9122-A232-46E8-BC4E-608533BEABAC}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{DCCF9122-A232-46E8-BC4E-608533BEABAC}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{DCCF9122-A232-46E8-BC4E-608533BEABAC}.Debug|Mixed Platforms.ActiveCfg = Debug|Any CPU
+		{DCCF9122-A232-46E8-BC4E-608533BEABAC}.Debug|Mixed Platforms.Build.0 = Debug|Any CPU
+		{DCCF9122-A232-46E8-BC4E-608533BEABAC}.Debug|x64.ActiveCfg = Debug|x64
+		{DCCF9122-A232-46E8-BC4E-608533BEABAC}.Debug|x64.Build.0 = Debug|x64
+		{DCCF9122-A232-46E8-BC4E-608533BEABAC}.Debug|x86.ActiveCfg = Debug|Any CPU
+		{DCCF9122-A232-46E8-BC4E-608533BEABAC}.Debug|x86.Build.0 = Debug|Any CPU
+		{DCCF9122-A232-46E8-BC4E-608533BEABAC}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{DCCF9122-A232-46E8-BC4E-608533BEABAC}.Release|Any CPU.Build.0 = Release|Any CPU
+		{DCCF9122-A232-46E8-BC4E-608533BEABAC}.Release|Mixed Platforms.ActiveCfg = Release|Any CPU
+		{DCCF9122-A232-46E8-BC4E-608533BEABAC}.Release|Mixed Platforms.Build.0 = Release|Any CPU
+		{DCCF9122-A232-46E8-BC4E-608533BEABAC}.Release|x64.ActiveCfg = Release|x64
+		{DCCF9122-A232-46E8-BC4E-608533BEABAC}.Release|x64.Build.0 = Release|x64
+		{DCCF9122-A232-46E8-BC4E-608533BEABAC}.Release|x86.ActiveCfg = Release|Any CPU
+		{DCCF9122-A232-46E8-BC4E-608533BEABAC}.Release|x86.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE

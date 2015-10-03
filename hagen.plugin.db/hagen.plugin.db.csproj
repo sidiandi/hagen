@@ -15,6 +15,7 @@
     <Compile Include="DatabaseLookup.cs" />
     <Compile Include="Extensions.cs" />
     <Compile Include="FileActionFactory.cs" />
+    <Compile Include="Filters.cs" />
     <Compile Include="ICommand.cs" />
     <Compile Include="InsertText.cs" />
     <Compile Include="mshtmlEx.cs" />

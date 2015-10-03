@@ -79,7 +79,10 @@ namespace hagen.Plugin.Db
                 return Observable.Empty<IAction>();
             }
 
-            return GetActionsEnum(query).ToObservable(ThreadPoolScheduler.Instance);
+            var actions = GetActionsEnum(query);
+            actions = Filters.OpenInVlc(actions);
+
+            return actions.ToObservable(ThreadPoolScheduler.Instance);
         }
     }
 }

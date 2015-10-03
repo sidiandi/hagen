@@ -14,6 +14,7 @@
     <Compile Include="AutomationExtension.cs" />
     <Compile Include="ContextMock.cs" />
     <Compile Include="Extensions.cs" />
+    <Compile Include="Filter.cs" />
     <Compile Include="IAction.cs" />
     <Compile Include="IActionSource.cs" />
     <Compile Include="IActionSource2.cs" />

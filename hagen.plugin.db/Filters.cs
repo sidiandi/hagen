@@ -5,7 +5,7 @@ using System.Text;
 using Sidi.IO;
 using System.Drawing;
 
-namespace hagen.ActionSource
+namespace hagen.Plugin.Db
 {
     public class Filters
     {
@@ -71,6 +71,30 @@ namespace hagen.ActionSource
                     return new[] { action };
                 });
             });
+        }
+
+        public static IEnumerable<IAction> OpenInVlc(IEnumerable<IAction> actions)
+        {
+                return actions.SelectMany(action =>
+                {
+                    var dir = GetPath(action);
+                    if (dir != null && dir.IsDirectory)
+                    {
+                        var openInVlc = new Action()
+                        {
+                            Name = String.Format("Open in VLC: {0}", dir.Quote()),
+                            CommandObject = new StartProcess()
+                            {
+                                Arguments = dir.Quote(),
+                                FileName = vlcExe
+                            },
+                            LastUseTime = action.LastExecuted
+                        };
+                        return new IAction[] { action, openInVlc };
+                    }
+
+                    return new[] { action };
+                });
         }
 
         static LPath notepadPlusPlusExe = Paths.GetFolderPath(Environment.SpecialFolder.ProgramFilesX86)

@@ -67,8 +67,6 @@ namespace hagen
                     components.Dispose();
                     components = null;
                 }
-
-                Action.IconCache.EntryUpdated -= new EventHandler<LruCacheBackground<Action, Icon>.EntryUpdatedEventArgs>(IconCache_EntryUpdated);
             }
             // Free your own state (unmanaged objects).
             // Set large fields to null.
@@ -140,7 +138,8 @@ namespace hagen
                 FillsFreeSpace = true,
             });
 
-            Action.IconCache.EntryUpdated +=new EventHandler<LruCacheBackground<Action,Icon>.EntryUpdatedEventArgs>(IconCache_EntryUpdated);
+            // todo: react on updated icons
+            // Action.IconCache.EntryUpdated +=new EventHandler<LruCacheBackground<Action,Icon>.EntryUpdatedEventArgs>(IconCache_EntryUpdated);
 
             this.Controls.Add(itemView);
 
@@ -259,10 +258,8 @@ namespace hagen
 
         public void Remove()
         {
-            foreach (var i in itemView.SelectedObjects.OfType<ActionWrapper>())
-            {
-                i.Data.Remove(i.Action);
-            }
+            throw new NotImplementedException();
+            // todo
             UpdateResult();
         }
 

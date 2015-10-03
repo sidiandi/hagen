@@ -33,21 +33,14 @@
   </PropertyGroup>
   <Import Project="..\build\Common.props" />
   <ItemGroup>
-    <Compile Include="Action.cs" />
     <Compile Include="ActionChoice.cs" />
-    <Compile Include="ActionsEx.cs" />
-    <Compile Include="ActionSource\ActionWrapper.cs" />
     <Compile Include="ActionSource\Composite.cs" />
-    <Compile Include="ActionSource\DatabaseLookup.cs" />
-    <Compile Include="ActionSource\Filter.cs" />
-    <Compile Include="ActionSource\Filters.cs" />
     <Compile Include="Activity.cs" />
     <Compile Include="ActivityLogger.cs" />
     <Compile Include="AggregateUtil.cs" />
     <Compile Include="Appender.cs" />
     <Compile Include="Contract.cs" />
     <Compile Include="Extensions.cs" />
-    <Compile Include="FileActionFactory.cs" />
     <Compile Include="FileGroup.cs" />
     <Compile Include="FileGroupDescriptor.cs" />
     <Compile Include="globalKeyboardHook.cs" />

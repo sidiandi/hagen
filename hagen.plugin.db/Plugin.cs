@@ -163,6 +163,39 @@ namespace hagen.Plugin.Db
             return m;
         }
 
+        private void noteToolStripMenuItem_Click(object sender, EventArgs e)
+        {
+            /*
+            var notesFile = context.DataDirectory.CatDir(
+                "Notes",
+                LPath.GetValidFilename(searchBox1.Query + ".txt"));
+
+            if (!notesFile.Exists)
+            {
+                notesFile.EnsureParentDirectoryExists();
+                using (var w = notesFile.OpenWrite())
+                {
+                    w.Write(new byte[] { 0xef, 0xbb, 0xbf }, 0, 3);
+                    using (var sw = new StreamWriter(w))
+                    {
+                        sw.WriteLine("Your text here");
+                    }
+                }
+            }
+
+            var p = Process.Start("notepad.exe", notesFile.ToString());
+            p.WaitForExit();
+
+            var a = new Action()
+            {
+                Name = searchBox1.Query,
+                CommandObject = new InsertText() { FileName = notesFile.ToString() }
+            };
+
+            actions.Add(a);
+            */
+        }
+
         private void ViewToolStripMenuItem_Click(object sender, EventArgs e)
         {
             lookup.IncludeInSearch = !lookup.IncludeInSearch;

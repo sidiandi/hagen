@@ -84,7 +84,6 @@
     <Compile Include="StartProcess.cs" />
     <Compile Include="StringEx.cs" />
     <Compile Include="TimeIntervalExtensions.cs" />
-    <Compile Include="Updater.cs" />
     <Compile Include="UserInterfaceState.cs" />
     <Compile Include="WindowInformation.cs" />
     <Compile Include="Windows.cs" />

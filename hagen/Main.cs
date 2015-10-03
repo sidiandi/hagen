@@ -48,7 +48,6 @@ namespace hagen
         private static readonly log4net.ILog log = log4net.LogManager.GetLogger(System.Reflection.MethodBase.GetCurrentMethod().DeclaringType);
 
         Shortcut.HotkeyBinder hotkeyBinder = new Shortcut.HotkeyBinder();
-        Collection<Action> actions;
         
         void InitUserInterface()
         {
@@ -73,8 +72,6 @@ namespace hagen
             jobListView.AsDockContent().Show(dockPanel, DockState.DockBottom);
 
             hagen.Context.AddJob = this.jobListView.JobList.Jobs.Add;
-
-            var actions = hagen.OpenActions();
 
             var pluginProvider = new PluginProvider(hagen.Context, new PathList() { Paths.BinDir });
 
@@ -132,8 +129,6 @@ namespace hagen
         public Main(Hagen hagen)
         {
             this.hagen = hagen;
-
-            actions = hagen.OpenActions();
 
             InitUserInterface();
             CheckWorkTime();
@@ -205,39 +200,6 @@ namespace hagen
         private void exitToolStripMenuItem_Click(object sender, EventArgs e)
         {
             this.Close();
-        }
-
-        private void updateStartMenuToolStripMenuItem_Click(object sender, EventArgs e)
-        {
-            jobListView.JobList.Jobs.Add(new Job("Update start menu", () =>
-              {
-                    using (var actions = hagen.OpenActions())
-                    {
-                        log.Info("Update");
-                        var actionsToAdd = new[]
-                        {
-                        ActionsEx.GetPathExecutables(),
-                        ActionsEx.GetStartMenuActions(),
-                        ActionsEx.GetSpecialFolderActions()
-                        }.SelectMany(x => x)
-                            .Select(x =>
-                            {
-                                log.Info(x);
-                                return x;
-                            })
-                            .ToList();
-
-                        actions.AddOrUpdate(actionsToAdd);
-                    }
-              }));
-        }
-
-        private void cleanupToolStripMenuItem_Click(object sender, EventArgs e)
-        {
-            jobListView.JobList.Jobs.Add(new Job("Cleanup", () =>
-              {
-                  hagen.Cleanup();
-              }));
         }
 
         private void propertiesToolStripMenuItem_Click(object sender, EventArgs e)
@@ -351,67 +313,9 @@ Hours: {0:G3}",
              */
         }
 
-        private void linksFromInternetExplorerToolStripMenuItem_Click(object sender, EventArgs e)
-        {
-            var links = ActionsEx.GetAllIeLinks().ToList();
-            try
-            {
-                var selected = Prompt.ChooseMany(links.ListFormat().DefaultColumns(), "Add Links");
-                foreach (var a in selected)
-                {
-                    actions.Add(a);
-                }
-            }
-            catch
-            {
-            }
-        }
-
-        [TestFixture]
-        public class Test : TestBase
-        {
-            [Test, RequiresSTA, Explicit]
-            public void IeLinks()
-            {
-                var a = new Main(new Hagen());
-                a.linksFromInternetExplorerToolStripMenuItem_Click(null, null);
-            }
-        }
-
         private void searchBox1_Load(object sender, EventArgs e)
         {
 
-        }
-
-        private void noteToolStripMenuItem_Click(object sender, EventArgs e)
-        {
-            var notesFile = hagen.DataDirectory.CatDir(
-                "Notes",
-                LPath.GetValidFilename(searchBox1.Query + ".txt"));
-
-            if (!notesFile.Exists)
-            {
-                notesFile.EnsureParentDirectoryExists();
-                using (var w = notesFile.OpenWrite())
-                {
-                    w.Write(new byte[]{ 0xef, 0xbb, 0xbf }, 0, 3);
-                    using (var sw = new StreamWriter(w))
-                    {
-                        sw.WriteLine("Your text here");
-                    }
-                }
-            }
-
-            var p = Process.Start("notepad.exe", notesFile.ToString());
-            p.WaitForExit();
-
-            var a = new Action()
-            {
-                Name = searchBox1.Query,
-                CommandObject = new InsertText() { FileName = notesFile.ToString() }
-            };
-
-            actions.Add(a);
         }
 
         private void deleteToolStripMenuItem_Click(object sender, EventArgs e)
@@ -419,89 +323,15 @@ Hours: {0:G3}",
             searchBox1.Remove();
         }
 
-        private void notesToolStripMenuItem_Click(object sender, EventArgs e)
-        {
-            var file = new LPath(@"C:\Users\Andreas\Desktop\Notes.txt");
-            var s = InsertText.ReadSections(file);
-            foreach (var i in s)
-            {
-                var a = new Action()
-                {
-                    Name = i.Key,
-                    CommandObject = new InsertText()
-                    {
-                        FileName = file,
-                        Section = i.Key,
-                    }
-                };
-
-                actions.Add(a);
-            }
-        }
-
         void SearchBox_DragDrop(object sender, DragEventArgs e)
         {
             hagen.Context.OnDragDrop(sender, e);
-
-            ClipboardUrl cbUrl;
-            if (ClipboardUrl.TryParse(e.Data, out cbUrl))
-            {
-                FileActionFactory f = new FileActionFactory();
-                var a = f.FromUrl(cbUrl.Url, cbUrl.Title);
-                actions.AddOrUpdate(a);
-                return;
-            }
-
-            // right-mouse drag - add recursive
-            bool recursive = (e.Effect == DragDropEffects.Link);
-
-            var pathList = Sidi.IO.PathList.Get(e.Data);
-            if (pathList != null)
-            {
-                jobListView.JobList.Jobs.Add(new Job(pathList.ToString(), () => { Add(pathList); }));
-            }
-        }
-
-        public void Add(PathList paths)
-        {
-            using (var actions = hagen.OpenActions())
-            {
-                FileActionFactory f = new FileActionFactory();
-                foreach (var i in paths
-                    .Where(p => p.Exists && !p.Info.IsHidden))
-                {
-                    log.Info(i);
-                    var action = f.FromFile(i);
-                    actions.AddOrUpdate(action);
-                }
-            }
         }
 
         void SearchBox_DragEnter(object sender, DragEventArgs e)
         {
             log.Info(e.Data.GetFormats().ListFormat());
             e.Effect = e.AllowedEffect;
-        }
-
-        private void updateFilesToolStripMenuItem_Click(object sender, EventArgs e)
-        {
-            jobListView.JobList.Jobs.Add(new Job("Update Files", () =>
-                {
-                    var updateFile = hagen.DataDirectory.CatDir("update.txt");
-                    var updater = new Updater(hagen);
-                    var p = new Parser(updater);
-                    if (updateFile.IsFile)
-                    {
-                        p.Run(Tokenizer.FromFile(updateFile));
-                    }
-                    else
-                    {
-                        using (var w = updateFile.WriteText())
-                        {
-                            p.PrintSampleScript(w);
-                        }
-                    }
-                }));
         }
     }
 }

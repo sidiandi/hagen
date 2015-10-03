@@ -73,15 +73,11 @@ namespace hagen
 
             this.dataDirectory = dataDirectory;
 
-            actions = OpenActions();
-
             this.Context = new Context(this)
             {
                 DataDirectory = dataDirectory
             };
         }
-
-        Collection<Action> actions;
 
         public LPath ActionsDatabasePath
         {
@@ -123,21 +119,8 @@ namespace hagen
             return new LastExecutedDbStore(ActionsDatabasePath, "LastExecuted");
         }
 
-        public Collection<Action> OpenActions()
-        {
-            return new Collection<Action>(ActionsDatabasePath);
-        }
-
         public Context Context { get; private set; }
 
-        public void Cleanup()
-        {
-            using (var actions = OpenActions())
-            {
-                actions.Cleanup();
-            }
-        }
-        
         public DateTime? GetWorkBegin(DateTime time)
         {
             var workDayBegin = time.Date;

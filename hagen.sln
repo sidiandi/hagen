@@ -23,10 +23,17 @@ EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "hagen.plugin", "hagen.plugin\hagen.plugin.csproj", "{9BF01205-1BD3-4121-909D-16CEC6D47143}"
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "hagen", "hagen\hagen.csproj", "{5E196699-E12B-4500-8178-BD38ACC8D362}"
+	ProjectSection(ProjectDependencies) = postProject
+		{E383806E-CF6C-4F40-B838-33574AC4A18C} = {E383806E-CF6C-4F40-B838-33574AC4A18C}
+		{C6160D7A-D2A6-421D-A16E-0974A285D56C} = {C6160D7A-D2A6-421D-A16E-0974A285D56C}
+		{D54AAAE7-E7AA-4A1D-A045-9E70853B7040} = {D54AAAE7-E7AA-4A1D-A045-9E70853B7040}
+	EndProjectSection
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "hagen.plugin.web", "hagen.plugin.web\hagen.plugin.web.csproj", "{D54AAAE7-E7AA-4A1D-A045-9E70853B7040}"
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "hagen.plugin.file", "hagen.plugin.file\hagen.plugin.file.csproj", "{E383806E-CF6C-4F40-B838-33574AC4A18C}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "hagen.plugin.db", "hagen.plugin.db\hagen.plugin.db.csproj", "{C6160D7A-D2A6-421D-A16E-0974A285D56C}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
@@ -120,6 +127,22 @@ Global
 		{E383806E-CF6C-4F40-B838-33574AC4A18C}.Release|x64.Build.0 = Release|x64
 		{E383806E-CF6C-4F40-B838-33574AC4A18C}.Release|x86.ActiveCfg = Release|Any CPU
 		{E383806E-CF6C-4F40-B838-33574AC4A18C}.Release|x86.Build.0 = Release|Any CPU
+		{C6160D7A-D2A6-421D-A16E-0974A285D56C}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{C6160D7A-D2A6-421D-A16E-0974A285D56C}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{C6160D7A-D2A6-421D-A16E-0974A285D56C}.Debug|Mixed Platforms.ActiveCfg = Debug|Any CPU
+		{C6160D7A-D2A6-421D-A16E-0974A285D56C}.Debug|Mixed Platforms.Build.0 = Debug|Any CPU
+		{C6160D7A-D2A6-421D-A16E-0974A285D56C}.Debug|x64.ActiveCfg = Debug|Any CPU
+		{C6160D7A-D2A6-421D-A16E-0974A285D56C}.Debug|x64.Build.0 = Debug|Any CPU
+		{C6160D7A-D2A6-421D-A16E-0974A285D56C}.Debug|x86.ActiveCfg = Debug|Any CPU
+		{C6160D7A-D2A6-421D-A16E-0974A285D56C}.Debug|x86.Build.0 = Debug|Any CPU
+		{C6160D7A-D2A6-421D-A16E-0974A285D56C}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{C6160D7A-D2A6-421D-A16E-0974A285D56C}.Release|Any CPU.Build.0 = Release|Any CPU
+		{C6160D7A-D2A6-421D-A16E-0974A285D56C}.Release|Mixed Platforms.ActiveCfg = Release|Any CPU
+		{C6160D7A-D2A6-421D-A16E-0974A285D56C}.Release|Mixed Platforms.Build.0 = Release|Any CPU
+		{C6160D7A-D2A6-421D-A16E-0974A285D56C}.Release|x64.ActiveCfg = Release|Any CPU
+		{C6160D7A-D2A6-421D-A16E-0974A285D56C}.Release|x64.Build.0 = Release|Any CPU
+		{C6160D7A-D2A6-421D-A16E-0974A285D56C}.Release|x86.ActiveCfg = Release|Any CPU
+		{C6160D7A-D2A6-421D-A16E-0974A285D56C}.Release|x86.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE

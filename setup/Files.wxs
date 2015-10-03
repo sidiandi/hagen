@@ -41,6 +41,18 @@
             <Component Id="cmp4E74BA96BC918989706C18892D0840BA" Guid="*">
                 <File Id="fil46E425659E033FDEEE5AA91B4A1BFEE5" KeyPath="yes" Source="$(var.BinDir)\hagen.plugin.dll.config" />
             </Component>
+            <Component Id="cmp624D4936AD416CD0A2C032078D350D7D" Guid="*">
+                <File Id="fil0A551B20249F965D29F15D873AF011CC" KeyPath="yes" Source="$(var.BinDir)\hagen.plugin.file.dll" />
+            </Component>
+            <Component Id="cmp8B29A8802BBEF828E154EF7C47C6B371" Guid="*">
+                <File Id="fil635D1C6AF3EF52C90B2BB60003EB4B85" KeyPath="yes" Source="$(var.BinDir)\hagen.plugin.file.dll.config" />
+            </Component>
+            <Component Id="cmp91C36754F53015008CB9C796615C44D0" Guid="*">
+                <File Id="filE95631AC55CB736E086437F01EDA3AAA" KeyPath="yes" Source="$(var.BinDir)\hagen.plugin.file.pdb" />
+            </Component>
+            <Component Id="cmp1B526E81F1FB7E44E17F8A003A68C62B" Guid="*">
+                <File Id="fil3A961323FE1D405E7CB8DC83E5D5202E" KeyPath="yes" Source="$(var.BinDir)\hagen.plugin.file.xml" />
+            </Component>
             <Component Id="cmp2076176DDFFBB4776E31F0908CB23C42" Guid="*">
                 <File Id="filC7EB293D58F9D13CA0C154852CE249EA" KeyPath="yes" Source="$(var.BinDir)\hagen.plugin.pdb" />
             </Component>
@@ -58,15 +70,6 @@
             </Component>
             <Component Id="cmpA5FC4AD60948C771785CDB7F4D8E393B" Guid="*">
                 <File Id="filC421677CDBE85ACE76C0B70E934F1CC8" KeyPath="yes" Source="$(var.BinDir)\hagen.plugin.xml" />
-            </Component>
-            <Component Id="cmp44DFAA51E197C6B5E4C9D3887E9DE4AD" Guid="*">
-                <File Id="fil74E0C2A890368F16659B4DD3C42F7F5F" KeyPath="yes" Source="$(var.BinDir)\hagen.vshost.exe" />
-            </Component>
-            <Component Id="cmp57BB43992A0338874787A8AD05AC6587" Guid="*">
-                <File Id="filC9F6A5B4BF06DC06917A74467FE33911" KeyPath="yes" Source="$(var.BinDir)\hagen.vshost.exe.config" />
-            </Component>
-            <Component Id="cmp590745BE9C3A955FB0A3F63A7B3B0DFA" Guid="*">
-                <File Id="fil2C91A63A609F25F21B1E5714B953D931" KeyPath="yes" Source="$(var.BinDir)\hagen.vshost.exe.manifest" />
             </Component>
             <Component Id="cmp78AD23A65B000551B27C50B2F250FD51" Guid="*">
                 <File Id="fil85FAC0DE02B3D5F978EBF912FA0D1F67" KeyPath="yes" Source="$(var.BinDir)\hagen.xml" />
@@ -119,11 +122,11 @@
             <Component Id="cmp920958D41E02EDC8711F88C267B234DA" Guid="*">
                 <File Id="fil70E4F94A49EF201E6AE263FBCCBFF793" KeyPath="yes" Source="$(var.BinDir)\Shortcut.dll" />
             </Component>
-            <Component Id="cmp98B8340202DD323C409114141F8ADC3B" Guid="*">
-                <File Id="fil6C0D000184AB24E24904CB360798EE32" KeyPath="yes" Source="$(var.BinDir)\Shortcut.xml" />
-            </Component>
             <Component Id="cmp9D803AF885CD309E8C56C8CFD7524014" Guid="*">
                 <File Id="fil9C11F9CCDBC39F08FA2EE2EC183FD3D6" KeyPath="yes" Source="$(var.BinDir)\Sidi.Util.dll" />
+            </Component>
+            <Component Id="cmp724D9816BA5036E3762FEF9BABADD7FC" Guid="*">
+                <File Id="fil33BD96A33989247D3BD9E18C481A82CF" KeyPath="yes" Source="$(var.BinDir)\Sidi.Util.pdb" />
             </Component>
             <Component Id="cmpA308F11AC1A0C43BE9E94C8319E7B7FE" Guid="*">
                 <File Id="fil1948DDD9A4BD72B7A0675E18565964B7" KeyPath="yes" Source="$(var.BinDir)\Sidi.Util.xml" />
@@ -179,29 +182,6 @@
             <Component Id="cmp2C9ADE433A5BF4F58225CCF53E6E4CF8" Guid="*">
                 <File Id="filC0D8F251E1F2B460F224CE244ACA81F1" KeyPath="yes" Source="$(var.BinDir)\WeifenLuo.WinFormsUI.Docking.dll" />
             </Component>
-            <Directory Id="dir6D44D19F046A15BA08D70A31EA401693" Name="cb-dump">
-                <Component Id="cmp641AA3C6AC15205926303E2381085C27" Guid="*">
-                    <File Id="filAF4422D0630B5BE09FB21D0861A80A40" KeyPath="yes" Source="$(var.BinDir)\cb-dump\DragContext" />
-                </Component>
-                <Component Id="cmp654C37E64FCF1074C2279617B3B1E2FD" Guid="*">
-                    <File Id="fil132FD53EAC4B2EDCDD896ACACDFD2F1B" KeyPath="yes" Source="$(var.BinDir)\cb-dump\DragImageBits" />
-                </Component>
-                <Component Id="cmpD3A2B8AC65A6D29ADBC9226F4552EBF3" Guid="*">
-                    <File Id="fil98C62D62BE53BCAA83D1B977015BBB68" KeyPath="yes" Source="$(var.BinDir)\cb-dump\DragSourceHelperFlags" />
-                </Component>
-                <Component Id="cmp2F073DC02231A7739E7EE89D3ABF0BA6" Guid="*">
-                    <File Id="fil447C9F0F393CF980896FCEC636F887DA" KeyPath="yes" Source="$(var.BinDir)\cb-dump\FileGroupDescriptorW" />
-                </Component>
-                <Component Id="cmp04E9B1AEFC6D817C33621FBAA5B09656" Guid="*">
-                    <File Id="fil04D0E4AB7776CE4EA312EB2B9C239A5C" KeyPath="yes" Source="$(var.BinDir)\cb-dump\InShellDragLoop" />
-                </Component>
-                <Component Id="cmp0545AC1FC657432F5B17AC1C028B70C3" Guid="*">
-                    <File Id="filE332AE2CCD79A070E88BFCC07793DD94" KeyPath="yes" Source="$(var.BinDir)\cb-dump\Shell IDList Array" />
-                </Component>
-                <Component Id="cmpEEE45D13593DF26E528EAA7FC7A3F680" Guid="*">
-                    <File Id="fil485BD136A6AD715DA0F7B4DC55E54B48" KeyPath="yes" Source="$(var.BinDir)\cb-dump\UsingDefaultDragImage" />
-                </Component>
-            </Directory>
             <Directory Id="dir43FCCFA109FBF584D9155DCE31E452EB" Name="x64">
                 <Component Id="cmp19F6DF8A2ABC78D782D76F1EEC9A5800" Guid="*">
                     <File Id="filC7EA62E1AC64247AFBE682E8631402B8" KeyPath="yes" Source="$(var.BinDir)\x64\SQLite.Interop.dll" />
@@ -229,15 +209,16 @@
             <ComponentRef Id="cmpF9EDD38B52F46D0463ED2193991CF5A9" />
             <ComponentRef Id="cmp8ED2D0527C99EE0E6F4305E5D6F1804B" />
             <ComponentRef Id="cmp4E74BA96BC918989706C18892D0840BA" />
+            <ComponentRef Id="cmp624D4936AD416CD0A2C032078D350D7D" />
+            <ComponentRef Id="cmp8B29A8802BBEF828E154EF7C47C6B371" />
+            <ComponentRef Id="cmp91C36754F53015008CB9C796615C44D0" />
+            <ComponentRef Id="cmp1B526E81F1FB7E44E17F8A003A68C62B" />
             <ComponentRef Id="cmp2076176DDFFBB4776E31F0908CB23C42" />
             <ComponentRef Id="cmp0B22BBB5FFFDAA04CD73763AEAA2C3F7" />
             <ComponentRef Id="cmpB6F6538429821B85CEB0C7BA372C29F6" />
             <ComponentRef Id="cmp261D7356F61575ED75B0512A6060ADA5" />
             <ComponentRef Id="cmp6AF52D47252B393D25EAF5E5B5C6FAC1" />
             <ComponentRef Id="cmpA5FC4AD60948C771785CDB7F4D8E393B" />
-            <ComponentRef Id="cmp44DFAA51E197C6B5E4C9D3887E9DE4AD" />
-            <ComponentRef Id="cmp57BB43992A0338874787A8AD05AC6587" />
-            <ComponentRef Id="cmp590745BE9C3A955FB0A3F63A7B3B0DFA" />
             <ComponentRef Id="cmp78AD23A65B000551B27C50B2F250FD51" />
             <ComponentRef Id="cmp28F47D9A07DA0DB70D726116C5513C1D" />
             <ComponentRef Id="cmpBACD3B68935C8DDF81918E3A63FE1918" />
@@ -255,8 +236,8 @@
             <ComponentRef Id="cmpC495939F29352109992E58BC805CEFAB" />
             <ComponentRef Id="cmp41D88919D97ABF34D594A4BBF063255F" />
             <ComponentRef Id="cmp920958D41E02EDC8711F88C267B234DA" />
-            <ComponentRef Id="cmp98B8340202DD323C409114141F8ADC3B" />
             <ComponentRef Id="cmp9D803AF885CD309E8C56C8CFD7524014" />
+            <ComponentRef Id="cmp724D9816BA5036E3762FEF9BABADD7FC" />
             <ComponentRef Id="cmpA308F11AC1A0C43BE9E94C8319E7B7FE" />
             <ComponentRef Id="cmpEF49D759D258CC8763825522D2FD5D0E" />
             <ComponentRef Id="cmp94443F251C7A409D2D55887AFD9D01F9" />
@@ -275,13 +256,6 @@
             <ComponentRef Id="cmp6B3A90C65D0052F7AA87D6CBA7A47431" />
             <ComponentRef Id="cmp96652979B553135C8913541FDE367690" />
             <ComponentRef Id="cmp2C9ADE433A5BF4F58225CCF53E6E4CF8" />
-            <ComponentRef Id="cmp641AA3C6AC15205926303E2381085C27" />
-            <ComponentRef Id="cmp654C37E64FCF1074C2279617B3B1E2FD" />
-            <ComponentRef Id="cmpD3A2B8AC65A6D29ADBC9226F4552EBF3" />
-            <ComponentRef Id="cmp2F073DC02231A7739E7EE89D3ABF0BA6" />
-            <ComponentRef Id="cmp04E9B1AEFC6D817C33621FBAA5B09656" />
-            <ComponentRef Id="cmp0545AC1FC657432F5B17AC1C028B70C3" />
-            <ComponentRef Id="cmpEEE45D13593DF26E528EAA7FC7A3F680" />
             <ComponentRef Id="cmp19F6DF8A2ABC78D782D76F1EEC9A5800" />
             <ComponentRef Id="cmp77484AF39EF2F8BD64E876C33A1C3E49" />
         </ComponentGroup>

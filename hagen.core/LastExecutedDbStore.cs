@@ -13,6 +13,7 @@ namespace hagen
         private static readonly log4net.ILog log = log4net.LogManager.GetLogger(System.Reflection.MethodBase.GetCurrentMethod().DeclaringType);
 
         readonly Sidi.Persistence.Dictionary<string, DateTime> data;
+        readonly System.Collections.Generic.Dictionary<string, DateTime> cache = new System.Collections.Generic.Dictionary<string, DateTime>();
 
         public LastExecutedDbStore(Sidi.IO.LPath dbPath, string tableName)
         {
@@ -20,6 +21,17 @@ namespace hagen
         }
 
         public DateTime Get(string id)
+        {
+            DateTime time;
+            if (!cache.TryGetValue(id, out time))
+            {
+                time = GetUncached(id);
+                cache[id] = time;
+            }
+            return time;
+        }
+
+        DateTime GetUncached(string id)
         {
             DateTime time;
             if (data.TryGetValue(id, out time))
@@ -38,6 +50,7 @@ namespace hagen
             var time = DateTime.UtcNow;
             log.InfoFormat("{0} last executed {1}", id, time);
             data[id] = time;
+            cache.Remove(id);
         }
 
         [TestFixture]

@@ -74,7 +74,11 @@ namespace hagen
             this.dataDirectory = dataDirectory;
 
             actions = OpenActions();
-            this.Context = new Context(this);
+
+            this.Context = new Context(this)
+            {
+                DataDirectory = dataDirectory
+            };
         }
 
         Collection<Action> actions;

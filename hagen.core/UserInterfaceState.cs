@@ -5,6 +5,7 @@ using System.Text;
 using System.Windows.Automation;
 using Sidi.IO;
 using System.Windows.Forms;
+using Sidi.Forms;
 
 namespace hagen
 {
@@ -77,11 +78,27 @@ namespace hagen
         {
             return new ActionChoice(name, actionProvider, Choose);
         }
+        public Action<Job> AddJob { get; set; }
 
         public System.Action<IList<IAction>> Choose;
 
         public ILastExecutedStore LastExecutedStore { get { return lastExecutedStore; } }
 
+        public MenuStrip MainMenu { get; set; }
+
+        public LPath DataDirectory { get; set; }
+
         readonly ILastExecutedStore lastExecutedStore;
+
+        public event DragEventHandler DragDrop;
+
+        public void OnDragDrop(object sender, DragEventArgs e)
+        {
+            if (DragDrop != null)
+            {
+                DragDrop(this, e);
+            }
+        }
+
     }
 }

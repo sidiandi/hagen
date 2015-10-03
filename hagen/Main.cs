@@ -52,6 +52,10 @@ namespace hagen
         
         void InitUserInterface()
         {
+            InitializeComponent();
+
+            hagen.Context.MainMenu = this.MainMenuStrip;
+
             this.IsMdiContainer = true;
             this.FormBorderStyle = System.Windows.Forms.FormBorderStyle.None;
 
@@ -62,12 +66,23 @@ namespace hagen
             };
             this.Controls.Add(dockPanel);
 
+            jobListView = new JobListView()
+            {
+                Text = "Jobs"
+            };
+            jobListView.AsDockContent().Show(dockPanel, DockState.DockBottom);
+
+            hagen.Context.AddJob = this.jobListView.JobList.Jobs.Add;
+
             var actions = hagen.OpenActions();
 
-            var pluginProvider = new PluginProvider(hagen, new PathList() { Paths.BinDir });
+            var pluginProvider = new PluginProvider(hagen.Context, new PathList() { Paths.BinDir });
 
             var actionSource = new Composite(
-                        new IActionSource2[] {new DatabaseLookup(actions) }
+                        new IActionSource2[]
+                        {
+                            // new DatabaseLookup(actions)
+                        }
                         .Concat(pluginProvider.GetActionSources()).ToArray());
 
             searchBox1 = new SearchBox(actionSource)
@@ -80,12 +95,6 @@ namespace hagen
             searchBox1.AllowDrop = true;
             searchBox1.DragEnter += new DragEventHandler(SearchBox_DragEnter);
             searchBox1.DragDrop += new DragEventHandler(SearchBox_DragDrop);
-
-            jobListView = new JobListView()
-            {
-                Text = "Jobs"
-            };
-            jobListView.AsDockContent().Show(dockPanel, DockState.DockBottom);
 
             /*
             var logViewer = new LogViewer2()
@@ -114,7 +123,6 @@ namespace hagen
                 CheckWorkTime();
             });
             alertTimer.Start();
-
         }
 
         public DockPanel dockPanel;
@@ -128,7 +136,6 @@ namespace hagen
             actions = hagen.OpenActions();
 
             InitUserInterface();
-            InitializeComponent();
             CheckWorkTime();
         }
 
@@ -434,6 +441,8 @@ Hours: {0:G3}",
 
         void SearchBox_DragDrop(object sender, DragEventArgs e)
         {
+            hagen.Context.OnDragDrop(sender, e);
+
             ClipboardUrl cbUrl;
             if (ClipboardUrl.TryParse(e.Data, out cbUrl))
             {

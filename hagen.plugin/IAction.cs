@@ -39,4 +39,9 @@ namespace hagen
         /// </summary>
         DateTime LastExecuted { get; }
     }
+
+    public interface IStorable
+    {
+        void Store();
+    }
 }

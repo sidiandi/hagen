@@ -65,6 +65,8 @@ namespace hagen
             hagen.Context.Choose = ActionChooser.Choose;
 
             main = new Main(hagen);
+            hagen.Context.MainMenu = main.MainMenuStrip;
+
             logViewer.AsDockContent().Show(main.dockPanel, WeifenLuo.WinFormsUI.Docking.DockState.DockBottom);
         }
 

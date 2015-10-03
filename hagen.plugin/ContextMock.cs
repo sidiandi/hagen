@@ -5,6 +5,8 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 using System.Windows.Automation;
+using System.Windows.Forms;
+using Sidi.Forms;
 
 namespace hagen.Test
 {
@@ -23,11 +25,19 @@ namespace hagen.Test
         }
     }
 
-    internal class ContextMock : hagen.IContext
+    internal class ContextMock : IContext
     {
         public ContextMock()
         {
             LastExecutedStore = new MemoryLastExecutedStore();
+        }
+
+        public LPath DataDirectory
+        {
+            get
+            {
+                throw new NotImplementedException();
+            }
         }
 
         public bool IsConsole
@@ -39,6 +49,14 @@ namespace hagen.Test
         }
 
         public ILastExecutedStore LastExecutedStore { get; private set; }
+
+        public MenuStrip MainMenu
+        {
+            get
+            {
+                throw new NotImplementedException();
+            }
+        }
 
         public AutomationElement SavedFocusedElement
         {
@@ -55,6 +73,16 @@ namespace hagen.Test
                 return null;
             }
         }
+
+        Action<Job> IContext.AddJob
+        {
+            get
+            {
+                throw new NotImplementedException();
+            }
+        }
+
+        public event DragEventHandler DragDrop;
 
         public IAction CreateChoice(string name, Func<IEnumerable<IAction>> actionProvider)
         {

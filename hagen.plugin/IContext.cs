@@ -18,5 +18,14 @@ namespace hagen
         IAction CreateChoice(string name, Func<IEnumerable<IAction>> actionProvider);
 
         ILastExecutedStore LastExecutedStore { get; }
+
+        System.Windows.Forms.MenuStrip MainMenu { get; }
+
+        Action<Sidi.Forms.Job> AddJob { get; }
+
+        event System.Windows.Forms.DragEventHandler DragDrop;
+
+        LPath DataDirectory { get; }
+
     }
 }

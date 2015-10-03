@@ -9,18 +9,18 @@ using Sidi.CommandLine;
 
 namespace hagen.ActionSource
 {
-    public class PluginProvider
+    public class PluginProvider : IDisposable
     {
         private static readonly log4net.ILog log = log4net.LogManager.GetLogger(System.Reflection.MethodBase.GetCurrentMethod().DeclaringType);
 
-        public PluginProvider(Hagen hagen, PathList searchPath)
+        public PluginProvider(IContext context, PathList searchPath)
         {
-            this.hagen = hagen;
+            this.context = context;
 
             this.Plugins = GetPlugins(searchPath);
         }
 
-        Hagen hagen;
+        readonly IContext context;
 
         public IList<IPlugin> Plugins { get; private set; }
 
@@ -34,79 +34,9 @@ namespace hagen.ActionSource
         IList<IPlugin> GetPlugins(Assembly assembly)
         {
             return assembly.GetTypes()
-                .Where(t => typeof(IPlugin).IsAssignableFrom(t) && !object.Equals(typeof(IPlugin), t))
-                .Select(t =>
-                    {
-                        var plugin = (IPlugin) t.GetConstructor(new Type[]{}).Invoke(new object[]{});
-                        plugin.Init(hagen.Context);
-                        return plugin;
-                    })
+                .Create<IPluginFactory>()
+                .SelectMany(f => f.CreatePlugins(context))
                 .ToList();
-
-           /*
-            return types
-                .Where(t => !t.Name.StartsWith("Test_"))
-                .Select(t =>
-                    {
-                        if (typeof(IActionSource2).IsAssignableFrom(t))
-                        {
-                            var ctor = t.GetConstructor(new Type[] { });
-
-                            if (ctor == null)
-                            {
-                                return null;
-                            }
-
-                            return (IActionSource2)ctor.Invoke(new object[] { });
-                        } 
-                        else if (typeof(IActionSource).IsAssignableFrom(t))
-                        {
-                            var ctor = t.GetConstructor(new Type[] { });
-                        
-                            if (ctor == null)
-                            {
-                                return null;
-                            }
-
-                            return ((IActionSource)ctor.Invoke(new object[] { })).ToIActionSource2();
-                        }
-                        else
-                        {
-                            return null;
-                        }
-                    })
-                .Where(t => t != null)
-
-                .Concat(types
-                    .Where(t => t.GetCustomAttributes(typeof(Usage), false).Any())
-                    .Select(t =>
-                    {
-                        object plugin = null;
-                        var hagenCtor = t.GetConstructor(new Type[]{ typeof(Hagen) } );
-                        if (hagenCtor != null)
-                        {
-                            plugin = hagenCtor.Invoke(new object[] { hagen });
-                            goto ok;
-                        }
-
-                        var defaultCtor = t.GetConstructor(new Type[] { });
-                        if (defaultCtor != null)
-                        {
-                            plugin = defaultCtor.Invoke(new object[] { });
-                            goto ok;
-                        }
-
-                        return null;
-
-                    ok:
-                        var parser = Parser.SingleSource(plugin);
-                        return new ActionFilter(parser);
-                    })
-                    .Where(x => x != null)
-                    )
-
-                .ToList();
-             */
         }
 
         IList<IPlugin> GetPlugins(PathList searchPath)
@@ -127,5 +57,43 @@ namespace hagen.ActionSource
                 .SelectMany(a => GetPlugins(a))
                 .ToList();
         }
+
+        #region IDisposable Support
+        private bool disposedValue = false; // To detect redundant calls
+
+        protected virtual void Dispose(bool disposing)
+        {
+            if (!disposedValue)
+            {
+                if (disposing)
+                {
+                    foreach (var p in Plugins.OfType<IDisposable>())
+                    {
+                        p.Dispose();
+                    }
+                }
+
+                // TODO: free unmanaged resources (unmanaged objects) and override a finalizer below.
+                // TODO: set large fields to null.
+
+                disposedValue = true;
+            }
+        }
+
+        // TODO: override a finalizer only if Dispose(bool disposing) above has code to free unmanaged resources.
+        // ~PluginProvider() {
+        //   // Do not change this code. Put cleanup code in Dispose(bool disposing) above.
+        //   Dispose(false);
+        // }
+
+        // This code added to correctly implement the disposable pattern.
+        public void Dispose()
+        {
+            // Do not change this code. Put cleanup code in Dispose(bool disposing) above.
+            Dispose(true);
+            // TODO: uncomment the following line if the finalizer is overridden above.
+            // GC.SuppressFinalize(this);
+        }
+        #endregion
     }
 }

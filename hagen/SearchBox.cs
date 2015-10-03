@@ -305,14 +305,17 @@ namespace hagen
 
         public void Properties()
         {
-            var actionWrapper = SelectedActions.OfType<ActionWrapper>().FirstOrDefault();
-            if (actionWrapper != null)
+            var storable = SelectedActions
+                .OfType<IStorable>()
+                .FirstOrDefault();
+
+            if (storable != null)
             {
                 ActionProperties dlg = new ActionProperties();
-                dlg.EditedObject = actionWrapper.Action;
+                dlg.EditedObject = storable;
                 if (dlg.ShowDialog() == DialogResult.OK)
                 {
-                    actionWrapper.Data.Update(actionWrapper.Action);
+                    storable.Store();
                 }
                 UpdateResult();
             }

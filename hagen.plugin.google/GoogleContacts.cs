@@ -14,10 +14,11 @@ using Google.Apis.Auth.OAuth2;
 using System.Threading;
 using Google.Apis.Util.Store;
 using System.Reactive.Linq;
+using System.Text.RegularExpressions;
 
 namespace hagen.plugin.google
 {
-    class GoogleContacts : IActionSource2
+    class GoogleContacts : IActionSource
     {
         private static readonly log4net.ILog log = log4net.LogManager.GetLogger(System.Reflection.MethodBase.GetCurrentMethod().DeclaringType);
 
@@ -34,7 +35,7 @@ namespace hagen.plugin.google
                     new string[] { "https://www.google.com/m8/feeds" },
                     "andreas.grimme@gmx.net",
                     CancellationToken.None,
-                    new FileDataStore("Contacts2")).Result;
+                    new FileDataStore("Contacts3")).Result;
 
             var parameters = new OAuth2Parameters()
             {
@@ -51,8 +52,13 @@ namespace hagen.plugin.google
 
         ContactsRequest contacts;
 
-        public IObservable<IAction> GetActions(string query)
-        {
+        IEnumerable<IAction> IActionSource.GetActions(string query)
+        { 
+            if (!Regex.IsMatch(query, @"^[\s\w]{4,200}$"))
+            {
+                return Enumerable.Empty<IAction>();
+            }
+
             var q = new FeedQuery("https://www.google.com/m8/feeds/contacts/default/full")
             {
                 Query = query
@@ -61,12 +67,12 @@ namespace hagen.plugin.google
             return feed.Entries
                 .Select(e =>
                 {
-                    return (IAction) new SimpleAction(this.context.LastExecutedStore, e.ToString(), e.ToString(), () =>
-                    {
-                    });
-                })
-                .ToObservable();
+                    return (IAction)new SimpleAction(this.context.LastExecutedStore, e.ToString(), e.ToString(), () =>
+                   {
+                   });
+                });
         }
+
 
         // Installed (non-web) application
         private static string redirectUri = "urn:ietf:wg:oauth:2.0:oob";

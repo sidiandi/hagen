@@ -20,7 +20,6 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 using System.Windows.Forms;
-using NUnit.Framework;
 using System.IO;
 using Sidi.IO;
 using System.Text.RegularExpressions;
@@ -74,14 +73,14 @@ namespace hagen
         public string Title { set; get; }
         public string Url { set; get; }
 
-        static string ReadFileDescriptorW(Stream s)
+        public static string ReadFileDescriptorW(Stream s)
         {
             s.Seek(76, SeekOrigin.Current);
             var b = new BinaryReader(s);
             return s.ReadFixedLengthUnicodeString(260);
         }
 
-        static string ReadUrl(Stream s)
+        public static string ReadUrl(Stream s)
         {
             var r = new StreamReader(s);
             for (; ; )
@@ -122,25 +121,6 @@ namespace hagen
                 catch (Exception)
                 {
                 }
-            }
-        }
-
-
-        [TestFixture]
-        public class Test : TestBase
-        {
-            [Test]
-            public void ReadFileDescriptor()
-            {
-                string fn = ClipboardUrl.ReadFileDescriptorW(System.IO.File.OpenRead(TestFile(@"FileGroupDescriptorW")));
-                Assert.AreEqual("myCSharp.de - DIE C#- und .NET Community - GUI Windows-Forms Email aus Clipboard auslesen.URL", fn);
-            }
-
-            [Test]
-            public void ReadUrl()
-            {
-                string u = ClipboardUrl.ReadUrl(TestFile(@"FileContents").OpenRead());
-                Assert.AreEqual("http://www.mycsharp.de/wbb2/thread.php?threadid=73296", u);
             }
         }
     }

@@ -19,7 +19,6 @@ using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Text;
-using NUnit.Framework;
 using Sidi.Test;
 using EnvDTE;
 using Sidi.IO;
@@ -131,29 +130,6 @@ namespace hagen.ActionSource
             };
 
             p.Start();
-        }
-
-        [TestFixture]
-        public class Test : TestBase
-        {
-            TextPosition exampleTextPosition = new TextPosition()
-                {
-                    Path = @"C:\work\hagen\hagen\Main.cs",
-                    Line = 119,
-                    Column = 34,
-                };
-
-            [Test, Explicit("interactive")]
-            public void Open()
-            {
-                OpenFile.OpenInVisualStudio(exampleTextPosition);
-            }
-
-            [Test, Explicit("interactive")]
-            public void OpenInNotepadPlusPlus()
-            {
-                OpenFile.OpenInNotepadPlusPlus(exampleTextPosition);
-            }
         }
     }
 }

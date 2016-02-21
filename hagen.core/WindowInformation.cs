@@ -64,7 +64,7 @@ namespace hagen
                 var hr = new HandleRef(this, hwnd);
                 uint pid;
                 NativeMethods.GetWindowThreadProcessId(hr, out pid);
-                return Process.GetProcessById((int)pid).MainModule.FileName;
+                return Process.GetProcessById((int)pid).ProcessName;
             }
             catch (Exception ex)
             {

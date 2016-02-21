@@ -23,7 +23,6 @@ using Sidi.CommandLine;
 using System.Text.RegularExpressions;
 using Sidi.IO;
 using Sidi.Extensions;
-using NUnit.Framework;
 using Sidi.Test;
 using System.Reactive.Concurrency;
 using System.Reactive.Subjects;
@@ -49,7 +48,7 @@ namespace hagen
         }
     }
     
-    class ActionFilter : IActionSource2
+    public class ActionFilter : IActionSource2
     {
         IContext context;
         public Parser Parser;
@@ -127,34 +126,6 @@ namespace hagen
                 .Select(i => ToIAction(i));
         }
 
-        [TestFixture]
-        public class Test : TestBase
-        {
-            public Test()
-            {
-                sampleApp = new SampleApp();
-                var p = Parser.SingleSource(sampleApp);
-                af = new ActionFilter(new hagen.Test.ContextMock(), p);
-            }
-
-            SampleApp sampleApp;
-            ActionFilter af;
-            
-            [Test]
-            public void ToStringTest()
-            {
-                Assert.AreEqual("SampleApp", af.ToString());
-            }
-
-            [Test]
-            public void GetActions()
-            {
-                Assert.AreEqual(1, af.GetActions("A").ToEnumerable().Count());
-                Assert.AreEqual(0, af.GetActions("B").ToEnumerable().Count());
-                af.GetActions("SomeAction").First().Execute();
-                Assert.IsTrue(sampleApp.SomeActionExecuted);
-            }
-        }
     }
 
     [Usage("sample app")]

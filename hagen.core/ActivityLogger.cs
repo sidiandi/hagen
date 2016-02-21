@@ -21,7 +21,6 @@ using System.Linq;
 using System.Text;
 using Sidi.Persistence;
 using System.Windows.Automation;
-using NUnit.Framework;
 using System.Windows.Threading;
 using System.ComponentModel;
 using System.Threading;

@@ -4,11 +4,10 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 using Sidi.Persistence;
-using NUnit.Framework;
 
 namespace hagen
 {
-    class LastExecutedDbStore : ILastExecutedStore
+    public class LastExecutedDbStore : ILastExecutedStore
     {
         private static readonly log4net.ILog log = log4net.LogManager.GetLogger(System.Reflection.MethodBase.GetCurrentMethod().DeclaringType);
 
@@ -51,21 +50,6 @@ namespace hagen
             log.InfoFormat("{0} last executed {1}", id, time);
             data[id] = time;
             cache.Remove(id);
-        }
-
-        [TestFixture]
-        public class LastExecutedDbStoreTest : Sidi.Test.TestBase
-        {
-            [Test]
-            public void ReadWriteTime()
-            {
-                var d = new Sidi.Persistence.Dictionary<string, DateTime>(TestFile("LastExecutedDbStoreTest.sqlite"), "LastExecuted");
-                var id = "IdOfAction";
-                var time = DateTime.UtcNow;
-                d[id] = time;
-                Assert.AreEqual(time, d[id]);
-            }
-
         }
     }
 }

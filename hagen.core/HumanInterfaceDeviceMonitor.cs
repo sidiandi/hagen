@@ -22,12 +22,11 @@ using System.Runtime.InteropServices;
 using System.Threading;
 using System.Threading.Tasks;
 using System.Reactive.Subjects;
-using NUnit.Framework;
 using System.Reactive.Linq;
 
 namespace hagen
 {
-class HumanInterfaceDeviceMonitor : IDisposable
+public class HumanInterfaceDeviceMonitor : IDisposable
 {
     private static readonly log4net.ILog log = log4net.LogManager.GetLogger(System.Reflection.MethodBase.GetCurrentMethod().DeclaringType);
 
@@ -184,21 +183,5 @@ class HumanInterfaceDeviceMonitor : IDisposable
     }
 
     #endregion
-
-    [TestFixture]
-    public class Test : Sidi.Test.TestBase
-    {
-        [Test, Explicit("interactive")]
-        public void Capture()
-        {
-            using (var ih = new HumanInterfaceDeviceMonitor())
-            {
-                using (ih.Mouse.Subscribe(_ => log.InfoFormat("{0} {1}", _.Location, _.Clicks)))
-                {
-                    ih.KeyDown.TakeWhile(_ => _.KeyCode != Keys.Escape).Wait();
-                }
-            }
-        }
-    }
 }
 }

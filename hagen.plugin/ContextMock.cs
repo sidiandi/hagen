@@ -25,7 +25,7 @@ namespace hagen.Test
         }
     }
 
-    internal class ContextMock : IContext
+    public class ContextMock : IContext
     {
         public ContextMock()
         {

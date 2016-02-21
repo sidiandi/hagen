@@ -1,5 +1,4 @@
-﻿using NUnit.Framework;
-using Sidi.Test;
+﻿using Sidi.Test;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -79,23 +78,6 @@ namespace hagen
         {
             messageLoopApplicationContext.ExitThread();
             messageLoopThread.Join();
-        }
-
-        [TestFixture]
-        public class Test : TestBase
-        {
-            private static readonly log4net.ILog log = log4net.LogManager.GetLogger(System.Reflection.MethodBase.GetCurrentMethod().DeclaringType);
-
-            [Test, Explicit("interactive, runs 60 seconds")]
-            public void ShowMessages()
-            {
-                using (var wih = new WinEventHook())
-                {
-                    wih.ForegroundWindowChanged.Subscribe(_ => Console.WriteLine(_));
-                    Thread.Sleep(TimeSpan.FromSeconds(60));
-                            
-                }
-            }
         }
     }
 }

@@ -33,10 +33,17 @@ namespace hagen.ActionSource
 
         IList<IPlugin> GetPlugins(Assembly assembly)
         {
-            return assembly.GetTypes()
-                .Create<IPluginFactory>()
-                .SelectMany(f => f.CreatePlugins(context))
-                .ToList();
+            try
+            {
+                return assembly.GetTypes()
+                    .Create<IPluginFactory>()
+                    .SelectMany(f => f.CreatePlugins(context))
+                    .ToList();
+            }
+            catch
+            {
+                return new List<IPlugin>();
+            }
         }
 
         IList<IPlugin> GetPlugins(PathList searchPath)

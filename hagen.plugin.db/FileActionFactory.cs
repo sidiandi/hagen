@@ -20,7 +20,6 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 using System.IO;
-using NUnit.Framework;
 using Sidi.Persistence;
 using Sidi.IO;
 
@@ -62,20 +61,5 @@ namespace hagen.Plugin.Db
         {
             return Sidi.IO.Find.AllFiles(root).Select(x => FromFile(x.ToString()));
         }
-
-        [TestFixture]
-        public class Test
-        {
-            [Test]
-            public void Create()
-            {
-                string p = Environment.GetFolderPath(Environment.SpecialFolder.StartMenu);
-
-                FileActionFactory f = new FileActionFactory();
-                Action a = f.FromFile(p);
-                var sp = (StartProcess)a.CommandObject;
-                Assert.AreEqual(p, sp.FileName);
-            }
-       }
     }
 }

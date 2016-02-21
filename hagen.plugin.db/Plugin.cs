@@ -219,9 +219,9 @@ namespace hagen.Plugin.Db
                     log.Info("Update");
                     var actionsToAdd = new[]
                     {
-                        ActionsEx.GetPathExecutables(),
-                        ActionsEx.GetStartMenuActions(),
-                        ActionsEx.GetSpecialFolderActions()
+                        ActionExtensions.GetPathExecutables(),
+                        ActionExtensions.GetStartMenuActions(),
+                        ActionExtensions.GetSpecialFolderActions()
                         }.SelectMany(x => x)
                         .Select(x =>
                         {
@@ -237,7 +237,7 @@ namespace hagen.Plugin.Db
 
         private void LinksFromInternetExplorerToolStripMenuItem_Click(object sender, EventArgs e)
         {
-            var links = ActionsEx.GetAllIeLinks().ToList();
+            var links = ActionExtensions.GetAllIeLinks().ToList();
             try
             {
                 var selected = Prompt.ChooseMany(links.ListFormat().DefaultColumns(), "Add Links");

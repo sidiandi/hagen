@@ -3,7 +3,6 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 using System.Windows.Forms;
-using NUnit.Framework;
 using log4net.Appender;
 using log4net.Core;
 using Sidi.Forms;
@@ -46,6 +45,8 @@ namespace Sidi.Forms
                     // e.Range.SetStyle(16);
                 };
 
+            textView.Font = new Font("Courier New", 10);
+
             this.Controls.Add(textView);
 
             timer = new Timer()
@@ -76,50 +77,6 @@ namespace Sidi.Forms
         System.Windows.Forms.Timer timer;
 
         ScintillaNET.Scintilla textView;
-
-        [TestFixture]
-        public class Test : TestBase
-        {
-            private static readonly log4net.ILog log = log4net.LogManager.GetLogger(System.Reflection.MethodBase.GetCurrentMethod().DeclaringType);
-
-            [Test, RequiresSTA, Explicit("interactive")]
-            public void List()
-            {
-                var lv = new LogViewer2()
-                {
-                    Size = new Size(800, 400)
-                };
-                lv.AddToRoot();
-                log.Error("error");
-                log.Warn("warn");
-                var form = lv.AsForm("Log Viewer");
-                form.Show();
-
-                foreach (var i in Enumerable.Range(0, 100))
-                {
-                    log.Info(i);
-                }
-
-                log4net.ThreadContext.Stacks["NDC"].Push("hello");
-
-                using (new LogScope(log.Info, "hello"))
-                {
-                }
-
-                try
-                {
-                    String s = null;
-                    Console.WriteLine(s.Length);
-                }
-                catch (Exception ex)
-                {
-                    log.Warn("some error", ex);
-                }
-
-                Application.Run(form);
-            }
-
-        }
 
         public void Close()
         {

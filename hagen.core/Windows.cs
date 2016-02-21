@@ -1,5 +1,4 @@
-﻿using NUnit.Framework;
-using Sidi.Test;
+﻿using Sidi.Test;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -11,7 +10,7 @@ using System.Runtime.InteropServices;
 
 namespace Sidi
 {
-    internal static class NativeMethods
+    public static class NativeMethods
     {
         [DllImport("user32.dll", SetLastError = true, CharSet = CharSet.Auto)]
         internal static extern int GetClassName(IntPtr hWnd, StringBuilder lpClassName, int nMaxCount);
@@ -132,6 +131,7 @@ namespace Sidi
             return handle.ToInt32();
         }
 
+        /*
         [TestFixture]
         public class Test : TestBase
         {
@@ -145,14 +145,13 @@ namespace Sidi
                 log.Info(windows.ListFormat().Add(_ => _.Class, _ => _.Text));
             }
 
-            /*
             [Test, Explicit]
             public void Dte()
             {
                 var dte = (EnvDTE.DTE)System.Runtime.InteropServices.Marshal.GetActiveObject("VisualStudio.DTE");
                 log.Info(dte.ActiveWindow.Caption);
             }
-            */
         }
+        */
     }
 }

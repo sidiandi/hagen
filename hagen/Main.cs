@@ -26,7 +26,6 @@ using System.Windows.Forms;
 using Sidi.Persistence;
 using Sidi.IO;
 using Sidi.Util;
-using NUnit.Framework;
 using System.Threading;
 using System.Diagnostics;
 using Sidi.Forms;
@@ -190,11 +189,6 @@ namespace hagen
         {
             base.OnClosed(e);
             hotkeyBinder.Dispose();
-        }
-
-        [TestFixture]
-        public class SearchBoxTest
-        {
         }
 
         private void exitToolStripMenuItem_Click(object sender, EventArgs e)

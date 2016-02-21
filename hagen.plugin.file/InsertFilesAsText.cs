@@ -21,7 +21,6 @@ using System.Linq;
 using System.Text;
 using System.Windows.Forms;
 using Sidi.Util;
-using NUnit.Framework;
 using Sidi.CommandLine;
 using Sidi.Extensions;
 

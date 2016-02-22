@@ -258,8 +258,10 @@ namespace hagen
 
         public void Remove()
         {
-            throw new NotImplementedException();
-            // todo
+            foreach (var a in SelectedActions.OfType<IStorable>().ToList())
+            {
+                a.Remove();                
+            }
             UpdateResult();
         }
 

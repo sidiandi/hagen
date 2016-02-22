@@ -16,7 +16,7 @@ namespace Sidi.Forms.Tests
     {
         private static readonly log4net.ILog log = log4net.LogManager.GetLogger(System.Reflection.MethodBase.GetCurrentMethod().DeclaringType);
 
-        [Test, RequiresSTA, Explicit("interactive")]
+        [Test, Apartment(System.Threading.ApartmentState.STA)]
         public void List()
         {
             var lv = new LogViewer2()

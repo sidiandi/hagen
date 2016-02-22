@@ -73,6 +73,7 @@
       <HintPath>..\packages\System.Data.SQLite.Linq.1.0.99.0\lib\net451\System.Data.SQLite.Linq.dll</HintPath>
       <Private>True</Private>
     </Reference>
+    <Reference Include="System.Drawing" />
     <Reference Include="System.Windows.Forms" />
     <Reference Include="System.Xml.Linq" />
     <Reference Include="System.Data.DataSetExtensions" />
@@ -84,6 +85,10 @@
   <ItemGroup>
     <Compile Include="AlwaysCrash.cs" />
     <Compile Include="AutoText.cs" />
+    <Compile Include="EnumerableExtensions.cs" />
+    <Compile Include="NoteAction.cs" />
+    <Compile Include="Notes.cs" />
+    <Compile Include="NotesReader.cs" />
     <Compile Include="OpenFile.cs" />
     <Compile Include="Plugin.cs" />
     <None Include="packages.config" />

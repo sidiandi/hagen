@@ -70,6 +70,7 @@ namespace hagen.Plugin.Db
         private System.Windows.Forms.ToolStripMenuItem sqliteConsoleToolStripMenuItem;
         private System.Windows.Forms.ToolStripMenuItem linksFromInternetExplorerToolStripMenuItem;
         private System.Windows.Forms.ToolStripMenuItem startMenuToolStripMenuItem;
+        private System.Windows.Forms.ToolStripMenuItem cleanupToolStripMenuItem;
 
         public static LPath GetDefaultActionPath(IContext context)
         {
@@ -118,6 +119,15 @@ namespace hagen.Plugin.Db
             this.sqliteConsoleToolStripMenuItem.Text = "Sqlite &Console";
             this.sqliteConsoleToolStripMenuItem.Click += SqliteConsoleToolStripMenuItem_Click;
 
+            // 
+            // cleanupToolStripMenuItem 
+            // 
+            this.cleanupToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
+            this.cleanupToolStripMenuItem.Name = "cleanupToolStripMenuItem";
+            this.cleanupToolStripMenuItem.Size = new System.Drawing.Size(149, 22);
+            this.cleanupToolStripMenuItem.Text = "&Cleanup";
+            this.cleanupToolStripMenuItem.Click += CleanupToolStripMenuItem_Click;
+
             viewToolStripMenuItem = new ToolStripMenuItem(actionsSqlitePath.FileNameWithoutExtension);
             viewToolStripMenuItem.Checked = lookup.IncludeInSearch;
             viewToolStripMenuItem.DoubleClick += ViewToolStripMenuItem_Click;
@@ -128,7 +138,8 @@ namespace hagen.Plugin.Db
             viewToolStripMenuItem.DropDownItems.AddRange(new System.Windows.Forms.ToolStripItem[] {
                 this.startMenuToolStripMenuItem,
                 this.sqliteConsoleToolStripMenuItem,
-                this.linksFromInternetExplorerToolStripMenuItem
+                this.linksFromInternetExplorerToolStripMenuItem,
+                this.cleanupToolStripMenuItem
             });
 
             context.MainMenu.Items.Add(viewToolStripMenuItem);
@@ -265,6 +276,14 @@ namespace hagen.Plugin.Db
             log.Info(() => p.StartInfo.Arguments);
             p.StartInfo.CreateNoWindow = false;
             p.Start();
+        }
+
+        private void CleanupToolStripMenuItem_Click(object sender, EventArgs e)
+        {
+            Task.Factory.StartNew(() =>
+            {
+                actions.Cleanup();
+            }, TaskCreationOptions.LongRunning);
         }
 
         DatabaseLookup lookup;

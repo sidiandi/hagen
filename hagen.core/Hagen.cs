@@ -75,7 +75,8 @@ namespace hagen
 
             this.Context = new Context(this)
             {
-                DataDirectory = dataDirectory
+                DataDirectory = dataDirectory,
+                DocumentDirectory = Paths.GetFolderPath(Environment.SpecialFolder.MyDocuments).CatDir("hagen")
             };
         }
 

@@ -10,7 +10,7 @@ using Sidi.Extensions;
 namespace hagen
 {
     [Usage("Insert automatic text")]
-    public class AutoText
+    public class AutoText 
     {
         private static readonly log4net.ILog log = log4net.LogManager.GetLogger(System.Reflection.MethodBase.GetCurrentMethod().DeclaringType);
 

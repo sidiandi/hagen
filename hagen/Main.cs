@@ -88,9 +88,8 @@ namespace hagen
             searchBox1.ItemsActivated += new EventHandler(searchBox1_ItemsActivated);
             searchBox1.AsDockContent().Show(dockPanel, DockState.Document);
 
-            searchBox1.AllowDrop = true;
-            searchBox1.DragEnter += new DragEventHandler(SearchBox_DragEnter);
-            searchBox1.DragDrop += new DragEventHandler(SearchBox_DragDrop);
+            DragEnter += new DragEventHandler(Main_DragEnter);
+            DragDrop += new DragEventHandler(Main_DragDrop);
 
             /*
             var logViewer = new LogViewer2()
@@ -203,16 +202,20 @@ namespace hagen
 
         private void statisticsToolStripMenuItem_Click(object sender, EventArgs e)
         {
-            // todo
-            // new activityReport.Program(hagen).StatisticsWindow().Show();
+            new activityReport.Program(hagen).StatisticsWindow().Show();
         }
 
         private void sqliteConsoleToolStripMenuItem_Click(object sender, EventArgs e)
         {
-            Process p = new Process();
-            p.StartInfo.FileName = L.Paths.BinDir.CatDir("sqlite3.exe");
-            p.StartInfo.Arguments = hagen.ActionsDatabasePath.Quote();
-            p.StartInfo.CreateNoWindow = false;
+            Process p = new Process
+            {
+                StartInfo = new ProcessStartInfo
+                {
+                    FileName = L.Paths.BinDir.CatDir("sqlite3.exe"),
+                    Arguments = new[] { hagen.ActionsDatabasePath.Quote(), "-cmd", ".schema" }.Join(" "),
+                    CreateNoWindow = false,
+                }
+            };
             p.Start();
         }
 
@@ -317,15 +320,15 @@ Hours: {0:G3}",
             searchBox1.Remove();
         }
 
-        void SearchBox_DragDrop(object sender, DragEventArgs e)
+        void Main_DragDrop(object sender, DragEventArgs e)
         {
             hagen.Context.OnDragDrop(sender, e);
         }
 
-        void SearchBox_DragEnter(object sender, DragEventArgs e)
+        void Main_DragEnter(object sender, DragEventArgs e)
         {
             log.Info(e.Data.GetFormats().ListFormat());
-            e.Effect = e.AllowedEffect;
+            e.Effect = DragDropEffects.Copy;
         }
     }
 }

@@ -14,7 +14,7 @@ namespace hagen.Tests
     {
         private static readonly log4net.ILog log = log4net.LogManager.GetLogger(System.Reflection.MethodBase.GetCurrentMethod().DeclaringType);
 
-        [Test, RequiresSTA, Explicit("interactive")]
+        [Test, Apartment(ApartmentState.STA)]
         public void Run()
         {
             var cs = new CancellationTokenSource();

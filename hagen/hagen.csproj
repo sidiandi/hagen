@@ -129,6 +129,10 @@
     <Service Include="{82A7F48D-3B50-4B1E-B82E-3ADA8210C358}" />
   </ItemGroup>
   <ItemGroup>
+    <ProjectReference Include="..\activityReport\activityReport.csproj">
+      <Project>{d3e69d04-feda-48d8-9498-f41362f7e52a}</Project>
+      <Name>activityReport</Name>
+    </ProjectReference>
     <ProjectReference Include="..\hagen.core\hagen.core.csproj">
       <Project>{b8a11330-3766-4244-9962-8b0d25e98005}</Project>
       <Name>hagen.core</Name>

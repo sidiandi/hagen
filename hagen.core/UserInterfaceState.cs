@@ -88,6 +88,8 @@ namespace hagen
 
         public LPath DataDirectory { get; set; }
 
+        public LPath DocumentDirectory { get; set; }
+
         readonly ILastExecutedStore lastExecutedStore;
 
         public event DragEventHandler DragDrop;

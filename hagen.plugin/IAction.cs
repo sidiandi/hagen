@@ -43,5 +43,6 @@ namespace hagen
     public interface IStorable
     {
         void Store();
+        void Remove();
     }
 }

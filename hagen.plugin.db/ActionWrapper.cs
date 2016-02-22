@@ -63,6 +63,11 @@ namespace hagen.Plugin.Db
             Data.Update(this.Action);
         }
 
+        public void Remove()
+        {
+            Data.Remove(this.Action);
+        }
+
         public string Name
         {
             get

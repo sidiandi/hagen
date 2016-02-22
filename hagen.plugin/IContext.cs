@@ -27,5 +27,6 @@ namespace hagen
 
         LPath DataDirectory { get; }
 
+        LPath DocumentDirectory { get; }
     }
 }

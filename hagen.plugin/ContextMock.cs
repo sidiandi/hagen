@@ -40,6 +40,14 @@ namespace hagen.Test
             }
         }
 
+        public LPath DocumentDirectory
+        {
+            get
+            {
+                throw new NotImplementedException();
+            }
+        }
+
         public bool IsConsole
         {
             get

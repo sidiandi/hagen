@@ -356,6 +356,7 @@ namespace activityReport
                 main.AddItem("{0:yyyy-MM} Overview".F(m.Begin), () => Overview(m));
                 main.AddItem("{0:yyyy-MM} Hours".F(m.Begin), () => Hours(m));
 
+                /*
                 main.AddItem("{0:yyyy-MM} Programs".F(m.Begin), () =>
                 {
                     using (var pu = hagen.OpenProgramUses())
@@ -392,82 +393,156 @@ namespace activityReport
                         return tm;
                     }
                 });
+                */
             }
 
             foreach (var iDay in all.Days.Reverse())
             {
                 var day = iDay;
-                main.AddItem("{0} activity".F(day.Begin), () =>
-                {
-                    var c = new Dvc.Chart();
-
-                    var ca = new Dvc.ChartArea();
-                    ca.AxisX.LabelStyle.Format = "HH:mm";
-
-                    /*
-                    ca.AxisY.Maximum = 35e3;
-                    ca.AxisY2.Maximum = 6e6;
-                     */
-                    ca.AxisY.Title = "Keystrokes";
-                    ca.AxisY2.Title  = "Mouse";
-
-                    ca.AxisX.Minimum = day.Begin.ToOADate();
-                    ca.AxisX.Maximum = day.End.ToOADate();
-                    c.ChartAreas.Add(ca);
-
-
-                    var keystrokes = new Dvc.Series()
-                    {
-                        Name = "keystrokes",
-                        ChartType = Dvc.SeriesChartType.FastLine,
-                    };
-
-                    var mouse = new Dvc.Series()
-                    {
-                        Name = "mouse",
-                        ChartType = Dvc.SeriesChartType.FastLine,
-                        YAxisType = Dvc.AxisType.Secondary
-                    };
-
-                    c.Series.Add(keystrokes);
-                    c.Series.Add(mouse);
-                    
-                    /*
-                    keystrokeAxis.Scale.Min = 0;
-                    keystrokeAxis.Scale.Max = 35e3;
-
-                    var mouseAxis = new YAxis("mouse move");
-                    p.YAxisList.Add(mouseAxis);
-                    mouseAxis.Scale.Min = 0;
-                    mouseAxis.Scale.Max = 6e6;
-                    */
-
-                    var data = input.Range(day);
-
-                    int totalKeyDown = 0;
-                    double totalMouseMove = 0;
-                    foreach (var i in data)
-                    {
-                        totalKeyDown += i.KeyDown;
-                        totalMouseMove += i.MouseMove;
-                        keystrokes.Points.AddXY(i.Begin, totalKeyDown);
-                        mouse.Points.AddXY(i.Begin, totalMouseMove);
-                    }
-
-                    c.Legends.Add(new Dvc.Legend()
-                        {
-                            Docking = Dvc.Docking.Top,
-                            LegendStyle = Dvc.LegendStyle.Row,
-                        });
-                    return c;
-                });
+                main.AddItem("{0} activity".F(day.Begin), () => Activity(day));
+                main.AddItem("{0} activity".F(day.Begin), () => ActivityOxy(day));
             }
 
-            
             main.List.FocusedItem = main.List.Items[0];
             main.List.Items[0].Selected = true;
             
             return main;
+        }
+
+        Control Activity(TimeInterval range)
+        {
+            var c = new Dvc.Chart();
+
+            var ca = new Dvc.ChartArea();
+            ca.AxisX.LabelStyle.Format = "HH:mm";
+
+            /*
+            ca.AxisY.Maximum = 35e3;
+            ca.AxisY2.Maximum = 6e6;
+             */
+            ca.AxisY.Title = "Keystrokes";
+            ca.AxisY2.Title = "Mouse";
+
+            ca.AxisX.SetRange(range);
+            c.ChartAreas.Add(ca);
+
+
+            var keystrokes = new Dvc.Series()
+            {
+                Name = "keystrokes",
+                ChartType = Dvc.SeriesChartType.FastLine,
+            };
+
+            var mouse = new Dvc.Series()
+            {
+                Name = "mouse",
+                ChartType = Dvc.SeriesChartType.FastLine,
+                YAxisType = Dvc.AxisType.Secondary
+            };
+
+            c.Series.Add(keystrokes);
+            c.Series.Add(mouse);
+
+            /*
+            keystrokeAxis.Scale.Min = 0;
+            keystrokeAxis.Scale.Max = 35e3;
+
+            var mouseAxis = new YAxis("mouse move");
+            p.YAxisList.Add(mouseAxis);
+            mouseAxis.Scale.Min = 0;
+            mouseAxis.Scale.Max = 6e6;
+            */
+
+            var data = input.Range(range);
+
+            int totalKeyDown = 0;
+            double totalMouseMove = 0;
+            foreach (var i in data)
+            {
+                totalKeyDown += i.KeyDown;
+                totalMouseMove += i.MouseMove;
+                keystrokes.Points.AddXY(i.Begin, totalKeyDown);
+                mouse.Points.AddXY(i.Begin, totalMouseMove);
+            }
+
+            c.Legends.Add(new Dvc.Legend()
+            {
+                Docking = Dvc.Docking.Top,
+                LegendStyle = Dvc.LegendStyle.Row,
+            });
+            return c;
+        }
+
+        Control ActivityOxy(TimeInterval m)
+        {
+            var model = new OxyPlot.PlotModel()
+            {
+                Title = "Activity",
+                Background = OxyColors.White,
+                DefaultFont = "Arial",
+                DefaultFontSize = 10.0
+            };
+
+            model.Axes.Add(new DateTimeAxis
+            {
+                Position = AxisPosition.Bottom,
+                MajorGridlineStyle = LineStyle.Solid,
+                MajorStep = 1.0/24.0,
+                MinorStep = 1.0/24.0/60.0*10.0,
+                Minimum = DateTimeAxis.ToDouble(m.Begin),
+                Maximum = DateTimeAxis.ToDouble(m.End),
+                StringFormat = "HH:mm"
+            });
+
+            var keyboardAxis = new OxyPlot.Axes.LinearAxis
+            {
+                Key = "keyboard",
+                Title = "Keyboard",
+                Position = AxisPosition.Left,
+                Minimum = 0,
+                Maximum = 60e3 * m.Duration.TotalDays
+            };
+            model.Axes.Add(keyboardAxis);
+
+            var mouseAxis = new OxyPlot.Axes.LinearAxis
+            {
+                Key = "mouse",
+                Title = "Mouse",
+                Position = AxisPosition.Right,
+                Minimum = 0,
+                Maximum = 7000e3 * m.Duration.TotalDays
+            };
+            model.Axes.Add(mouseAxis);
+
+            var keystrokes = new OxyPlot.Series.LineSeries
+            {
+                Title = "keystrokes",
+                YAxisKey = keyboardAxis.Key
+            };
+            model.Series.Add(keystrokes);
+
+            var mouse = new OxyPlot.Series.LineSeries
+            {
+                Title = "mouse",
+                YAxisKey = mouseAxis.Key
+            };
+            model.Series.Add(mouse);
+
+            var data = input.Range(m);
+            int totalKeyDown = 0;
+            double totalMouseMove = 0;
+            foreach (var i in data)
+            {
+                totalKeyDown += i.KeyDown;
+                totalMouseMove += i.MouseMove;
+                keystrokes.Points.Add(new OxyPlot.DataPoint(DateTimeAxis.ToDouble(i.Begin), totalKeyDown));
+                mouse.Points.Add(new OxyPlot.DataPoint(DateTimeAxis.ToDouble(i.Begin), totalMouseMove));
+            }
+
+            return new OxyPlot.WindowsForms.PlotView
+            {
+                Model = model
+            };
         }
 
         const double daySep = 0.3;
@@ -482,8 +557,9 @@ namespace activityReport
                 DefaultFontSize = 10.0
             };
 
-            model.Axes.Add(new DateTimeAxis(AxisPosition.Left)
+            model.Axes.Add(new DateTimeAxis
             {
+                Position = AxisPosition.Left,
                 MajorGridlineStyle = LineStyle.Solid,
                 // MinorGridlineStyle = LineStyle.Dot,
                 MajorStep = 1,
@@ -491,8 +567,10 @@ namespace activityReport
                 Minimum = DateTimeAxis.ToDouble(m.Begin.AddDays(-1)),
                 Maximum = DateTimeAxis.ToDouble(m.End)
             });
-            model.Axes.Add(new TimeSpanAxis(AxisPosition.Bottom)
+
+            model.Axes.Add(new TimeSpanAxis
             {
+                Position = AxisPosition.Bottom,
                 MajorGridlineStyle = LineStyle.Solid,
                 MinorGridlineStyle = LineStyle.Dot,
                 StringFormat = "h:mm",
@@ -563,16 +641,19 @@ namespace activityReport
                 DefaultFontSize = 10.0
             };
 
-            model.Axes.Add(new DateTimeAxis(AxisPosition.Left)
+            model.Axes.Add(new DateTimeAxis
             {
+                Position = AxisPosition.Left,
                 MajorGridlineStyle = LineStyle.Solid,
                 // MinorGridlineStyle = LineStyle.Dot,
                 MajorStep = 1,
                 Minimum = DateTimeAxis.ToDouble(m.Begin.AddDays(-1)),
                 Maximum = DateTimeAxis.ToDouble(m.End)
             });
-            model.Axes.Add(new TimeSpanAxis(AxisPosition.Bottom)
+
+            model.Axes.Add(new TimeSpanAxis
             {
+                Position = AxisPosition.Bottom,
                 MajorGridlineStyle = LineStyle.Solid,
                 MinorGridlineStyle = LineStyle.Dot,
                 StringFormat = "h:mm",

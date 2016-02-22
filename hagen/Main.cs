@@ -38,6 +38,7 @@ using Sidi.Test;
 using WeifenLuo.WinFormsUI.Docking;
 using Sidi.CommandLine;
 using hagen.ActionSource;
+using System.Reflection;
 
 namespace hagen
 {
@@ -118,6 +119,51 @@ namespace hagen
                 CheckWorkTime();
             });
             alertTimer.Start();
+
+            this.reportsToolStripMenuItem.DropDownItems.AddRange(GetTextReportMenuItems().ToArray());
+        }
+
+        IEnumerable<ToolStripItem> GetTextReportMenuItems()
+        {
+            var type = typeof(activityReport.Program);
+            Func<object> instance = () => new activityReport.Program(this.hagen);
+
+
+            var reports = type.GetMethods()
+                .Where(m =>
+                {
+                    var p = m.GetParameters();
+                    return
+                        p.Length == 2 &&
+                        p[0].ParameterType.Equals(typeof(TextWriter)) && 
+                        p[1].ParameterType.Equals(typeof(TimeInterval));
+                });
+
+            return reports.Select(m =>
+            {
+                var reportMethod = m;
+                var tsi = new ToolStripMenuItem(m.Name)
+                {
+                };
+                tsi.Click += (s, e) => ShowReport(m.Name, (w,time) => m.Invoke(instance(), new object[] { w, time }));
+                return tsi;
+            });
+        }
+
+        void ShowReport(string name, Action<TextWriter, TimeInterval> report)
+        {
+            var p = hagen.DataDirectory.CatDir("Reports", LPath.GetValidFilename(name) + ".txt");
+            p.EnsureParentDirectoryExists();
+            using (var output = new StreamWriter(p))
+            {
+                report(output, TimeIntervalExtensions.LastDays(180));
+            }
+            Process.Start("notepad.exe", p.ToString().Quote());
+        }
+
+        private static void Tsi_Click(object sender, EventArgs e)
+        {
+            throw new NotImplementedException();
         }
 
         public DockPanel dockPanel;
@@ -221,8 +267,7 @@ namespace hagen
 
         private void reportMailToolStripMenuItem_Click(object sender, EventArgs e)
         {
-            // todo
-            // new activityReport.Program(hagen).ShowReport();
+            new activityReport.Program(hagen).ShowReport();
         }
 
         private void notifyIcon_MouseDoubleClick(object sender, MouseEventArgs e)

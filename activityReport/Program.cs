@@ -136,21 +136,22 @@ namespace activityReport
             var p = hagen.DataDirectory.CatDir("work-time-report.txt");
             using (var output = new StreamWriter(p))
             {
-                new activityReport.Program(this.hagen).WorktimeReport(output, TimeIntervalExtensions.LastDays(90));
+                new activityReport.Program(this.hagen).WorktimeReport(output, TimeIntervalExtensions.LastDays(180));
             }
             Process.Start("notepad.exe", p.ToString().Quote());
-        }
-
-        [Usage("Show statistics window")]
-        public void Stats()
-        {
-            Application.Run(StatisticsWindow());
         }
 
         [Usage("Prints a day-by-day work time report")]
         public void Worktime()
         {
-            WorktimeReport(Console.Out, new TimeInterval(DateTime.Now.AddYears(-1), DateTime.Now));
+            // WorktimeReport(Console.Out, new TimeInterval(DateTime.Now.AddYears(-1), DateTime.Now));
+            WorktimeReport(Console.Out, new TimeInterval(DateTime.Now.AddDays(-60), DateTime.Now));
+        }
+
+        [Usage("Prints a monthly report about overtime work")]
+        public void Overtime()
+        {
+            OvertimeReport(Console.Out, new TimeInterval(DateTime.Now.AddDays(-60), DateTime.Now));
         }
 
         public void Report(TextWriter w, TimeInterval range)
@@ -255,12 +256,22 @@ namespace activityReport
             }
         }
 
-        public void WorktimeReport(TextWriter w, TimeInterval range)
+        IList<WorktimeInfo> GetWorktimeInfo(TimeInterval range)
         {
             var wti = range.Days.Select(x => new WorktimeInfo(x, input)).ToList();
             UpdateBalance(wti);
+            return wti;
+        }
 
-            var days = wti.OrderByDescending(x => x.Date);
+        static string MonthString(TimeInterval i)
+        {
+            return String.Format("{0:yyyy-MM}", i.Begin);
+        }
+
+        public void WorktimeReport(TextWriter w, TimeInterval range)
+        {
+            var worktimeInfo = GetWorktimeInfo(range);
+            var days = worktimeInfo.OrderByDescending(x => x.Date);
 
             foreach (var i in days)
             {
@@ -286,6 +297,36 @@ namespace activityReport
                 .AddColumn("Balance", x => String.Format("{0:F2}", x.Balance))
                 .RenderText(w);
              */
+        }
+
+        public void OvertimeReport(TextWriter w, TimeInterval range)
+        {
+            var pauseTime = 0.75;
+            var regularWorkTime = 8.0;
+            var maximalWorkTime = 10.0;
+
+            foreach (var month in range.Months)
+            {
+                w.WriteLine(@"
+
+Work > {0} hours in {1:yyyy-MM}
+====
+", regularWorkTime, month.Begin);
+
+                var worktimeInfo = GetWorktimeInfo(month);
+
+                foreach (var i in worktimeInfo.Where(_ => _.Attendance != null))
+                {
+                    var worktime = i.Attendance.Duration.TotalHours - pauseTime;
+                    var overtime = worktime - regularWorkTime;
+                    if (overtime > 0)
+                    {
+                        var maxAllowedOvertime = maximalWorkTime - regularWorkTime;
+                        overtime = overtime - 0.25 * ((int)((overtime - maxAllowedOvertime) / 0.25) + 1);
+                        w.WriteLine("{0:ddd dd.MM.yyyy}: {1:F2} hours", i.Date, overtime);
+                    }
+                }
+            }
         }
 
         TypedTreeMap<T> CreateTreeMap<T>(IList<T> data)
@@ -400,7 +441,6 @@ namespace activityReport
             {
                 var day = iDay;
                 main.AddItem("{0} activity".F(day.Begin), () => Activity(day));
-                main.AddItem("{0} activity".F(day.Begin), () => ActivityOxy(day));
             }
 
             main.List.FocusedItem = main.List.Items[0];
@@ -409,71 +449,7 @@ namespace activityReport
             return main;
         }
 
-        Control Activity(TimeInterval range)
-        {
-            var c = new Dvc.Chart();
-
-            var ca = new Dvc.ChartArea();
-            ca.AxisX.LabelStyle.Format = "HH:mm";
-
-            /*
-            ca.AxisY.Maximum = 35e3;
-            ca.AxisY2.Maximum = 6e6;
-             */
-            ca.AxisY.Title = "Keystrokes";
-            ca.AxisY2.Title = "Mouse";
-
-            ca.AxisX.SetRange(range);
-            c.ChartAreas.Add(ca);
-
-
-            var keystrokes = new Dvc.Series()
-            {
-                Name = "keystrokes",
-                ChartType = Dvc.SeriesChartType.FastLine,
-            };
-
-            var mouse = new Dvc.Series()
-            {
-                Name = "mouse",
-                ChartType = Dvc.SeriesChartType.FastLine,
-                YAxisType = Dvc.AxisType.Secondary
-            };
-
-            c.Series.Add(keystrokes);
-            c.Series.Add(mouse);
-
-            /*
-            keystrokeAxis.Scale.Min = 0;
-            keystrokeAxis.Scale.Max = 35e3;
-
-            var mouseAxis = new YAxis("mouse move");
-            p.YAxisList.Add(mouseAxis);
-            mouseAxis.Scale.Min = 0;
-            mouseAxis.Scale.Max = 6e6;
-            */
-
-            var data = input.Range(range);
-
-            int totalKeyDown = 0;
-            double totalMouseMove = 0;
-            foreach (var i in data)
-            {
-                totalKeyDown += i.KeyDown;
-                totalMouseMove += i.MouseMove;
-                keystrokes.Points.AddXY(i.Begin, totalKeyDown);
-                mouse.Points.AddXY(i.Begin, totalMouseMove);
-            }
-
-            c.Legends.Add(new Dvc.Legend()
-            {
-                Docking = Dvc.Docking.Top,
-                LegendStyle = Dvc.LegendStyle.Row,
-            });
-            return c;
-        }
-
-        Control ActivityOxy(TimeInterval m)
+        Control Activity(TimeInterval m)
         {
             var model = new OxyPlot.PlotModel()
             {
@@ -487,8 +463,7 @@ namespace activityReport
             {
                 Position = AxisPosition.Bottom,
                 MajorGridlineStyle = LineStyle.Solid,
-                MajorStep = 1.0/24.0,
-                MinorStep = 1.0/24.0/60.0*10.0,
+                MinorGridlineStyle = LineStyle.Dot,
                 Minimum = DateTimeAxis.ToDouble(m.Begin),
                 Maximum = DateTimeAxis.ToDouble(m.End),
                 StringFormat = "HH:mm"
@@ -561,7 +536,6 @@ namespace activityReport
             {
                 Position = AxisPosition.Left,
                 MajorGridlineStyle = LineStyle.Solid,
-                // MinorGridlineStyle = LineStyle.Dot,
                 MajorStep = 1,
                 MinorStep = 1.0/4.0,
                 Minimum = DateTimeAxis.ToDouble(m.Begin.AddDays(-1)),
@@ -573,9 +547,9 @@ namespace activityReport
                 Position = AxisPosition.Bottom,
                 MajorGridlineStyle = LineStyle.Solid,
                 MinorGridlineStyle = LineStyle.Dot,
-                StringFormat = "h:mm",
                 Minimum = TimeSpan.Zero.TotalSeconds,
-                Maximum = TimeSpan.FromDays(1).TotalSeconds
+                Maximum = TimeSpan.FromDays(1).TotalSeconds,
+                StringFormat = "h:mm",
             });
 
             var bars = Summarize(input.Range(m));

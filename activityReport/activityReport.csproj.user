@@ -4,7 +4,7 @@
     <StartArguments>gui</StartArguments>
   </PropertyGroup>
   <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Debug|AnyCPU' ">
-    <StartArguments>Statistics</StartArguments>
+    <StartArguments>Overtime</StartArguments>
   </PropertyGroup>
   <PropertyGroup>
     <PublishUrlHistory />

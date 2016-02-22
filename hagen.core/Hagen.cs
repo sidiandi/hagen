@@ -212,6 +212,10 @@ namespace hagen
                 var input = new Input();
                 input.Begin = r.GetDateTime(0);
                 input.End = r.GetDateTime(1);
+                if (input.End < input.Begin)
+                {
+                    input.End = input.Begin;
+                }
                 input.KeyDown = (int) r.GetInt64(2);
                 input.MouseMove = r.GetDouble(3);
                 input.Clicks = (int) r.GetInt64(4);

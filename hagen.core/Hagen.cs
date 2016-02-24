@@ -28,6 +28,7 @@ using System.Windows.Forms;
 using System.Windows.Automation;
 using System.Runtime.InteropServices;
 using System.Data.Common;
+using System.Diagnostics;
 
 namespace hagen
 {
@@ -48,9 +49,11 @@ namespace hagen
         }
     }
 
-    public class Hagen
+    public class Hagen : IDisposable
     {
         private static readonly log4net.ILog log = log4net.LogManager.GetLogger(System.Reflection.MethodBase.GetCurrentMethod().DeclaringType);
+
+        public ActivityLogger activityLogger;
 
         static Hagen()
         {
@@ -73,6 +76,8 @@ namespace hagen
 
             this.dataDirectory = dataDirectory;
 
+            activityLogger = new ActivityLogger(this);
+
             this.Context = new Context(this)
             {
                 DataDirectory = dataDirectory,
@@ -88,7 +93,7 @@ namespace hagen
             }
         }
 
-        LPath LogDatabasePath
+        public LPath LogDatabasePath
         {
             get
             {
@@ -154,6 +159,45 @@ namespace hagen
         {
             return new Collection<Log>(LogDatabasePath);
         }
+
+        #region IDisposable Support
+        private bool disposedValue = false; // To detect redundant calls
+
+        protected virtual void Dispose(bool disposing)
+        {
+            if (!disposedValue)
+            {
+                if (disposing)
+                {
+                    if (activityLogger != null)
+                    {
+                        activityLogger.Dispose();
+                        activityLogger = null;
+                    }
+                }
+
+                // TODO: free unmanaged resources (unmanaged objects) and override a finalizer below.
+                // TODO: set large fields to null.
+
+                disposedValue = true;
+            }
+        }
+
+        // TODO: override a finalizer only if Dispose(bool disposing) above has code to free unmanaged resources.
+        // ~Hagen() {
+        //   // Do not change this code. Put cleanup code in Dispose(bool disposing) above.
+        //   Dispose(false);
+        // }
+
+        // This code added to correctly implement the disposable pattern.
+        public void Dispose()
+        {
+            // Do not change this code. Put cleanup code in Dispose(bool disposing) above.
+            Dispose(true);
+            // TODO: uncomment the following line if the finalizer is overridden above.
+            // GC.SuppressFinalize(this);
+        }
+        #endregion
     }
 
     public static class HagenEx

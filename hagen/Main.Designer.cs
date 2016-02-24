@@ -133,7 +133,7 @@ namespace hagen
             // 
             this.sqliteConsoleToolStripMenuItem.Name = "sqliteConsoleToolStripMenuItem";
             this.sqliteConsoleToolStripMenuItem.Size = new System.Drawing.Size(152, 22);
-            this.sqliteConsoleToolStripMenuItem.Text = "Sqlite &Console";
+            this.sqliteConsoleToolStripMenuItem.Text = "Show Log Database Console";
             this.sqliteConsoleToolStripMenuItem.Click += new System.EventHandler(this.sqliteConsoleToolStripMenuItem_Click);
             // 
             // notifyIcon

@@ -101,5 +101,7 @@ namespace hagen.Test
         {
             throw new NotImplementedException();
         }
+
+        public IInputAggregator Input { get { return null; } }
     }
 }

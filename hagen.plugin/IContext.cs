@@ -28,5 +28,7 @@ namespace hagen
         LPath DataDirectory { get; }
 
         LPath DocumentDirectory { get; }
+
+        IInputAggregator Input { get; }
     }
 }

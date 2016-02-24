@@ -35,7 +35,6 @@
   <ItemGroup>
     <Compile Include="ActionChoice.cs" />
     <Compile Include="ActionSource\Composite.cs" />
-    <Compile Include="Activity.cs" />
     <Compile Include="ActivityLogger.cs" />
     <Compile Include="AggregateUtil.cs" />
     <Compile Include="Appender.cs" />

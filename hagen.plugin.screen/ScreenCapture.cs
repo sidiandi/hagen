@@ -152,6 +152,7 @@ namespace hagen
             {
                 destination.EnsureParentDirectoryExists();
                 bitmap.Save(destination.ToString(), System.Drawing.Imaging.ImageFormat.Png);
+                log.InfoFormat("Screenshot of {0} saved in {1}", screen, destination);
                 return destination;
             }
         }

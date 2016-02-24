@@ -14,8 +14,11 @@ namespace hagen
         private static readonly log4net.ILog log = log4net.LogManager.GetLogger(System.Reflection.MethodBase.GetCurrentMethod().DeclaringType);
         public Context(Hagen hagen)
         {
+            this.hagen = hagen;
             lastExecutedStore = hagen.OpenLastExecutedStore();
         }
+
+        Hagen hagen;
 
         public void InsertText(string text)
         {
@@ -102,5 +105,13 @@ namespace hagen
             }
         }
 
+        public IInputAggregator Input
+        {
+            get
+            {
+                return hagen.activityLogger == null ? null :
+                this.hagen.activityLogger.inputAggregator;
+            }
+        }
     }
 }

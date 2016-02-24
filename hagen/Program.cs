@@ -72,10 +72,7 @@ namespace hagen
 
         public void RunUserInterface()
         {
-            using (var activityLogger = Debugger.IsAttached ? null : new ActivityLogger(hagen))
-            {
-                Application.Run(main);
-            }
+            Application.Run(main);
         }
 
         Hagen hagen;

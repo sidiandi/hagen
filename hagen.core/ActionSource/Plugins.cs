@@ -35,9 +35,18 @@ namespace hagen.ActionSource
         {
             try
             {
-                return assembly.GetTypes()
+                if (!assembly.FullName.StartsWith("hagen.plugin."))
+                {
+                    return new List<IPlugin>();
+                }
+
+                log.InfoFormat("Looking for plugins in {0}", assembly.FullName);
+                var types = assembly.GetTypes();
+                return types
                     .Create<IPluginFactory>()
+                    .Where(_ => { log.InfoFormat("IPluginFactory: {0}", _.GetType().FullName); return true; })
                     .SelectMany(f => f.CreatePlugins(context))
+                    .Where(_ => { log.InfoFormat("  IPlugin: {0}", _.GetType().FullName); return true; })
                     .ToList();
             }
             catch
@@ -48,14 +57,9 @@ namespace hagen.ActionSource
 
         IList<IPlugin> GetPlugins(PathList searchPath)
         {
-            var assemblyFileExtension = new Sidi.IO.FileType("exe", "dll");
-            var hagenExe = Assembly.GetEntryAssembly().GetLocalPath();
-            var sidiUtil = typeof(Sidi.IO.LPath).Assembly.GetLocalPath();
-
             var assemblyFiles = searchPath
                 .SelectMany(x => x.GetFiles())
-                .Where(x => assemblyFileExtension.Is(x))
-                .Where(x => !x.Equals(hagenExe) && !x.Equals(sidiUtil))
+                .Where(x => IsPlugin(x))
                 .ToList();
 
             return assemblyFiles
@@ -63,6 +67,22 @@ namespace hagen.ActionSource
                 .Where(x => x != null)
                 .SelectMany(a => GetPlugins(a))
                 .ToList();
+        }
+
+        static FileType assemblyFileExtension = new Sidi.IO.FileType("exe", "dll");
+        static LPath hagenExe = Assembly.GetEntryAssembly().GetLocalPath();
+        static LPath sidiUtil = typeof(Sidi.IO.LPath).Assembly.GetLocalPath();
+
+        static bool IsPlugin(LPath x)
+        {
+            return x.FileNameWithoutExtension.StartsWith("hagen.plugin.screen");
+
+            return
+                assemblyFileExtension.Is(x) &&
+                x.FileNameWithoutExtension.StartsWith("hagen.plugin.", StringComparison.InvariantCultureIgnoreCase) &&
+                !x.FileNameWithoutExtension.EndsWith("Tests", StringComparison.InvariantCultureIgnoreCase) &&
+                !x.Equals(hagenExe) &&
+                !x.Equals(sidiUtil);
         }
 
         #region IDisposable Support

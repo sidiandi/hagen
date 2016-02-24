@@ -7,7 +7,7 @@ using System.Threading.Tasks;
 
 namespace hagen
 {
-    public class ObservableTimeInterval
+    public class ObservableTimeInterval : IObservableTimeInterval
     {
         public IObservable<DateTime> Begin { get; set; }
         public IObservable<DateTime> End { get; set; }

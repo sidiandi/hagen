@@ -48,6 +48,11 @@ namespace hagen
         Collection<ProgramUse> programUse;
         Collection<Input> inputs;
 
+        public InputAggregator inputAggregator
+        {
+            get; private set;
+        }
+
         public ActivityLogger(Hagen hagen)
         {
             this.hagen = hagen;
@@ -55,16 +60,16 @@ namespace hagen
             programUse = hagen.OpenProgramUses();
             inputs = hagen.OpenInputs();
 
-            var hidMonitor = new HumanInterfaceDeviceMonitor();
+            var hidMonitor = Debugger.IsAttached ? null : new HumanInterfaceDeviceMonitor();
             var winEventHook = new WinEventHook();
             var timer = Observable.Interval(this.inputLoggingInterval);
 
-            var inputAggregator = new InputAggregator();
+            inputAggregator = new InputAggregator();
 
             subscriptions = new System.Reactive.Disposables.CompositeDisposable(
                 ObservableTimeInterval.Get(inputLoggingInterval).Subscribe(inputAggregator.Time),
-                hidMonitor.KeyDown.Subscribe(inputAggregator.KeyDown),
-                hidMonitor.Mouse.Subscribe(inputAggregator.Mouse),
+                hidMonitor == null ? null :  hidMonitor.KeyDown.Subscribe(inputAggregator.KeyDown),
+                hidMonitor == null ? null : hidMonitor.Mouse.Subscribe(inputAggregator.Mouse),
                 inputAggregator.Input.SubscribeOn(TaskPoolScheduler.Default).Subscribe(_ =>
                     {
                         inputs.Add(_);

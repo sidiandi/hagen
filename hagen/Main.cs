@@ -258,7 +258,7 @@ namespace hagen
                 StartInfo = new ProcessStartInfo
                 {
                     FileName = L.Paths.BinDir.CatDir("sqlite3.exe"),
-                    Arguments = new[] { hagen.ActionsDatabasePath.Quote(), "-cmd", ".schema" }.Join(" "),
+                    Arguments = new[] { hagen.LogDatabasePath.Quote(), "-cmd", ".schema" }.Join(" "),
                     CreateNoWindow = false,
                 }
             };

@@ -13,6 +13,7 @@
   <ItemGroup>
     <Compile Include="ActionFilter.cs" />
     <Compile Include="ActionSourceCollectorPlugin.cs" />
+    <Compile Include="Activity.cs" />
     <Compile Include="AdapterIActionSource.cs" />
     <Compile Include="AutomationExtension.cs" />
     <Compile Include="ContextMock.cs" />
@@ -24,6 +25,7 @@
     <Compile Include="IconHelper.cs" />
     <Compile Include="Icons.cs" />
     <Compile Include="IContext.cs" />
+    <Compile Include="IInputAggregator.cs" />
     <Compile Include="ILastExecutedStore.cs" />
     <Compile Include="IPlugin.cs" />
     <Compile Include="NativeMethods.cs" />

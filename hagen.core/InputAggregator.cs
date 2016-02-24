@@ -10,7 +10,7 @@ using System.Windows.Forms;
 
 namespace hagen
 {
-    public class InputAggregator : IDisposable
+    public class InputAggregator : IInputAggregator, IDisposable
     {
         private static readonly log4net.ILog log = log4net.LogManager.GetLogger(System.Reflection.MethodBase.GetCurrentMethod().DeclaringType);
 
@@ -21,6 +21,38 @@ namespace hagen
         Input input = new Input();
 
         IDisposable subscriptions;
+
+        IObservable<IObservableTimeInterval> IInputAggregator.Time
+        {
+            get
+            {
+                return this.Time;
+            }
+        }
+
+        IObservable<KeyEventArgs> IInputAggregator.KeyDown
+        {
+            get
+            {
+                return this.KeyDown;
+            }
+        }
+
+        IObservable<MouseEventArgs> IInputAggregator.Mouse
+        {
+            get
+            {
+                return this.Mouse;
+            }
+        }
+
+        IObservable<Input> IInputAggregator.Input
+        {
+            get
+            {
+                return this.Input;
+            }
+        }
 
         public InputAggregator()
         {

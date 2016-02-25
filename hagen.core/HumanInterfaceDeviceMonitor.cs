@@ -55,7 +55,10 @@ public class HumanInterfaceDeviceMonitor : IDisposable
             hookThreadApplicationContext = new ApplicationContext();
             Application.Run(hookThreadApplicationContext);
             log.Info("hookThread end");
-        }));
+        }))
+        {
+            Name = "HumanInterfaceDeviceMonitor.hookThread"
+        };
 
         hookThread.SetApartmentState(ApartmentState.STA);
 

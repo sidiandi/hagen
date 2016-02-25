@@ -43,17 +43,20 @@ namespace hagen.ActionSource
         public Screen(IContext context)
         {
             this.context = context;
+            
             if (this.context.Input == null)
             {
                 log.Warn("no key listener active");
             }
             else
             {
+                /*
                 log.Warn("key listener active");
                 this.context.Input.Time.SubscribeOn(TaskPoolScheduler.Default).Subscribe(_ =>
                 {
                     CaptureScreens();
                 });
+                */
 
                 this.context.Input.KeyDown.SubscribeOn(TaskPoolScheduler.Default).Subscribe(HandlePrintScreen);
             }
@@ -77,45 +80,51 @@ namespace hagen.ActionSource
         [Usage("Capture active window")]
         public LPath CaptureActiveWindow()
         {
-            var sc = new ScreenCapture();
-            var dir = ScreenCaptureDirectory;
             var fe = context.SavedFocusedElement;
             if (fe == null)
             {
-                throw new System.Exception("Not active window");
+                throw new System.Exception("No active window");
             }
-            return sc.CaptureWindow(dir, fe.GetTopLevelElement());
+            return screenCapture.Capture(fe, GetDestinationFilename(DateTime.Now, fe.Current.Name));
         }
+
+        LPath GetDestinationFilename(DateTime time, string title)
+        {
+            return context.DocumentDirectory.CatDir(
+                "screen", 
+                time.ToString("yyyy"),
+                time.ToString("yyyy-MM-dd"),
+                LPath.GetValidFilename(time.ToString("yyyy-MM-ddTHH-mm-ss.ffffzzz") + "_" + title  + ".png")
+                );
+        }
+
+        ScreenCapture screenCapture = new ScreenCapture();
 
         [Usage("Capture all screens")]
         public IList<LPath> CaptureScreens()
         {
-            log.Info("CaptureScreens");
-            var sc = new ScreenCapture();
-            return sc.CaptureAll(ScreenCaptureDirectory);
-        }
-
-        LPath ScreenCaptureDirectory
-        {
-            get
-            {
-                var now = DateTime.Now;
-                return context.DocumentDirectory.CatDir("screen", now.ToString("yyyy"), now.ToString("yyyy-MM-dd"));
-            }
+            var now = DateTime.Now;
+            return screenCapture.CaptureAllScreens(s => GetDestinationFilename(now, s.DeviceName));
         }
 
         [Usage("Capture the primary screen")]
         public LPath CapturePrimaryScreen()
         {
-            var sc = new ScreenCapture();
-            var dir = ScreenCaptureDirectory;
-            return sc.CaptureToDirectory(System.Windows.Forms.Screen.PrimaryScreen, dir);
+            var s = System.Windows.Forms.Screen.PrimaryScreen;
+            return screenCapture.Capture(s, GetDestinationFilename(DateTime.Now, s.DeviceName));
+        }
+
+        [Usage("Capture the screen where the mouse pointer is right now")]
+        public LPath CaptureCurrentScreen()
+        {
+            var s = System.Windows.Forms.Screen.PrimaryScreen;
+            return screenCapture.Capture(s, GetDestinationFilename(DateTime.Now, s.DeviceName));
         }
 
         [Usage("Create a screen shot mail")]
-        public void MailScreenShotPrimaryScreen()
+        public void MailScreenShotCurrentScreen()
         {
-            var file = CapturePrimaryScreen();
+            var file = CaptureCurrentScreen();
             CreateOutlookEmailWithEmbeddedPicture(file);
         }
 

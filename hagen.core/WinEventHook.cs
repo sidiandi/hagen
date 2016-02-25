@@ -17,7 +17,10 @@ namespace hagen
         {
             procDelegate = new WinEventDelegate(WinEventProc);
             messageLoopApplicationContext = new ApplicationContext();
-            messageLoopThread = new Thread(() => MessageLoop());
+            messageLoopThread = new Thread(() => MessageLoop())
+            {
+                Name = "WinEventHook.messageLoopThread"
+            };
             messageLoopThread.Start();
         }
 

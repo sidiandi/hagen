@@ -28,7 +28,7 @@ using Sidi.Forms;
 namespace hagen
 {
     [Usage("Quick starter")]
-    public class Program
+    public class Program : IDisposable
     {
         private static readonly log4net.ILog log = log4net.LogManager.GetLogger(System.Reflection.MethodBase.GetCurrentMethod().DeclaringType);
 
@@ -38,9 +38,11 @@ namespace hagen
         [STAThread]
         static void Main(string[] args)
         {
-            var p = new Program();
-            new Parser(p).Parse(args);
-            p.RunUserInterface();
+            using (var p = new Program())
+            {
+                new Parser(p).Parse(args);
+                p.RunUserInterface();
+            }
         }
 
         public Program()
@@ -112,5 +114,41 @@ namespace hagen
                 p.Kill();
             }
         }
+
+        #region IDisposable Support
+        private bool disposedValue = false; // To detect redundant calls
+
+        protected virtual void Dispose(bool disposing)
+        {
+            if (!disposedValue)
+            {
+                if (disposing)
+                {
+                    hagen.Dispose();
+                    hagen = null;
+                }
+
+                // TODO: free unmanaged resources (unmanaged objects) and override a finalizer below.
+                // TODO: set large fields to null.
+
+                disposedValue = true;
+            }
+        }
+
+        // TODO: override a finalizer only if Dispose(bool disposing) above has code to free unmanaged resources.
+        // ~Program() {
+        //   // Do not change this code. Put cleanup code in Dispose(bool disposing) above.
+        //   Dispose(false);
+        // }
+
+        // This code added to correctly implement the disposable pattern.
+        public void Dispose()
+        {
+            // Do not change this code. Put cleanup code in Dispose(bool disposing) above.
+            Dispose(true);
+            // TODO: uncomment the following line if the finalizer is overridden above.
+            // GC.SuppressFinalize(this);
+        }
+        #endregion
     }
 }

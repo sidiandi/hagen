@@ -33,88 +33,14 @@ namespace hagen
     {
         private static readonly log4net.ILog log = log4net.LogManager.GetLogger(System.Reflection.MethodBase.GetCurrentMethod().DeclaringType);
 
-        public IList<LPath> CaptureAll(LPath destinationDirectory)
-        {
-            var now = DateTime.Now;
-            return Screen.AllScreens.Select(screen =>
-            {
-                var dest = destinationDirectory.CatDir(GetCaptureFilename(screen, now));
-                Capture(screen, dest);
-                return dest;
-            }).ToList();
-        }
-
-        LPath GetCaptureFilename(Screen screen, DateTime time)
-        {
-            var name = (String.Format("{0}_{1}.png", time.ToString("s"), new LPath(screen.DeviceName).FileNameWithoutExtension));
-            return LPath.GetValidFilename(name);
-        }
-
-        LPath GetCaptureFilename(AutomationElement window, DateTime time)
-        {
-            var name = String.Format("{0}_{1}.png",
-                time.ToString("s"),
-                window.Current.Name);
-            return LPath.GetValidFilename(name);
-        }
-
-        LPath GetCaptureFilename(AutomationElement window, int index, DateTime time)
-        {
-            var name = String.Format("{0}_{2:D2}_{1}.png",
-                time.ToString("s"),
-                window.Current.Name,
-                index);
-            return LPath.GetValidFilename(name);
-        }
-
-        [TestFixture]
-        public class Test : TestBase
-        {
-            [Test]
-            public void Filename()
-            {
-                var time = DateTime.Now;
-                var screen = Screen.PrimaryScreen;
-                Console.WriteLine(String.Format("{0}_{1}.png", time.ToString("s"), new LPath(screen.DeviceName).FileNameWithoutExtension));
-                Console.WriteLine(new ScreenCapture().GetCaptureFilename(screen, time));
-            }
-
-            [Test]
-            public void CaptureActiveWindow()
-            {
-                var s = new ScreenCapture();
-                s.CaptureWindow(TestFile("capture"), AutomationElement.FocusedElement);
-            }
-
-            [Test]
-            public void Filename2()
-            {
-                var dir = new LPath(@"C:\temp\cap");
-                var time = DateTime.Now;
-                var sc = new ScreenCapture();
-                var cap = sc.Capture(Screen.PrimaryScreen);
-                int index = 0;
-                for (var wnd = AutomationElement.FocusedElement; wnd != null; wnd = TreeWalker.ControlViewWalker.GetParent(wnd))
-                {
-                    var file = dir.CatDir(sc.GetCaptureFilename(wnd, index++, time));
-                    var r = wnd.Current.BoundingRectangle;
-                    using (var bm = new Bitmap((int)r.Width, (int)r.Height))
-                    {
-                        Graphics.FromImage(bm).DrawImage(cap, new RectangleF(0, 0, bm.Width, bm.Height),
-                            new RectangleF((float)r.Left, (float)r.Top, (float)r.Width, (float)r.Height),
-                            GraphicsUnit.Pixel);
-                        file.EnsureParentDirectoryExists();
-                        bm.Save(file.ToString(), System.Drawing.Imaging.ImageFormat.Png);
-                        Console.WriteLine(file);
-                    }
-                }
-            }
-        }
-
         public Bitmap Capture(Screen screen)
         {
-            var b = screen.Bounds;
             return Capture((Rectangle)(screen.Bounds));
+        }
+
+        public LPath Capture(Screen screen, LPath destination)
+        {
+            return Capture((Rectangle)(screen.Bounds), destination);
         }
 
         public Bitmap Capture(Rectangle bounds)
@@ -123,10 +49,39 @@ namespace hagen
             {
                 using (Graphics g = Graphics.FromImage(bitmap))
                 {
-                    g.CopyFromScreen(bounds.Left, bounds.Top, 0,0, bounds.Size);
+                    g.CopyFromScreen(bounds.Left, bounds.Top, 0, 0, bounds.Size);
                 }
             }
             return bitmap;
+        }
+
+        public LPath Capture(Rectangle bounds, LPath destination)
+        {
+            using (var bitmap = Capture(bounds))
+            {
+                destination.EnsureParentDirectoryExists();
+                bitmap.Save(destination.ToString(), System.Drawing.Imaging.ImageFormat.Png);
+                log.InfoFormat("Screenshot of {0} saved in {1}", bounds, destination);
+                return destination;
+            }
+        }
+
+        public LPath Capture(AutomationElement window, LPath destination)
+        {
+            return Capture(ToRectangle(window.Current.BoundingRectangle), destination);
+        }
+
+        /// <summary>
+        /// Captures the content of all screens to file names determined by the passed function
+        /// </summary>
+        /// <param name="getDestinationPath">Function that determines the file name to be used.</param>
+        /// <returns>List of created file names</returns>
+        public IList<LPath> CaptureAllScreens(Func<Screen, LPath> getDestinationPath)
+        {
+            return Screen.AllScreens.Select(screen =>
+            {
+                return Capture(screen, getDestinationPath(screen));
+            }).ToList();
         }
 
         static Rectangle ToRectangle(System.Windows.Rect r)
@@ -134,32 +89,5 @@ namespace hagen
             return new Rectangle((int)r.X, (int)r.Y, (int)r.Width, (int)r.Height);
         }
 
-        public LPath CaptureWindow(LPath directory, AutomationElement window)
-        {
-            using (var b = Capture(ToRectangle(window.Current.BoundingRectangle)))
-            {
-                var file = directory.CatDir(GetCaptureFilename(window, DateTime.Now));
-                log.Info(file);
-                file.EnsureParentDirectoryExists();
-                b.Save(file.ToString());
-                return file;
-            }
-        }
-
-        public LPath Capture(Screen screen, LPath destination)
-        {
-            using (var bitmap = Capture(screen))
-            {
-                destination.EnsureParentDirectoryExists();
-                bitmap.Save(destination.ToString(), System.Drawing.Imaging.ImageFormat.Png);
-                log.InfoFormat("Screenshot of {0} saved in {1}", screen, destination);
-                return destination;
-            }
-        }
-
-        public LPath CaptureToDirectory(Screen screen, LPath directory)
-        {
-            return Capture(screen, directory.CatDir(GetCaptureFilename(screen, DateTime.Now)));
-        }
     }
 }

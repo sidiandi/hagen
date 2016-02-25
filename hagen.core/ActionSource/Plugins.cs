@@ -75,14 +75,12 @@ namespace hagen.ActionSource
 
         static bool IsPlugin(LPath x)
         {
-            return x.FileNameWithoutExtension.StartsWith("hagen.plugin.screen");
+            // return x.FileNameWithoutExtension.StartsWith("hagen.plugin.screen");
 
             return
                 assemblyFileExtension.Is(x) &&
                 x.FileNameWithoutExtension.StartsWith("hagen.plugin.", StringComparison.InvariantCultureIgnoreCase) &&
-                !x.FileNameWithoutExtension.EndsWith("Tests", StringComparison.InvariantCultureIgnoreCase) &&
-                !x.Equals(hagenExe) &&
-                !x.Equals(sidiUtil);
+                !x.FileNameWithoutExtension.EndsWith("Tests", StringComparison.InvariantCultureIgnoreCase);
         }
 
         #region IDisposable Support

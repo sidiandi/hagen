@@ -242,19 +242,22 @@ namespace hagen
         {
             System.Drawing.Icon icon = null;
 
-            if (FileName.StartsWith("http://"))
+            if (!String.IsNullOrEmpty(FileName))
             {
-                return BrowserIcon;
-            }
-            else
-            {
-                if (Directory.Exists(FileName))
+                if (FileName.StartsWith("http://"))
                 {
-                    icon = IconReader.GetFolderIcon(IconReader.IconSize.Large, IconReader.FolderType.Closed);
+                    return BrowserIcon;
                 }
                 else
                 {
-                    icon = IconReader.GetFileIcon(FileName, IconReader.IconSize.Large, false);
+                    if (Directory.Exists(FileName))
+                    {
+                        icon = IconReader.GetFolderIcon(IconReader.IconSize.Large, IconReader.FolderType.Closed);
+                    }
+                    else
+                    {
+                        icon = IconReader.GetFileIcon(FileName, IconReader.IconSize.Large, false);
+                    }
                 }
             }
             return icon;

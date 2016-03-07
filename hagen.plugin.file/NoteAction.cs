@@ -19,9 +19,11 @@ namespace Sidi
         private static readonly log4net.ILog log = log4net.LogManager.GetLogger(System.Reflection.MethodBase.GetCurrentMethod().DeclaringType);
 
         Note note;
+        ILastExecutedStore lastExecutedStore;
 
-        public NoteAction(Note note)
+        public NoteAction(Note note, ILastExecutedStore lastExecutedStore)
         {
+            this.lastExecutedStore = lastExecutedStore;
             this.note = note;
         }
 
@@ -45,7 +47,7 @@ namespace Sidi
         {
             get
             {
-                return DateTime.Now;
+                return lastExecutedStore.Get(Id);
             }
         }
 
@@ -59,6 +61,7 @@ namespace Sidi
 
         public void Execute()
         {
+            lastExecutedStore.Set(Id);
             var text = note.Content;
             Clipboard.SetText(text);
             SendKeys.Send("+{INS}");

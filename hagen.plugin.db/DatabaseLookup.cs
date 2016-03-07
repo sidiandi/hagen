@@ -46,7 +46,9 @@ namespace hagen.Plugin.Db
 
         IEnumerable<IAction> GetActionsEnum(string query)
         {
-            using (new LogScope(log.Info, query))
+            query = query.OneLine(80).Trim();
+
+            using (new LogScope(log.Info, "qurey: {0}", query))
             {
                 var cmd = actions.Connection.CreateCommand();
 

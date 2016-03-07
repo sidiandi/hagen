@@ -17,11 +17,11 @@ namespace hagen.Tests
         {
             sampleApp = new SampleApp();
             var p = Parser.SingleSource(sampleApp);
-            af = new ActionFilter(new hagen.Test.ContextMock(), p);
+            af = new CommandLineParserActionSource(new hagen.Test.ContextMock(), p);
         }
 
         SampleApp sampleApp;
-        ActionFilter af;
+        CommandLineParserActionSource af;
 
         [Test]
         public void ToStringTest()

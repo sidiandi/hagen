@@ -45,7 +45,7 @@ namespace hagen
             SendKeys.Send("+{INS}");
         }
 
-        [Usage("Inserts the currenct date")]
+        [Usage("Inserts the current date")]
         public void InsertDate()
         {
             InsertText(DateTime.Now.ToString("yyyy-MM-dd"));

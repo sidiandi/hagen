@@ -11,7 +11,7 @@
   </PropertyGroup>
   <Import Project="..\build\Common.props" />
   <ItemGroup>
-    <Compile Include="ActionFilter.cs" />
+    <Compile Include="CommandLineParserActionSource.cs" />
     <Compile Include="ActionSourceCollectorPlugin.cs" />
     <Compile Include="Activity.cs" />
     <Compile Include="AdapterIActionSource.cs" />

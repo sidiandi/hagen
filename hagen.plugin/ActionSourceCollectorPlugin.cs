@@ -79,7 +79,7 @@ namespace hagen
                         }
 
                         var parser = Parser.SingleSource(plugin);
-                        return new ActionFilter(this.Context, parser);
+                        return new CommandLineParserActionSource(this.Context, parser);
                     })
                     .Where(x => x != null)
                     )

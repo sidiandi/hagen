@@ -28,7 +28,8 @@ namespace Sidi.Forms
 
         public LogViewer2()
         {
-            Layout = new PatternLayout("%utcdate{ISO8601} %level %logger %ndc - %message%newline%exception")
+            // https://www.ietf.org/rfc/rfc3339.txt
+            Layout = new PatternLayout("%date{yyyy'-'MM'-'dd'T'HH':'mm':'ss'.'fffffffzzz} %level %logger %ndc - %message%newline%exception")
             {
                 IgnoresException = false
             };

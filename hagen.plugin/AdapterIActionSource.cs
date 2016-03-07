@@ -21,6 +21,11 @@ namespace hagen
             this.actionSource = actionSource;
         }
 
+        public override string ToString()
+        {
+            return String.Format("{0} for {1}", this.GetType(), actionSource.GetType());
+        }
+
         public IActionSource actionSource { get; private set; }
 
         IEnumerable<IAction> SafeEnum(IEnumerable<IAction> data)

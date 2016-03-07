@@ -9,7 +9,6 @@ using System.Threading.Tasks;
 using Sidi.Extensions;
 using hagen;
 using System.Windows.Forms;
-using Sidi.Extensions;
 using System.IO;
 
 namespace Sidi

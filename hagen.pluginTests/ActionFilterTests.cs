@@ -34,7 +34,7 @@ namespace hagen.Tests
         {
             Assert.AreEqual(1, af.GetActions("A").ToEnumerable().Count());
             Assert.AreEqual(0, af.GetActions("B").ToEnumerable().Count());
-            af.GetActions("SomeAction").First().Execute();
+            af.GetActions("SomeAction").FirstAsync().Wait().Execute();
             Assert.IsTrue(sampleApp.SomeActionExecuted);
         }
     }

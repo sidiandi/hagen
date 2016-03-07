@@ -38,19 +38,19 @@ namespace hagen.Plugin.Db
 
         public static IEnumerable<Action> GetStartMenuActions()
         {
-            FileActionFactory f = new FileActionFactory();
-
-            var result = new List<Action>();
+            var factory = new FileActionFactory();
 
             return
                 new[]
                 {
-                    new LPath(AllUsersStartMenu),
-                    Sidi.IO.Paths.GetFolderPath(Environment.SpecialFolder.StartMenu),
-                    Sidi.IO.Paths.GetFolderPath(Environment.SpecialFolder.MyDocuments).CatDir("My RoboForm Data")
+                    Find.AllFiles(new LPath(AllUsersStartMenu)),
+                    Find.AllFiles(Sidi.IO.Paths.GetFolderPath(Environment.SpecialFolder.StartMenu)),
+                    Find.AllFiles(Sidi.IO.Paths.GetFolderPath(Environment.SpecialFolder.MyDocuments).CatDir("My RoboForm Data"))
+                        .Where(_ => !_.FullName.Parts.Contains("obsolete"))
                 }
+                .SelectMany(_ => _)
                 .Where(x => x.Exists)
-                .SelectMany(p => f.Recurse(p));
+                .Select(_ => factory.FromFile(_));
         }
 
         public static IEnumerable<Action> GetPathExecutables()

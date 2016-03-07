@@ -22,7 +22,6 @@ namespace hagen
 
         T Create<T>(Type t)
         {
-            object plugin = null;
             var contextCtor = t.GetConstructor(new Type[] { typeof(IContext) });
             if (contextCtor != null)
             {

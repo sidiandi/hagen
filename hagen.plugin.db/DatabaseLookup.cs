@@ -48,7 +48,7 @@ namespace hagen.Plugin.Db
         {
             query = query.OneLine(80).Trim();
 
-            using (new LogScope(log.Info, "qurey: {0}", query))
+            using (new LogScope(log.Info, "query: {0}", query))
             {
                 var cmd = actions.Connection.CreateCommand();
 

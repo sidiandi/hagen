@@ -8,6 +8,9 @@ using System.Reactive.Concurrency;
 
 namespace hagen
 {
+    /// <summary>
+    /// Converts an IActionSource instance into an IActionSource2 instance.
+    /// </summary>
     internal class AdapterIActionSource : IActionSource2
     {
         private static readonly log4net.ILog log = log4net.LogManager.GetLogger(System.Reflection.MethodBase.GetCurrentMethod().DeclaringType);

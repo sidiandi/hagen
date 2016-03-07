@@ -31,11 +31,18 @@ namespace hagen.Plugin.Db
 
         public Action FromFile(LPath file)
         {
+            return FromFile(file.Info);
+        }
+
+        public Action FromFile(IFileSystemInfo fileSystemInfo)
+        {
+            var file = fileSystemInfo.FullName;
+
             var action = new Action()
             {
                 Name = file.IsRoot ? file.StringRepresentation : file.FileName,
                 CommandObject = StartProcess.FromFileName(file),
-                LastUseTime = file.Info.LastWriteTimeUtc,
+                LastUseTime = fileSystemInfo.LastWriteTimeUtc,
             };
             log.InfoFormat("Created action for {0}", file);
             return action;
@@ -57,9 +64,9 @@ namespace hagen.Plugin.Db
         
         public int Levels { set; get; }
 
-        public IEnumerable<Action> Recurse(LPath root)
+        public IEnumerable<Action> CreateActions(IEnumerable<IFileSystemInfo> fileSystemInfos)
         {
-            return Sidi.IO.Find.AllFiles(root).Select(x => FromFile(x.ToString()));
+            return fileSystemInfos.Select(x => FromFile(x));
         }
     }
 }

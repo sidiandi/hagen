@@ -242,19 +242,26 @@ namespace hagen.Plugin.Db
         {
             System.Drawing.Icon icon = null;
 
-            if (FileName.StartsWith("http://"))
+            if (String.IsNullOrEmpty(FileName))
             {
-                return BrowserIcon;
             }
             else
             {
-                if (Directory.Exists(FileName))
+                if (FileName.StartsWith("http://"))
                 {
-                    icon = IconReader.GetFolderIcon(IconReader.IconSize.Large, IconReader.FolderType.Closed);
+                    return BrowserIcon;
                 }
-                else
+                else if (LPath.IsValidFilename(FileName))
                 {
-                    icon = IconReader.GetFileIcon(FileName, IconReader.IconSize.Large, false);
+                    var p = new LPath(FileName);
+                    if (p.IsDirectory)
+                    {
+                        icon = IconReader.GetFolderIcon(IconReader.IconSize.Large, IconReader.FolderType.Closed);
+                    }
+                    else if (p.IsFile)
+                    {
+                        icon = IconReader.GetFileIcon(p, IconReader.IconSize.Large, false);
+                    }
                 }
             }
             return icon;

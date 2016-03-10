@@ -242,7 +242,10 @@ namespace hagen
         {
             System.Drawing.Icon icon = null;
 
-            if (!String.IsNullOrEmpty(FileName))
+            if (String.IsNullOrEmpty(FileName))
+            {
+            }
+            else
             {
                 if (FileName.StartsWith("http://"))
                 {

@@ -92,24 +92,9 @@ namespace hagen
         static void KillAlreadyRunning()
         {
             Process thisProcess = Process.GetCurrentProcess();
-            string thisProcessFileName = Path.GetFileName(thisProcess.MainModule.FileName);
-            foreach (var p in Process.GetProcesses().Where(x =>
-                {
-                    try
-                    {
-                        if (x.Id == thisProcess.Id)
-                        {
-                            return false;
-                        }
-
-                        string fn = Path.GetFileName(x.MainModule.FileName);
-                        return fn == thisProcessFileName;
-                    }
-                    catch (Exception)
-                    {
-                        return false;
-                    }
-                }))
+            var thisProcessName = thisProcess.ProcessName;
+            foreach (var p in Process.GetProcesses()
+                .Where(x => (x.Id != thisProcess.Id) && object.Equals(thisProcessName, x.ProcessName)))
             {
                 p.Kill();
             }

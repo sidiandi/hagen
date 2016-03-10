@@ -11,15 +11,14 @@ namespace hagen.Plugin.Db
     {
         static StartProcess GetStartProcess(IAction a)
         {
-            try
-            {
-                var commandObject = ((ActionWrapper)a).Action.CommandObject;
-                return ((StartProcess)commandObject);
-            }
-            catch
+            var actionWrapper = a as ActionWrapper;
+            if (actionWrapper == null)
             {
                 return null;
             }
+
+            var startProcess = actionWrapper.Action.CommandObject as StartProcess;
+            return startProcess;
         }
 
         static LPath GetPath(IAction a)

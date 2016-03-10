@@ -21,6 +21,7 @@ using System.Linq;
 using System.Text;
 using System.Diagnostics;
 using System.IO;
+using Sidi.IO;
 
 namespace hagen
 {
@@ -89,13 +90,17 @@ namespace hagen
             }
             else
             {
-                if (Directory.Exists(FileName))
+                if (LPath.IsValidFilename(FileName))
                 {
-                    icon = IconReader.GetFolderIcon(IconReader.IconSize.Large, IconReader.FolderType.Closed);
-                }
-                else
-                {
-                    icon = IconReader.GetFileIcon(FileName, IconReader.IconSize.Large, false);
+                    var p = new LPath(FileName);
+                    if (p.IsDirectory)
+                    {
+                        icon = IconReader.GetFolderIcon(IconReader.IconSize.Large, IconReader.FolderType.Closed);
+                    }
+                    else if (p.IsFile)
+                    {
+                        icon = IconReader.GetFileIcon(p, IconReader.IconSize.Large, false);
+                    }
                 }
             }
             return icon;

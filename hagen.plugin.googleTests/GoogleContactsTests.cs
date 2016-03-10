@@ -12,11 +12,12 @@ using Sidi.IO;
 using Google.GData.Client;
 using Google.Contacts;
 using Sidi.Extensions;
+using Sidi.Test;
 
 namespace hagen.plugin.google.Tests
 {
     [TestFixture()]
-    public class GoogleContactsTests
+    public class GoogleContactsTests : TestBase
     {
         private static readonly log4net.ILog log = log4net.LogManager.GetLogger(System.Reflection.MethodBase.GetCurrentMethod().DeclaringType);
 

@@ -44,10 +44,8 @@
     <Compile Include="FileGroupDescriptor.cs" />
     <Compile Include="globalKeyboardHook.cs" />
     <Compile Include="Hagen.cs" />
-    <Compile Include="ICommand.cs" />
     <Compile Include="InputAggregator.cs" />
     <Compile Include="InputEx.cs" />
-    <Compile Include="InsertText.cs" />
     <Compile Include="HumanInterfaceDeviceMonitor.cs" />
     <Compile Include="InternetShortcut.cs" />
     <Compile Include="IObservable.cs" />
@@ -73,7 +71,6 @@
     </Compile>
     <Compile Include="AsyncQuery.cs" />
     <Compile Include="RxExtensions.cs" />
-    <Compile Include="StartProcess.cs" />
     <Compile Include="StringEx.cs" />
     <Compile Include="TimeIntervalExtensions.cs" />
     <Compile Include="UserInterfaceState.cs" />

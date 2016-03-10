@@ -94,7 +94,6 @@
   <ItemGroup>
     <Compile Include="HumanInterfaceDeviceMonitorTests.cs" />
     <Compile Include="InputAggregatorTests.cs" />
-    <Compile Include="InsertTextTests.cs" />
     <Compile Include="LastExecutedDbStoreTests.cs" />
     <Compile Include="ProgramUseAggregatorTests.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />

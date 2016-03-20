@@ -304,20 +304,22 @@ namespace hagen
 
         public void Properties()
         {
-            var storable = SelectedActions
-                .OfType<IStorable>()
-                .FirstOrDefault();
+            var actionToEdit = SelectedActions.FirstOrDefault();
 
-            if (storable != null)
+            var dlg = new ActionProperties
             {
-                ActionProperties dlg = new ActionProperties();
-                dlg.EditedObject = storable;
-                if (dlg.ShowDialog() == DialogResult.OK)
+                EditedObject = actionToEdit
+            };
+
+            if (dlg.ShowDialog() == DialogResult.OK)
+            {
+                var storable = actionToEdit as IStorable;
+                if (storable != null)
                 {
                     storable.Store();
                 }
-                UpdateResult();
             }
+            UpdateResult();
         }
     }
 }

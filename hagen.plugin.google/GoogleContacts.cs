@@ -14,6 +14,8 @@ using System.Reactive.Linq;
 using System.Text.RegularExpressions;
 using Google.Apis.Util.Store;
 using Google.Apis.Auth.OAuth2;
+using System.Diagnostics;
+using System.ComponentModel;
 
 namespace hagen.plugin.google
 {
@@ -21,54 +23,80 @@ namespace hagen.plugin.google
     {
         private static readonly log4net.ILog log = log4net.LogManager.GetLogger(System.Reflection.MethodBase.GetCurrentMethod().DeclaringType);
 
+        string scope = "https://www.google.com/m8/feeds";
         readonly IContext context;
 
         public GoogleContacts(IContext context)
         {
             this.context = context;
-
-            /*
-            var secrets = Paths.BinDir.CatDir("client_secret_292564741141-6fa0tqv21ro1v8s28gj4upei0muvuidm.apps.googleusercontent.com.json").Read(GoogleClientSecrets.Load).Secrets;
-
-            var credential = GoogleWebAuthorizationBroker.AuthorizeAsync(
-                    secrets,
-                    new string[] { "https://www.google.com/m8/feeds" },
-                    "andreas.grimme@gmx.net",
-                    CancellationToken.None,
-                    new FileDataStore("Contacts3")).Result;
-
-            oAuth2Parameters = new OAuth2Parameters()
-            {
-                ClientId = secrets.ClientId,
-                ClientSecret = secrets.ClientSecret,
-                RedirectUri = redirectUri,
-                Scope = "https://www.google.com/m8/feeds",
-                AccessToken = credential.Token.AccessToken,
-                RefreshToken = credential.Token.RefreshToken,
-            };
-            */
+            new CredentialManagement.CredentialProvider(scope).GetCredential();
         }
 
         OAuth2Parameters oAuth2Parameters;
 
+        static bool HasPrefix(string query, string prefix, out string subQuery)
+        {
+            var parts = Sidi.Util.Tokenizer.ToList(query);
+            if (parts.Any() && Sidi.CommandLine.Parser.IsMatch(parts[0], prefix))
+            {
+                subQuery = parts.Skip(1).Join(" ");
+                return true;
+            }
+            else
+            {
+                subQuery = null;
+                return false;
+            }
+        }
+
         IEnumerable<IAction> IActionSource.GetActions(string query)
         {
+            var contact = "Contact";
+
+            if (!HasPrefix(query, contact, out query))
+            {
+                goto nothing;
+            }
+
             if (!Regex.IsMatch(query, @"^[\s\w]{4,200}$"))
             {
-                return Enumerable.Empty<IAction>();
+                goto nothing;
             }
 
             var entries = ReadContacts(query);
 
             log.Info(entries.ListFormat());
 
-            return entries.Select(e =>
-            {
-                return (IAction)new SimpleAction(this.context.LastExecutedStore, e.ToString(), e.ToString(), () =>
-                {
-                });
+            return entries.Select(e => (IAction)new ContactAction(this.context.LastExecutedStore, e));
 
-            });
+            nothing:
+                return Enumerable.Empty<IAction>();
+        }
+
+        public class ContactAction : ActionBase
+        {
+            [Browsable(true)]
+            [TypeConverter(typeof(ExpandableObjectConverter))]
+            public Contact Contact
+            {
+                get; private set;
+            }
+
+            public ContactAction(ILastExecutedStore lastExecutedStore, Contact contact)
+                : base(lastExecutedStore)
+            {
+                var name = String.Format("{0}: {1}", "Contact", contact.ToString());
+                this.Name = name;
+                this.Id = name;
+                this.Contact = contact;
+            }
+
+            public override void Execute()
+            {
+                var id = Contact.Self.Split(new[] { '/' }).Last();
+                var uri = String.Format("https://contacts.google.com/u/0/preview/{0}", id);
+                Process.Start(uri);
+            }
         }
 
         IList<Contact> ReadContacts(string query)
@@ -83,31 +111,34 @@ namespace hagen.plugin.google
         {
             var secrets = Paths.BinDir.CatDir("client_secret_292564741141-6fa0tqv21ro1v8s28gj4upei0muvuidm.apps.googleusercontent.com.json").Read(GoogleClientSecrets.Load).Secrets;
 
-            var credential = await GoogleWebAuthorizationBroker.AuthorizeAsync(
-                    secrets,
-                    new string[] { "https://www.google.com/m8/feeds" },
-                    "andreas.grimme@gmx.net",
-                    CancellationToken.None,
-                    null);
-
-            var parameters = new Google.GData.Client.OAuth2Parameters()
+            for (var cp = new CredentialManagement.CredentialProvider(scope); ; cp.Reset())
             {
-                ClientId = secrets.ClientId,
-                ClientSecret = secrets.ClientSecret,
-                RedirectUri = redirectUri,
-                Scope = "https://www.google.com/m8/feeds",
-                AccessToken = credential.Token.AccessToken,
-                RefreshToken = credential.Token.RefreshToken,
-            };
+                var credential = await GoogleWebAuthorizationBroker.AuthorizeAsync(
+                        secrets,
+                        new string[] { "https://www.google.com/m8/feeds" },
+                        cp.GetCredential().UserName,
+                        CancellationToken.None,
+                        null);
 
-            var contacts = new ContactsRequest(new RequestSettings("hagen", parameters));
-            var q = new FeedQuery("https://www.google.com/m8/feeds/contacts/default/full")
-            {
-                Query = query
-            };
-            var feed = contacts.Get<Contact>(q);
-            var entries = feed.Entries.ToList();
-            return entries;
+                var parameters = new Google.GData.Client.OAuth2Parameters()
+                {
+                    ClientId = secrets.ClientId,
+                    ClientSecret = secrets.ClientSecret,
+                    RedirectUri = redirectUri,
+                    Scope = scope,
+                    AccessToken = credential.Token.AccessToken,
+                    RefreshToken = credential.Token.RefreshToken,
+                };
+
+                var contacts = new ContactsRequest(new RequestSettings("hagen", parameters));
+                var q = new FeedQuery("https://www.google.com/m8/feeds/contacts/default/full")
+                {
+                    Query = query
+                };
+                var feed = contacts.Get<Contact>(q);
+                var entries = feed.Entries.ToList();
+                return entries;
+            }
         }
     }
 }

@@ -93,7 +93,7 @@
       <Private>True</Private>
     </Reference>
     <Reference Include="nunit.framework, Version=3.0.5813.39031, Culture=neutral, PublicKeyToken=2638cd05610744eb, processorArchitecture=MSIL">
-      <HintPath>..\packages\NUnit.3.0.1\lib\net45\nunit.framework.dll</HintPath>
+      <HintPath>..\packages\NUnitTDNet.3.0.1.0\lib\net45\nunit.framework.dll</HintPath>
       <Private>True</Private>
     </Reference>
     <Reference Include="protobuf-net, Version=2.0.0.668, Culture=neutral, PublicKeyToken=257b51d87d2e4d67, processorArchitecture=MSIL">
@@ -151,6 +151,10 @@
     <None Include="packages.config" />
   </ItemGroup>
   <ItemGroup>
+    <ProjectReference Include="..\CredentialManagement\CredentialManagement.csproj">
+      <Project>{c7beae0b-d485-42ce-a11e-b6d0cd67e726}</Project>
+      <Name>CredentialManagement</Name>
+    </ProjectReference>
     <ProjectReference Include="..\hagen.plugin.google\hagen.plugin.google.csproj">
       <Project>{DCCF9122-A232-46E8-BC4E-608533BEABAC}</Project>
       <Name>hagen.plugin.google</Name>

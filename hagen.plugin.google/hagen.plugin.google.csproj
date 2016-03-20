@@ -151,6 +151,10 @@
     </Reference>
   </ItemGroup>
   <ItemGroup>
+    <ProjectReference Include="..\CredentialManagement\CredentialManagement.csproj">
+      <Project>{c7beae0b-d485-42ce-a11e-b6d0cd67e726}</Project>
+      <Name>CredentialManagement</Name>
+    </ProjectReference>
     <ProjectReference Include="..\hagen.plugin\hagen.plugin.csproj">
       <Project>{9bf01205-1bd3-4121-909d-16cec6d47143}</Project>
       <Name>hagen.plugin</Name>

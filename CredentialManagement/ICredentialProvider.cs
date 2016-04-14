@@ -13,7 +13,7 @@ namespace CredentialManagement
     /// <summary>
     /// Supplies a credential for a certain purpose
     /// </summary>
-    interface ICredentialProvider
+    public interface ICredentialProvider
     {
         NetworkCredential GetCredential();
         

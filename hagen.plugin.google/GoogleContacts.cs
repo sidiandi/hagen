@@ -25,11 +25,13 @@ namespace hagen.plugin.google
 
         string scope = "https://www.google.com/m8/feeds";
         readonly IContext context;
+        CredentialManagement.ICredentialProvider credentialProvider;
 
         public GoogleContacts(IContext context)
         {
             this.context = context;
-            new CredentialManagement.CredentialProvider(scope).GetCredential();
+            credentialProvider = new CredentialManagement.CredentialProvider(scope);
+            credentialProvider.GetCredential();
         }
 
         OAuth2Parameters oAuth2Parameters;
@@ -111,12 +113,12 @@ namespace hagen.plugin.google
         {
             var secrets = Paths.BinDir.CatDir("client_secret_292564741141-6fa0tqv21ro1v8s28gj4upei0muvuidm.apps.googleusercontent.com.json").Read(GoogleClientSecrets.Load).Secrets;
 
-            for (var cp = new CredentialManagement.CredentialProvider(scope); ; cp.Reset())
+            for (; ; credentialProvider.Reset())
             {
                 var credential = await GoogleWebAuthorizationBroker.AuthorizeAsync(
                         secrets,
                         new string[] { "https://www.google.com/m8/feeds" },
-                        cp.GetCredential().UserName,
+                        credentialProvider.GetCredential().UserName,
                         CancellationToken.None,
                         null);
 

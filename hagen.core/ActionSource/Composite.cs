@@ -39,7 +39,12 @@ namespace hagen.ActionSource
 
         public IObservable<IAction> GetActions(string query)
         {
-            return Sources.SafeSelect(source => source.GetActions(query)).Merge();
+            var actionObservables = Sources.SafeSelect(source =>
+            {
+                log.Info(source);
+                return source.GetActions(query);
+            }).ToList();
+            return actionObservables.Merge();
         }
 
         public IList<IActionSource2> Sources;

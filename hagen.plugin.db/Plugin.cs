@@ -91,6 +91,7 @@ namespace hagen.Plugin.Db
             this.actionsSqlitePath = actionsSqlitePath;
             actions = new Sidi.Persistence.Collection<Action>(actionsSqlitePath);
             lookup = new DatabaseLookup(actions);
+            // lookupExecutableWithArguments = new DatabaseLookupExecutableWithArguments(actions);
 
             // 
             // startMenuToolStripMenuItem
@@ -216,8 +217,16 @@ namespace hagen.Plugin.Db
 
         public bool IncludeInSearch
         {
-            get { return lookup.IncludeInSearch; }
-            set { lookup.IncludeInSearch = value; }
+            get
+            {
+                return lookup.IncludeInSearch;
+            }
+
+            set
+            {
+                lookup.IncludeInSearch = value;
+                // lookupExecutableWithArguments.IncludeInSearch = value;
+            }
         }
         public bool AcceptDrop { get; set; }
 
@@ -287,6 +296,7 @@ namespace hagen.Plugin.Db
         }
 
         DatabaseLookup lookup;
+        DatabaseLookupExecutableWithArguments lookupExecutableWithArguments;
 
         public IEnumerable<IActionSource2> GetActionSources()
         {

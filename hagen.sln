@@ -60,6 +60,10 @@ Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "CredentialManagementTests",
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "CredentialManagementTestProgram", "CredentialManagementTestProgram\CredentialManagementTestProgram.csproj", "{DF9ADBB0-705D-4DDE-8A4C-D51A55F9E411}"
 EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "hagen.plugin.office", "hagen.plugin.office\hagen.plugin.office.csproj", "{10DBA5BB-2710-4AD2-8021-6B9026D1BFDA}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "hagen.plugin.officeTests", "hagen.plugin.officeTests\hagen.plugin.officeTests.csproj", "{D540232C-5F5F-43D2-B649-9D1148792A89}"
+EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		Debug|Any CPU = Debug|Any CPU
@@ -286,6 +290,30 @@ Global
 		{DF9ADBB0-705D-4DDE-8A4C-D51A55F9E411}.Release|x64.Build.0 = Release|Any CPU
 		{DF9ADBB0-705D-4DDE-8A4C-D51A55F9E411}.Release|x86.ActiveCfg = Release|Any CPU
 		{DF9ADBB0-705D-4DDE-8A4C-D51A55F9E411}.Release|x86.Build.0 = Release|Any CPU
+		{10DBA5BB-2710-4AD2-8021-6B9026D1BFDA}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{10DBA5BB-2710-4AD2-8021-6B9026D1BFDA}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{10DBA5BB-2710-4AD2-8021-6B9026D1BFDA}.Debug|x64.ActiveCfg = Debug|Any CPU
+		{10DBA5BB-2710-4AD2-8021-6B9026D1BFDA}.Debug|x64.Build.0 = Debug|Any CPU
+		{10DBA5BB-2710-4AD2-8021-6B9026D1BFDA}.Debug|x86.ActiveCfg = Debug|Any CPU
+		{10DBA5BB-2710-4AD2-8021-6B9026D1BFDA}.Debug|x86.Build.0 = Debug|Any CPU
+		{10DBA5BB-2710-4AD2-8021-6B9026D1BFDA}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{10DBA5BB-2710-4AD2-8021-6B9026D1BFDA}.Release|Any CPU.Build.0 = Release|Any CPU
+		{10DBA5BB-2710-4AD2-8021-6B9026D1BFDA}.Release|x64.ActiveCfg = Release|Any CPU
+		{10DBA5BB-2710-4AD2-8021-6B9026D1BFDA}.Release|x64.Build.0 = Release|Any CPU
+		{10DBA5BB-2710-4AD2-8021-6B9026D1BFDA}.Release|x86.ActiveCfg = Release|Any CPU
+		{10DBA5BB-2710-4AD2-8021-6B9026D1BFDA}.Release|x86.Build.0 = Release|Any CPU
+		{D540232C-5F5F-43D2-B649-9D1148792A89}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{D540232C-5F5F-43D2-B649-9D1148792A89}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{D540232C-5F5F-43D2-B649-9D1148792A89}.Debug|x64.ActiveCfg = Debug|Any CPU
+		{D540232C-5F5F-43D2-B649-9D1148792A89}.Debug|x64.Build.0 = Debug|Any CPU
+		{D540232C-5F5F-43D2-B649-9D1148792A89}.Debug|x86.ActiveCfg = Debug|Any CPU
+		{D540232C-5F5F-43D2-B649-9D1148792A89}.Debug|x86.Build.0 = Debug|Any CPU
+		{D540232C-5F5F-43D2-B649-9D1148792A89}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{D540232C-5F5F-43D2-B649-9D1148792A89}.Release|Any CPU.Build.0 = Release|Any CPU
+		{D540232C-5F5F-43D2-B649-9D1148792A89}.Release|x64.ActiveCfg = Release|Any CPU
+		{D540232C-5F5F-43D2-B649-9D1148792A89}.Release|x64.Build.0 = Release|Any CPU
+		{D540232C-5F5F-43D2-B649-9D1148792A89}.Release|x86.ActiveCfg = Release|Any CPU
+		{D540232C-5F5F-43D2-B649-9D1148792A89}.Release|x86.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE

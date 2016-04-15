@@ -181,11 +181,16 @@ namespace hagen.Plugin.Db
             }
         }
 
+        public void UsedNow()
+        {
+            this.LastUseTime = DateTime.UtcNow;
+        }
+
         public void Execute()
         {
             try
             {
-                this.LastUseTime = DateTime.UtcNow;
+                UsedNow();
                 commandObject.Execute();
             }
             catch (Exception e)

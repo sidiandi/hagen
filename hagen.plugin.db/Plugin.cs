@@ -309,7 +309,9 @@ namespace hagen.Plugin.Db
         void Context_DragDrop(object sender, DragEventArgs e)
         {
             if (!AcceptDrop)
-            { return; }
+            {
+                return;
+            }
 
             ClipboardUrl cbUrl;
             if (ClipboardUrl.TryParse(e.Data, out cbUrl))
@@ -327,7 +329,10 @@ namespace hagen.Plugin.Db
             if (pathList != null)
             {
                 context.AddJob(new Job(pathList.ToString(), () => { Add(pathList); }));
+                return;
             }
+
+            log.WarnFormat("Dropped data could not be added. Available formats:\r\n{0}", e.Data.GetFormats().ListFormat());
         }
 
         public void Add(PathList paths)

@@ -134,6 +134,7 @@ namespace hagen.Plugin.Db
         public static void AddOrUpdate(this Collection<Action> actions, Action newAction)
         {
             var ea = actions.Find("Command = @command", "command", newAction.Command);
+            newAction.UsedNow();
             if (ea != null)
             {
                 newAction.Id = ea.Id;

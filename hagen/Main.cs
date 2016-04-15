@@ -372,8 +372,7 @@ Hours: {0:G3}",
 
         void Main_DragEnter(object sender, DragEventArgs e)
         {
-            log.Info(e.Data.GetFormats().ListFormat());
-            e.Effect = DragDropEffects.Copy;
+            e.Effect = e.AllowedEffect;
         }
     }
 }

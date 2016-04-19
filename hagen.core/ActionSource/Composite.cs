@@ -28,16 +28,16 @@ using System.Reactive.Linq;
 
 namespace hagen.ActionSource
 {
-    public class Composite : IActionSource2
+    public class Composite : IActionSource3
     {
         private static readonly log4net.ILog log = log4net.LogManager.GetLogger(System.Reflection.MethodBase.GetCurrentMethod().DeclaringType);
 
-        public Composite(params IActionSource2[] sources)
+        public Composite(params IActionSource3[] sources)
         {
             this.Sources = sources.ToList();
         }
 
-        public IObservable<IAction> GetActions(string query)
+        public IObservable<IResult> GetActions(IQuery query)
         {
             var actionObservables = Sources.SafeSelect(source =>
             {
@@ -47,6 +47,6 @@ namespace hagen.ActionSource
             return actionObservables.Merge();
         }
 
-        public IList<IActionSource2> Sources;
+        public IList<IActionSource3> Sources;
     }
 }

@@ -28,6 +28,7 @@ using System.Reactive.Concurrency;
 using System.Reactive.Subjects;
 using System.Reactive.Linq;
 using System.Windows.Automation;
+using Sidi.Util;
 
 namespace hagen
 {
@@ -115,6 +116,25 @@ namespace hagen
             }
         }
 
+        IAction TryToIAction(Sidi.CommandLine.Action a, string parameterString)
+        {
+            return new SimpleAction(
+                context.LastExecutedStore,
+                a.Name,
+                String.Format("{0}.{1}({3}) ({2})", a.Source.Instance.GetType().Name, a.Name, a.Usage, parameterString),
+                () =>
+                {
+                    if (a.Parameters.Count == 1)
+                    {
+                        a.Handle(new List<string> { parameterString }, true);
+                    }
+                    else
+                    {
+                        a.Handle(Tokenizer.ToList(parameterString), true);
+                    }
+                });
+        }
+
         public IObservable<IAction> GetActions(string query)
         {
             return GetActionsEnum(query).ToObservable(ThreadPoolScheduler.Instance);
@@ -137,41 +157,27 @@ namespace hagen
         {
             var p = Regex.Split(query, @"[.\s]+");
 
-            var a = Actions;
-
-            var selection = a.AsEnumerable();
-
             if (
                 object.Equals(query, "?") ||
                 object.Equals(query, "help"))
             {
+                return Actions.Select(i => ToIAction(i));
             }
-            else
+
+            if (p.Length == 0)
             {
-
-                if (p.Length > 1)
-                {
-                    selection = selection
-                        .Where(i =>
-                        {
-                            return
-                                Parser.IsMatch(p[0], i.Source.Instance.GetType().Name) &&
-                                Parser.IsMatch(p[p.Length - 1], i.Name);
-                        });
-                }
-                else
-                {
-                    selection = selection
-                        .Where(i =>
-                        {
-                            return
-                                Parser.IsMatch(p[0], i.Source.Instance.GetType().Name) ||
-                                Parser.IsMatch(p[0], i.Name);
-                        });
-                }
+                return Actions.Where(i =>
+                    Parser.IsMatch(p[0], i.Source.Instance.GetType().Name) ||
+                    Parser.IsMatch(p[0], i.Name))
+                    .Select(i => ToIAction(i));
             }
 
-            return selection.Select(i => ToIAction(i));
+            var parameterString = query.Substring(p[0].Length).Trim();
+
+            return Actions.Where(i =>
+                Parser.IsMatch(p[0], i.Name))
+                .Select(i => TryToIAction(i, parameterString))
+                .Where(a => a != null);
         }
 
     }

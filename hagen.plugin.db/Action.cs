@@ -191,7 +191,19 @@ namespace hagen.Plugin.Db
             try
             {
                 UsedNow();
-                commandObject.Execute();
+                if (System.Windows.Forms.Control.ModifierKeys == Keys.Shift)
+                {
+                    var sp = commandObject as StartProcess;
+                    if (sp != null)
+                    {
+                        Clipboard.SetText(sp.FileName);
+                        SendKeys.Send("+{INS}");
+                    }
+                }
+                else
+                {
+                    commandObject.Execute();
+                }
             }
             catch (Exception e)
             {

@@ -68,6 +68,8 @@ namespace hagen
 
             main = new Main(hagen);
             hagen.Context.MainMenu = main.MainMenuStrip;
+            hagen.Context.TagsSource = () => main.searchBox1.Query.Tags as IReadOnlyCollection<string>;
+
 
             logViewer.AsDockContent().Show(main.dockPanel, WeifenLuo.WinFormsUI.Docking.DockState.DockBottom);
         }

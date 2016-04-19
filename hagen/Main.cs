@@ -75,12 +75,7 @@ namespace hagen
 
             var pluginProvider = new PluginProvider(hagen.Context, new PathList() { Paths.BinDir });
 
-            var actionSource = new Composite(
-                        new IActionSource2[]
-                        {
-                            // new DatabaseLookup(actions)
-                        }
-                        .Concat(pluginProvider.GetActionSources()).ToArray());
+            var actionSource = new Composite(pluginProvider.GetActionSources().ToArray());
 
             searchBox1 = new SearchBox(actionSource)
             {
@@ -167,7 +162,7 @@ namespace hagen
         }
 
         public DockPanel dockPanel;
-        SearchBox searchBox1;
+        public SearchBox searchBox1;
         Hagen hagen;
 
         public Main(Hagen hagen)
@@ -222,7 +217,7 @@ namespace hagen
                 if (lastCLipboardHash != hash)
                 {
                     lastCLipboardHash = hash;
-                    searchBox1.Query = t.Truncate(4096);
+                    searchBox1.QueryText = t.Truncate(4096);
                 }
             }
             searchBox1.Start();

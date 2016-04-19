@@ -10,7 +10,7 @@ namespace hagen
 {
     public class ActionChooser
     {
-        class SimpleActionSource : IActionSource2
+        class SimpleActionSource : IActionSource2, IActionSource3
         {
             public SimpleActionSource(IList<IAction> actions)
             {
@@ -30,6 +30,11 @@ namespace hagen
 
                 return actions.Where(x => regex.IsMatch(x.Name)).ToObservable();
             }
+
+            public IObservable<IResult> GetActions(IQuery query)
+            {
+                return GetActions(query.Text).Select(_ => _.ToResult());
+            }
         }
 
         public static void Choose(IList<IAction> actions)
@@ -48,7 +53,7 @@ namespace hagen
                     f.Close();
                 };
 
-                f.Shown += (s, e) => { sb.Query = String.Empty; };
+                f.Shown += (s, e) => { sb.QueryText = String.Empty; };
                 f.ShowDialog();
             }
         }

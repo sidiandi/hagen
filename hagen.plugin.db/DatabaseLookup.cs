@@ -28,7 +28,7 @@ using Sidi.Extensions;
 
 namespace hagen.Plugin.Db
 {
-    public class DatabaseLookup : IActionSource2
+    public class DatabaseLookup : IActionSource3
     {
         private static readonly log4net.ILog log = log4net.LogManager.GetLogger(System.Reflection.MethodBase.GetCurrentMethod().DeclaringType);
 
@@ -44,47 +44,59 @@ namespace hagen.Plugin.Db
             yield return new ActionWrapper(action, actions);
         }
 
-        IEnumerable<IAction> GetActionsEnum(string query)
+        IEnumerable<IResult> GetActionsEnum(IQuery query)
         {
-            query = query.OneLine(80).Trim();
+            var terms = Tokenizer.ToList(query.Text.OneLine(80));
 
-            using (new LogScope(log.Info, "query: {0}", query))
+            foreach (var i in GetResults(terms.Concat(query.Tags)))
             {
-                var cmd = actions.Connection.CreateCommand();
-
-                var p = cmd.CreateParameter();
-                p.ParameterName = "$p";
-                p.DbType = System.Data.DbType.String;
-                p.Value = "%" + query.Truncate(0x100) + "%";
-                cmd.Parameters.Add(p);
-
-                if (String.IsNullOrEmpty(query) || query.Length <= 2)
-                {
-                    cmd.CommandText = String.Format("select oid from {1} where Name like {0} order by LastUseTime desc limit 20", p.ParameterName, actions.Table);
-                }
-                else
-                {
-                    cmd.CommandText = String.Format("select oid from {1} where Name like {0} order by LastUseTime desc", p.ParameterName, actions.Table);
-                }
-
-                var r = actions.Query(cmd);
-                return r.SelectMany(action => ToIActions(action)).ToList();
+                i.Priority = Priority.High;
+                yield return i;
             }
+
+            foreach (var i in GetResults(terms))
+            {
+                i.Priority = Priority.Low;
+                yield return i;
+            }
+        }
+
+        IEnumerable<IResult> GetResults(IEnumerable<string> terms)
+        {
+            if (!terms.Any())
+            {
+                return Enumerable.Empty<IResult>();
+            }
+
+            var termsQuery = terms.Select(t => String.Format("Name like {0}", ("%" + t + "%").Quote())).Join(" and ");
+
+            var cmd = actions.Connection.CreateCommand();
+
+            if (terms.Sum(t => t.Length) <= 2)
+            {
+                cmd.CommandText = String.Format("select oid from {1} where {0} order by LastUseTime desc limit 20", termsQuery, actions.Table);
+            }
+            else
+            {
+                cmd.CommandText = String.Format("select oid from {1} where {0} order by LastUseTime desc limit 20", termsQuery, actions.Table);
+            }
+
+            var r = actions.Query(cmd);
+            var results = r.SelectMany(action => ToIActions(action)).Select(a => a.ToResult(Priority.High)).ToList();
+            return results;
         }
 
         public bool IncludeInSearch;
 
-        public IObservable<IAction> GetActions(string query)
+        public IObservable<IResult> GetActions(IQuery query)
         {
             if (!IncludeInSearch)
             {
-                return Observable.Empty<IAction>();
+                return Observable.Empty<IResult>();
             }
 
-            var actions = GetActionsEnum(query);
-            actions = Filters.OpenInVlc(actions);
-
-            return actions.ToObservable(ThreadPoolScheduler.Instance);
+            var results = GetActionsEnum(query);
+            return results.ToObservable(ThreadPoolScheduler.Instance);
         }
     }
 }

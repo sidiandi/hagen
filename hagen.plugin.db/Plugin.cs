@@ -11,7 +11,7 @@ using Sidi.Extensions;
 
 namespace hagen.Plugin.Db
 {
-    class PluginFactory : IPluginFactory
+    class PluginFactory : IPluginFactory3
     {
         private static readonly log4net.ILog log = log4net.LogManager.GetLogger(System.Reflection.MethodBase.GetCurrentMethod().DeclaringType);
         static System.Collections.Specialized.StringCollection EmptyOnNull(System.Collections.Specialized.StringCollection c)
@@ -26,7 +26,7 @@ namespace hagen.Plugin.Db
             }
         }
 
-        public IEnumerable<IPlugin> CreatePlugins(IContext context)
+        public IEnumerable<IPlugin3> CreatePlugins(IContext context)
         {
             var dbPaths = EmptyOnNull(Settings.Default.ActionDatabases);
 
@@ -58,7 +58,7 @@ namespace hagen.Plugin.Db
         }
     }
 
-    class Plugin : IPlugin
+    class Plugin : IPlugin3
     {
         private static readonly log4net.ILog log = log4net.LogManager.GetLogger(System.Reflection.MethodBase.GetCurrentMethod().DeclaringType);
 
@@ -298,9 +298,9 @@ namespace hagen.Plugin.Db
         DatabaseLookup lookup;
         DatabaseLookupExecutableWithArguments lookupExecutableWithArguments;
 
-        public IEnumerable<IActionSource2> GetActionSources()
+        public IEnumerable<IActionSource3> GetActionSources()
         {
-            return new IActionSource2[]
+            return new IActionSource3[]
             {
                 lookup
             };
@@ -308,6 +308,8 @@ namespace hagen.Plugin.Db
 
         void Context_DragDrop(object sender, DragEventArgs e)
         {
+            var tagsPrefix = this.context.Tags.Select(_ => _ + " ").Join(String.Empty);
+
             if (!AcceptDrop)
             {
                 return;
@@ -317,8 +319,9 @@ namespace hagen.Plugin.Db
             if (ClipboardUrl.TryParse(e.Data, out cbUrl))
             {
                 FileActionFactory f = new FileActionFactory();
-                var a = f.FromUrl(cbUrl.Url, cbUrl.Title);
-                actions.AddOrUpdate(a);
+                var action = f.FromUrl(cbUrl.Url, cbUrl.Title);
+                action.Name = tagsPrefix + action.Name;
+                actions.AddOrUpdate(action);
                 return;
             }
 
@@ -328,14 +331,14 @@ namespace hagen.Plugin.Db
             var pathList = Sidi.IO.PathList.Get(e.Data);
             if (pathList != null)
             {
-                context.AddJob(new Job(pathList.ToString(), () => { Add(pathList); }));
+                context.AddJob(new Job(pathList.ToString(), () => { Add(pathList, tagsPrefix); }));
                 return;
             }
 
             log.WarnFormat("Dropped data could not be added. Available formats:\r\n{0}", e.Data.GetFormats().ListFormat());
         }
 
-        public void Add(PathList paths)
+        public void Add(PathList paths, string tagsPrefix)
         {
             using (var actions = OpenActions())
             {
@@ -345,6 +348,7 @@ namespace hagen.Plugin.Db
                 {
                     log.Info(i);
                     var action = f.FromFile(i);
+                    action.Name = tagsPrefix + action.Name;
                     actions.AddOrUpdate(action);
                 }
             }

@@ -22,40 +22,47 @@ namespace hagen.ActionSource
 
         readonly IContext context;
 
-        public IList<IPlugin> Plugins { get; private set; }
+        public IList<IPlugin3> Plugins { get; private set; }
 
-        public IEnumerable<IActionSource2> GetActionSources()
+        public IEnumerable<IActionSource3> GetActionSources()
         {
             return Plugins.SelectMany(p => p.GetActionSources())
                 .Where(x => x != null)
                 .ToList();
         }
 
-        IList<IPlugin> GetPlugins(Assembly assembly)
+        IList<IPlugin3> GetPlugins(Assembly assembly)
         {
             try
             {
                 if (!assembly.FullName.StartsWith("hagen.plugin."))
                 {
-                    return new List<IPlugin>();
+                    return new List<IPlugin3>();
                 }
 
                 log.InfoFormat("Looking for plugins in {0}", assembly.FullName);
                 var types = assembly.GetTypes();
-                return types
+
+                var legacyPlugins = types
                     .Create<IPluginFactory>()
                     .Where(_ => { log.InfoFormat("IPluginFactory: {0}", _.GetType().FullName); return true; })
                     .SelectMany(f => f.CreatePlugins(context))
                     .Where(_ => { log.InfoFormat("  IPlugin: {0}", _.GetType().FullName); return true; })
-                    .ToList();
+                    .Select(_ => _.ToIPlugin3());
+
+                var plugins = types
+                    .Create<IPluginFactory3>()
+                    .SelectMany(f => f.CreatePlugins(context));
+
+                return legacyPlugins.Concat(plugins).ToList();
             }
             catch
             {
-                return new List<IPlugin>();
+                return new List<IPlugin3>();
             }
         }
 
-        IList<IPlugin> GetPlugins(PathList searchPath)
+        IList<IPlugin3> GetPlugins(PathList searchPath)
         {
             var assemblyFiles = searchPath
                 .SelectMany(x => x.GetFiles())

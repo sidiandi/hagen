@@ -113,5 +113,15 @@ namespace hagen
                 this.hagen.activityLogger.inputAggregator;
             }
         }
+
+        public IReadOnlyCollection<string> Tags
+        {
+            get
+            {
+                return TagsSource();
+            }
+        }
+
+        public Func<IReadOnlyCollection<string>> TagsSource { get; set; }
     }
 }

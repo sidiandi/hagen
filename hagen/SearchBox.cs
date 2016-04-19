@@ -42,8 +42,8 @@ namespace hagen
 
         ObjectListView itemView;
 
-        IActionSource2 m_actionSource;
-        IActionSource2 ActionSource
+        IActionSource3 m_actionSource;
+        IActionSource3 ActionSource
         {
             set
             {
@@ -58,20 +58,20 @@ namespace hagen
 
         protected override void Dispose(bool disposing)
         {
-          if (!IsDisposed)
-          {
-            if (disposing)
+            if (!IsDisposed)
             {
-                if (components != null)
+                if (disposing)
                 {
-                    components.Dispose();
-                    components = null;
+                    if (components != null)
+                    {
+                        components.Dispose();
+                        components = null;
+                    }
                 }
+                // Free your own state (unmanaged objects).
+                // Set large fields to null.
             }
-            // Free your own state (unmanaged objects).
-            // Set large fields to null.
-          }
-          base.Dispose(disposing);
+            base.Dispose(disposing);
         }
 
         void SelectItem(int index)
@@ -79,7 +79,7 @@ namespace hagen
             itemView.SelectedIndex = index;
         }
 
-        public SearchBox(IActionSource2 actionSource)
+        public SearchBox(IActionSource3 actionSource)
         {
             int size = 40;
 
@@ -107,31 +107,31 @@ namespace hagen
             };
 
             itemView.Columns.Add(new OLVColumn()
+            {
+                Name = "Icon",
+                AspectGetter = x => ((IResult)x).Action.Name,
+                AspectToStringConverter = x => String.Empty,
+                ImageGetter = x =>
                 {
-                    Name = "Icon",
-                    AspectGetter = x => ((IAction)x).Name,
-                    AspectToStringConverter = x => String.Empty,
-                    ImageGetter = x =>
+                    try
                     {
-                        try
-                        {
-                            var icon = ((IAction)x).Icon;
-                            return icon != null ? icon.ToBitmap() : null;
-                        }
-                        catch
-                        {
-                            return null;
-                        }
-                    },
-                    Width = size,
-                });
+                        var icon = ((IResult)x).Action.Icon;
+                        return icon != null ? icon.ToBitmap() : null;
+                    }
+                    catch
+                    {
+                        return null;
+                    }
+                },
+                Width = size,
+            });
 
             itemView.Columns.Add(new OLVColumn()
             {
                 Name = "Name",
                 AspectGetter = _ =>
                 {
-                    var a = (IAction)_;
+                    var a = ((IResult)_).Action;
                     return String.Format("{0} {1}", a.Name, a.LastExecuted);
                 },
                 WordWrap = true,
@@ -170,38 +170,39 @@ namespace hagen
 
             textBoxQuery.GetTextChangedObservable()
                 .Throttle(TimeSpan.FromMilliseconds(200))
+                .Select(text => Query.Parse(text))
                 .Merge(ManualUpdate)
                 .Select(query => ActionSource.GetActions(query))
                 .ObserveOn(this)
                 .Subscribe(result =>
                     {
-                        actions = new List<IAction>();
+                        results = new List<IResult>();
                         result
                             .ObserveOn(this)
                             .Subscribe(_ =>
                             {
-                                actions = actions.Concat(new IAction[] { _ }).OrderByDescending(x => x.LastExecuted).ToList();
+                                results = results.Concat(new IResult[] { _ }).OrderByDescending(x => x.Priority).ToList();
                                 var si = Math.Max(itemView.SelectedIndex, 0);
-                                itemView.SetObjects(actions);
+                                itemView.SetObjects(results);
                                 itemView.SelectedIndex = si;
                             });
                     });
         }
 
-        Subject<string> ManualUpdate = new Subject<string>();
+        Subject<IQuery> ManualUpdate = new Subject<IQuery>();
 
         void itemView_RetrieveVirtualItem(object sender, RetrieveVirtualItemEventArgs e)
         {
-            e.Item = new ListViewItem(actions[e.ItemIndex].Name);
+            e.Item = new ListViewItem(results[e.ItemIndex].Action.Name);
         }
 
-        IList<IAction> actions;
-        IList<IAction> Actions
+        IList<IResult> results;
+        IList<IResult> Results
         {
             set
             {
-                actions = value;
-                itemView.SetObjects(actions);
+                results = value;
+                itemView.SetObjects(results);
             }
         }
 
@@ -215,22 +216,33 @@ namespace hagen
             textBoxQuery.Focus();
         }
 
-        public string Query
+        public Query Query
         {
             get
             {
-                return textBoxQuery.Text;
+                return Query.Parse(this.textBoxQuery.Text);
             }
 
             set
             {
-                textBoxQuery.Text = value;
+                textBoxQuery.Text = value.BuildQueryString();
+            }
+        }
+
+        public string QueryText
+        {
+            set
+            {
+                var q = Query;
+                q.Text = value;
+                Query = q;
             }
         }
 
         public void Start()
         {
-            textBoxQuery.SelectAll();
+            var q = hagen.Query.Parse(textBoxQuery.Text);
+            textBoxQuery.Select(q.TextBegin, q.TextEnd);
         }
 
         public event EventHandler ItemsActivated;
@@ -252,7 +264,15 @@ namespace hagen
         {
             get
             {
-                return itemView.SelectedObjects.Cast<IAction>();
+                return SelectedResults.Select(_ => _.Action);
+            }
+        }
+
+        public IEnumerable<IResult> SelectedResults
+        {
+            get
+            {
+                return itemView.SelectedObjects.Cast<IResult>();
             }
         }   
 
@@ -299,7 +319,7 @@ namespace hagen
 
         public void UpdateResult()
         {
-            ManualUpdate.OnNext(textBoxQuery.Text);
+            ManualUpdate.OnNext(Query);
         }
 
         public void Properties()

@@ -7,8 +7,9 @@ using System.Text;
 using System.Threading.Tasks;
 using Sidi.Extensions;
 using Sidi.CommandLine;
+using System.Runtime.InteropServices;
 
-namespace Sidi
+namespace hagen.plugin.office
 {
     [Usage("Outlook commands")]
     class Outlook
@@ -19,9 +20,20 @@ namespace Sidi
         {
         }
 
-        [Usage("Add a TO DO item")]
+        [Usage("Add a task item to Outlook")]
+        public void Task(string subject)
+        {
+            Todo(subject);
+        }
+
+        [Usage("Add a To Do item to Outlook")]
         public void Todo(string subject)
         {
+            var app = OutlookExtensions.ProvideApplication();
+            var task = app.CreateTaskItem();
+            task.Subject = subject;
+            task.DueDate = DateTime.Today.AddDays(1);
+            task.Save();
         }
     }
 }

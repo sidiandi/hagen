@@ -103,5 +103,13 @@ namespace hagen.Test
         }
 
         public IInputAggregator Input { get { return null; } }
+
+        public IReadOnlyCollection<string> Tags
+        {
+            get
+            {
+                throw new NotImplementedException();
+            }
+        }
     }
 }

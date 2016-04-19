@@ -30,5 +30,10 @@ namespace hagen
         LPath DocumentDirectory { get; }
 
         IInputAggregator Input { get; }
+
+        /// <summary>
+        /// Currently active tags
+        /// </summary>
+        System.Collections.Generic.IReadOnlyCollection<string> Tags { get; }
     }
 }

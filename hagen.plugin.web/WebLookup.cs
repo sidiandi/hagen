@@ -20,17 +20,19 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 using System.Text.RegularExpressions;
+using System.Reactive.Linq;
+using System.Reactive.Concurrency;
 
 namespace hagen.ActionSource
 {
-    public class WebLookup : IActionSource
+    public class WebLookup : IActionSource3
     {
-        public IEnumerable<IAction> GetActions(string query)
+        public IEnumerable<IResult> GetActionsEnum(IQuery queryObject)
         {
-            query = query.Trim();
+            var query = queryObject.Text.Trim();
             if (Uri.IsWellFormedUriString(query, UriKind.Absolute))
             {
-                yield return new ShellAction(query, String.Format("Open URL {0}", query));
+                yield return new ShellAction(query, String.Format("Open URL {0}", query)).ToResult(Priority.Highest);
             }
             else
             {
@@ -42,25 +44,35 @@ namespace hagen.ActionSource
             }
         }
 
-        IAction WebLookupAction(string title, string urlTemplate, string query)
+        IObservable<IResult> IActionSource3.GetActions(IQuery query)
+        {
+            var results = GetActionsEnum(query);
+            return results.ToObservable(ThreadPoolScheduler.Instance);
+        }
+
+        IResult WebLookupAction(string title, string urlTemplate, string query)
         {
             var lastUsed = DateTime.MinValue;
 
             // try to parse query
             var p = Regex.Split(query, @"\s+");
 
+            var priority = Priority.Low;
+
             if (p.Length >= 2 && title.StartsWith(p[0], StringComparison.InvariantCultureIgnoreCase))
             {
-                lastUsed = DateTime.UtcNow;
+                priority = Priority.High;
                 query = String.Join(" ", p.Skip(1));
             }
 
-            return new ShellAction(
+            var a = new ShellAction(
                 String.Format(urlTemplate, System.Web.HttpUtility.UrlEncode(query)),
                 String.Format("{0} \"{1}\"", title, query))
             {
                 LastExecuted = lastUsed
             };
+
+            return a.ToResult(priority);
         }
     }
 }

@@ -49,7 +49,7 @@ namespace hagen
         }
     }
     
-    public class CommandLineParserActionSource : IActionSource2
+    public class CommandLineParserActionSource : IActionSource3
     {
         private static readonly log4net.ILog log = log4net.LogManager.GetLogger(System.Reflection.MethodBase.GetCurrentMethod().DeclaringType);
 
@@ -135,9 +135,11 @@ namespace hagen
                 });
         }
 
-        public IObservable<IAction> GetActions(string query)
+        public IObservable<IResult> GetActions(IQuery query)
         {
-            return GetActionsEnum(query).ToObservable(ThreadPoolScheduler.Instance);
+            return GetActionsEnum(query.Text)
+                .Select(_ => _.ToResult(Priority.Normal))
+                .ToObservable(ThreadPoolScheduler.Instance);
         }
 
         IList<Sidi.CommandLine.Action> Actions
@@ -179,6 +181,5 @@ namespace hagen
                 .Select(i => TryToIAction(i, parameterString))
                 .Where(a => a != null);
         }
-
     }
 }

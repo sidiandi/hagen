@@ -9,7 +9,7 @@ using Sidi.Extensions;
 
 namespace hagen
 {
-    public class ActionSourceCollector : IPlugin
+    public class ActionSourceCollector : IPlugin3
     {
         private static readonly log4net.ILog log = log4net.LogManager.GetLogger(System.Reflection.MethodBase.GetCurrentMethod().DeclaringType);
 
@@ -37,7 +37,7 @@ namespace hagen
             return default(T);
         }
 
-        public virtual IEnumerable<IActionSource2> GetActionSources()
+        public virtual IEnumerable<IActionSource3> GetActionSources()
         {
             var assembly = GetType().Assembly;
             log.InfoFormat("Looking for action sources in {0}", assembly);
@@ -47,9 +47,13 @@ namespace hagen
                 .Where(t => !t.Name.StartsWith("Test_"))
                 .Select(t =>
                     {
-                        if (typeof(IActionSource2).IsAssignableFrom(t))
+                        if (typeof(IActionSource3).IsAssignableFrom(t))
                         {
-                            return Create<IActionSource2>(t);
+                            return Create<IActionSource3>(t);
+                        }
+                        else if (typeof(IActionSource2).IsAssignableFrom(t))
+                        {
+                            return Create<IActionSource2>(t).ToActionSource3();
                         } 
                         else if (typeof(IActionSource).IsAssignableFrom(t))
                         {
@@ -58,7 +62,7 @@ namespace hagen
                             {
                                 return null;
                             }
-                            return a.ToIActionSource2();
+                            return a.ToIActionSource2().ToActionSource3();
                         }
                         else
                         {

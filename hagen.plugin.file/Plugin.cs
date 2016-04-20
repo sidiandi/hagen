@@ -6,9 +6,9 @@ using System.Threading.Tasks;
 
 namespace hagen
 {
-    class PluginFactory : IPluginFactory
+    class PluginFactory : IPluginFactory3
     {
-        public IEnumerable<IPlugin> CreatePlugins(IContext context)
+        public IEnumerable<IPlugin3> CreatePlugins(IContext context)
         {
             var p = new Plugin();
             p.Init(context);

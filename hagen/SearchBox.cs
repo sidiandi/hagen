@@ -181,7 +181,7 @@ namespace hagen
                             .ObserveOn(this)
                             .Subscribe(_ =>
                             {
-                                results = results.Concat(new IResult[] { _ }).OrderByDescending(x => x.Priority).ToList();
+                                results = results.Concat(new IResult[] { _ }).OrderByDescending(x => x.Priority).ThenByDescending(x => x.Action.LastExecuted).ToList();
                                 var si = Math.Max(itemView.SelectedIndex, 0);
                                 itemView.SetObjects(results);
                                 itemView.SelectedIndex = si;

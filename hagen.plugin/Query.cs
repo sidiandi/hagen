@@ -58,13 +58,17 @@ namespace hagen
                 }
                 tags.Add(tag);
             }
-            var text = queryString.Substring(i);
+            if (tags.Count == 0)
+            {
+                i = 0;
+            }
+            var text = queryString.Substring(i).OneLine(80);
 
             return new Query
             {
                 ParsedString = queryString,
                 TextBegin = i,
-                TextEnd = i + text.Length,
+                TextEnd = queryString.Length,
                 tags = tags,
                 text = text
             };

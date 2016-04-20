@@ -48,16 +48,22 @@ namespace hagen.Plugin.Db
         {
             var terms = Tokenizer.ToList(query.Text.OneLine(80));
 
+            var seen = new HashSet<string>();
+
             foreach (var i in GetResults(terms.Concat(query.Tags)))
             {
                 i.Priority = Priority.High;
+                seen.Add(i.Action.Name);
                 yield return i;
             }
 
             foreach (var i in GetResults(terms))
             {
-                i.Priority = Priority.Low;
-                yield return i;
+                if (!seen.Contains(i.Action.Name))
+                {
+                    i.Priority = Priority.Low;
+                    yield return i;
+                }
             }
         }
 

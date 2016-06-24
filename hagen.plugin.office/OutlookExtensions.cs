@@ -37,5 +37,23 @@ namespace hagen.plugin.office
             var task = (Microsoft.Office.Interop.Outlook.TaskItem)app.CreateItem(Microsoft.Office.Interop.Outlook.OlItemType.olTaskItem);
             return task;
         }
+
+        public static NameSpace GetSession(this Application app)
+        {
+            return app.ActiveExplorer().Session;
+        }
+
+        public static MAPIFolder ProvideFolder(this Application app, OlDefaultFolders root, string name)
+        {
+            var rootFolder = (MAPIFolder) app.GetSession().GetDefaultFolder(root);
+            var existingFolder = rootFolder.Folders.OfType<MAPIFolder>().FirstOrDefault(_ => object.Equals(_.Name, name));
+            if (existingFolder != null)
+            {
+                return existingFolder;
+            }
+
+            var newFolder = rootFolder.Folders.Add(name, System.Reflection.Missing.Value);
+            return newFolder;
+        }
     }
 }

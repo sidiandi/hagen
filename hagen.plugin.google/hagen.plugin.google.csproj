@@ -2,8 +2,7 @@
 <Project ToolsVersion="4.0" DefaultTargets="Build" xmlns="http://schemas.microsoft.com/developer/msbuild/2003">
   <PropertyGroup>
     <ProjectGuid>{DCCF9122-A232-46E8-BC4E-608533BEABAC}</ProjectGuid>
-    <NuGetPackageImportStamp>
-    </NuGetPackageImportStamp>
+    <NuGetPackageImportStamp>5186810f</NuGetPackageImportStamp>
   </PropertyGroup>
   <Import Project="..\build\Common.props" />
   <ItemGroup>
@@ -105,16 +104,16 @@
       <HintPath>..\..\..\Program Files (x86)\Reference Assemblies\Microsoft\Framework\.NETFramework\v4.5.1\System.dll</HintPath>
     </Reference>
     <Reference Include="System.ComponentModel.DataAnnotations" />
-    <Reference Include="System.Data.SQLite, Version=1.0.101.0, Culture=neutral, PublicKeyToken=db937bc2d44ff139, processorArchitecture=MSIL">
-      <HintPath>..\packages\System.Data.SQLite.Core.1.0.101.0\lib\net451\System.Data.SQLite.dll</HintPath>
+    <Reference Include="System.Data.SQLite, Version=1.0.102.0, Culture=neutral, PublicKeyToken=db937bc2d44ff139, processorArchitecture=MSIL">
+      <HintPath>..\packages\System.Data.SQLite.Core.1.0.102.0\lib\net451\System.Data.SQLite.dll</HintPath>
       <Private>True</Private>
     </Reference>
-    <Reference Include="System.Data.SQLite.EF6, Version=1.0.101.0, Culture=neutral, PublicKeyToken=db937bc2d44ff139, processorArchitecture=MSIL">
-      <HintPath>..\packages\System.Data.SQLite.EF6.1.0.101.0\lib\net451\System.Data.SQLite.EF6.dll</HintPath>
+    <Reference Include="System.Data.SQLite.EF6, Version=1.0.102.0, Culture=neutral, PublicKeyToken=db937bc2d44ff139, processorArchitecture=MSIL">
+      <HintPath>..\packages\System.Data.SQLite.EF6.1.0.102.0\lib\net451\System.Data.SQLite.EF6.dll</HintPath>
       <Private>True</Private>
     </Reference>
-    <Reference Include="System.Data.SQLite.Linq, Version=1.0.101.0, Culture=neutral, PublicKeyToken=db937bc2d44ff139, processorArchitecture=MSIL">
-      <HintPath>..\packages\System.Data.SQLite.Linq.1.0.101.0\lib\net451\System.Data.SQLite.Linq.dll</HintPath>
+    <Reference Include="System.Data.SQLite.Linq, Version=1.0.102.0, Culture=neutral, PublicKeyToken=db937bc2d44ff139, processorArchitecture=MSIL">
+      <HintPath>..\packages\System.Data.SQLite.Linq.1.0.102.0\lib\net451\System.Data.SQLite.Linq.dll</HintPath>
       <Private>True</Private>
     </Reference>
     <Reference Include="System.Net" />
@@ -172,9 +171,9 @@
     </PropertyGroup>
     <Error Condition="!Exists('..\packages\Microsoft.Bcl.Build.1.0.21\build\Microsoft.Bcl.Build.targets')" Text="$([System.String]::Format('$(ErrorText)', '..\packages\Microsoft.Bcl.Build.1.0.21\build\Microsoft.Bcl.Build.targets'))" />
     <Error Condition="!Exists('..\packages\GitVersionTask.3.5.4\build\dotnet\GitVersionTask.targets')" Text="$([System.String]::Format('$(ErrorText)', '..\packages\GitVersionTask.3.5.4\build\dotnet\GitVersionTask.targets'))" />
-    <Error Condition="!Exists('..\packages\System.Data.SQLite.Core.1.0.101.0\build\net451\System.Data.SQLite.Core.targets')" Text="$([System.String]::Format('$(ErrorText)', '..\packages\System.Data.SQLite.Core.1.0.101.0\build\net451\System.Data.SQLite.Core.targets'))" />
+    <Error Condition="!Exists('..\packages\System.Data.SQLite.Core.1.0.102.0\build\net451\System.Data.SQLite.Core.targets')" Text="$([System.String]::Format('$(ErrorText)', '..\packages\System.Data.SQLite.Core.1.0.102.0\build\net451\System.Data.SQLite.Core.targets'))" />
   </Target>
   <Import Project="..\packages\Microsoft.Bcl.Build.1.0.21\build\Microsoft.Bcl.Build.targets" Condition="Exists('..\packages\Microsoft.Bcl.Build.1.0.21\build\Microsoft.Bcl.Build.targets')" />
   <Import Project="..\packages\GitVersionTask.3.5.4\build\dotnet\GitVersionTask.targets" Condition="Exists('..\packages\GitVersionTask.3.5.4\build\dotnet\GitVersionTask.targets')" />
-  <Import Project="..\packages\System.Data.SQLite.Core.1.0.101.0\build\net451\System.Data.SQLite.Core.targets" Condition="Exists('..\packages\System.Data.SQLite.Core.1.0.101.0\build\net451\System.Data.SQLite.Core.targets')" />
+  <Import Project="..\packages\System.Data.SQLite.Core.1.0.102.0\build\net451\System.Data.SQLite.Core.targets" Condition="Exists('..\packages\System.Data.SQLite.Core.1.0.102.0\build\net451\System.Data.SQLite.Core.targets')" />
 </Project>

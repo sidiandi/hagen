@@ -1,4 +1,4 @@
-﻿namespace CredentialManagement
+﻿namespace Sidi.CredentialManagement
 {
     public enum PersistanceType : uint
     {

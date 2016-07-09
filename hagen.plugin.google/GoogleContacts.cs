@@ -25,12 +25,12 @@ namespace hagen.plugin.google
 
         string scope = "https://www.google.com/m8/feeds";
         readonly IContext context;
-        CredentialManagement.ICredentialProvider credentialProvider;
+        Sidi.CredentialManagement.ICredentialProvider credentialProvider;
 
         public GoogleContacts(IContext context)
         {
             this.context = context;
-            credentialProvider = new CredentialManagement.CredentialProvider(scope);
+            credentialProvider = Sidi.CredentialManagement.Factory.GetCredentialProvider(scope);
             credentialProvider.GetCredential();
         }
 

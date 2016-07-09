@@ -4,7 +4,7 @@ using System.Drawing;
 using System.Runtime.InteropServices;
 using System.Text;
 
-namespace CredentialManagement
+namespace Sidi.CredentialManagement
 {
     public class XPPrompt : BaseCredentialsPrompt
     {

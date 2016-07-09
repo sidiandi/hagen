@@ -6,7 +6,7 @@ using System.Security;
 using System.Security.Permissions;
 using System.Text;
 
-namespace CredentialManagement
+namespace Sidi.CredentialManagement
 {
     public class Credential: IDisposable
     {

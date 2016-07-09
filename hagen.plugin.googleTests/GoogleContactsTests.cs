@@ -34,7 +34,7 @@ namespace hagen.plugin.google.Tests
         {
             var secrets = Paths.BinDir.CatDir("client_secret_292564741141-6fa0tqv21ro1v8s28gj4upei0muvuidm.apps.googleusercontent.com.json").Read(GoogleClientSecrets.Load).Secrets;
 
-            for (var credentialProvider = new CredentialManagement.CredentialProvider("https://www.google.com/m8/feeds"); ; credentialProvider.Reset())
+            for (var credentialProvider = Sidi.CredentialManagement.Factory.GetCredentialProvider("https://www.google.com/m8/feeds"); ; credentialProvider.Reset())
             {
                 var credential = await GoogleWebAuthorizationBroker.AuthorizeAsync(
                     secrets,

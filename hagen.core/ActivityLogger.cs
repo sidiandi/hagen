@@ -66,11 +66,12 @@ namespace hagen
 
             inputAggregator = new InputAggregator();
 
-            subscriptions = new System.Reactive.Disposables.CompositeDisposable(
+            subscriptions = new System.Reactive.Disposables.CompositeDisposable(new IDisposable[]
+            {
                 ObservableTimeInterval.Get(inputLoggingInterval).Subscribe(inputAggregator.Time),
                 hidMonitor == null ? null :  hidMonitor.KeyDown.Subscribe(inputAggregator.KeyDown),
                 hidMonitor == null ? null : hidMonitor.Mouse.Subscribe(inputAggregator.Mouse),
-                inputAggregator.Input.SubscribeOn(TaskPoolScheduler.Default).Subscribe(_ =>
+                inputAggregator.Input.SubscribeOn(System.Reactive.Concurrency.TaskPoolScheduler.Default).Subscribe(_ =>
                     {
                         inputs.Add(_);
                         log.InfoFormat("Input: {0} clicks, {1} keys", _.Clicks, _.KeyDown);
@@ -80,7 +81,7 @@ namespace hagen
                 programUse,
                 hidMonitor,
                 winEventHook
-            );
+            }.Where(_ => _ != null));
 
             workDayBegin = DateTime.Now.Date;
         }

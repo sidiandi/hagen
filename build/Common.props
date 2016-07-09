@@ -12,7 +12,7 @@
     <RootNamespace>Sidi</RootNamespace>
     <SignAssembly>true</SignAssembly>
     <AssemblyOriginatorKeyFile>$(SolutionDir)key.snk</AssemblyOriginatorKeyFile>
-    <TargetFrameworkVersion>v4.5.1</TargetFrameworkVersion>
+    <TargetFrameworkVersion>v4.6</TargetFrameworkVersion>
     <RestorePackages>true</RestorePackages>
     <DocumentationFile>$(OutputPath)\$(AssemblyName).xml</DocumentationFile>
     <RestorePackages>true</RestorePackages>

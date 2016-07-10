@@ -597,7 +597,7 @@ Work > {0} hours in {1:yyyy-MM}
             model.Series.Add(keys);
             */
 
-            var plotView = new OxyPlot.WindowsForms.PlotView()
+            var plotView = new OxyPlot.WindowsForms.PlotView
             {
                 Model = model
             };
@@ -659,7 +659,7 @@ Work > {0} hours in {1:yyyy-MM}
 
             model.Series.Add(activity);
 
-            var plotView = new OxyPlot.WindowsForms.PlotView()
+            var plotView = new OxyPlot.WindowsForms.PlotView
             {
                 Model = model
             };

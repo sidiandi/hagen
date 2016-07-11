@@ -69,10 +69,10 @@ namespace hagen
 
         static List<string> emptyArgs = new List<string>();
 
-        static bool TakesPathList(Sidi.CommandLine.Action a)
+        static bool TakesSingleParameter<T>(Sidi.CommandLine.Action a)
         {
             var pi = a.MethodInfo.GetParameters();
-            return pi.Length == 1 && pi[0].ParameterType == typeof(PathList);
+            return pi.Length == 1 && pi[0].ParameterType == typeof(T);
         }
 
         static bool IsVisible(Sidi.CommandLine.Action a)
@@ -116,6 +116,18 @@ namespace hagen
             }
         }
 
+        IAction ToIAction<T>(Sidi.CommandLine.Action a, T arg1)
+        {
+            return new SimpleAction(
+                context.LastExecutedStore,
+                a.Name,
+                String.Format("{0}({2}) ({1})", a.Name, a.Usage, arg1.ToString().OneLine(255)),
+                () =>
+                {
+                    a.MethodInfo.Invoke(a.Source.Instance, new object[] { arg1 });
+                });
+        }
+
         IAction TryToIAction(Sidi.CommandLine.Action a, string parameterString)
         {
             return new SimpleAction(
@@ -137,9 +149,7 @@ namespace hagen
 
         public IObservable<IResult> GetActions(IQuery query)
         {
-            return GetActionsEnum(query.Text)
-                .Select(_ => _.ToResult(Priority.Normal))
-                .ToObservable(ThreadPoolScheduler.Instance);
+            return GetResults(query.Text).ToObservable(ThreadPoolScheduler.Instance);
         }
 
         IList<Sidi.CommandLine.Action> Actions
@@ -155,15 +165,22 @@ namespace hagen
         }
         IList<Sidi.CommandLine.Action> actions;
 
-        IEnumerable<IAction> GetActionsEnum(string query)
+        IEnumerable<IResult> GetResults(string query)
         {
+            if (context.SelectedPathList.Count == 1)
+            {
+                // single path argument
+                return Actions.Where(_ => TakesSingleParameter<LPath>(_))
+                    .Select(a => ToIAction(a, context.SelectedPathList.First()).ToResult(Priority.High));
+            }
+
             var p = Regex.Split(query, @"[.\s]+");
 
             if (
                 object.Equals(query, "?") ||
                 object.Equals(query, "help"))
             {
-                return Actions.Select(i => ToIAction(i));
+                return Actions.Select(i => ToIAction(i).ToResult(Priority.Normal));
             }
 
             if (p.Length == 0)
@@ -171,7 +188,7 @@ namespace hagen
                 return Actions.Where(i =>
                     Parser.IsMatch(p[0], i.Source.Instance.GetType().Name) ||
                     Parser.IsMatch(p[0], i.Name))
-                    .Select(i => ToIAction(i));
+                    .Select(i => ToIAction(i).ToResult(Priority.Normal));
             }
 
             var parameterString = query.Substring(p[0].Length).Trim();
@@ -179,7 +196,8 @@ namespace hagen
             return Actions.Where(i =>
                 Parser.IsMatch(p[0], i.Name))
                 .Select(i => TryToIAction(i, parameterString))
-                .Where(a => a != null);
+                .Where(a => a != null)
+                .Select(_ => _.ToResult(Priority.Normal));
         }
     }
 }

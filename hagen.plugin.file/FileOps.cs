@@ -13,17 +13,9 @@ namespace hagen
     [Usage("File system operations")]
     public class FileOps
     {
-        [Usage("move selected files to a new directory"), ForegroundWindowMustBeExplorer]
-        public void MoveToNewDirectory(LPath directoryName)
+        [Usage("Remove empty direcories")]
+        public void RemoveEmptyDirectories(PathList paths)
         {
-            var paths = new Sidi.Util.Shell().SelectedFiles;
-            System.Windows.Forms.MessageBox.Show(paths.Join());
-        }
-
-        [Usage("Removes empty direcories"), ForegroundWindowMustBeExplorer]
-        public void RemoveEmptyDirectories()
-        {
-            var paths = new Sidi.Util.Shell().SelectedFiles;
             var op = new Operation();
             foreach (var i in paths)
             {
@@ -59,10 +51,9 @@ namespace hagen
             throw new System.IO.IOException("Cannot make a unique path for {0}".F(p));
         }
 
-        [Usage("Flatten the directory hierarchy in the selected directory"), ForegroundWindowMustBeExplorer]
-        public void Flatten()
+        [Usage("Flatten the directory hierarchy in the selected directories")]
+        public void Flatten(PathList paths)
         {
-            var paths = new Sidi.Util.Shell().SelectedFiles;
             var op = new Operation();
             foreach (var i in paths)
             {
@@ -89,9 +80,9 @@ namespace hagen
         }
 
         [Usage("Merge selected directories"), ForegroundWindowMustBeExplorer]
-        public void Merge()
+        public void Merge(PathList pathList)
         {
-            var directories = new Sidi.Util.Shell().SelectedFiles.Where(x => x.IsDirectory).ToList();
+            var directories = pathList.Where(x => x.IsDirectory).ToList();
             LPath root = directories.First().Parent;
 
             foreach (var d in directories)
@@ -106,22 +97,9 @@ namespace hagen
             }
         }
 
-        [Usage("Create tvshow.nfo"), ForegroundWindowMustBeExplorer]
-        public void TvshowNfo()
+        [Usage("Merge selected directories"), ForegroundWindowMustBeExplorer]
+        public void Treemap(PathList pathList)
         {
-            var dir = new Sidi.Util.Shell().SelectedFiles.First();
-            if (dir.IsDirectory)
-            {
-                var nfoFile = dir.CatDir("tvshow.nfo");
-                nfoFile.WriteAllText(Clipboard.GetText());
-            }
-        }
-
-        [Usage("Test"), ForegroundWindowMustBeExplorer]
-        public void TestSelectedFiles()
-        {
-            var paths = new Sidi.Util.Shell().SelectedFiles;
-            System.Windows.Forms.MessageBox.Show(paths.Join());
         }
     }
 }

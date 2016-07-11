@@ -8,7 +8,7 @@ using System.Threading.Tasks;
 using Sidi.Extensions;
 using Sidi.CommandLine;
 
-namespace hagen
+namespace hagen.plugin.Tests
 {
     [Usage("sample app")]
     public class SampleApp

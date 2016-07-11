@@ -8,7 +8,7 @@ using System.Threading.Tasks;
 using Sidi.CommandLine;
 using System.Reactive.Linq;
 
-namespace hagen.Tests
+namespace hagen.plugin.Tests
 {
     [TestFixture()]
     public class ActionFilterTests
@@ -17,7 +17,7 @@ namespace hagen.Tests
         {
             sampleApp = new SampleApp();
             var p = Parser.SingleSource(sampleApp);
-            af = new CommandLineParserActionSource(new hagen.Test.ContextMock(), p);
+            af = new CommandLineParserActionSource(new ContextMock(), p);
         }
 
         SampleApp sampleApp;

@@ -9,6 +9,9 @@ using Sidi.Extensions;
 
 namespace hagen
 {
+    /// <summary>
+    /// Derive from this class to collect all action sources in your assembly
+    /// </summary>
     public class ActionSourceCollector : IPlugin3
     {
         private static readonly log4net.ILog log = log4net.LogManager.GetLogger(System.Reflection.MethodBase.GetCurrentMethod().DeclaringType);

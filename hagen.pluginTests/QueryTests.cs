@@ -6,7 +6,7 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 
-namespace hagen.Tests
+namespace hagen.plugin.Tests
 {
     [TestFixture()]
     public class QueryTests

@@ -44,7 +44,7 @@ namespace hagen.Plugin.Db
             yield return new ActionWrapper(action, actions);
         }
 
-        IEnumerable<IResult> GetActionsEnum(IQuery query)
+        IEnumerable<IResult> GetResults(IQuery query)
         {
             var terms = Tokenizer.ToList(query.Text.OneLine(80));
 
@@ -67,6 +67,11 @@ namespace hagen.Plugin.Db
             }
         }
 
+        /// <summary>
+        /// Selects results that match the terms
+        /// </summary>
+        /// <param name="terms"></param>
+        /// <returns>List of results. Empty list if terms contain an SQL problem</returns>
         IEnumerable<IResult> GetResults(IEnumerable<string> terms)
         {
             if (!terms.Any())
@@ -87,7 +92,16 @@ namespace hagen.Plugin.Db
                 cmd.CommandText = String.Format("select oid from {1} where {0} order by LastUseTime desc limit 20", termsQuery, actions.Table);
             }
 
-            var r = actions.Query(cmd);
+            IList<Action> r;
+            try
+            {
+                r = actions.Query(cmd);
+            }
+            catch (System.Data.SQLite.SQLiteException e)
+            {
+                log.Info(e);
+                return Enumerable.Empty<IResult>();
+            }
             var results = r.SelectMany(action => ToIActions(action)).Select(a => a.ToResult(Priority.High)).ToList();
             return results;
         }
@@ -101,7 +115,7 @@ namespace hagen.Plugin.Db
                 return Observable.Empty<IResult>();
             }
 
-            var results = GetActionsEnum(query);
+            var results = GetResults(query);
             return results.ToObservable(ThreadPoolScheduler.Instance);
         }
     }

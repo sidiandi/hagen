@@ -13,7 +13,7 @@ namespace hagen
     public class Query : IQuery
     {
         List<string> tags;
-        string text;
+        string text = String.Empty;
 
         private static readonly log4net.ILog log = log4net.LogManager.GetLogger(System.Reflection.MethodBase.GetCurrentMethod().DeclaringType);
 

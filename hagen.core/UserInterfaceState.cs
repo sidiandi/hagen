@@ -6,6 +6,9 @@ using System.Windows.Automation;
 using Sidi.IO;
 using System.Windows.Forms;
 using Sidi.Forms;
+using Sidi.Extensions;
+using System.Collections;
+using Shell32;
 
 namespace hagen
 {
@@ -45,14 +48,49 @@ namespace hagen
         public void SaveFocus()
         {
             focusedElement = (IntPtr) NativeMethods.GetForegroundWindow();
-            try
+            selectedPathList = GetSelectedFiles(focusedElement);
+            log.Info(selectedPathList);
+        }
+
+        static IEnumerable<LPath> GetSelectedFiles(SHDocVw.InternetExplorer w)
+        {
+            if (w == null)
             {
-                selectedPathList = PathList.GetFilesSelectedInExplorer();
+                return Enumerable.Empty<LPath>();
             }
-            catch
+
+            var view = ((IShellFolderViewDual2)w.Document);
+
+            var items = view.SelectedItems()
+                .OfType<FolderItem>()
+                .Select(i => new LPath(i.Path))
+                .ToList();
+
+            if (items.Any())
             {
-                selectedPathList = new PathList();
+                return items;
             }
+
+            Console.WriteLine(w.LocationURL);
+            return new LPath[] { LPath.Parse(w.LocationURL) };
+        }
+
+        public static PathList GetSelectedFiles(IntPtr hwnd)
+        {
+            var shell = new Shell();
+
+            var shellWindow = ((IEnumerable)shell.Windows()).OfType<SHDocVw.InternetExplorer>()
+                .FirstOrDefault(_ => _.HWND == (int)hwnd);
+
+            if (shellWindow == null)
+            {
+                goto none;
+            }
+
+            return new PathList(GetSelectedFiles(shellWindow));
+
+            none:
+            return new PathList();
         }
 
         IntPtr focusedElement = IntPtr.Zero;

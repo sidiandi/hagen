@@ -59,20 +59,29 @@ namespace hagen
                 return Enumerable.Empty<LPath>();
             }
 
-            var view = ((IShellFolderViewDual2)w.Document);
-
-            var items = view.SelectedItems()
-                .OfType<FolderItem>()
-                .Select(i => new LPath(i.Path))
-                .ToList();
-
-            if (items.Any())
+            // handle Explorer windows
+            var view = w.Document as IShellFolderViewDual2;
+            if (view != null)
             {
-                return items;
+
+                var items = view.SelectedItems()
+                    .OfType<FolderItem>()
+                    .Select(i => new LPath(i.Path))
+                    .ToList();
+
+                if (items.Any())
+                {
+                    return items;
+                }
             }
 
-            Console.WriteLine(w.LocationURL);
-            return new LPath[] { LPath.Parse(w.LocationURL) };
+            var url = w.LocationURL;
+            if (LPath.IsValid(url))
+            {
+                return new LPath[] { LPath.Parse(url) };
+            }
+
+            return Enumerable.Empty<LPath>();
         }
 
         public static PathList GetSelectedFiles(IntPtr hwnd)

@@ -16,6 +16,7 @@
     <Compile Include="Activity.cs" />
     <Compile Include="AdapterIActionSource.cs" />
     <Compile Include="AutomationExtension.cs" />
+    <Compile Include="EnumerableActionSource.cs" />
     <Compile Include="Extensions.cs" />
     <Compile Include="Filter.cs" />
     <Compile Include="IAction.cs" />

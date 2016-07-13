@@ -11,16 +11,14 @@ using System.Text.RegularExpressions;
 
 namespace Sidi
 {
-    public class Notes : IActionSource
+    public class Notes : EnumerableActionSource
     {
         private static readonly log4net.ILog log = log4net.LogManager.GetLogger(System.Reflection.MethodBase.GetCurrentMethod().DeclaringType);
 
         IList<Note> notes;
-        IContext context;
 
         public Notes(IContext context)
         {
-            this.context = context;
             var notesDir = context.DocumentDirectory.CatDir("Notes");
             notesDir.EnsureDirectoryExists();
             notes = notesDir.GetFiles("*.txt")
@@ -41,16 +39,20 @@ namespace Sidi
             return new Regex(Regex.Escape(pattern), RegexOptions.IgnoreCase, TimeSpan.FromMilliseconds(100));
         }
 
-        public IEnumerable<IAction> GetActions(string query)
+        protected override IEnumerable<IResult> GetResults(IQuery query)
         {
-            var all = query.Equals("notes", StringComparison.CurrentCultureIgnoreCase);
+            var all = query.Text.Equals("notes", StringComparison.CurrentCultureIgnoreCase);
             if (all)
             {
-                return notes.Select(_ => new NoteAction(_, context.LastExecutedStore));
+                return notes
+                    .Select(_ => new NoteAction(_, query.Context.LastExecutedStore))
+                    .Select(_ => _.ToResult(Priority.Normal));
             }
 
-            var re = SafeRegex(query);
-            return notes.Where(n => re.IsMatch(n.Name)).Select(_ => new NoteAction(_, context.LastExecutedStore));
+            var re = SafeRegex(query.Text);
+            return notes.Where(n => re.IsMatch(n.Name))
+                .Select(_ => new NoteAction(_, query.Context.LastExecutedStore))
+                .Select(_ => _.ToResult(Priority.Normal));
         }
     }
 }

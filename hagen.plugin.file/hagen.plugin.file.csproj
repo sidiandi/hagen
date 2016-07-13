@@ -86,6 +86,7 @@
     <Compile Include="NoteAction.cs" />
     <Compile Include="Notes.cs" />
     <Compile Include="NotesReader.cs" />
+    <Compile Include="PathLookup.cs" />
     <Compile Include="Plugin.cs" />
     <None Include="packages.config" />
     <None Include="SidiTools.cs" />

@@ -14,7 +14,7 @@ namespace hagen.plugin.Tests
         [Test()]
         public void ParseTest()
         {
-            var q = Query.Parse("#tag1 #tag2 hello world");
+            var q = Query.Parse(null, "#tag1 #tag2 hello world");
             Assert.AreEqual(2, q.Tags.Count);
             Assert.IsTrue(q.Tags.Contains("#tag1"));
             Assert.IsTrue(q.Tags.Contains("#tag2"));

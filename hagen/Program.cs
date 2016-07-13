@@ -64,7 +64,7 @@ namespace hagen
             KillAlreadyRunning();
 
             hagen = new Hagen();
-            hagen.Context.Choose = ActionChooser.Choose;
+            hagen.Context.Choose = _ => ActionChooser.Choose(hagen.Context, _);
 
             main = new Main(hagen);
             hagen.Context.MainMenu = main.MainMenuStrip;

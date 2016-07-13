@@ -10,5 +10,7 @@ namespace hagen
     {
         string Text { get; }
         System.Collections.Generic.IReadOnlyCollection<string> Tags { get; }
+
+        IContext Context { get; }
     }
 }

@@ -17,8 +17,14 @@ namespace hagen
 
         private static readonly log4net.ILog log = log4net.LogManager.GetLogger(System.Reflection.MethodBase.GetCurrentMethod().DeclaringType);
 
-        public Query()
+        public Query(IContext context)
         {
+            if (context == null)
+            {
+                throw new ArgumentNullException("context");
+            }
+
+            this.Context = context;
         }
 
         const string tagPrefix = "#";
@@ -44,8 +50,13 @@ namespace hagen
             return true;
         }
 
-        public static Query Parse(string queryString)
+        public static Query Parse(IContext context, string queryString)
         {
+            if (context == null)
+            {
+                throw new ArgumentNullException("context");
+            }
+
             int i = 0; // current position in the query string
             var tags = new List<string>();
             for (;;)
@@ -64,7 +75,7 @@ namespace hagen
             }
             var text = queryString.Substring(i).OneLine(80);
 
-            return new Query
+            return new Query(context)
             {
                 ParsedString = queryString,
                 TextBegin = i,
@@ -104,5 +115,7 @@ namespace hagen
                 return tags;
             }
         }
+
+        public IContext Context { get; private set; }
     }
 }

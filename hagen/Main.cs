@@ -77,7 +77,7 @@ namespace hagen
 
             var actionSource = new Composite(pluginProvider.GetActionSources().ToArray());
 
-            searchBox1 = new SearchBox(actionSource)
+            searchBox1 = new SearchBox(this.hagen.Context, actionSource)
             {
                 Text = "Search",
             };
@@ -208,6 +208,7 @@ namespace hagen
         public void Popup()
         {
             this.hagen.Context.SaveFocus();
+            searchBox1.Context = this.hagen.Context;
             WindowState = FormWindowState.Maximized;
             this.Visible = true;
             if (Clipboard.ContainsText())

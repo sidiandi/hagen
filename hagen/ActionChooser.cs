@@ -37,9 +37,9 @@ namespace hagen
             }
         }
 
-        public static void Choose(IList<IAction> actions)
+        public static void Choose(IContext context, IList<IAction> actions)
         {
-            using (var sb = new SearchBox(new SimpleActionSource(actions)))
+            using (var sb = new SearchBox(context, new SimpleActionSource(actions)))
             {
                 var f = sb.AsForm("Select");
                 f.WindowState = System.Windows.Forms.FormWindowState.Maximized;

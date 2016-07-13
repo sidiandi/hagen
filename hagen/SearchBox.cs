@@ -79,9 +79,12 @@ namespace hagen
             itemView.SelectedIndex = index;
         }
 
-        public SearchBox(IActionSource3 actionSource)
+        public IContext Context { private get; set; }
+
+        public SearchBox(IContext context, IActionSource3 actionSource)
         {
             int size = 40;
+            Context = context;
 
             itemView = new ObjectListView()
             {
@@ -170,7 +173,8 @@ namespace hagen
 
             textBoxQuery.GetTextChangedObservable()
                 .Throttle(TimeSpan.FromMilliseconds(200))
-                .Select(text => Query.Parse(text))
+                .Select(text => { var c = Context; return c == null ? null : Query.Parse(c, text); })
+                .Where(_ => _ != null)
                 .Merge(ManualUpdate)
                 .Select(query => ActionSource.GetActions(query))
                 .ObserveOn(this)
@@ -220,7 +224,7 @@ namespace hagen
         {
             get
             {
-                return Query.Parse(this.textBoxQuery.Text);
+                return Query.Parse(Context, this.textBoxQuery.Text);
             }
 
             set
@@ -241,7 +245,7 @@ namespace hagen
 
         public void Start()
         {
-            var q = hagen.Query.Parse(textBoxQuery.Text);
+            var q = hagen.Query.Parse(Context, textBoxQuery.Text);
             textBoxQuery.Select(q.TextBegin, q.TextEnd);
         }
 
@@ -274,7 +278,7 @@ namespace hagen
             {
                 return itemView.SelectedObjects.Cast<IResult>();
             }
-        }   
+        }
 
         public void Remove()
         {

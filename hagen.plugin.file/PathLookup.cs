@@ -21,7 +21,7 @@ namespace hagen
 
         protected override IEnumerable<IResult> GetResults(IQuery query)
         {
-            if (LPath.IsValid(query.Text))
+            if (!String.IsNullOrEmpty(query.Text) && LPath.IsValid(query.Text))
             {
                 var path = new LPath(query.Text);
 

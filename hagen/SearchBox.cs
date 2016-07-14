@@ -247,6 +247,7 @@ namespace hagen
         {
             var q = hagen.Query.Parse(Context, textBoxQuery.Text);
             textBoxQuery.Select(q.TextBegin, q.TextEnd);
+            UpdateResult();
         }
 
         public event EventHandler ItemsActivated;

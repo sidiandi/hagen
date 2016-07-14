@@ -24,6 +24,22 @@ namespace hagen.plugin.Tests
             FileActionExecuted = true;
         }
 
+        [Usage("Simple action without arguments")]
+        public void DoSomething()
+        {
+            DoSomethingExecuted = true;
+        }
+
+        public bool DoSomethingExecuted { get; private set; }
+
+        [Usage("Action with a string argument")]
+        public void Greet(string text)
+        {
+            GreetingText = text;
+        }
+
+        public string GreetingText { get; set; }
+
         public SampleActions()
         {
         }

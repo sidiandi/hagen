@@ -30,6 +30,7 @@ namespace hagen.plugin.Tests
         public ContextMock()
         {
             LastExecutedStore = new MemoryLastExecutedStore();
+            SelectedPathList = new PathList();
         }
 
         public LPath DataDirectory

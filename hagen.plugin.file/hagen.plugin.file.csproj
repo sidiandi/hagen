@@ -91,8 +91,8 @@
     <None Include="packages.config" />
     <None Include="SidiTools.cs" />
     <Compile Include="TextPosition.cs" />
-    <Compile Include="FileOps.cs" />
-    <Compile Include="InsertFilesAsText.cs" />
+    <Compile Include="FileActions.cs" />
+    <Compile Include="TextInsertActions.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
   </ItemGroup>
   <ItemGroup>

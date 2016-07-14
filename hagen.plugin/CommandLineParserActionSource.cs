@@ -29,6 +29,7 @@ using System.Reactive.Subjects;
 using System.Reactive.Linq;
 using System.Windows.Automation;
 using Sidi.Util;
+using System.IO;
 
 namespace hagen
 {
@@ -49,7 +50,7 @@ namespace hagen
         }
     }
     
-    public class CommandLineParserActionSource : IActionSource3
+    public class CommandLineParserActionSource : EnumerableActionSource
     {
         private static readonly log4net.ILog log = log4net.LogManager.GetLogger(System.Reflection.MethodBase.GetCurrentMethod().DeclaringType);
 
@@ -116,12 +117,16 @@ namespace hagen
             }
         }
 
-        IAction ToIAction<T>(Sidi.CommandLine.Action a, T arg1)
+        IAction ToIAction<T>(Sidi.CommandLine.Action a, T arg1, string arg1String = null)
         {
+            if (arg1String == null)
+            {
+                arg1String = arg1.ToString();
+            }
             return new SimpleAction(
                 context.LastExecutedStore,
                 a.Name,
-                String.Format("{0}({2}) ({1})", a.Name, a.Usage, arg1.ToString().OneLine(255)),
+                String.Format("{0}({2}) ({1})", a.Name, a.Usage, arg1String.OneLine(255)),
                 () =>
                 {
                     a.MethodInfo.Invoke(a.Source.Instance, new object[] { arg1 });
@@ -147,11 +152,6 @@ namespace hagen
                 });
         }
 
-        public IObservable<IResult> GetActions(IQuery query)
-        {
-            return GetResults(query.Text).ToObservable(ThreadPoolScheduler.Instance);
-        }
-
         IList<Sidi.CommandLine.Action> Actions
         {
             get
@@ -165,39 +165,77 @@ namespace hagen
         }
         IList<Sidi.CommandLine.Action> actions;
 
-        IEnumerable<IResult> GetResults(string query)
+        protected override IEnumerable<IResult> GetResults(IQuery query)
         {
-            if (context.SelectedPathList.Count == 1)
-            {
-                // single path argument
-                return Actions.Where(_ => TakesSingleParameter<LPath>(_))
-                    .Select(a => ToIAction(a, context.SelectedPathList.First()).ToResult(Priority.High));
-            }
-
-            var p = Regex.Split(query, @"[.\s]+");
-
             if (
-                object.Equals(query, "?") ||
-                object.Equals(query, "help"))
+                object.Equals(query.Text, "?") ||
+                object.Equals(query.Text, "help"))
             {
                 return Actions.Select(i => ToIAction(i).ToResult(Priority.Normal));
             }
 
-            if (p.Length == 0)
+            var results = Enumerable.Empty<IResult>();
+            var p = Regex.Split(query.Text, @"[.\s]+");
+            var action = p.Length > 0 ? p[0] : String.Empty;
+
+            if (query.Context.SelectedPathList.Count == 1)
             {
-                return Actions.Where(i =>
-                    Parser.IsMatch(p[0], i.Source.Instance.GetType().Name) ||
-                    Parser.IsMatch(p[0], i.Name))
-                    .Select(i => ToIAction(i).ToResult(Priority.Normal));
+                // single LPath argument
+                results = results.Concat(Actions
+                    .Where(_ => Parser.IsMatch(action, _.Name) && TakesSingleParameter<LPath>(_))
+                    .Select(a => ToIAction(a, context.SelectedPathList.First()).ToResult(Priority.High)));
             }
 
-            var parameterString = query.Substring(p[0].Length).Trim();
+            if (query.Context.SelectedPathList.Count >= 1)
+            {
+                // single PathList argument
+                results = results.Concat(Actions
+                    .Where(_ => Parser.IsMatch(action, _.Name) && TakesSingleParameter<PathList>(_))
+                    .Select(a => ToIAction(a, context.SelectedPathList, GetNiceText(context.SelectedPathList)).ToResult(Priority.High)));
+            }
 
-            return Actions.Where(i =>
-                Parser.IsMatch(p[0], i.Name))
+            var parameterString = query.Text.Substring(p[0].Length).Trim();
+
+            results = results.Concat(Actions
+                .Where(i =>
+                {
+                    return Parser.IsMatch(action, i.Name);
+                })
                 .Select(i => TryToIAction(i, parameterString))
                 .Where(a => a != null)
-                .Select(_ => _.ToResult(Priority.Normal));
+                .Select(_ => _.ToResult(Priority.Normal)));
+
+            return results;
+        }
+
+        static string GetNiceText(PathList p)
+        {
+            var maxLength = 64;
+
+            using (var w = new StringWriter())
+            {
+                int length = 0;
+                int i = 0;
+                for (; i < p.Count;)
+                {
+                    var s = p[i].ToString();
+                    w.Write(s);
+                    length += s.Length;
+                    ++i;
+                    if (length > maxLength || i >= p.Count)
+                    {
+                        break;
+                    }
+                    s = ", ";
+                    w.Write(s);
+                    length += s.Length;
+                }
+                if (i < p.Count)
+                {
+                    w.Write(", and {0} more", p.Count - i);
+                }
+                return w.ToString();
+            }
         }
     }
 }

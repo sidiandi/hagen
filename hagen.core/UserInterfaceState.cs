@@ -49,7 +49,10 @@ namespace hagen
         {
             focusedElement = (IntPtr) NativeMethods.GetForegroundWindow();
             selectedPathList = GetSelectedFiles(focusedElement);
-            log.Info(selectedPathList);
+            if (selectedPathList.Any())
+            {
+                log.InfoFormat("Files selected in Explorer: {0}", selectedPathList);
+            }
         }
 
         static IEnumerable<LPath> GetSelectedFiles(SHDocVw.InternetExplorer w)

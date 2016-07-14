@@ -29,11 +29,43 @@ namespace hagen.plugin.Tests
             parser.ItemSources.Add(new Sidi.CommandLine.ItemSource(sampleActions));
             var c = new CommandLineParserActionSource(context, parser);
 
-            var results = c.GetActions(new Query(null)).ToEnumerable().ToList();
+            var results = c.GetActions(new Query(context)).ToEnumerable().ToList();
 
             Assert.AreEqual(1, results.Count);
             results[0].Action.Execute();
             Assert.IsTrue(sampleActions.FileActionExecuted);
+        }
+
+        [Test()]
+        public void ExecutesASimpleAction()
+        {
+            var sampleActions = new SampleActions();
+            var context = new ContextMock();
+            var parser = new Sidi.CommandLine.Parser();
+            parser.ItemSources.Add(new Sidi.CommandLine.ItemSource(sampleActions));
+            var c = new CommandLineParserActionSource(context, parser);
+
+            var q = new Query(context)
+            {
+                Text = "DoSomething"
+            };
+
+            var results = c.GetActions(q).ToEnumerable().ToList();
+
+            Assert.AreEqual(1, results.Count);
+            results[0].Action.Execute();
+            Assert.IsTrue(sampleActions.DoSomethingExecuted);
+
+            q = new Query(context)
+            {
+                Text = "Greet Hello"
+            };
+
+            results = c.GetActions(q).ToEnumerable().ToList();
+
+            Assert.AreEqual(1, results.Count);
+            results[0].Action.Execute();
+            Assert.AreEqual("Hello", sampleActions.GreetingText);
         }
 
         public static IEnumerable<LPath> GetSelectedFiles(SHDocVw.InternetExplorer w)
@@ -60,7 +92,7 @@ namespace hagen.plugin.Tests
         }
 
 
-        [Test, Apartment(System.Threading.ApartmentState.STA)]
+        [Test, Apartment(System.Threading.ApartmentState.STA), Explicit]
         public void FilesInExplorer()
         {
             var shell = new Shell();

@@ -79,18 +79,17 @@ namespace hagen.Plugin.Db
                 return Enumerable.Empty<IResult>();
             }
 
-            var termsQuery = terms.Select(t => String.Format("Name like {0}", ("%" + t + "%").Quote())).Join(" and ");
-
             var cmd = actions.Connection.CreateCommand();
 
-            if (terms.Sum(t => t.Length) <= 2)
+            var termsQuery = terms.Select((t,i) =>
             {
-                cmd.CommandText = String.Format("select oid from {1} where {0} order by LastUseTime desc limit 20", termsQuery, actions.Table);
-            }
-            else
-            {
-                cmd.CommandText = String.Format("select oid from {1} where {0} order by LastUseTime desc limit 20", termsQuery, actions.Table);
-            }
+                var paramName = String.Format("@term{0}", i);
+                var parameter = cmd.Parameters.Add(paramName, System.Data.DbType.String);
+                parameter.Value = String.Format("%{0}%", t);
+                return String.Format("Name like {0}", paramName);
+            }).Join(" and ");
+
+            cmd.CommandText = String.Format("select oid from {1} where {0} order by LastUseTime desc limit 50", termsQuery, actions.Table);
 
             IList<Action> r;
             try

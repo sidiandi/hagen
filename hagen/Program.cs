@@ -55,6 +55,7 @@ namespace hagen
             var logViewer = new LogViewer2()
             {
                 Text = "Log",
+                Threshold = log4net.Core.Level.Info
             };
 
             logViewer.AddToRoot();

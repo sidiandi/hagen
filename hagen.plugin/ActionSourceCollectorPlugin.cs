@@ -43,7 +43,6 @@ namespace hagen
         public virtual IEnumerable<IActionSource3> GetActionSources()
         {
             var assembly = GetType().Assembly;
-            log.InfoFormat("Looking for action sources in {0}", assembly);
             var types = assembly.GetTypes();
 
             var actionSources = types
@@ -92,7 +91,7 @@ namespace hagen
 
                 .ToList();
 
-            log.Info(actionSources.ListFormat());
+            log.InfoFormat("Action sources found in {0}\r\n{1}", assembly, actionSources.ListFormat());
             return actionSources;
         }
     }

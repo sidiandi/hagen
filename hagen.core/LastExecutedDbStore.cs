@@ -35,7 +35,7 @@ namespace hagen
             DateTime time;
             if (data.TryGetValue(id, out time))
             {
-                log.InfoFormat("{0} last executed {1}", id, time);
+                log.DebugFormat("{0} last executed {1}", id, time);
                 return time;
             }
             else
@@ -47,7 +47,7 @@ namespace hagen
         public void Set(string id)
         {
             var time = DateTime.UtcNow;
-            log.InfoFormat("{0} last executed {1}", id, time);
+            log.DebugFormat("{0} last executed {1}", id, time);
             data[id] = time;
             cache.Remove(id);
         }

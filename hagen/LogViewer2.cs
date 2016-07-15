@@ -87,14 +87,19 @@ namespace Sidi.Forms
 
         public void DoAppend(log4net.Core.LoggingEvent loggingEvent)
         {
-            lock (this)
+            if (loggingEvent.Level.CompareTo(Threshold) >= 0)
             {
-                if (output == null)
+                lock (this)
                 {
-                    output = new StringWriter();
+                    if (output == null)
+                    {
+                        output = new StringWriter();
+                    }
+                    Layout.Format(output, loggingEvent);
                 }
-                Layout.Format(output, loggingEvent);
             }
         }
+
+        public log4net.Core.Level Threshold {get; set; }
     }
 }

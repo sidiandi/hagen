@@ -74,9 +74,16 @@ namespace hagen
             base.Dispose(disposing);
         }
 
-        void SelectItem(int index)
+        bool TrySelectItem(int index)
         {
+            if (index < 0 || index >= itemView.Items.Count)
+            {
+                return false;
+            }
+
             itemView.SelectedIndex = index;
+            itemView.EnsureVisible(index);
+            return true;
         }
 
         public IContext Context { private get; set; }
@@ -107,6 +114,7 @@ namespace hagen
                 AlternateRowBackColor = Color.FromArgb(0xff, 0xf0, 0xf0, 0xf0),
                 UseHotItem = true,
                 FullRowSelect = true,
+                Font = new Font(FontFamily.GenericSansSerif, 12.0f),
             };
 
             itemView.Columns.Add(new OLVColumn()
@@ -135,7 +143,7 @@ namespace hagen
                 AspectGetter = _ =>
                 {
                     var a = ((IResult)_).Action;
-                    return String.Format("{0} {1}", a.Name, a.LastExecuted);
+                    return String.Format("{0}", a.Name);
                 },
                 WordWrap = true,
                 FillsFreeSpace = true,
@@ -295,16 +303,24 @@ namespace hagen
             switch (e.KeyCode)
             {
                 case Keys.Down:
-                    if (itemView.SelectedIndex < itemView.GetItemCount())
+                    if ((e.Modifiers & Keys.Control) != 0)
                     {
-                        SelectItem(itemView.SelectedIndex + 1);
+                        TrySelectItem(itemView.Items.Count-1);
+                    }
+                    else
+                    {
+                        TrySelectItem(itemView.SelectedIndex + 1);
                     }
                     e.Handled = true;
                     break;
                 case Keys.Up:
-                    if (itemView.SelectedIndex > 0)
+                    if ((e.Modifiers & Keys.Control) != 0)
                     {
-                        SelectItem(itemView.SelectedIndex - 1);
+                        TrySelectItem(0);
+                    }
+                    else
+                    {
+                        TrySelectItem(itemView.SelectedIndex - 1);
                     }
                     e.Handled = true;
                     break;

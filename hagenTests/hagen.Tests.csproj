@@ -76,6 +76,7 @@
     <Compile Include="ClipboardUrlTests.cs" />
     <Compile Include="LogViewer2Tests.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
+    <Compile Include="RunOnLogonTests.cs" />
     <Compile Include="TaskProgressTests.cs" />
   </ItemGroup>
   <ItemGroup>

@@ -370,5 +370,16 @@ Hours: {0:G3}",
         {
             e.Effect = e.AllowedEffect;
         }
+
+        private void optionsToolStripMenuItem_Click(object sender, EventArgs e)
+        {
+            var exePath = Assembly.GetEntryAssembly().GetLocalPath();
+            var optionsDialog = new Options();
+            optionsDialog.RunOnLogon = RunOnLogon.Get(exePath);
+            if (optionsDialog.ShowDialog() == DialogResult.OK)
+            {
+                RunOnLogon.Set(exePath, optionsDialog.RunOnLogon);
+            }
+        }
     }
 }

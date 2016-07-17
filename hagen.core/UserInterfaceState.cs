@@ -66,7 +66,6 @@ namespace hagen
             var view = w.Document as IShellFolderViewDual2;
             if (view != null)
             {
-
                 var items = view.SelectedItems()
                     .OfType<FolderItem>()
                     .Select(i => new LPath(i.Path))
@@ -79,9 +78,13 @@ namespace hagen
             }
 
             var url = w.LocationURL;
-            if (LPath.IsValid(url))
+            if (Uri.IsWellFormedUriString(url, UriKind.Absolute))
             {
-                return new LPath[] { LPath.Parse(url) };
+                var uri = new Uri(url);
+                if (object.Equals(uri.Scheme, "file"))
+                {
+                    return new LPath[] { LPath.Parse(uri.LocalPath) };
+                }
             }
 
             return Enumerable.Empty<LPath>();

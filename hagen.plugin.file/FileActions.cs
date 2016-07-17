@@ -1,4 +1,4 @@
-﻿    using System;
+﻿using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Text;
@@ -7,6 +7,7 @@ using Sidi.IO;
 using Sidi.Extensions;
 using SHDocVw;
 using System.Windows.Forms;
+using System.Diagnostics;
 
 namespace hagen
 {
@@ -79,7 +80,7 @@ namespace hagen
             op.DeleteEmptyDirectories(directory);
         }
 
-        [Usage("Merge selected directories"), ForegroundWindowMustBeExplorer]
+        [Usage("Merge selected directories")]
         public void Merge(PathList pathList)
         {
             var directories = pathList.Where(x => x.IsDirectory).ToList();
@@ -97,9 +98,24 @@ namespace hagen
             }
         }
 
-        [Usage("Merge selected directories"), ForegroundWindowMustBeExplorer]
+        [Usage("Show file sizes as a treemap")]
         public void Treemap(PathList pathList)
         {
+        }
+
+        [Usage("Open with text editor")]
+        public void EditText(PathList pathList)
+        {
+            var editorExe = Paths.GetFolderPath(Environment.SpecialFolder.ProgramFilesX86).CatDir(@"Notepad++\notepad++.exe");
+            if (!editorExe.IsFile)
+            {
+                editorExe = "notepad.exe";
+            }
+
+            foreach (var i in pathList)
+            {
+                Process.Start(editorExe, i.Quote());
+            }
         }
     }
 }

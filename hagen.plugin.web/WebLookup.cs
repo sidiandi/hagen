@@ -25,29 +25,26 @@ using System.Reactive.Concurrency;
 
 namespace hagen.ActionSource
 {
-    public class WebLookup : IActionSource3
+    public class WebLookup : EnumerableActionSource
     {
-        public IEnumerable<IResult> GetActionsEnum(IQuery queryObject)
+        protected override IEnumerable<IResult> GetResults(IQuery queryObject)
         {
             var query = queryObject.Text.Trim();
-            if (Uri.IsWellFormedUriString(query, UriKind.Absolute))
+            if (query.Length >= 3)
             {
-                yield return new ShellAction(query, String.Format("Open URL {0}", query)).ToResult(Priority.Highest);
+                if (Uri.IsWellFormedUriString(query, UriKind.Absolute))
+                {
+                    yield return new ShellAction(query, String.Format("Open URL {0}", query)).ToResult(Priority.Highest);
+                }
+                else
+                {
+                    yield return WebLookupAction("Google", "http://www.google.com/search?q={0}", query);
+                    yield return WebLookupAction("Wikipedia", "http://en.wikipedia.org/wiki/Special:Search?search={0}&go=Go", query);
+                    yield return WebLookupAction("Translate", "http://translate.google.com/#auto/en/{0}", query);
+                    yield return WebLookupAction("Leo", "http://dict.leo.org/?lp=ende&search={0}", query);
+                    yield return WebLookupAction("Preis", "http://www.heise.de/preisvergleich/?fs={0}&x=0&y=0&in=", query);
+                }
             }
-            else
-            {
-                yield return WebLookupAction("Google", "http://www.google.com/search?q={0}", query);
-                yield return WebLookupAction("Wikipedia", "http://en.wikipedia.org/wiki/Special:Search?search={0}&go=Go", query);
-                yield return WebLookupAction("Translate", "http://translate.google.com/#auto/en/{0}", query);
-                yield return WebLookupAction("Leo", "http://dict.leo.org/?lp=ende&search={0}", query);
-                yield return WebLookupAction("Preis", "http://www.heise.de/preisvergleich/?fs={0}&x=0&y=0&in=", query);
-            }
-        }
-
-        IObservable<IResult> IActionSource3.GetActions(IQuery query)
-        {
-            var results = GetActionsEnum(query);
-            return results.ToObservable(ThreadPoolScheduler.Instance);
         }
 
         IResult WebLookupAction(string title, string urlTemplate, string query)

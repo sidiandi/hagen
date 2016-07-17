@@ -74,7 +74,7 @@ namespace hagen.Plugin.Db
         /// <returns>List of results. Empty list if terms contain an SQL problem</returns>
         IEnumerable<IResult> GetResults(IEnumerable<string> terms)
         {
-            if (!terms.Any())
+            if (!terms.Any(_ => _.Length >= 3))
             {
                 return Enumerable.Empty<IResult>();
             }

@@ -126,11 +126,25 @@ namespace hagen
             return new SimpleAction(
                 context.LastExecutedStore,
                 a.Name,
-                String.Format("{0}({2}) ({1})", a.Name, a.Usage, arg1String.OneLine(255)),
+                String.Format("{0}({1}) - {2}", DisplayText(a), arg1String.OneLine(128), a.Usage),
                 () =>
                 {
                     a.MethodInfo.Invoke(a.Source.Instance, new object[] { arg1 });
                 });
+        }
+
+        string DisplayText(Sidi.CommandLine.Action a)
+        {
+            return a.Source.Instance.GetType().Name + "." + a.Name;
+        }
+
+        IAction ToIAction(Sidi.CommandLine.Action a, PathList arg1, string arg1String = null)
+        {
+            if (TakesSingleParameter<LPath>(a))
+            {
+                return ToIAction<LPath>(a, arg1.First(), GetNiceText(arg1));
+            }
+            return ToIAction<PathList>(a, arg1, arg1String);
         }
 
         IAction TryToIAction(Sidi.CommandLine.Action a, string parameterString)
@@ -138,7 +152,7 @@ namespace hagen
             return new SimpleAction(
                 context.LastExecutedStore,
                 a.Name,
-                String.Format("{0}.{1}({3}) ({2})", a.Source.Instance.GetType().Name, a.Name, a.Usage, parameterString),
+                String.Format("{0}({1}) - ({2})", DisplayText(a), parameterString, a.Usage),
                 () =>
                 {
                     if (a.Parameters.Count == 1)
@@ -165,47 +179,121 @@ namespace hagen
         }
         IList<Sidi.CommandLine.Action> actions;
 
+        public static int MatchLength(string input, string pattern)
+        {
+            return MatchLength(input, 0, pattern, 0);
+        }
+
+        const int NoMatch = -1;
+
+        public static int MatchLength(string input, int i, string pattern, int p)
+        {
+            if (p >= pattern.Length)
+            {
+                return 0;
+            }
+
+            if (i >= input.Length)
+            {
+                return NoMatch;
+            }
+
+            if (char.IsUpper(input[i]))
+            {
+                if (char.ToLower(input[i]) == char.ToLower(pattern[p]))
+                {
+                    var rest = MatchLength(input, i + 1, pattern, p + 1);
+                    return rest == NoMatch ? NoMatch : rest + 1;
+                }
+                else
+                {
+                    return NoMatch;
+                }
+            }
+            else
+            {
+                if (char.ToLower(input[i]) == char.ToLower(pattern[p]))
+                {
+                    var rest = MatchLength(input, i + 1, pattern, p + 1);
+                    if (rest != NoMatch)
+                    {
+                        return rest + 1;
+                    }
+                    rest = MatchLength(input, i + 1, pattern, p);
+                    if (rest != NoMatch)
+                    {
+                        return rest + 1;
+                    }
+                    return NoMatch;
+                }
+                else
+                {
+                    var rest = MatchLength(input, i + 1, pattern, p);
+                    return rest == NoMatch ? NoMatch : rest + 1;
+                }
+            }
+        }
+
         protected override IEnumerable<IResult> GetResults(IQuery query)
         {
+            var args = Tokenizer.ToArray(query.Text);
+            var pattern = args.Length > 0 ? args[0] : String.Empty;
+
             if (
-                object.Equals(query.Text, "?") ||
-                object.Equals(query.Text, "help"))
+                object.Equals(pattern, "?") ||
+                object.Equals(pattern, "help"))
             {
                 return Actions.Select(i => ToIAction(i).ToResult(Priority.Normal));
             }
 
-            var results = Enumerable.Empty<IResult>();
-            var p = Regex.Split(query.Text, @"[.\s]+");
-            var action = p.Length > 0 ? p[0] : String.Empty;
-
-            if (query.Context.SelectedPathList.Count == 1)
+            if (pattern.Length < 2)
             {
-                // single LPath argument
-                results = results.Concat(Actions
-                    .Where(_ => Parser.IsMatch(action, _.Name) && TakesSingleParameter<LPath>(_))
-                    .Select(a => ToIAction(a, context.SelectedPathList.First()).ToResult(Priority.High)));
+                return Enumerable.Empty<IResult>();
             }
 
-            if (query.Context.SelectedPathList.Count >= 1)
+            Func<Sidi.CommandLine.Action, bool> isMatch = a =>
             {
-                // single PathList argument
-                results = results.Concat(Actions
-                    .Where(_ => Parser.IsMatch(action, _.Name) && TakesSingleParameter<PathList>(_))
-                    .Select(a => ToIAction(a, context.SelectedPathList, GetNiceText(context.SelectedPathList)).ToResult(Priority.High)));
-            }
+                var sourceName = a.Source.Instance.GetType().Name;
+                return
+                    MatchLength(a.Name, pattern) >= 0 ||
+                    MatchLength(sourceName + a.Name, pattern) >= 0;
+            };
 
-            var parameterString = query.Text.Substring(p[0].Length).Trim();
+            int selectedPathCount = query.Context.SelectedPathList.Count;
+            var parameterString = args.Skip(1).Join(" ");
 
-            results = results.Concat(Actions
-                .Where(i =>
+            // if paths are selected, handle actions that take a path argument with high priority
+            Func<Sidi.CommandLine.Action, bool> isFileAction = a =>
+            {
+                return
+                    (selectedPathCount > 0) &&
+                    (
+                        (selectedPathCount == 1 && TakesSingleParameter<LPath>(a)) ||
+                        (selectedPathCount >= 1 && TakesSingleParameter<PathList>(a))
+                    );
+            };
+
+            return Actions.Select(pa =>
+            {
+                if (isMatch(pa))
                 {
-                    return Parser.IsMatch(action, i.Name);
-                })
-                .Select(i => TryToIAction(i, parameterString))
-                .Where(a => a != null)
-                .Select(_ => _.ToResult(Priority.Normal)));
-
-            return results;
+                    if (isFileAction(pa))
+                    {
+                        var a = ToIAction(pa, query.Context.SelectedPathList);
+                        return a.ToResult(Priority.High);
+                    }
+                    else
+                    {
+                        var a = TryToIAction(pa, parameterString);
+                        if (a != null)
+                        {
+                            return a.ToResult(Priority.Normal);
+                        };
+                    }
+                }
+                return null;
+            })
+            .Where(_ => _ != null);
         }
 
         static string GetNiceText(PathList p)

@@ -24,6 +24,18 @@ namespace hagen.plugin.Tests
             FileActionExecuted = true;
         }
 
+        [Usage("File action")]
+        public void Delete(LPath path)
+        {
+            FileActionExecuted = true;
+        }
+
+        [Usage("File action")]
+        public void Rename(LPath path)
+        {
+            FileActionExecuted = true;
+        }
+
         [Usage("Simple action without arguments")]
         public void DoSomething()
         {

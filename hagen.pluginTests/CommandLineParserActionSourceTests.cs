@@ -31,7 +31,7 @@ namespace hagen.plugin.Tests
 
             var results = c.GetActions(new Query(context)).ToEnumerable().ToList();
 
-            Assert.AreEqual(1, results.Count);
+            Assert.AreEqual(5, results.Count);
             results[0].Action.Execute();
             Assert.IsTrue(sampleActions.FileActionExecuted);
         }
@@ -68,43 +68,36 @@ namespace hagen.plugin.Tests
             Assert.AreEqual("Hello", sampleActions.GreetingText);
         }
 
-        public static IEnumerable<LPath> GetSelectedFiles(SHDocVw.InternetExplorer w)
+        [Test()]
+        public void Matches()
         {
-            if (w == null)
-            {
-                return Enumerable.Empty<LPath>();
-            }
+            var sampleActions = new SampleActions();
+            var context = new ContextMock();
+            var parser = new Sidi.CommandLine.Parser();
+            parser.ItemSources.Add(new Sidi.CommandLine.ItemSource(sampleActions));
+            var c = new CommandLineParserActionSource(context, parser);
 
-            var view = ((IShellFolderViewDual2)w.Document);
-
-            var items = view.SelectedItems()
-                .OfType<FolderItem>()
-                .Select(i => new LPath(i.Path))
-                .ToList();
-
-            if (items.Any())
-            {
-                return items;
-            }
-
-            Console.WriteLine(w.LocationURL);
-            return new LPath[] { LPath.Parse(w.LocationURL) };
+            AssertMatch(context, c, "del", "SampleActions.Delete");
+            AssertMatch(context, c, "sadel", "SampleActions.Delete");
         }
 
-
-        [Test, Apartment(System.Threading.ApartmentState.STA), Explicit]
-        public void FilesInExplorer()
+        void AssertMatch(IContext context, IActionSource3 c, string input, string expectedActionText)
         {
-            var shell = new Shell();
+            var q = new Query(context) { Text = input };
+            var results = c.GetActions(q).ToEnumerable().ToList();
+            Assert.IsTrue(results.Single().Action.Name.StartsWith(expectedActionText));
+        }
 
-            var shellWindows = ((IEnumerable)shell.Windows()).OfType<SHDocVw.InternetExplorer>()
-                .Select(x => { try { return new { Handle = x.HWND, Instance = x }; } catch { return null; } })
-                .Where(x => x != null)
-                .ToDictionary(x => x.Handle, x => x.Instance);
-
-            var files = shellWindows.Values.SelectMany(_ => GetSelectedFiles(_));
-
-            log.Info(files.Join());
+        [Test]
+        public void MatchLength()
+        {
+            Assert.AreEqual(16, CommandLineParserActionSource.MatchLength("SampleActionsDelete", "sadel"));
+            Assert.AreEqual(-1, CommandLineParserActionSource.MatchLength("HelloWorld", "w"));
+            Assert.AreEqual(7, CommandLineParserActionSource.MatchLength("HelloWorld", "hewo"));
+            Assert.AreEqual(7, CommandLineParserActionSource.MatchLength("HelloWorld", "hwo"));
+            Assert.AreEqual(6, CommandLineParserActionSource.MatchLength("HelloWorld", "hw"));
+            Assert.AreEqual(2, CommandLineParserActionSource.MatchLength("HelloWorld", "he"));
+            Assert.AreEqual(1, CommandLineParserActionSource.MatchLength("HelloWorld", "h"));
         }
     }
 }

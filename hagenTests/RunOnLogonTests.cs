@@ -13,7 +13,7 @@ namespace hagen.Tests
     public class RunOnLogonTests
     {
         [Test()]
-        public void GetTest()
+        public void SetAndGet()
         {
             var path = new LPath(@"C:\temp\test.exe");
             RunOnLogon.Set(path, true);

@@ -41,6 +41,11 @@ namespace Sidi
 
         protected override IEnumerable<IResult> GetResults(IQuery query)
         {
+            if (query.Text.Length < 3)
+            {
+                return Enumerable.Empty<IResult>();
+            }
+
             var all = query.Text.Equals("notes", StringComparison.CurrentCultureIgnoreCase);
             if (all)
             {

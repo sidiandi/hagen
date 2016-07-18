@@ -82,7 +82,7 @@ namespace hagen
 
         public static System.Drawing.Icon GetIcon(string FileName)
         {
-            System.Drawing.Icon icon = null;
+           System.Drawing.Icon icon = null;
 
             if (FileName.StartsWith("http://") || FileName.StartsWith("https://"))
             {

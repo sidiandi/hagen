@@ -60,7 +60,7 @@ namespace hagen
 
         public System.Drawing.Icon Icon
         {
-            get { return null; }
+            get; set; 
         }
 
         public string Id

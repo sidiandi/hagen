@@ -61,7 +61,10 @@ namespace hagen
         {
             this.context = context;
             this.Parser = parser;
+            _icon = Sidi.Properties.Resources.Play;
         }
+
+        System.Drawing.Icon _icon;
 
         public override string ToString()
         {
@@ -95,7 +98,10 @@ namespace hagen
                     () =>
                     {
                         a.Handle(new List<string>() { pathList.ToString() }, true);
-                    });
+                    })
+                {
+                    Icon = _icon
+                };
             }
             else
             {
@@ -113,7 +119,10 @@ namespace hagen
                         {
                             this.Parser.Parse(new string[] { "ShowDialog", a.Name });
                         }
-                    });
+                    })
+                {
+                    Icon = _icon
+                };
             }
         }
 
@@ -130,7 +139,10 @@ namespace hagen
                 () =>
                 {
                     a.MethodInfo.Invoke(a.Source.Instance, new object[] { arg1 });
-                });
+                })
+            {
+                Icon = _icon
+            };
         }
 
         string DisplayText(Sidi.CommandLine.Action a)
@@ -147,23 +159,19 @@ namespace hagen
             return ToIAction<PathList>(a, arg1, arg1String);
         }
 
-        IAction TryToIAction(Sidi.CommandLine.Action a, string parameterString)
+        IAction ToIAction(Sidi.CommandLine.Action a, List<string> args)
         {
             return new SimpleAction(
                 context.LastExecutedStore,
                 a.Name,
-                String.Format("{0}({1}) - ({2})", DisplayText(a), parameterString, a.Usage),
+                String.Format("{0}({1}) - ({2})", DisplayText(a), args.Join(" " ), a.Usage),
                 () =>
                 {
-                    if (a.Parameters.Count == 1)
-                    {
-                        a.Handle(new List<string> { parameterString }, true);
-                    }
-                    else
-                    {
-                        a.Handle(Tokenizer.ToList(parameterString), true);
-                    }
-                });
+                    a.Handle(args, true);
+                })
+            {
+                Icon = _icon
+            };
         }
 
         IList<Sidi.CommandLine.Action> Actions
@@ -234,30 +242,41 @@ namespace hagen
             }
         }
 
+        static string GetMatchText(Sidi.CommandLine.Action a)
+        {
+            var sourceName = a.Source.Instance.GetType().Name;
+            return sourceName + a.Name;
+        }
+
         protected override IEnumerable<IResult> GetResults(IQuery query)
         {
-            var args = Tokenizer.ToArray(query.Text);
-            var pattern = args.Length > 0 ? args[0] : String.Empty;
+            var args = Tokenizer.ToList(query.Text);
+            if (args.Count < 1)
+            {
+                return Enumerable.Empty<IResult>();
+            }
+            var pattern = args.PopHead();
+
+            Func<Sidi.CommandLine.Action, bool> isMatch = a =>
+            {
+                return
+                    (pattern.Length >= 2) &&
+                    (
+                        MatchLength(a.Name, pattern) >= 0 ||
+                        MatchLength(GetMatchText(a), pattern) >= 0
+                    );
+            };
 
             if (
                 object.Equals(pattern, "?") ||
                 object.Equals(pattern, "help"))
             {
-                return Actions.Select(i => ToIAction(i).ToResult(Priority.Normal));
+                var re = args.Count >= 1 ? new Regex(args[0], RegexOptions.IgnoreCase) : new Regex(".*");
+                isMatch = a =>
+                {
+                    return re.IsMatch(GetMatchText(a));
+                };
             }
-
-            if (pattern.Length < 2)
-            {
-                return Enumerable.Empty<IResult>();
-            }
-
-            Func<Sidi.CommandLine.Action, bool> isMatch = a =>
-            {
-                var sourceName = a.Source.Instance.GetType().Name;
-                return
-                    MatchLength(a.Name, pattern) >= 0 ||
-                    MatchLength(sourceName + a.Name, pattern) >= 0;
-            };
 
             int selectedPathCount = query.Context.SelectedPathList.Count;
             var parameterString = args.Skip(1).Join(" ");
@@ -270,26 +289,27 @@ namespace hagen
                     (
                         (selectedPathCount == 1 && TakesSingleParameter<LPath>(a)) ||
                         (selectedPathCount >= 1 && TakesSingleParameter<PathList>(a))
+                    ) && 
+                    (
+                        MatchLength(a.Name, pattern) >= 0 ||
+                        MatchLength(GetMatchText(a), pattern) >= 0
                     );
             };
 
             return Actions.Select(pa =>
             {
-                if (isMatch(pa))
+                if (isFileAction(pa))
                 {
-                    if (isFileAction(pa))
+                    var a = ToIAction(pa, query.Context.SelectedPathList);
+                    return a.ToResult(Priority.High);
+                }
+                else if (isMatch(pa))
+                {
+                    var a = ToIAction(pa, args);
+                    if (a != null)
                     {
-                        var a = ToIAction(pa, query.Context.SelectedPathList);
-                        return a.ToResult(Priority.High);
-                    }
-                    else
-                    {
-                        var a = TryToIAction(pa, parameterString);
-                        if (a != null)
-                        {
-                            return a.ToResult(Priority.Normal);
-                        };
-                    }
+                        return a.ToResult(Priority.Normal);
+                    };
                 }
                 return null;
             })

@@ -251,7 +251,7 @@ namespace hagen.Plugin.Db
                 {
                     return BrowserIcon;
                 }
-                else if (LPath.IsValidFilename(FileName))
+                else if (LPath.IsValid(FileName))
                 {
                     var p = new LPath(FileName);
                     if (p.IsDirectory)

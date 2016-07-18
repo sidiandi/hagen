@@ -23,12 +23,6 @@ namespace hagen.plugin.office
         [Usage("Add a task item to Outlook")]
         public void Task(string subject)
         {
-            Todo(subject);
-        }
-
-        [Usage("Add a To Do item to Outlook")]
-        public void Todo(string subject)
-        {
             var app = OutlookExtensions.ProvideApplication();
             var task = app.CreateTaskItem();
             task.Subject = subject;

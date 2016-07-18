@@ -198,7 +198,7 @@ namespace hagen
         {
             if (p >= pattern.Length)
             {
-                return 0;
+                return i;
             }
 
             if (i >= input.Length)
@@ -210,8 +210,7 @@ namespace hagen
             {
                 if (char.ToLower(input[i]) == char.ToLower(pattern[p]))
                 {
-                    var rest = MatchLength(input, i + 1, pattern, p + 1);
-                    return rest == NoMatch ? NoMatch : rest + 1;
+                    return MatchLength(input, i + 1, pattern, p + 1);
                 }
                 else
                 {
@@ -225,19 +224,21 @@ namespace hagen
                     var rest = MatchLength(input, i + 1, pattern, p + 1);
                     if (rest != NoMatch)
                     {
-                        return rest + 1;
+                        return rest;
                     }
                     rest = MatchLength(input, i + 1, pattern, p);
                     if (rest != NoMatch)
                     {
-                        return rest + 1;
+                        return rest;
                     }
                     return NoMatch;
                 }
                 else
                 {
-                    var rest = MatchLength(input, i + 1, pattern, p);
-                    return rest == NoMatch ? NoMatch : rest + 1;
+                    for (; i < input.Length && char.IsLower(input[i]); ++i)
+                    {
+                    }
+                    return MatchLength(input, i, pattern, p);
                 }
             }
         }

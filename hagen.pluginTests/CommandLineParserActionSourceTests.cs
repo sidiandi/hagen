@@ -92,6 +92,7 @@ namespace hagen.plugin.Tests
         public void MatchLength()
         {
             Assert.AreEqual(16, CommandLineParserActionSource.MatchLength("SampleActionsDelete", "sadel"));
+            Assert.AreEqual(-1, CommandLineParserActionSource.MatchLength("Remove", "rove"));
             Assert.AreEqual(-1, CommandLineParserActionSource.MatchLength("HelloWorld", "w"));
             Assert.AreEqual(7, CommandLineParserActionSource.MatchLength("HelloWorld", "hewo"));
             Assert.AreEqual(7, CommandLineParserActionSource.MatchLength("HelloWorld", "hwo"));

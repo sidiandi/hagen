@@ -178,26 +178,33 @@ namespace hagen.Plugin.Db
             }
             */
 
-            Process p = new Process()
+            if (object.Equals(Path.GetExtension(FileName), ".lnk"))
             {
-                StartInfo = new ProcessStartInfo()
-                {
-                    Arguments = Arguments,
-                    CreateNoWindow = CreateNoWindow,
-                    FileName = FileName,
-                    UseShellExecute = true,
-                    Verb = Verb,
-                    WindowStyle = WindowStyle,
-                    WorkingDirectory = GetDefaultWorkingDirectory()
-                }
-            };
-
-            try
-            {
-                p.Start();
+                Process.Start(FileName.Quote());
             }
-            finally
+            else
             {
+                Process p = new Process()
+                {
+                    StartInfo = new ProcessStartInfo()
+                    {
+                        Arguments = Arguments,
+                        CreateNoWindow = CreateNoWindow,
+                        FileName = FileName,
+                        UseShellExecute = true,
+                        Verb = String.IsNullOrEmpty(Verb) ? null : Verb,
+                        WindowStyle = WindowStyle,
+                        WorkingDirectory = GetDefaultWorkingDirectory()
+                    }
+                };
+
+                try
+                {
+                    p.Start();
+                }
+                finally
+                {
+                }
             }
         }
 

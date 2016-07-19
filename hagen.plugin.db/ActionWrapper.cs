@@ -47,14 +47,7 @@ namespace hagen.Plugin.Db
         
         public void Execute()
         {
-            if (Control.ModifierKeys == Keys.Control)
-            {
-            }
-            else
-            {
-                Action.Execute();
-            }
-
+            Action.Execute();
             Data.Update(Action);
         }
 

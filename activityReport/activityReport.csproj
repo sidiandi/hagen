@@ -144,7 +144,7 @@
   </ItemGroup>
   <ItemGroup>
     <ProjectReference Include="..\hagen.core\hagen.core.csproj">
-      <Project>{B8A11330-3766-4244-9962-8B0D25E98005}</Project>
+      <Project>{b8a11330-3766-4244-9962-8b0d25e98005}</Project>
       <Name>hagen.core</Name>
     </ProjectReference>
     <ProjectReference Include="..\hagen.plugin\hagen.plugin.csproj">

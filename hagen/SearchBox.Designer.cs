@@ -39,17 +39,20 @@ namespace hagen
             // 
             this.textBoxQuery.Dock = System.Windows.Forms.DockStyle.Top;
             this.textBoxQuery.Location = new System.Drawing.Point(0, 0);
+            this.textBoxQuery.Margin = new System.Windows.Forms.Padding(4, 4, 4, 4);
             this.textBoxQuery.Name = "textBoxQuery";
-            this.textBoxQuery.Size = new System.Drawing.Size(467, 20);
+            this.textBoxQuery.Size = new System.Drawing.Size(623, 22);
             this.textBoxQuery.TabIndex = 0;
             // 
             // SearchBox
             // 
-            this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 13F);
+            this.AutoScaleDimensions = new System.Drawing.SizeF(8F, 16F);
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
             this.Controls.Add(this.textBoxQuery);
+            this.Font = new System.Drawing.Font("Microsoft Sans Serif", 9.75F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
+            this.Margin = new System.Windows.Forms.Padding(4, 4, 4, 4);
             this.Name = "SearchBox";
-            this.Size = new System.Drawing.Size(467, 229);
+            this.Size = new System.Drawing.Size(623, 282);
             this.ResumeLayout(false);
             this.PerformLayout();
 

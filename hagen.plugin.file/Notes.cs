@@ -41,7 +41,7 @@ namespace Sidi
 
         protected override IEnumerable<IResult> GetResults(IQuery query)
         {
-            if (query.Text.Length < 3)
+            if (query.Text.Length < 2)
             {
                 return Enumerable.Empty<IResult>();
             }

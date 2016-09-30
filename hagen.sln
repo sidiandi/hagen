@@ -13,13 +13,6 @@ Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Solution Items", "Solution 
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "hagen.core", "hagen.core\hagen.core.csproj", "{B8A11330-3766-4244-9962-8B0D25E98005}"
 EndProject
-Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = ".nuget", ".nuget", "{BFA35297-F359-4563-83FF-CBA94980F910}"
-	ProjectSection(SolutionItems) = preProject
-		.nuget\NuGet.exe = .nuget\NuGet.exe
-		.nuget\NuGet.targets = .nuget\NuGet.targets
-		.nuget\packages.config = .nuget\packages.config
-	EndProjectSection
-EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "hagen.plugin", "hagen.plugin\hagen.plugin.csproj", "{9BF01205-1BD3-4121-909D-16CEC6D47143}"
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "hagen", "hagen\hagen.csproj", "{5E196699-E12B-4500-8178-BD38ACC8D362}"

@@ -114,7 +114,7 @@ namespace hagen
                 AlternateRowBackColor = Color.FromArgb(0xff, 0xf0, 0xf0, 0xf0),
                 UseHotItem = true,
                 FullRowSelect = true,
-                Font = new Font(FontFamily.GenericSansSerif, 12.0f),
+                // Font = new Font(FontFamily.GenericSansSerif, 12.0f),
             };
 
             itemView.Columns.Add(new OLVColumn()

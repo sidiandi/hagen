@@ -539,7 +539,8 @@ Work > {0} hours in {1:yyyy-MM}
                 MajorStep = 1,
                 MinorStep = 1.0/4.0,
                 Minimum = DateTimeAxis.ToDouble(m.Begin.AddDays(-1)),
-                Maximum = DateTimeAxis.ToDouble(m.End)
+                Maximum = DateTimeAxis.ToDouble(m.End),
+                StringFormat = "ddd dd.MM.",
             });
 
             model.Axes.Add(new TimeSpanAxis
@@ -622,7 +623,8 @@ Work > {0} hours in {1:yyyy-MM}
                 // MinorGridlineStyle = LineStyle.Dot,
                 MajorStep = 1,
                 Minimum = DateTimeAxis.ToDouble(m.Begin.AddDays(-1)),
-                Maximum = DateTimeAxis.ToDouble(m.End)
+                Maximum = DateTimeAxis.ToDouble(m.End),
+                StringFormat = "ddd dd.MM.",
             });
 
             model.Axes.Add(new TimeSpanAxis

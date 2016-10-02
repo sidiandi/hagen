@@ -43,13 +43,13 @@ Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "hagen.plugin.google.Tests",
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "hagen.Tests", "hagenTests\hagen.Tests.csproj", "{E450A3BD-0586-4C67-9476-AA88D3918AA7}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "activityReport", "activityReport\activityReport.csproj", "{D3E69D04-FEDA-48D8-9498-F41362F7E52A}"
-EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "hagen.plugin.screen", "hagen.plugin.screen\hagen.plugin.screen.csproj", "{BE26DB18-ADEA-45A7-B2FF-E1847FD4FCC2}"
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "hagen.plugin.office", "hagen.plugin.office\hagen.plugin.office.csproj", "{10DBA5BB-2710-4AD2-8021-6B9026D1BFDA}"
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "hagen.plugin.office.Tests", "hagen.plugin.officeTests\hagen.plugin.office.Tests.csproj", "{D540232C-5F5F-43D2-B649-9D1148792A89}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "activityReport", "activityReport\activityReport.csproj", "{D3E69D04-FEDA-48D8-9498-F41362F7E52A}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
@@ -217,18 +217,6 @@ Global
 		{E450A3BD-0586-4C67-9476-AA88D3918AA7}.Release|x64.Build.0 = Release|Any CPU
 		{E450A3BD-0586-4C67-9476-AA88D3918AA7}.Release|x86.ActiveCfg = Release|Any CPU
 		{E450A3BD-0586-4C67-9476-AA88D3918AA7}.Release|x86.Build.0 = Release|Any CPU
-		{D3E69D04-FEDA-48D8-9498-F41362F7E52A}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
-		{D3E69D04-FEDA-48D8-9498-F41362F7E52A}.Debug|Any CPU.Build.0 = Debug|Any CPU
-		{D3E69D04-FEDA-48D8-9498-F41362F7E52A}.Debug|x64.ActiveCfg = Debug|x64
-		{D3E69D04-FEDA-48D8-9498-F41362F7E52A}.Debug|x64.Build.0 = Debug|x64
-		{D3E69D04-FEDA-48D8-9498-F41362F7E52A}.Debug|x86.ActiveCfg = Debug|x86
-		{D3E69D04-FEDA-48D8-9498-F41362F7E52A}.Debug|x86.Build.0 = Debug|x86
-		{D3E69D04-FEDA-48D8-9498-F41362F7E52A}.Release|Any CPU.ActiveCfg = Release|Any CPU
-		{D3E69D04-FEDA-48D8-9498-F41362F7E52A}.Release|Any CPU.Build.0 = Release|Any CPU
-		{D3E69D04-FEDA-48D8-9498-F41362F7E52A}.Release|x64.ActiveCfg = Release|x64
-		{D3E69D04-FEDA-48D8-9498-F41362F7E52A}.Release|x64.Build.0 = Release|x64
-		{D3E69D04-FEDA-48D8-9498-F41362F7E52A}.Release|x86.ActiveCfg = Release|x86
-		{D3E69D04-FEDA-48D8-9498-F41362F7E52A}.Release|x86.Build.0 = Release|x86
 		{BE26DB18-ADEA-45A7-B2FF-E1847FD4FCC2}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
 		{BE26DB18-ADEA-45A7-B2FF-E1847FD4FCC2}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{BE26DB18-ADEA-45A7-B2FF-E1847FD4FCC2}.Debug|x64.ActiveCfg = Debug|Any CPU
@@ -265,6 +253,18 @@ Global
 		{D540232C-5F5F-43D2-B649-9D1148792A89}.Release|x64.Build.0 = Release|Any CPU
 		{D540232C-5F5F-43D2-B649-9D1148792A89}.Release|x86.ActiveCfg = Release|Any CPU
 		{D540232C-5F5F-43D2-B649-9D1148792A89}.Release|x86.Build.0 = Release|Any CPU
+		{D3E69D04-FEDA-48D8-9498-F41362F7E52A}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{D3E69D04-FEDA-48D8-9498-F41362F7E52A}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{D3E69D04-FEDA-48D8-9498-F41362F7E52A}.Debug|x64.ActiveCfg = Debug|x64
+		{D3E69D04-FEDA-48D8-9498-F41362F7E52A}.Debug|x64.Build.0 = Debug|x64
+		{D3E69D04-FEDA-48D8-9498-F41362F7E52A}.Debug|x86.ActiveCfg = Debug|x86
+		{D3E69D04-FEDA-48D8-9498-F41362F7E52A}.Debug|x86.Build.0 = Debug|x86
+		{D3E69D04-FEDA-48D8-9498-F41362F7E52A}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{D3E69D04-FEDA-48D8-9498-F41362F7E52A}.Release|Any CPU.Build.0 = Release|Any CPU
+		{D3E69D04-FEDA-48D8-9498-F41362F7E52A}.Release|x64.ActiveCfg = Release|x64
+		{D3E69D04-FEDA-48D8-9498-F41362F7E52A}.Release|x64.Build.0 = Release|x64
+		{D3E69D04-FEDA-48D8-9498-F41362F7E52A}.Release|x86.ActiveCfg = Release|x86
+		{D3E69D04-FEDA-48D8-9498-F41362F7E52A}.Release|x86.Build.0 = Release|x86
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE

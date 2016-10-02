@@ -124,7 +124,6 @@
     <Reference Include="WindowsBase" />
   </ItemGroup>
   <ItemGroup>
-    <Content Include="CredentialManagement\CredentialManagement.csproj" />
     <None Include="Resources\Play.ico" />
     <None Include="Play-64.png" />
   </ItemGroup>

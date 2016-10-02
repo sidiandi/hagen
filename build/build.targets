@@ -28,13 +28,7 @@ along with sidi-util. If not, see <http://www.gnu.org/licenses/>.-->
 		<Git>git</Git>
   </PropertyGroup>
 
-	<PropertyGroup>
-	<MSBuildCommunityTasksPath>$(SourceDir)\build</MSBuildCommunityTasksPath>
-  </PropertyGroup>
-  
-  <Import Project="$(NugetPackagesDir)\GitVersionTask.3.4.1\Build\portable-net+sl+win+wpa+wp\GitVersionTask.targets" />
-  <Import Project="$(MSBuildCommunityTasksPath)\MSBuild.Community.Tasks.Targets" />
-  <Import Project="C:\work\nugetPackSymbols\CreateNugetSymbolsPackage\bin\Debug\Build\CreateNugetSymbolsPackage.targets" />
+  <Import Project="$(NugetPackagesDir)\GitVersionTask.3.6.3\Build\portable-net+sl+win+wpa+wp\GitVersionTask.targets" />
 
   <Target Name="GetVersion">
 		<GetVersion SolutionDirectory="$(SolutionDir)">
@@ -129,13 +123,7 @@ along with sidi-util. If not, see <http://www.gnu.org/licenses/>.-->
   <Target Name="Publish" DependsOnTargets="Build;Test;BuildSetup" >
 	<Copy SourceFiles="$(SetupFile)"  DestinationFolder="C:\Users\Andreas\Dropbox\bin\hagen" />
   </Target>
-
-  <!-- This target puts the build.log file into the build directory -->
-  <Target Name="StartWrapper" >
-	<MakeDir Directories="$(BuildDir)"/>
-    <Exec
-		Command="&quot;$(MSBuildBinPath)\msbuild.exe&quot; &quot;$(MSBuildProjectFullPath)&quot; /t:$(BuildTarget) &quot;/fileLoggerParameters:LogFile=$(BuildDir)\build.log;Verbosity=diagnostic;Encoding=UTF-8&quot;"
-		/>
-  </Target>
+  
+  <Target Name="Release" DependsOnTargets="Publish" />
 
 </Project>

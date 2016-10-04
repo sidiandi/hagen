@@ -10,7 +10,6 @@
   </PropertyGroup>
   <Import Project="..\build\Common.props" />
   <ItemGroup>
-    <Compile Include="HandsFreeDial.cs" />
     <Compile Include="Outlook.cs" />
     <Compile Include="OutlookExtensions.cs" />
     <Compile Include="Plugin.cs" />
@@ -84,6 +83,10 @@
     </Reference>
     <Reference Include="protobuf-net, Version=2.1.0.0, Culture=neutral, PublicKeyToken=257b51d87d2e4d67, processorArchitecture=MSIL">
       <HintPath>..\packages\protobuf-net.2.1.0\lib\net451\protobuf-net.dll</HintPath>
+      <Private>True</Private>
+    </Reference>
+    <Reference Include="Sidi.HandsFree, Version=0.1.1.0, Culture=neutral, PublicKeyToken=9e08416b2e539030, processorArchitecture=MSIL">
+      <HintPath>..\packages\Sidi.HandsFree.0.1.1\lib\net46\Sidi.HandsFree.dll</HintPath>
       <Private>True</Private>
     </Reference>
     <Reference Include="Sidi.Util, Version=12.1.0.0, Culture=neutral, PublicKeyToken=1e33c1a5eebc53e1">

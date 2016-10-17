@@ -19,6 +19,7 @@ namespace hagen
         {
             this.hagen = hagen;
             lastExecutedStore = hagen.OpenLastExecutedStore();
+            NotifyAction = x => log.Info(x);
         }
 
         Hagen hagen;
@@ -175,6 +176,12 @@ namespace hagen
             }
         }
 
+        public void Notify(string message)
+        {
+            NotifyAction(message);
+        }
+
         public Func<IReadOnlyCollection<string>> TagsSource { get; set; }
+        public Action<string> NotifyAction { get; set; }
     }
 }

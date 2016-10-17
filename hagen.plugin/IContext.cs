@@ -35,5 +35,11 @@ namespace hagen
         /// Currently active tags
         /// </summary>
         System.Collections.Generic.IReadOnlyCollection<string> Tags { get; }
+
+        /// <summary>
+        /// Notify the user
+        /// </summary>
+        /// <param name="message"></param>
+        void Notify(string message);
     }
 }

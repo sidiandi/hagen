@@ -54,6 +54,7 @@ namespace hagen
             InitializeComponent();
 
             hagen.Context.MainMenu = this.MainMenuStrip;
+            hagen.Context.NotifyAction = text => this.Invoke(() => notifyIcon.ShowBalloonTip(10000, "hagen Alert", text, ToolTipIcon.Info));
 
             this.IsMdiContainer = true;
             this.FormBorderStyle = System.Windows.Forms.FormBorderStyle.None;

@@ -30,6 +30,7 @@ using System.Reactive.Linq;
 using System.Windows.Automation;
 using Sidi.Util;
 using System.IO;
+using System.Reflection;
 
 namespace hagen
 {
@@ -174,6 +175,36 @@ namespace hagen
             };
         }
 
+        static bool TakesSingleString(MethodInfo m)
+        {
+            var p = m.GetParameters();
+            return p.Length == 1 && object.Equals(p[0].ParameterType, typeof(string));
+        }
+
+        IAction ToIAction(Sidi.CommandLine.Action a, string args)
+        {
+            args = args.Trim();
+
+            return new SimpleAction(
+                context.LastExecutedStore,
+                a.Name,
+                String.Format("{0}({1}) - ({2})", DisplayText(a), args, a.Usage),
+                () =>
+                {
+                    if (TakesSingleString(a.MethodInfo))
+                    {
+                        a.Handle(new List<string> { args }, true);
+                    }
+                    else
+                    {
+                        a.Handle(Tokenizer.ToList(args), true);
+                    }
+                })
+            {
+                Icon = _icon
+            };
+        }
+
         IList<Sidi.CommandLine.Action> Actions
         {
             get
@@ -257,6 +288,7 @@ namespace hagen
                 return Enumerable.Empty<IResult>();
             }
             var pattern = args.PopHead();
+            var argsText = query.Text.Substring(pattern.Length);
 
             Func<Sidi.CommandLine.Action, bool> isMatch = a =>
             {
@@ -306,7 +338,7 @@ namespace hagen
                 }
                 else if (isMatch(pa))
                 {
-                    var a = ToIAction(pa, args);
+                    var a = ToIAction(pa, argsText);
                     if (a != null)
                     {
                         return a.ToResult(Priority.Normal);

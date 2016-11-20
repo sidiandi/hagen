@@ -21,14 +21,14 @@ along with sidi-util. If not, see <http://www.gnu.org/licenses/>.-->
 
 		<NugetPackagesDir>$(SourceDir)\packages</NugetPackagesDir>
 		
-		<NUnitBin>$(NugetPackagesDir)\NUnit.Runners.2.6.4\tools</NUnitBin>
-		<NUnitConsole>$(NUnitBin)\nunit-console-x86.exe</NUnitConsole>
+
+		<NUnitConsole>$(NugetPackagesDir)\NUnit.ConsoleRunner.$(NunitVersion)\tools\nunit3-console.exe</NUnitConsole>
 		
 		<Nuget>$(SourceDir)\.nuget\NuGet.exe</Nuget>
 		<Git>git</Git>
   </PropertyGroup>
 
-  <Import Project="$(NugetPackagesDir)\GitVersionTask.3.6.3\Build\portable-net+sl+win+wpa+wp\GitVersionTask.targets" />
+  <Import Project="$(NugetPackagesDir)\GitVersionTask.$(GitVersionTaskVersion)\Build\portable-net+sl+win+wpa+wp\GitVersionTask.targets" />
 
   <Target Name="GetVersion">
 		<GetVersion SolutionDirectory="$(SolutionDir)">
@@ -65,7 +65,10 @@ along with sidi-util. If not, see <http://www.gnu.org/licenses/>.-->
   </Target>
 
   <Target Name="Test" DependsOnTargets="Build">
-    <Exec Command="$(NUnitConsole) /xml=$(TestDir)\TestResult.xml /labels @(Targets, ' ')" />
+    <ItemGroup>
+      <TestTargets Include="%(Targets.Identity)" Condition="$([System.Text.RegularExpressions.Regex]::IsMatch(%(Filename), 'Test'))"/>
+    </ItemGroup>
+    <Exec Command="$(NUnitConsole) --out=$(TestDir)\TestResult.xml --labels=All @(TestTargets, ' ')" />
   </Target>
 
   <Target Name="Pack" DependsOnTargets="GetVersion">

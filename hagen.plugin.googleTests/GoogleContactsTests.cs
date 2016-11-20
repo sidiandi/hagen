@@ -1,9 +1,4 @@
 ﻿using NUnit.Framework;
-using hagen.plugin.google;
-using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
 using System.Threading.Tasks;
 using Google.Apis.Auth.OAuth2;
 using System.Threading;
@@ -16,7 +11,7 @@ using Sidi.Test;
 
 namespace hagen.plugin.google.Tests
 {
-    [TestFixture()]
+    [TestFixture]
     public class GoogleContactsTests : TestBase
     {
         private static readonly log4net.ILog log = log4net.LogManager.GetLogger(System.Reflection.MethodBase.GetCurrentMethod().DeclaringType);

@@ -29,9 +29,9 @@ namespace hagen.plugin.Tests
             parser.ItemSources.Add(new Sidi.CommandLine.ItemSource(sampleActions));
             var c = new CommandLineParserActionSource(context, parser);
 
-            var results = c.GetActions(new Query(context)).ToEnumerable().ToList();
+            var results = c.GetActions(Query.Parse(context, "File")).ToEnumerable().ToList();
 
-            Assert.AreEqual(5, results.Count);
+            Assert.AreEqual(1, results.Count);
             results[0].Action.Execute();
             Assert.IsTrue(sampleActions.FileActionExecuted);
         }

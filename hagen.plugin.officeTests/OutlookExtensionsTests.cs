@@ -16,7 +16,7 @@ namespace hagen.plugin.office.Tests
     {
         private static readonly log4net.ILog log = log4net.LogManager.GetLogger(System.Reflection.MethodBase.GetCurrentMethod().DeclaringType);
 
-        [Test()]
+        [Test(), Explicit("requires Outlook")]
         public void BetterDecline()
         {
             var app = OutlookExtensions.ProvideApplication();
@@ -33,7 +33,7 @@ namespace hagen.plugin.office.Tests
             }
         }
 
-        [Test()]
+        [Test(), Explicit("requires outlook")]
         public void ProvideFolderTest()
         {
             var app = OutlookExtensions.ProvideApplication();

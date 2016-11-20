@@ -26,15 +26,16 @@ namespace hagen.plugin.Tests
         [Test]
         public void ToStringTest()
         {
-            Assert.AreEqual("SampleApp", af.ToString());
+            Assert.AreEqual("hagen.plugin.Tests.SampleApp", af.ToString());
         }
 
         [Test]
         public void GetActions()
         {
-            Assert.AreEqual(1, af.GetActions(Query.Parse(null, "A")).ToEnumerable().Count());
-            Assert.AreEqual(0, af.GetActions(Query.Parse(null, "B")).ToEnumerable().Count());
-            af.GetActions(Query.Parse(null, "SomeAction")).FirstAsync().Wait().Action.Execute();
+            var context = new ContextMock();
+            Assert.AreEqual(1, af.GetActions(Query.Parse(context, "Add")).ToEnumerable().Count());
+            Assert.AreEqual(0, af.GetActions(Query.Parse(context, "Bdd")).ToEnumerable().Count());
+            af.GetActions(Query.Parse(context, "SomeAction")).FirstAsync().Wait().Action.Execute();
             Assert.IsTrue(sampleApp.SomeActionExecuted);
         }
     }

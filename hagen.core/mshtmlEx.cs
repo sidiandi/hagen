@@ -30,10 +30,12 @@ namespace Sidi.Extensions
 {
     public static class mshtmlEx
     {
+        /*
         public static bool IsInternetExplorer(this InternetExplorer ie)
         {
             return Path.GetFileNameWithoutExtension(ie.FullName).ToLower().Equals("iexplore");
         }
+        */
 
         public static string GetAttribute(this IHTMLElement element, string name)
         {

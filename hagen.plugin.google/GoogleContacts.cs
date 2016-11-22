@@ -34,8 +34,6 @@ namespace hagen.plugin.google
             credentialProvider.GetCredential();
         }
 
-        OAuth2Parameters oAuth2Parameters;
-
         static bool HasPrefix(string query, string prefix, out string subQuery)
         {
             var parts = Sidi.Util.Tokenizer.ToList(query);
@@ -113,34 +111,31 @@ namespace hagen.plugin.google
         {
             var secrets = Paths.BinDir.CatDir("client_secret_292564741141-6fa0tqv21ro1v8s28gj4upei0muvuidm.apps.googleusercontent.com.json").Read(GoogleClientSecrets.Load).Secrets;
 
-            for (; ; credentialProvider.Reset())
+            var credential = await GoogleWebAuthorizationBroker.AuthorizeAsync(
+                    secrets,
+                    new string[] { "https://www.google.com/m8/feeds" },
+                    credentialProvider.GetCredential().UserName,
+                    CancellationToken.None,
+                    null);
+
+            var parameters = new Google.GData.Client.OAuth2Parameters()
             {
-                var credential = await GoogleWebAuthorizationBroker.AuthorizeAsync(
-                        secrets,
-                        new string[] { "https://www.google.com/m8/feeds" },
-                        credentialProvider.GetCredential().UserName,
-                        CancellationToken.None,
-                        null);
+                ClientId = secrets.ClientId,
+                ClientSecret = secrets.ClientSecret,
+                RedirectUri = redirectUri,
+                Scope = scope,
+                AccessToken = credential.Token.AccessToken,
+                RefreshToken = credential.Token.RefreshToken,
+            };
 
-                var parameters = new Google.GData.Client.OAuth2Parameters()
-                {
-                    ClientId = secrets.ClientId,
-                    ClientSecret = secrets.ClientSecret,
-                    RedirectUri = redirectUri,
-                    Scope = scope,
-                    AccessToken = credential.Token.AccessToken,
-                    RefreshToken = credential.Token.RefreshToken,
-                };
-
-                var contacts = new ContactsRequest(new RequestSettings("hagen", parameters));
-                var q = new FeedQuery("https://www.google.com/m8/feeds/contacts/default/full")
-                {
-                    Query = query
-                };
-                var feed = contacts.Get<Contact>(q);
-                var entries = feed.Entries.ToList();
-                return entries;
-            }
+            var contacts = new ContactsRequest(new RequestSettings("hagen", parameters));
+            var q = new FeedQuery("https://www.google.com/m8/feeds/contacts/default/full")
+            {
+                Query = query
+            };
+            var feed = contacts.Get<Contact>(q);
+            var entries = feed.Entries.ToList();
+            return entries;
         }
     }
 }

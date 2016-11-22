@@ -19,7 +19,7 @@ along with sidi-util. If not, see <http://www.gnu.org/licenses/>.-->
 	<PropertyGroup>
 		<SourceDir>$([System.IO.Directory]::GetParent($(MSBuildProjectDirectory)))</SourceDir>
 
-		<NugetPackagesDir>$(SourceDir)\packages</NugetPackagesDir>
+		<NugetPackagesDir>$(SourceDir)\..\nuget-packages</NugetPackagesDir>
 
 		<NUnitConsole>$(NugetPackagesDir)\NUnit.ConsoleRunner.$(NunitVersion)\tools\nunit3-console.exe</NUnitConsole>
 		
@@ -67,7 +67,7 @@ along with sidi-util. If not, see <http://www.gnu.org/licenses/>.-->
     <ItemGroup>
       <TestTargets Include="%(Targets.Identity)" Condition="$([System.Text.RegularExpressions.Regex]::IsMatch(%(Filename), 'Test'))"/>
     </ItemGroup>
-    <Exec Command="$(NUnitConsole) --out=$(TestDir)\TestResult.xml --labels=All @(TestTargets, ' ')" />
+    <Exec Command="$(NUnitConsole) --labels=On --work=$(TestDir) --result=$(TestDir)\TestResult.xml --labels=All @(TestTargets, ' ')" />
   </Target>
 
   <Target Name="Pack" DependsOnTargets="GetVersion">

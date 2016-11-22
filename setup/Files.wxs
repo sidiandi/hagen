@@ -296,9 +296,6 @@
             <Component Id="cmpEF96DF6483813956624BAB1A3210EB57" Guid="*">
                 <File Id="fil26845F1B9913929E7AB229F3FE16638D" KeyPath="yes" Source="$(var.BinDir)\InTheHand.Net.Personal.xml" />
             </Component>
-            <Component Id="cmpBACD3B68935C8DDF81918E3A63FE1918" Guid="*">
-                <File Id="fil86CD6A2E24B865F7BEB71214FAE21733" KeyPath="yes" Source="$(var.BinDir)\ListViewPrinter.dll" />
-            </Component>
             <Component Id="cmp13D58469BCB864EB53214ED46E622188" Guid="*">
                 <File Id="fil28F7A9478894C77C5F6C2A95DAA4B459" KeyPath="yes" Source="$(var.BinDir)\log4net.dll" />
             </Component>
@@ -347,6 +344,9 @@
             <Component Id="cmp7219299C1DFD6E86228C460F02846E19" Guid="*">
                 <File Id="fil411D2D21DD3FDFF0571E5511223284F0" KeyPath="yes" Source="$(var.BinDir)\ObjectListView.dll" />
             </Component>
+            <Component Id="cmpBE29A33C968959052EBDB0779FA59D65" Guid="*">
+                <File Id="fil065FB56B336DB76B50C9920F6838A46D" KeyPath="yes" Source="$(var.BinDir)\ObjectListView.xml" />
+            </Component>
             <Component Id="cmp9867DD01B906E145D73B1AA12191B24D" Guid="*">
                 <File Id="filF3C7E1DBD3AD0BE68A0C0D000EC5A7D6" KeyPath="yes" Source="$(var.BinDir)\OxyPlot.dll" />
             </Component>
@@ -391,9 +391,6 @@
             </Component>
             <Component Id="cmpA308F11AC1A0C43BE9E94C8319E7B7FE" Guid="*">
                 <File Id="fil1948DDD9A4BD72B7A0675E18565964B7" KeyPath="yes" Source="$(var.BinDir)\Sidi.Util.xml" />
-            </Component>
-            <Component Id="cmpEF49D759D258CC8763825522D2FD5D0E" Guid="*">
-                <File Id="fil3BC77C22ABFE54AEFC1BFCC3A042D1C8" KeyPath="yes" Source="$(var.BinDir)\SparkleLibrary.dll" />
             </Component>
             <Component Id="cmp94443F251C7A409D2D55887AFD9D01F9" Guid="*">
                 <File Id="filE4363E03998332262DBD99EC9C6EE4FE" KeyPath="yes" Source="$(var.BinDir)\sqlite3.exe" />
@@ -642,7 +639,6 @@
             <ComponentRef Id="cmp28F47D9A07DA0DB70D726116C5513C1D" />
             <ComponentRef Id="cmpA9E964925B5D35E7B3336014E9393F2E" />
             <ComponentRef Id="cmpEF96DF6483813956624BAB1A3210EB57" />
-            <ComponentRef Id="cmpBACD3B68935C8DDF81918E3A63FE1918" />
             <ComponentRef Id="cmp13D58469BCB864EB53214ED46E622188" />
             <ComponentRef Id="cmp742785C9A7B88BE6B2E81C2322E3D2EE" />
             <ComponentRef Id="cmpC9CE6FD0F9E9DFB943DBB4F09D32F05A" />
@@ -659,6 +655,7 @@
             <ComponentRef Id="cmp7FBBFC727329AAA372231FA34295C0C6" />
             <ComponentRef Id="cmpB92DF3B9C359B83A9BA4E27C5DBD40E1" />
             <ComponentRef Id="cmp7219299C1DFD6E86228C460F02846E19" />
+            <ComponentRef Id="cmpBE29A33C968959052EBDB0779FA59D65" />
             <ComponentRef Id="cmp9867DD01B906E145D73B1AA12191B24D" />
             <ComponentRef Id="cmp042101B1E72ACEAF695459FBAA4063AE" />
             <ComponentRef Id="cmp6481F8AB77F5393616870BD96AFB0129" />
@@ -674,7 +671,6 @@
             <ComponentRef Id="cmpA2352FD271AA1946BD664FD451372504" />
             <ComponentRef Id="cmp9D803AF885CD309E8C56C8CFD7524014" />
             <ComponentRef Id="cmpA308F11AC1A0C43BE9E94C8319E7B7FE" />
-            <ComponentRef Id="cmpEF49D759D258CC8763825522D2FD5D0E" />
             <ComponentRef Id="cmp94443F251C7A409D2D55887AFD9D01F9" />
             <ComponentRef Id="cmp5BF82A49794EF8CA80B3603A0E77FC35" />
             <ComponentRef Id="cmp1A01EFD00F1DAF10CE06F8196357F24C" />

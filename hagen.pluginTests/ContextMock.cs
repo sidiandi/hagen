@@ -31,6 +31,9 @@ namespace hagen.plugin.Tests
     {
         private static readonly log4net.ILog log = log4net.LogManager.GetLogger(System.Reflection.MethodBase.GetCurrentMethod().DeclaringType);
 
+        #pragma warning disable 67
+        public event DragEventHandler DragDrop;
+
         public ContextMock()
         {
             LastExecutedStore = new MemoryLastExecutedStore();
@@ -88,8 +91,6 @@ namespace hagen.plugin.Tests
                 throw new NotImplementedException();
             }
         }
-
-        public event DragEventHandler DragDrop;
 
         public IAction CreateChoice(string name, Func<IEnumerable<IAction>> actionProvider)
         {

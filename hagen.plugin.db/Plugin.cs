@@ -296,7 +296,6 @@ namespace hagen.Plugin.Db
         }
 
         DatabaseLookup lookup;
-        DatabaseLookupExecutableWithArguments lookupExecutableWithArguments;
 
         public IEnumerable<IActionSource3> GetActionSources()
         {

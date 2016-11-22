@@ -67,7 +67,7 @@ namespace hagen.plugin.office.Tests
         [Test]
         public void OutlookQueryFormat_formats_date_correctly()
         {
-            Assert.AreEqual("October 24, 2002 12:00 AM", new DateTime(2002, 10, 24, 0, 0, 0).OutlookQueryFormat());
+            Assert.AreEqual("24.10.2002 00:00", new DateTime(2002, 10, 24, 0, 0, 0).OutlookQueryFormat());
         }
 
         [Test]

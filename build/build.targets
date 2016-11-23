@@ -16,14 +16,17 @@ GNU Lesser General Public License for more details.
 You should have received a copy of the GNU Lesser General Public License
 along with sidi-util. If not, see <http://www.gnu.org/licenses/>.-->
 <Project xmlns="http://schemas.microsoft.com/developer/msbuild/2003">
+
+  <!-- Directories -->
 	<PropertyGroup>
 		<SourceDir>$([System.IO.Directory]::GetParent($(MSBuildProjectDirectory)))</SourceDir>
-
 		<NugetPackagesDir>$(SourceDir)\..\nuget-packages</NugetPackagesDir>
-
+  </PropertyGroup>
+  
+  <!-- Tools -->
+	<PropertyGroup>
 		<NUnitConsole>$(NugetPackagesDir)\NUnit.ConsoleRunner.$(NunitVersion)\tools\nunit3-console.exe</NUnitConsole>
-		
-		<Nuget>$(SourceDir)\.nuget\NuGet.exe</Nuget>
+		<Nuget>NuGet.exe</Nuget>
 		<Git>git</Git>
   </PropertyGroup>
 
@@ -76,28 +79,15 @@ along with sidi-util. If not, see <http://www.gnu.org/licenses/>.-->
 	</PropertyGroup>
 	<RemoveDir Directories="$(PackageDir)"/>
 	<MakeDir Directories="$(PackageDir)" />
-	<Exec WorkingDirectory="$(ReleaseDir)" Command="$(Nuget) pack $(SourceDir)\%(PackageProjects.Identity) -OutputDirectory $(PackageDir) -Version $(GfvNuGetVersion)" />
+	<Exec WorkingDirectory="$(ReleaseDir)" Command="$(Nuget) pack $(SourceDir)\%(Package.Identity)\%(Package.Identity).csproj -OutputDirectory $(PackageDir) -Version $(GfvNuGetVersion)" />
 	<ItemGroup>
-		<PackageFiles Include="$(PackageDir)\sidi-util.$(GfvNuGetVersion).nupkg" />
+		<PackageFiles Include="$(PackageDir)\%(Package.Identity).$(GfvNuGetVersion).nupkg" />
 	</ItemGroup>
-	<CreateNugetSymbolsPackage
-		Package = "%(PackageFiles.Identity)"
-		BinDir = "$(OutDir)"
-		/>
   </Target>
 
-  <Target Name="PushLocal" DependsOnTargets="Test;Pack">
-    <Exec WorkingDirectory="$(ReleaseDir)" Command="$(Nuget) push -Source $(NugetLocalFeed) %(PackageFiles.Identity)" />
-    <Exec WorkingDirectory="$(ReleaseDir)" Command="$(Nuget) push -Source $(NugetLocalFeed) %(PackageFiles.RootDir)%(PackageFiles.Directory)%(PackageFiles.Filename).symbols.nupkg" />
-  </Target>
-
+  <!-- Push nuget packages to feed -->
   <Target Name="Push" DependsOnTargets="Test;Pack">
-    <Exec WorkingDirectory="$(ReleaseDir)" Command="$(Nuget) push %(PackageFiles.Identity)" />
-    <Exec WorkingDirectory="$(ReleaseDir)" Command="$(Nuget) push %(PackageFiles.RootDir)%(PackageFiles.Directory)%(PackageFiles.Filename).symbols.nupkg" />
-  </Target>
-
-  <Target Name="TestPush" DependsOnTargets="Build">
-    <Exec WorkingDirectory="$(ReleaseDir)" Command="$(Nuget) push $(OutDir)\%(Package.Identity).$(GfvNuGetVersion).symbols.nupkg" />
+    <Exec WorkingDirectory="$(ReleaseDir)" Command="$(Nuget) push %(PackageFiles.Identity) $(NugetApiKey) -Source $(NugetFeed)" />
   </Target>
 
   <Target Name="BuildSetup" DependsOnTargets="GetVersion;Tag">
@@ -122,7 +112,7 @@ along with sidi-util. If not, see <http://www.gnu.org/licenses/>.-->
 	<Exec Command="@(SetupFile, ' ')" />
   </Target>
   
-  <Target Name="Publish" DependsOnTargets="Build;Test;BuildSetup" >
+  <Target Name="Publish" DependsOnTargets="Build;Test;BuildSetup;Push" >
 	<Copy SourceFiles="$(SetupFile)"  DestinationFolder="C:\Users\Andreas\Dropbox\bin\hagen" />
   </Target>
   

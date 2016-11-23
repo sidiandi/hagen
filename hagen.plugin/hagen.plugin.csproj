@@ -23,13 +23,16 @@
     <Compile Include="IAction.cs" />
     <Compile Include="IActionSource.cs" />
     <Compile Include="IActionSource2.cs" />
+    <Compile Include="IActionSource3.cs" />
     <Compile Include="IconHelper.cs" />
     <Compile Include="Icons.cs" />
     <Compile Include="IContext.cs" />
     <Compile Include="IInputAggregator.cs" />
     <Compile Include="ILastExecutedStore.cs" />
     <Compile Include="IPlugin.cs" />
+    <Compile Include="IPlugin3.cs" />
     <Compile Include="IQuery.cs" />
+    <Compile Include="IResult.cs" />
     <Compile Include="NativeMethods.cs" />
     <Compile Include="PathListExtension.cs" />
     <Compile Include="PrivateExtensions.cs" />

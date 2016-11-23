@@ -19,7 +19,7 @@ using System.ComponentModel;
 
 namespace hagen.plugin.google
 {
-    public class GoogleContacts : IActionSource
+    public class GoogleContacts : EnumerableActionSource
     {
         private static readonly log4net.ILog log = log4net.LogManager.GetLogger(System.Reflection.MethodBase.GetCurrentMethod().DeclaringType);
 
@@ -47,30 +47,6 @@ namespace hagen.plugin.google
                 subQuery = null;
                 return false;
             }
-        }
-
-        IEnumerable<IAction> IActionSource.GetActions(string query)
-        {
-            var contact = "Contact";
-
-            if (!HasPrefix(query, contact, out query))
-            {
-                goto nothing;
-            }
-
-            if (!Regex.IsMatch(query, @"^[\s\w]{4,200}$"))
-            {
-                goto nothing;
-            }
-
-            var entries = ReadContacts(query);
-
-            log.Info(entries.ListFormat());
-
-            return entries.Select(e => (IAction)new ContactAction(this.context.LastExecutedStore, e));
-
-            nothing:
-                return Enumerable.Empty<IAction>();
         }
 
         public class ContactAction : ActionBase
@@ -136,6 +112,33 @@ namespace hagen.plugin.google
             var feed = contacts.Get<Contact>(q);
             var entries = feed.Entries.ToList();
             return entries;
+        }
+
+        protected override IEnumerable<IResult> GetResults(IQuery query)
+        {
+            var contact = "Contact";
+
+            string searchTerm;
+
+            if (!HasPrefix(query.Text, contact, out searchTerm))
+            {
+                goto nothing;
+            }
+
+            if (!Regex.IsMatch(searchTerm, @"^[\s\w]{4,200}$"))
+            {
+                goto nothing;
+            }
+
+            var entries = ReadContacts(searchTerm);
+
+            log.Info(entries.ListFormat());
+
+            return entries.Select(e => (IAction)new ContactAction(this.context.LastExecutedStore, e))
+                .Select(_ => _.ToResult());
+
+        nothing:
+            return Enumerable.Empty<IResult>();
         }
     }
 }

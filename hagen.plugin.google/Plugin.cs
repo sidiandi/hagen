@@ -6,26 +6,26 @@ using System.Threading.Tasks;
 
 namespace hagen.plugin.google
 {
-    class PluginFactory : IPluginFactory
+    class PluginFactory : IPluginFactory3
     {
-        public IEnumerable<IPlugin> CreatePlugins(IContext context)
+        public IEnumerable<IPlugin3> CreatePlugins(IContext context)
         {
-            return new IPlugin[] { new Plugin(context) };
+            yield return new Plugin(context);
         }
     }
 
-    class Plugin : IPlugin
+    class Plugin : IPlugin3
     {
         IContext context;
-        readonly IActionSource2[] actionSources;
+        readonly IActionSource3[] actionSources;
 
         public Plugin(IContext context)
         {
             this.context = context;
-            this.actionSources = new IActionSource2[] { new GoogleContacts(context).ToIActionSource2() };
+            this.actionSources = new IActionSource3[] { new GoogleContacts(context) };
         }
 
-        public IEnumerable<IActionSource2> GetActionSources()
+        IEnumerable<IActionSource3> IPlugin3.GetActionSources()
         {
             return actionSources;
         }

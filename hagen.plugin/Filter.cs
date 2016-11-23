@@ -5,20 +5,20 @@ using System.Text;
 
 namespace hagen
 {
-    public class Filter : IActionSource
+    public class Filter : IActionSource3
     {
-        public Filter(IActionSource source, Func<IEnumerable<IAction>, IEnumerable<IAction>> filter)
+        public Filter(IActionSource3 source, Func<IObservable<IResult>, IObservable<IResult>> filter)
         {
             this.source = source;
             this.filter = filter;
         }
 
-        IActionSource source;
-        Func<IEnumerable<IAction>, IEnumerable<IAction>> filter;
+        readonly IActionSource3 source;
+        readonly Func<IObservable<IResult>, IObservable<IResult>> filter;
     
-        public IEnumerable<IAction>  GetActions(string query)
+        public IObservable<IResult> GetActions(IQuery query)
         {
- 	        return filter(source.GetActions(query));
+            return filter(source.GetActions(query));
         }
     }
 }

@@ -43,18 +43,11 @@ namespace hagen.ActionSource
                 log.InfoFormat("Looking for plugins in {0}", assembly.FullName);
                 var types = assembly.GetTypes();
 
-                var legacyPlugins = types
-                    .Create<IPluginFactory>()
-                    .Where(_ => { log.InfoFormat("IPluginFactory: {0}", _.GetType().FullName); return true; })
-                    .SelectMany(f => f.CreatePlugins(context))
-                    .Where(_ => { log.InfoFormat("  IPlugin: {0}", _.GetType().FullName); return true; })
-                    .Select(_ => _.ToIPlugin3());
-
                 var plugins = types
                     .Create<IPluginFactory3>()
                     .SelectMany(f => f.CreatePlugins(context));
 
-                return legacyPlugins.Concat(plugins).ToList();
+                return plugins.ToList();
             }
             catch
             {

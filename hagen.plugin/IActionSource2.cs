@@ -12,27 +12,7 @@ namespace hagen
         IObservable<IAction> GetActions(string query);
     }
 
-    public enum Priority
-    {
-        Lowest,
-        Low,
-        Normal,
-        High,
-        Highest
-    }
-
-    public interface IResult
-    {
-        IAction Action { get; }
-        Priority Priority { get; set; }
-    }
-
-    public interface IActionSource3
-    {
-        IObservable<IResult> GetActions(IQuery query);
-    }
-
-    public static class IActionSource2Extensions
+    internal static class IActionSource2Extensions
     {
         class ActionSource3Wrapper : IActionSource3
         {
@@ -54,34 +34,9 @@ namespace hagen
             }
         }
 
-        class ActionWrapper : IResult
-        {
-            public ActionWrapper(IAction action, Priority priority)
-            {
-                this.Action = action;
-                this.Priority = priority;
-            }
-
-            public IAction Action {
-                get; private set; }
-
-            public Priority Priority {
-                get; set; }
-        }
-
         public static IActionSource3 ToActionSource3(this IActionSource2 actionSource)
         {
             return new ActionSource3Wrapper(actionSource);
-        }
-
-        public static IResult ToResult(this IAction action)
-        {
-            return action.ToResult(Priority.Normal);
-        }
-
-        public static IResult ToResult(this IAction action, Priority priority)
-        {
-            return new ActionWrapper(action, priority);
         }
     }
 }

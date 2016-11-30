@@ -65,7 +65,7 @@ namespace hagen.Plugin.Db
         {
             get
             {
-                return String.Format("{0} ({1}) {2}", Action.Name, Action.CommandDetails, Data.Connection.DataSource);
+                return String.Format("{0} ({1})", Action.Name, Action.CommandDetails, Data.Connection.DataSource);
             }
         }
 

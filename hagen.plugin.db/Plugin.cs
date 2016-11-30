@@ -345,10 +345,17 @@ namespace hagen.Plugin.Db
                 foreach (var i in paths
                     .Where(p => p.Exists && !p.Info.IsHidden))
                 {
-                    log.Info(i);
-                    var action = f.FromFile(i);
-                    action.Name = tagsPrefix + action.Name;
-                    actions.AddOrUpdate(action);
+                    try
+                    {
+                        log.Info(i);
+                        var action = f.FromFile(i);
+                        action.Name = tagsPrefix + action.Name;
+                        actions.AddOrUpdate(action);
+                    }
+                    catch (Exception ex)
+                    {
+                        log.Warn(ex);
+                    }
                 }
             }
         }

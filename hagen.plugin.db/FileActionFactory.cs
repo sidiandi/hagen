@@ -22,6 +22,7 @@ using System.Text;
 using System.IO;
 using Sidi.Persistence;
 using Sidi.IO;
+using Sidi.Extensions;
 
 namespace hagen.Plugin.Db
 {
@@ -36,15 +37,15 @@ namespace hagen.Plugin.Db
 
         public Action FromFile(IFileSystemInfo fileSystemInfo)
         {
-            var file = fileSystemInfo.FullName;
+            var path = fileSystemInfo.FullName.GetUniversalName();
 
             var action = new Action()
             {
-                Name = file.IsRoot ? file.StringRepresentation : file.FileName,
-                CommandObject = StartProcess.FromFileName(file),
+                Name = path.IsRoot ? path.StringRepresentation : fileSystemInfo.FileNameWithContext(),
+                CommandObject = StartProcess.FromFileName(path),
                 LastUseTime = fileSystemInfo.LastWriteTimeUtc,
             };
-            log.InfoFormat("Created action for {0}", file);
+            log.InfoFormat("Created action for {0}", path);
             return action;
         }
 

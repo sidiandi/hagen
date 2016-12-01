@@ -93,17 +93,36 @@ namespace hagen
 
         public static PathList GetSelectedFiles(IntPtr hwnd)
         {
-            var shell = new Shell();
-
-            var shellWindow = ((IEnumerable)shell.Windows()).OfType<SHDocVw.InternetExplorer>()
-                .FirstOrDefault(_ => _.HWND == (int)hwnd);
-
-            if (shellWindow == null)
+            try
             {
-                goto none;
-            }
+                var shell = new Shell();
 
-            return new PathList(GetSelectedFiles(shellWindow));
+                var shellWindow = ((IEnumerable) shell.Windows()).OfType<SHDocVw.InternetExplorer>()
+                    .FirstOrDefault(_ =>
+                    {
+                        try
+                        {
+                            return _.HWND == (int) hwnd;
+                        }
+                        catch
+                        {
+
+                        }
+
+                        return false;
+                    });
+
+                if (shellWindow == null)
+                {
+                    goto none;
+                }
+
+                return new PathList(GetSelectedFiles(shellWindow));
+            }
+            catch (Exception e)
+            {
+                log.Warn(e);
+            }
 
             none:
             return new PathList();

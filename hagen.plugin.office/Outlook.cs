@@ -48,8 +48,14 @@ namespace hagen.plugin.office
         {
             try
             {
-                log.Info("check");
-                var app = OutlookExtensions.ProvideApplication();
+                // log.Debug("check upcoming appointments");
+                // var app = OutlookExtensions.ProvideApplication();
+                var app = OutlookExtensions.GetRunningApplication();
+                if (app == null)
+                {
+                    // Outlook is not running - do nothing
+                    return;
+                }
                 var ns = app.GetNamespace("MAPI");
                 var calendarFolder = ns.GetDefaultFolder(OlDefaultFolders.olFolderCalendar);
 

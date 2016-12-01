@@ -307,12 +307,12 @@ namespace hagen.Plugin.Db
 
         void Context_DragDrop(object sender, DragEventArgs e)
         {
-            var tagsPrefix = this.context.Tags.Select(_ => _ + " ").Join(String.Empty);
-
             if (!AcceptDrop)
             {
                 return;
             }
+
+            var tagsPrefix = this.context.Tags.Select(_ => _ + " ").Join(String.Empty);
 
             ClipboardUrl cbUrl;
             if (ClipboardUrl.TryParse(e.Data, out cbUrl))

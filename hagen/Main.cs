@@ -364,12 +364,15 @@ Hours: {0:G3}",
 
         void Main_DragDrop(object sender, DragEventArgs e)
         {
+            log.InfoFormat("Drop: {0}, {1}", e.AllowedEffect, e.Data.GetFormats().Join(", "));
             hagen.Context.OnDragDrop(sender, e);
         }
 
         void Main_DragEnter(object sender, DragEventArgs e)
         {
-            e.Effect = e.AllowedEffect;
+            log.Info(e.Data.GetFormats().Join(", "));
+            log.Info(e.AllowedEffect);
+            e.Effect = DragDropEffects.All;
         }
 
         private void optionsToolStripMenuItem_Click(object sender, EventArgs e)

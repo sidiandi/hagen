@@ -19,6 +19,16 @@ namespace hagen.plugin.office
 
         public static Application ProvideApplication()
         {
+            var instance = GetRunningApplication();
+            if (instance != null)
+            {
+                return instance;
+            }
+            return new Microsoft.Office.Interop.Outlook.Application();
+        }
+
+        public static Application GetRunningApplication()
+        {
             try
             {
                 var instance = Marshal.GetActiveObject("Outlook.Application") as Microsoft.Office.Interop.Outlook.Application;
@@ -31,7 +41,7 @@ namespace hagen.plugin.office
             {
             }
 
-            return new Microsoft.Office.Interop.Outlook.Application();
+            return null;
         }
 
         public static TaskItem CreateTaskItem(this Application app)

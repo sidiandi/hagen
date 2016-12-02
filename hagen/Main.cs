@@ -39,6 +39,7 @@ using WeifenLuo.WinFormsUI.Docking;
 using Sidi.CommandLine;
 using hagen.ActionSource;
 using System.Reflection;
+using Microsoft.Win32;
 
 namespace hagen
 {
@@ -52,6 +53,8 @@ namespace hagen
         void InitUserInterface()
         {
             InitializeComponent();
+
+            EnableDragAndDropFromInternetExplorer();
 
             hagen.Context.MainMenu = this.MainMenuStrip;
             hagen.Context.NotifyAction = text => this.Invoke(() => notifyIcon.ShowBalloonTip(10000, "hagen Alert", text, ToolTipIcon.Info));
@@ -362,6 +365,43 @@ Hours: {0:G3}",
             searchBox1.Remove();
         }
 
+        /// <summary>
+        /// 
+        /// </summary>
+        /// Drag and drop from Internet Explorer? See 
+        /// 
+        /// https://answers.microsoft.com/en-us/ie/forum/ie8-windows_other/dragging-dropping-pictures-text-no-more-in/7e6116cf-92b1-4c99-98b3-52d0169d4c50
+        /// 
+        /// Drag/Drop of content from IE on Windows XP is allowed; on Windows Vista and above, Protected Mode blocks such copies unless 
+        /// the process is opted-in to allowing drops via the registry. This is a security measure. To enable drag/drop to an application, 
+        /// you must list the application in the registry. You can register your application to accept web content from a drag-and-drop 
+        /// operation by creating a DragDrop policy. DragDrop policies must have a globally unique identifier (GUID) associated with them. 
+        /// Use CreateGuid to create a new GUID for your policy. Next, add a key to the following location. 
+        /// HKEY_LOCAL_MACHINE\SOFTWARE\Microsoft\Internet Explorer\Low Rights\DragDrop Set the name of the new key to the GUID created 
+        /// for your policy and then add the following settings to the key. Policy (DWORD) should be set to 3, which tells Protected Mode 
+        /// to allow web content to be silently copied to your application process. AppName (REG_SZ) is the filename of your application 
+        /// executable file. AppPath (REG_SZ) is the user-selected install location of your application's executable file. 
+        static void EnableDragAndDropFromInternetExplorer()
+        {
+            try
+            {
+                using (var dragDrop = Registry.LocalMachine.OpenSubKey(@"SOFTWARE\Microsoft\Internet Explorer\Low Rights\DragDrop", true))
+                {
+                    using (var hagenDragDrop = dragDrop.CreateSubKey("{F41E8255-3897-4cf4-AEC7-4F85171A0B3C}"))
+                    {
+                        hagenDragDrop.SetValue("Policy", (UInt32)3);
+                        var exe = Assembly.GetEntryAssembly().GetLocalPath();
+                        hagenDragDrop.SetValue("AppName", exe.FileName);
+                        hagenDragDrop.SetValue("AppPath", exe.Parent);
+                    }
+                }
+            }
+            catch (Exception ex)
+            {
+                log.Warn("Cannot enable drag-and-drop from Internet Explorer. Start application in elevated mode.", ex);
+            }
+        }
+
         void Main_DragDrop(object sender, DragEventArgs e)
         {
             log.InfoFormat("Drop: {0}, {1}", e.AllowedEffect, e.Data.GetFormats().Join(", "));
@@ -372,7 +412,7 @@ Hours: {0:G3}",
         {
             log.Info(e.Data.GetFormats().Join(", "));
             log.Info(e.AllowedEffect);
-            e.Effect = DragDropEffects.All;
+            e.Effect = e.AllowedEffect;
         }
 
         private void optionsToolStripMenuItem_Click(object sender, EventArgs e)

@@ -60,7 +60,7 @@ namespace hagen.Plugin.Db
             {
                 parts = new[] { p.Server, p.Share }.Concat(parts);
             }
-            return parts.Reverse().Take(3).Join(" < ");
+            return parts.Take(4).Join(" < ");
         }
 
         [DllImport("mpr.dll", CharSet = CharSet.Unicode)]

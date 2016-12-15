@@ -107,6 +107,10 @@ along with sidi-util. If not, see <http://www.gnu.org/licenses/>.-->
     </MSBuild>
   </Target>
   
+  <Target Name="Run" DependsOnTargets="Build">
+	<Exec Command="$(OutDir)\hagen.exe Popup" />
+  </Target>
+  
   <Target Name="Install" DependsOnTargets="BuildSetup">
     <Message Text="@(SetupFile, ' ')" />
 	<Exec Command="@(SetupFile, ' ')" />

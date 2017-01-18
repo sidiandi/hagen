@@ -6,27 +6,20 @@ using System.Threading.Tasks;
 
 namespace hagen
 {
-    public interface IPluginFactory
+    [Obsolete]
+    internal interface IPluginFactory
     {
         IEnumerable<IPlugin> CreatePlugins(IContext context);
     }
 
-    public interface IPlugin
+    [Obsolete]
+    internal interface IPlugin
     {
         IEnumerable<IActionSource2> GetActionSources();
     }
 
-    public interface IPlugin3
-    {
-        IEnumerable<IActionSource3> GetActionSources();
-    }
-
-    public interface IPluginFactory3
-    {
-        IEnumerable<IPlugin3> CreatePlugins(IContext context);
-    }
-
-    public static class IPluginExtensions
+    [Obsolete]
+    internal static class IPluginExtensions
     {
         public static IPlugin3 ToIPlugin3(this IPlugin plugin)
         {

@@ -260,11 +260,21 @@ namespace hagen.Plugin.Db
             var links = ActionExtensions.GetAllIeLinks().ToList();
             try
             {
-                var selected = Prompt.ChooseMany(links.ListFormat().DefaultColumns(), "Add Links");
-                foreach (var a in selected)
-                {
-                    actions.Add(a);
-                }
+                var tagsPrefix = GetTagsPrefix();
+
+                var selected = Prompt.ChooseMany(links.ListFormat().DefaultColumns(), "Add Links")
+                    .Select(_ => new Action {Command = _.Command, Name = new[] {tagsPrefix, _.Name}.Join(" ")})
+                    .ToList();
+
+                context.AddJob(new Job(
+                    String.Format("Add {0} links from Internet Explorer", selected.Count),
+                    () =>
+                    {
+                        foreach (var a in selected)
+                        {
+                            actions.Add(a);
+                        }
+                    }));
             }
             catch
             {
@@ -296,7 +306,6 @@ namespace hagen.Plugin.Db
         }
 
         DatabaseLookup lookup;
-        DatabaseLookupExecutableWithArguments lookupExecutableWithArguments;
 
         public IEnumerable<IActionSource3> GetActionSources()
         {
@@ -306,14 +315,19 @@ namespace hagen.Plugin.Db
             };
         }
 
+        string GetTagsPrefix()
+        {
+            return this.context.Tags.Select(_ => _ + " ").Join(String.Empty);
+        }
+
         void Context_DragDrop(object sender, DragEventArgs e)
         {
-            var tagsPrefix = this.context.Tags.Select(_ => _ + " ").Join(String.Empty);
-
             if (!AcceptDrop)
             {
                 return;
             }
+
+            var tagsPrefix = GetTagsPrefix();
 
             ClipboardUrl cbUrl;
             if (ClipboardUrl.TryParse(e.Data, out cbUrl))
@@ -346,10 +360,17 @@ namespace hagen.Plugin.Db
                 foreach (var i in paths
                     .Where(p => p.Exists && !p.Info.IsHidden))
                 {
-                    log.Info(i);
-                    var action = f.FromFile(i);
-                    action.Name = tagsPrefix + action.Name;
-                    actions.AddOrUpdate(action);
+                    try
+                    {
+                        log.Info(i);
+                        var action = f.FromFile(i);
+                        action.Name = tagsPrefix + action.Name;
+                        actions.AddOrUpdate(action);
+                    }
+                    catch (Exception ex)
+                    {
+                        log.Warn(ex);
+                    }
                 }
             }
         }

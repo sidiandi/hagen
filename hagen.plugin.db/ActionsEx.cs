@@ -160,7 +160,7 @@ namespace hagen.Plugin.Db
             }
         }
 
-        public static IEnumerable<Action> GetAllIeLinks()
+        public static IList<Action> GetAllIeLinks()
         {
             return new SHDocVw.ShellWindows()
                 .Cast<SHDocVw.InternetExplorer>()
@@ -168,6 +168,11 @@ namespace hagen.Plugin.Db
                 .SelectMany(ie =>
                     {
                         var d = (IHTMLDocument3)ie.Document;
+
+                        var options = d.getElementsByTagName("option").Cast<IHTMLElement>()
+                            .Where(o => Uri.IsWellFormedUriString(o.GetAttribute("value"), UriKind.Absolute))
+                            .ToList();
+
                         return d.getElementsByTagName("a")
                             .Cast<IHTMLElement>()
                             .Select(a =>
@@ -177,8 +182,16 @@ namespace hagen.Plugin.Db
                                     Name = a.GetInnerText(),
                                     Command = a.GetAttribute("href"),
                                 };
-                            });
-                    });
+                            })
+                            .Concat(options.Select(option =>
+                            {
+                                return new Action()
+                                {
+                                    Name = option.GetInnerText(),
+                                    Command = option.GetAttribute("value"),
+                                };
+                            }));
+                    }).ToList();
         }
     }
 }

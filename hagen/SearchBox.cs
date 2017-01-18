@@ -20,6 +20,7 @@ using System.Collections.Generic;
 using System.ComponentModel;
 using System.Drawing;
 using System.Data;
+using System.Globalization;
 using System.Linq;
 using System.Text;
 using System.Windows.Forms;
@@ -93,6 +94,9 @@ namespace hagen
             int size = 40;
             Context = context;
 
+            System.Threading.Thread.CurrentThread.CurrentCulture = CultureInfo.InvariantCulture;
+            System.Threading.Thread.CurrentThread.CurrentUICulture = CultureInfo.InvariantCulture;
+
             itemView = new ObjectListView()
             {
                 HeaderStyle = ColumnHeaderStyle.None,
@@ -102,10 +106,10 @@ namespace hagen
                 GridLines = false,
                 HideSelection = false,
                 UseCustomSelectionColors = true,
-                HighlightBackgroundColor = SystemColors.Highlight,
-                UnfocusedHighlightBackgroundColor = SystemColors.Highlight,
-                HighlightForegroundColor = SystemColors.HighlightText,
-                UnfocusedHighlightForegroundColor = SystemColors.HighlightText,
+                SelectedBackColor = SystemColors.Highlight,
+                UnfocusedSelectedBackColor = SystemColors.Highlight,
+                SelectedForeColor = SystemColors.HighlightText,
+                UnfocusedSelectedForeColor = SystemColors.HighlightText,
                 OwnerDraw = true,
                 ShowGroups = false,
                 ShowItemToolTips = true,

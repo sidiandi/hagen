@@ -62,7 +62,7 @@ namespace hagen
         }
     }
 
-    public static class IActionSourceExtensions
+    internal static class IActionSourceExtensions
     {
         public static IActionSource2 ToIActionSource2(this IActionSource actionSource)
         {

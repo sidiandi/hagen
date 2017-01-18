@@ -21,6 +21,7 @@ namespace hagen
         public virtual void Init(IContext context)
         {
             Context = context;
+            GetActionSources();
         }
 
         T Create<T>(Type t)
@@ -41,6 +42,17 @@ namespace hagen
         }
 
         public virtual IEnumerable<IActionSource3> GetActionSources()
+        {
+            if (_actionSources == null)
+            {
+                _actionSources = GetActionSourcesImpl().ToList();
+            }
+            return _actionSources;
+        }
+
+        private List<IActionSource3> _actionSources;
+
+        IEnumerable<IActionSource3> GetActionSourcesImpl()
         {
             var assembly = GetType().Assembly;
             var types = assembly.GetTypes();

@@ -4,10 +4,11 @@ using System.Linq;
 using System.Text;
 using Sidi.IO;
 using System.Drawing;
+using System.Reactive.Linq;
 
 namespace hagen.Plugin.Db
 {
-    public class Filters
+    public static class Filters
     {
         static StartProcess GetStartProcess(IAction a)
         {
@@ -46,62 +47,45 @@ namespace hagen.Plugin.Db
 
         static LPath vlcExe = new LPath(@"C:\Program Files (x86)\VideoLAN\VLC\vlc.exe");
 
-        public static IActionSource OpenInVlc(IActionSource source)
+        public static IActionSource3 CreateFilter(this IActionSource3 source, Func<IAction, IEnumerable<IAction>> filterFunction)
         {
-            return new Filter(source, actions =>
+            return new Filter(source, results =>
             {
-                return actions.SelectMany(action =>
+                return results.SelectMany(result =>
                 {
-                    var dir = GetPath(action);
-                    if (dir != null && dir.IsDirectory)
-                    {
-                        var openInVlc = new Action()
-                        {
-                            Name = String.Format("Open in VLC: {0}", dir.Quote()),
-                            CommandObject = new StartProcess()
-                            {
-                                Arguments = dir.Quote(),
-                                FileName = vlcExe
-                            }
-                        };
-                        return new IAction[] { action, openInVlc };
-                    }
-
-                    return new[] { action };
+                    var action = result.Action;
+                    return filterFunction(action).Select(_ => { var r = _.ToResult(); r.Priority = result.Priority; return r; });
                 });
             });
         }
 
-        public static IEnumerable<IAction> OpenInVlc(IEnumerable<IAction> actions)
+        public static IActionSource3 OpenInVlc(IActionSource3 source)
         {
-                return actions.SelectMany(action =>
+            return source.CreateFilter(action =>
+            {
+                var dir = GetPath(action);
+                if (dir != null && dir.IsDirectory)
                 {
-                    var dir = GetPath(action);
-                    if (dir != null && dir.IsDirectory)
+                    var openInVlc = new Action()
                     {
-                        var openInVlc = new Action()
+                        Name = String.Format("Open in VLC: {0}", dir.Quote()),
+                        CommandObject = new StartProcess()
                         {
-                            Name = String.Format("Open in VLC: {0}", dir.Quote()),
-                            CommandObject = new StartProcess()
-                            {
-                                Arguments = dir.Quote(),
-                                FileName = vlcExe
-                            },
-                            LastUseTime = action.LastExecuted
-                        };
-                        return new IAction[] { action, openInVlc };
-                    }
+                            Arguments = dir.Quote(),
+                            FileName = vlcExe
+                        }
+                    };
+                    return new[] { action, openInVlc };
+                }
 
-                    return new[] { action };
-                });
+                return new[] { action };
+            });
         }
 
         static LPath notepadPlusPlusExe = Paths.GetFolderPath(Environment.SpecialFolder.ProgramFilesX86)
             .CatDir(@"Notepad++\notepad++.exe");
-        
-        public static IActionSource NoFileAssociation(IActionSource source)
-        {
-            var blacklist = new HashSet<string>()
+
+        static readonly HashSet<string> blacklist = new HashSet<string>()
             {
                 ".lnk",
                 ".exe",
@@ -110,27 +94,50 @@ namespace hagen.Plugin.Db
                 ".jpeg",
                 ".url",
             };
-            
-            return new Filter(source, actions =>
+
+        public static IEnumerable<IAction> OpenInVlc(IEnumerable<IAction> actions)
+        {
+            return actions.SelectMany(action =>
             {
-                return actions.SelectMany(action =>
+                var dir = GetPath(action);
+                if (dir != null && dir.IsDirectory)
                 {
-                    var p = GetPath(action);
-                    if (p != null && p.IsFile && !blacklist.Contains(p.Extension.ToLower()))
+                    var openInVlc = new Action()
                     {
-                        var openInVlc = new Action()
+                        Name = String.Format("Open in VLC: {0}", dir.Quote()),
+                        CommandObject = new StartProcess()
                         {
-                            Name = String.Format("Notepad: {0}", p),
-                            CommandObject = new StartProcess()
-                            {
-                                Arguments = p.Quote(),
-                                FileName = notepadPlusPlusExe,
-                            }
-                        };
-                        return new IAction[] { action, openInVlc };
-                    }
-                    return new[] { action };
-                });
+                            Arguments = dir.Quote(),
+                            FileName = vlcExe
+                        },
+                        LastUseTime = action.LastExecuted
+                    };
+                    return new IAction[] { action, openInVlc };
+                }
+
+                return new[] { action };
+            });
+        }
+
+        public static IActionSource3 NoFileAssociation(IActionSource3 source)
+        {
+            return source.CreateFilter(action =>
+            { 
+                var p = GetPath(action);
+                if (p != null && p.IsFile && !blacklist.Contains(p.Extension.ToLower()))
+                {
+                    var openInVlc = new Action()
+                    {
+                        Name = String.Format("Notepad: {0}", p),
+                        CommandObject = new StartProcess()
+                        {
+                            Arguments = p.Quote(),
+                            FileName = notepadPlusPlusExe,
+                        }
+                    };
+                    return new IAction[] { action, openInVlc };
+                }
+                return new[] { action };
             });
         }
     }

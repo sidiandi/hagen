@@ -3,18 +3,15 @@
 <Project xmlns="http://schemas.microsoft.com/developer/msbuild/2003">
   <PropertyGroup>
     <CompanyName>Andreas Grimme</CompanyName>
-        <ProductName>hagen</ProductName>
+    <ProductName>hagen</ProductName>
     <UpgradeCode>57CAC978-D1D8-4375-A93F-E906E4E66D60</UpgradeCode>
-    <Configuration>Release</Configuration>
-    <Platform>AnyCPU</Platform>
-    <NugetLocalFeed>$(USERPROFILE)\Dropbox\nuget</NugetLocalFeed>
-
-  <GitVersionTaskVersion>3.6.4</GitVersionTaskVersion>
-  <NUnitVersion>3.5.0</NUnitVersion>
-
   </PropertyGroup>
   
   <ItemGroup>
     <Package Include="hagen.plugin" />
   </ItemGroup>
+  
+  <!-- define secret NugetApiKey property in a private .props file. See build/api_key_example.props for an example -->
+	<Import Project="$(HOMEPATH)\Documents\myget_sidiandi_api_key.txt" Condition="Exists('$(HOMEPATH)\Documents\myget_sidiandi_api_key.txt')" />
+  
 </Project>

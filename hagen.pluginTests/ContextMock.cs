@@ -12,6 +12,8 @@ namespace hagen.plugin.Tests
 {
     internal class MemoryLastExecutedStore : ILastExecutedStore
     {
+        private static readonly log4net.ILog log = log4net.LogManager.GetLogger(System.Reflection.MethodBase.GetCurrentMethod().DeclaringType);
+
         IDictionary<string, DateTime> data = new Sidi.Collections.DefaultValueDictionary<string, DateTime>(_ => DateTime.MinValue);
 
         public DateTime Get(string id)
@@ -27,6 +29,11 @@ namespace hagen.plugin.Tests
 
     public class ContextMock : IContext
     {
+        private static readonly log4net.ILog log = log4net.LogManager.GetLogger(System.Reflection.MethodBase.GetCurrentMethod().DeclaringType);
+
+        #pragma warning disable 67
+        public event DragEventHandler DragDrop;
+
         public ContextMock()
         {
             LastExecutedStore = new MemoryLastExecutedStore();
@@ -85,8 +92,6 @@ namespace hagen.plugin.Tests
             }
         }
 
-        public event DragEventHandler DragDrop;
-
         public IAction CreateChoice(string name, Func<IEnumerable<IAction>> actionProvider)
         {
             throw new NotImplementedException();
@@ -105,6 +110,11 @@ namespace hagen.plugin.Tests
             {
                 throw new NotImplementedException();
             }
+        }
+
+        public void Notify(string message)
+        {
+            log.Info(message);
         }
     }
 }

@@ -22,8 +22,8 @@ using System.Text;
 
 namespace hagen
 {
-    [Obsolete("Use IActionSource2 instead")]
-    public interface IActionSource
+    // [Obsolete("Use IActionSource2 instead")]
+    interface IActionSource
     {
         IEnumerable<IAction> GetActions(string query);
     }

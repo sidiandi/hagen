@@ -74,14 +74,14 @@ namespace hagen.Plugin.Db
         /// <returns>List of results. Empty list if terms contain an SQL problem</returns>
         IEnumerable<IResult> GetResults(IEnumerable<string> terms)
         {
-            if (!terms.Any(_ => _.Length >= 3))
+            var cmd = actions.Connection.CreateCommand();
+
+            if (!terms.Any(_ => _.Length >= 1))
             {
                 return Enumerable.Empty<IResult>();
             }
 
-            var cmd = actions.Connection.CreateCommand();
-
-            var termsQuery = terms.Select((t,i) =>
+            var termsQuery = terms.Select((t, i) =>
             {
                 var paramName = String.Format("@term{0}", i);
                 var parameter = cmd.Parameters.Add(paramName, System.Data.DbType.String);

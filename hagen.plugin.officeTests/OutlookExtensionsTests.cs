@@ -8,13 +8,15 @@ using System.Threading.Tasks;
 using Sidi.Test;
 using Microsoft.Office.Interop.Outlook;
 using Sidi.Extensions;
+using Sidi.Util;
 
 namespace hagen.plugin.office.Tests
 {
     [TestFixture()]
     public class OutlookExtensionsTests : TestBase
     {
-        private static readonly log4net.ILog log = log4net.LogManager.GetLogger(System.Reflection.MethodBase.GetCurrentMethod().DeclaringType);
+        private static readonly log4net.ILog log =
+            log4net.LogManager.GetLogger(System.Reflection.MethodBase.GetCurrentMethod().DeclaringType);
 
         [Test(), Explicit("requires Outlook")]
         public void BetterDecline()
@@ -38,13 +40,51 @@ namespace hagen.plugin.office.Tests
         {
             var app = OutlookExtensions.ProvideApplication();
             var f1 = app.ProvideFolder(OlDefaultFolders.olFolderCalendar, "test");
-            log.Info(app.GetSession().GetDefaultFolder(OlDefaultFolders.olFolderCalendar).Folders.OfType<MAPIFolder>().Select(_ => _.Name).Join());
+            log.Info(
+                app.GetSession()
+                    .GetDefaultFolder(OlDefaultFolders.olFolderCalendar)
+                    .Folders.OfType<MAPIFolder>()
+                    .Select(_ => _.Name)
+                    .Join());
 
             var f2 = app.ProvideFolder(OlDefaultFolders.olFolderCalendar, "test");
-            log.Info(app.GetSession().GetDefaultFolder(OlDefaultFolders.olFolderCalendar).Folders.OfType<MAPIFolder>().Select(_ => _.Name).Join());
+            log.Info(
+                app.GetSession()
+                    .GetDefaultFolder(OlDefaultFolders.olFolderCalendar)
+                    .Folders.OfType<MAPIFolder>()
+                    .Select(_ => _.Name)
+                    .Join());
 
             Assert.AreEqual(f1.Name, f2.Name);
-            log.Info(app.GetSession().GetDefaultFolder(OlDefaultFolders.olFolderCalendar).Folders.OfType<MAPIFolder>().Select(_ => _.Name).Join());
+            log.Info(
+                app.GetSession()
+                    .GetDefaultFolder(OlDefaultFolders.olFolderCalendar)
+                    .Folders.OfType<MAPIFolder>()
+                    .Select(_ => _.Name)
+                    .Join());
+        }
+
+        [Test]
+        public void OutlookQueryFormat_formats_date_correctly()
+        {
+            Assert.AreEqual("24.10.2002 00:00", new DateTime(2002, 10, 24, 0, 0, 0).OutlookQueryFormat());
+        }
+
+        [Test]
+        public void AppointmentReminder()
+        {
+            var app = OutlookExtensions.ProvideApplication();
+            var ns = app.GetNamespace("MAPI");
+            var calendarFolder = ns.GetDefaultFolder(OlDefaultFolders.olFolderCalendar);
+            var ti = new TimeInterval(DateTime.Now, TimeSpan.FromMinutes(60));
+            var upcoming = app.GetOutlookAppointmentsStartingIn(calendarFolder, ti);
+
+            log.Info(upcoming.ListFormat()
+                    .Add(_ => _.Subject)
+                    .Add(_ => _.Location)
+                    .Add(_ => _.Start)
+                    .Add(_ => _.End)
+            );
         }
     }
 }

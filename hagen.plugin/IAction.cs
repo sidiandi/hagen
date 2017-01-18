@@ -28,7 +28,7 @@ namespace hagen
         void Execute();
         string Name { get; }
         System.Drawing.Icon Icon { get; }
-        
+
         /// <summary>
         /// Unique Identifier
         /// </summary>
@@ -44,5 +44,37 @@ namespace hagen
     {
         void Store();
         void Remove();
+    }
+
+    public static class IActionExtensions
+    {
+        public static IResult ToResult(this IAction action)
+        {
+            return action.ToResult(Priority.Normal);
+        }
+
+        class ActionWrapper : IResult
+        {
+            public ActionWrapper(IAction action, Priority priority)
+            {
+                this.Action = action;
+                this.Priority = priority;
+            }
+
+            public IAction Action
+            {
+                get; private set;
+            }
+
+            public Priority Priority
+            {
+                get; set;
+            }
+        }
+
+        public static IResult ToResult(this IAction action, Priority priority)
+        {
+            return new ActionWrapper(action, priority);
+        }
     }
 }

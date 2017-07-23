@@ -54,13 +54,7 @@ namespace hagen.Plugin.Db
 
         public static string FileNameWithContext(this IFileSystemInfo fileSystemInfo)
         {
-            var p = fileSystemInfo.FullName.GetUniversalName();
-            var parts = p.Parts.Reverse();
-            if (p.IsUnc)
-            {
-                parts = new[] { p.Server, p.Share }.Concat(parts);
-            }
-            return parts.Take(4).Join(" < ");
+            return fileSystemInfo.FullName.GetUniversalName().FileNameWithContext();
         }
 
         public static string FileNameWithContext(this LPath resolvedPath)
@@ -68,7 +62,7 @@ namespace hagen.Plugin.Db
             var parts = resolvedPath.Parts.Reverse();
             if (resolvedPath.IsUnc)
             {
-                parts = new[] { resolvedPath.Server, resolvedPath.Share }.Concat(parts);
+                parts = parts.Concat(new[] { resolvedPath.Share, resolvedPath.Server });
             }
             return parts.Take(4).Join(" < ");
         }

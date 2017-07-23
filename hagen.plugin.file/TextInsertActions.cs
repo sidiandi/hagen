@@ -51,6 +51,12 @@ namespace hagen
             InsertText(DateTime.Now.ToString("yyyy-MM-dd"));
         }
 
+        [Usage("Inserts a GUID")]
+        public void InsertGuid()
+        {
+            InsertText(Guid.NewGuid().ToString());
+        }
+
         [Usage("Inserts the current time (RFC3339 format)")]
         public void InsertTime()
         {

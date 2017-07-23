@@ -74,7 +74,7 @@ namespace hagen
                 inputAggregator.Input.SubscribeOn(System.Reactive.Concurrency.TaskPoolScheduler.Default).Subscribe(_ =>
                     {
                         inputs.Add(_);
-                        log.InfoFormat("Input: {0} clicks, {1} keys", _.Clicks, _.KeyDown);
+                        log.DebugFormat("Input: {0} clicks, {1} keys", _.Clicks, _.KeyDown);
                     }),
                 inputAggregator,
                 inputs,

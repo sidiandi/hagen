@@ -183,27 +183,39 @@ namespace hagen
 
             ActionSource = actionSource;
 
-            textBoxQuery.GetTextChangedObservable()
+            var resultStream = textBoxQuery.GetTextChangedObservable()
                 .Throttle(TimeSpan.FromMilliseconds(200))
                 .Select(text => { var c = Context; return c == null ? null : Query.Parse(c, text); })
                 .Where(_ => _ != null)
                 .Merge(ManualUpdate)
-                .Select(query => ActionSource.GetActions(query))
+                .Select(query => ActionSource.GetActions(query));
+
+            resultStream
                 .ObserveOn(this)
                 .Subscribe(result =>
                     {
                         results = new List<IResult>();
-                        result
+
+                        if (currentItemsReceiver != null)
+                        {
+                            currentItemsReceiver.Dispose();
+                        }
+
+                        currentItemsReceiver = result
+                            .Buffer(TimeSpan.FromMilliseconds(200), 50)
                             .ObserveOn(this)
                             .Subscribe(_ =>
                             {
-                                results = results.Concat(new IResult[] { _ }).OrderByDescending(x => x.Priority).ThenByDescending(x => x.Action.LastExecuted).ToList();
+                                results = results.Concat(_)
+                                    .OrderByDescending(x => x.Action.LastExecuted).ThenByDescending(x => x.Priority).ToList();
                                 var si = Math.Max(itemView.SelectedIndex, 0);
                                 itemView.SetObjects(results);
                                 itemView.SelectedIndex = si;
                             });
                     });
         }
+
+        IDisposable currentItemsReceiver;
 
         Subject<IQuery> ManualUpdate = new Subject<IQuery>();
 

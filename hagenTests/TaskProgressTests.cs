@@ -14,7 +14,7 @@ namespace hagen.Tests
     {
         private static readonly log4net.ILog log = log4net.LogManager.GetLogger(System.Reflection.MethodBase.GetCurrentMethod().DeclaringType);
 
-        [Test, Apartment(ApartmentState.STA)]
+        [Test, Apartment(ApartmentState.STA), Explicit("does not run on Jenkins")]
         public void Run()
         {
             var cs = new CancellationTokenSource();

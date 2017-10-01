@@ -16,7 +16,7 @@ namespace hagen.plugin.google.Tests
     {
         private static readonly log4net.ILog log = log4net.LogManager.GetLogger(System.Reflection.MethodBase.GetCurrentMethod().DeclaringType);
 
-        [Test]
+        [Test, Explicit("does not run on Jenkins")]
         public void ReadContacts()
         {
             ReadContactsAsync().Wait();

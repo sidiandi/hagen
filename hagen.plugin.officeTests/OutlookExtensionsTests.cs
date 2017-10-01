@@ -70,7 +70,7 @@ namespace hagen.plugin.office.Tests
             Assert.AreEqual("24.10.2002 00:00", new DateTime(2002, 10, 24, 0, 0, 0).OutlookQueryFormat());
         }
 
-        [Test]
+        [Test, Explicit("does not run on Jenkins")]
         public void AppointmentReminder()
         {
             var app = OutlookExtensions.ProvideApplication();

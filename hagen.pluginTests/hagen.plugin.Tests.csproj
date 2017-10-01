@@ -28,14 +28,14 @@
     <Reference Include="Microsoft.Win32.Primitives">
       <HintPath>..\..\nuget-packages\Microsoft.Win32.Primitives.4.3.0\lib\net46\Microsoft.Win32.Primitives.dll</HintPath>
     </Reference>
-    <Reference Include="nunit.framework, Version=3.7.1.0, Culture=neutral, PublicKeyToken=2638cd05610744eb, processorArchitecture=MSIL">
-      <HintPath>..\..\nuget-packages\NUnit.3.7.1\lib\net45\nunit.framework.dll</HintPath>
+    <Reference Include="nunit.framework, Version=3.8.1.0, Culture=neutral, PublicKeyToken=2638cd05610744eb, processorArchitecture=MSIL">
+      <HintPath>..\..\nuget-packages\NUnit.3.8.1\lib\net45\nunit.framework.dll</HintPath>
     </Reference>
-    <Reference Include="protobuf-net, Version=2.3.0.0, Culture=neutral, PublicKeyToken=257b51d87d2e4d67, processorArchitecture=MSIL">
-      <HintPath>..\..\nuget-packages\protobuf-net.2.3.0\lib\net40\protobuf-net.dll</HintPath>
+    <Reference Include="protobuf-net, Version=2.3.2.0, Culture=neutral, PublicKeyToken=257b51d87d2e4d67, processorArchitecture=MSIL">
+      <HintPath>..\..\nuget-packages\protobuf-net.2.3.2\lib\net40\protobuf-net.dll</HintPath>
     </Reference>
-    <Reference Include="Sidi.Util, Version=12.2.0.0, Culture=neutral, PublicKeyToken=1e33c1a5eebc53e1, processorArchitecture=MSIL">
-      <HintPath>..\..\nuget-packages\sidi-util.12.2.0\lib\net45\Sidi.Util.dll</HintPath>
+    <Reference Include="Sidi.Util, Version=12.3.0.0, Culture=neutral, PublicKeyToken=1e33c1a5eebc53e1, processorArchitecture=MSIL">
+      <HintPath>..\..\nuget-packages\sidi-util.12.3.0\lib\net45\Sidi.Util.dll</HintPath>
     </Reference>
     <Reference Include="System" />
     <Reference Include="System.AppContext">
@@ -54,8 +54,8 @@
     <Reference Include="System.Data.SQLite.Linq, Version=1.0.105.2, Culture=neutral, PublicKeyToken=db937bc2d44ff139, processorArchitecture=MSIL">
       <HintPath>..\..\nuget-packages\System.Data.SQLite.Linq.1.0.105.2\lib\net46\System.Data.SQLite.Linq.dll</HintPath>
     </Reference>
-    <Reference Include="System.Diagnostics.DiagnosticSource, Version=4.0.2.0, Culture=neutral, PublicKeyToken=cc7b13ffcd2ddd51, processorArchitecture=MSIL">
-      <HintPath>..\..\nuget-packages\System.Diagnostics.DiagnosticSource.4.4.0\lib\net46\System.Diagnostics.DiagnosticSource.dll</HintPath>
+    <Reference Include="System.Diagnostics.DiagnosticSource, Version=4.0.2.1, Culture=neutral, PublicKeyToken=cc7b13ffcd2ddd51, processorArchitecture=MSIL">
+      <HintPath>..\..\nuget-packages\System.Diagnostics.DiagnosticSource.4.4.1\lib\net46\System.Diagnostics.DiagnosticSource.dll</HintPath>
     </Reference>
     <Reference Include="System.Globalization.Calendars">
       <HintPath>..\..\nuget-packages\System.Globalization.Calendars.4.3.0\lib\net46\System.Globalization.Calendars.dll</HintPath>
@@ -72,8 +72,8 @@
     <Reference Include="System.IO.FileSystem.Primitives">
       <HintPath>..\..\nuget-packages\System.IO.FileSystem.Primitives.4.3.0\lib\net46\System.IO.FileSystem.Primitives.dll</HintPath>
     </Reference>
-    <Reference Include="System.Net.Http, Version=4.1.1.1, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a, processorArchitecture=MSIL">
-      <HintPath>..\..\nuget-packages\System.Net.Http.4.3.2\lib\net46\System.Net.Http.dll</HintPath>
+    <Reference Include="System.Net.Http, Version=4.1.1.2, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a, processorArchitecture=MSIL">
+      <HintPath>..\..\nuget-packages\System.Net.Http.4.3.3\lib\net46\System.Net.Http.dll</HintPath>
     </Reference>
     <Reference Include="System.Net.Sockets">
       <HintPath>..\..\nuget-packages\System.Net.Sockets.4.3.0\lib\net46\System.Net.Sockets.dll</HintPath>
@@ -105,8 +105,8 @@
     <Reference Include="System.Security.Cryptography.Primitives">
       <HintPath>..\..\nuget-packages\System.Security.Cryptography.Primitives.4.3.0\lib\net46\System.Security.Cryptography.Primitives.dll</HintPath>
     </Reference>
-    <Reference Include="System.Security.Cryptography.X509Certificates">
-      <HintPath>..\..\nuget-packages\System.Security.Cryptography.X509Certificates.4.3.0\lib\net46\System.Security.Cryptography.X509Certificates.dll</HintPath>
+    <Reference Include="System.Security.Cryptography.X509Certificates, Version=4.1.1.1, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a, processorArchitecture=MSIL">
+      <HintPath>..\..\nuget-packages\System.Security.Cryptography.X509Certificates.4.3.1\lib\net461\System.Security.Cryptography.X509Certificates.dll</HintPath>
     </Reference>
     <Reference Include="System.Windows.Forms" />
     <Reference Include="System.Xml" />
@@ -190,7 +190,9 @@
     </PropertyGroup>
     <Error Condition="!Exists('..\..\nuget-packages\GitVersionTask.3.6.5\build\dotnet\GitVersionTask.targets')" Text="$([System.String]::Format('$(ErrorText)', '..\..\nuget-packages\GitVersionTask.3.6.5\build\dotnet\GitVersionTask.targets'))" />
     <Error Condition="!Exists('..\..\nuget-packages\System.Data.SQLite.Core.1.0.105.2\build\net46\System.Data.SQLite.Core.targets')" Text="$([System.String]::Format('$(ErrorText)', '..\..\nuget-packages\System.Data.SQLite.Core.1.0.105.2\build\net46\System.Data.SQLite.Core.targets'))" />
+    <Error Condition="!Exists('..\..\nuget-packages\NETStandard.Library.2.0.0\build\NETStandard.Library.targets')" Text="$([System.String]::Format('$(ErrorText)', '..\..\nuget-packages\NETStandard.Library.2.0.0\build\NETStandard.Library.targets'))" />
   </Target>
   <Import Project="..\..\nuget-packages\GitVersionTask.3.6.5\build\dotnet\GitVersionTask.targets" Condition="Exists('..\..\nuget-packages\GitVersionTask.3.6.5\build\dotnet\GitVersionTask.targets')" />
   <Import Project="..\..\nuget-packages\System.Data.SQLite.Core.1.0.105.2\build\net46\System.Data.SQLite.Core.targets" Condition="Exists('..\..\nuget-packages\System.Data.SQLite.Core.1.0.105.2\build\net46\System.Data.SQLite.Core.targets')" />
+  <Import Project="..\..\nuget-packages\NETStandard.Library.2.0.0\build\NETStandard.Library.targets" Condition="Exists('..\..\nuget-packages\NETStandard.Library.2.0.0\build\NETStandard.Library.targets')" />
 </Project>

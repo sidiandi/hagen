@@ -38,14 +38,17 @@ File.WriteAllText(PropsFile, @"<?xml version=""1.0"" encoding=""utf-8""?>
     </Task>  
   </UsingTask>  
 
-  <Target Name="RestorePackages">
+  <Target Name="CreateBuildDir" >
+    <MakeDir Directories="$(BuildDir)"/>
+  </Target>
+
+  <Target Name="RestorePackages" DependsOnTargets="CreateBuildDir" >
     <Exec Command="nuget restore &quot;$(SourceDir)\$(ProductName).sln&quot;" />
     <CreatePackageVersionProps PackagesFile="C:\work\hagen\hagen.coreTests\packages.config" PropsFile="$(BuildDir)\nuget.props" />
   </Target>
   
   <!-- This target puts the build.log file into the build directory -->
   <Target Name="Bootstrap" DependsOnTargets="RestorePackages" >
-	<MakeDir Directories="$(BuildDir)"/>
     <Exec
 		Command="&quot;$(MSBuildBinPath)\msbuild.exe&quot; &quot;$(MSBuildProjectDir)Build.proj&quot; /t:$(BuildTarget) &quot;/fileLoggerParameters:LogFile=$(BuildDir)\build.log;Verbosity=diagnostic;Encoding=UTF-8&quot;"
 		/>

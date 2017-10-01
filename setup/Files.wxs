@@ -317,6 +317,9 @@
             <Component Id="cmpB92DF3B9C359B83A9BA4E27C5DBD40E1" Guid="*">
                 <File Id="filCCD055F61AE65252A5472B26C3AD9DB0" KeyPath="yes" Source="$(var.BinDir)\nunit.framework.xml" />
             </Component>
+            <Component Id="cmpD03870D9DB61C6AB0DC3AFBF3A89619F" Guid="*">
+                <File Id="fil273027E803BE9533918AFB2409DA7475" KeyPath="yes" Source="$(var.BinDir)\nunit_random_seed.tmp" />
+            </Component>
             <Component Id="cmp7219299C1DFD6E86228C460F02846E19" Guid="*">
                 <File Id="fil411D2D21DD3FDFF0571E5511223284F0" KeyPath="yes" Source="$(var.BinDir)\ObjectListView.dll" />
             </Component>
@@ -337,6 +340,9 @@
             </Component>
             <Component Id="cmp079F957BF600F15E13C0301641E0D378" Guid="*">
                 <File Id="fil30A671C60B3821827C93BCC0314C707C" KeyPath="yes" Source="$(var.BinDir)\protobuf-net.dll" />
+            </Component>
+            <Component Id="cmp10CF933A66E41C9F324B7CF0889EC930" Guid="*">
+                <File Id="fil8D8F5793B19AE16E7FD37A681CC0CB59" KeyPath="yes" Source="$(var.BinDir)\protobuf-net.xml" />
             </Component>
             <Component Id="cmpC80ADC21DF1316EE7C265958C73AB64D" Guid="*">
                 <File Id="filE0582058E72F3E3B667BE9E38D319B4C" KeyPath="yes" Source="$(var.BinDir)\SciLexer.dll" />
@@ -382,6 +388,9 @@
             </Component>
             <Component Id="cmp6B7CE49F5F3A518047B74FB6AC2251C5" Guid="*">
                 <File Id="fil86030949C08D40073D1F77D572C14B0D" KeyPath="yes" Source="$(var.BinDir)\System.Data.SQLite.dll" />
+            </Component>
+            <Component Id="cmpE25D4339F043AE9AF876A4620A6432C9" Guid="*">
+                <File Id="fil231CA1DE8C286CE1F5188773A945762D" KeyPath="yes" Source="$(var.BinDir)\System.Data.SQLite.dll.config" />
             </Component>
             <Component Id="cmpF0779F15EC19A57BE1B2F861D7DE696E" Guid="*">
                 <File Id="filFCD462E7D1690B3E0A1EC55BB1B7FE6B" KeyPath="yes" Source="$(var.BinDir)\System.Data.SQLite.EF6.dll" />
@@ -622,6 +631,7 @@
             <ComponentRef Id="cmp125C379E185231EFADA4CB4301BD0A9E" />
             <ComponentRef Id="cmp7FBBFC727329AAA372231FA34295C0C6" />
             <ComponentRef Id="cmpB92DF3B9C359B83A9BA4E27C5DBD40E1" />
+            <ComponentRef Id="cmpD03870D9DB61C6AB0DC3AFBF3A89619F" />
             <ComponentRef Id="cmp7219299C1DFD6E86228C460F02846E19" />
             <ComponentRef Id="cmpBE29A33C968959052EBDB0779FA59D65" />
             <ComponentRef Id="cmp9867DD01B906E145D73B1AA12191B24D" />
@@ -629,6 +639,7 @@
             <ComponentRef Id="cmp6481F8AB77F5393616870BD96AFB0129" />
             <ComponentRef Id="cmp0EBB2C8A066AA80A805B79098BFB223E" />
             <ComponentRef Id="cmp079F957BF600F15E13C0301641E0D378" />
+            <ComponentRef Id="cmp10CF933A66E41C9F324B7CF0889EC930" />
             <ComponentRef Id="cmpC80ADC21DF1316EE7C265958C73AB64D" />
             <ComponentRef Id="cmpF2D23AAA869973A3774E275C31B3A277" />
             <ComponentRef Id="cmp658C98C0E84723AB62B81DEC00E9BAFA" />
@@ -644,6 +655,7 @@
             <ComponentRef Id="cmp1A01EFD00F1DAF10CE06F8196357F24C" />
             <ComponentRef Id="cmp6E52B5B284A5C6D04DFDDC4BC01C9D04" />
             <ComponentRef Id="cmp6B7CE49F5F3A518047B74FB6AC2251C5" />
+            <ComponentRef Id="cmpE25D4339F043AE9AF876A4620A6432C9" />
             <ComponentRef Id="cmpF0779F15EC19A57BE1B2F861D7DE696E" />
             <ComponentRef Id="cmp7CD8A031D36A447486DB78F3F83272E7" />
             <ComponentRef Id="cmpB0D00055965EDE11CC624747CE56C686" />

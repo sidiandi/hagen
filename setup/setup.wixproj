@@ -57,6 +57,7 @@
     <PropertyGroup>
     <DefineConstants>
       Version=$(Version);
+      Description=$(Description);
       CompanyName=$(CompanyName);
       ProductName=$(ProductName);
       BinDir=$(BinDir);

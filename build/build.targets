@@ -97,7 +97,8 @@ along with sidi-util. If not, see <http://www.gnu.org/licenses/>.-->
         Projects="$(SourceDir)\setup\setup.wixproj" Properties="
 			CompanyName=$(CompanyName);
 			ProductName=$(ProductName);
-			Version=$(GfvSemVer);
+			Version=$(GfvMajorMinorPatch);
+      Description=$(GfvSemVer);
 			Configuration=Release;
 			Platform=Any CPU;
 			OutputPath=$(BuildDir)\setup;

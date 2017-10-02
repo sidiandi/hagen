@@ -119,10 +119,17 @@ along with sidi-util. If not, see <http://www.gnu.org/licenses/>.-->
 	<Exec Command="@(SetupFile, ' ')" />
   </Target>
   
-  <Target Name="Publish" DependsOnTargets="Build;Test;BuildSetup;Push" >
+  <Target Name="PublishToDropbox" DependsOnTargets="Build;Test;BuildSetup;Push" >
 	<Copy SourceFiles="$(SetupFile)"  DestinationFolder="C:\Users\Andreas\Dropbox\bin\hagen" />
   </Target>
   
-  <Target Name="Release" DependsOnTargets="Publish" />
+  <Target Name="Release" DependsOnTargets="BuildSetup" >
+    <Exec IgnoreExitCode="true" Command="github-release release --tag v$(GfvSemVer)" 
+      EnvironmentVariables="GITHUB_TOKEN=$(GITHUB_TOKEN);GITHUB_USER=$(GITHUB_USER);GITHUB_REPO=$(GITHUB_REPO)"
+    />
+    <Exec Command="github-release upload -t v$(GfvSemVer) --name hagen.msi --replace --file @(SetupFile, ' ')" 
+      EnvironmentVariables="GITHUB_TOKEN=$(GITHUB_TOKEN);GITHUB_USER=$(GITHUB_USER);GITHUB_REPO=$(GITHUB_REPO)"
+    />
+  </Target>
 
 </Project>

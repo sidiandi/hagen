@@ -11,7 +11,14 @@
     <Package Include="hagen.plugin" />
   </ItemGroup>
   
+  <PropertyGroup>
+    <GITHUB_REPO>hagen</GITHUB_REPO>
+  </PropertyGroup>
+
   <!-- define secret NugetApiKey property in a private .props file. See build/api_key_example.props for an example -->
-	<Import Project="$(HOMEPATH)\Documents\myget_sidiandi_api_key.txt" Condition="$(NugetApiKey) == '' and Exists('$(HOMEPATH)\Documents\myget_sidiandi_api_key.txt')" />
+  <PropertyGroup Condition="$(SECRET_PROPS) == ''">
+    <SECRET_PROPS>$(HOMEPATH)\Documents\hagen-secrets.props</SECRET_PROPS>
+  </PropertyGroup>
+  <Import Project="$(SECRET_PROPS)" Condition="$(NugetApiKey) == ''" />
   
 </Project>

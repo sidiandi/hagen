@@ -123,7 +123,7 @@ along with sidi-util. If not, see <http://www.gnu.org/licenses/>.-->
 	<Copy SourceFiles="$(SetupFile)"  DestinationFolder="C:\Users\Andreas\Dropbox\bin\hagen" />
   </Target>
   
-  <Target Name="Release" DependsOnTargets="BuildSetup" >
+  <Target Name="Release" DependsOnTargets="Build;Test;BuildSetup" >
     <Exec IgnoreExitCode="true" Command="github-release release --tag v$(GfvSemVer)" 
       EnvironmentVariables="GITHUB_TOKEN=$(GITHUB_TOKEN);GITHUB_USER=$(GITHUB_USER);GITHUB_REPO=$(GITHUB_REPO)"
     />

@@ -66,7 +66,10 @@ along with sidi-util. If not, see <http://www.gnu.org/licenses/>.-->
   </Target>
 
   <Target Name="Tag" DependsOnTargets="GetVersion">
-	<Exec WorkingDirectory="$(SourceDir)" Command="$(Git) tag --force v$(GfvSemVer)" />
+    <PropertyGroup>
+      <ReleaseTag>v$(GfvFullSemVer)</ReleaseTag>
+    </PropertyGroup>
+    <Exec WorkingDirectory="$(SourceDir)" Command="$(Git) tag --force $(ReleaseTag)" />
   </Target>
 
   <Target Name="Test" DependsOnTargets="Build">
@@ -125,10 +128,10 @@ along with sidi-util. If not, see <http://www.gnu.org/licenses/>.-->
   </Target>
   
   <Target Name="Release" DependsOnTargets="Build;Test;BuildSetup" >
-    <Exec IgnoreExitCode="true" Command="$(GithubRelease) release --tag v$(GfvSemVer)" 
+    <Exec IgnoreExitCode="true" Command="$(GithubRelease) release --tag $(ReleaseTag)" 
       EnvironmentVariables="GITHUB_TOKEN=$(GITHUB_TOKEN);GITHUB_USER=$(GITHUB_USER);GITHUB_REPO=$(GITHUB_REPO)"
     />
-    <Exec Command="$(GithubRelease) upload -t v$(GfvSemVer) --name hagen.msi --replace --file @(SetupFile, ' ')" 
+    <Exec Command="$(GithubRelease) upload --tag $(ReleaseTag) --name $(ProductName)-$(GfvFullSemVer).msi --replace --file @(SetupFile, ' ')" 
       EnvironmentVariables="GITHUB_TOKEN=$(GITHUB_TOKEN);GITHUB_USER=$(GITHUB_USER);GITHUB_REPO=$(GITHUB_REPO)"
     />
   </Target>

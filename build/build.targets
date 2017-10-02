@@ -30,6 +30,7 @@ along with sidi-util. If not, see <http://www.gnu.org/licenses/>.-->
 		<NUnitConsole>$(NugetPackagesDir)\NUnit.ConsoleRunner.$(NugetPackageVersion_NUnit_ConsoleRunner)\tools\nunit3-console.exe</NUnitConsole>
 		<Nuget>NuGet.exe</Nuget>
 		<Git>git</Git>
+    <GithubRelease>C:\bin\github-release.exe</GithubRelease>
   </PropertyGroup>
 
   <Import Project="$(NugetPackagesDir)\GitVersionTask.$(NugetPackageVersion_GitVersionTask)\Build\portable-net+sl+win+wpa+wp\GitVersionTask.targets" />
@@ -124,10 +125,10 @@ along with sidi-util. If not, see <http://www.gnu.org/licenses/>.-->
   </Target>
   
   <Target Name="Release" DependsOnTargets="Build;Test;BuildSetup" >
-    <Exec IgnoreExitCode="true" Command="github-release release --tag v$(GfvSemVer)" 
+    <Exec IgnoreExitCode="true" Command="$(GithubRelease) release --tag v$(GfvSemVer)" 
       EnvironmentVariables="GITHUB_TOKEN=$(GITHUB_TOKEN);GITHUB_USER=$(GITHUB_USER);GITHUB_REPO=$(GITHUB_REPO)"
     />
-    <Exec Command="github-release upload -t v$(GfvSemVer) --name hagen.msi --replace --file @(SetupFile, ' ')" 
+    <Exec Command="$(GithubRelease) upload -t v$(GfvSemVer) --name hagen.msi --replace --file @(SetupFile, ' ')" 
       EnvironmentVariables="GITHUB_TOKEN=$(GITHUB_TOKEN);GITHUB_USER=$(GITHUB_USER);GITHUB_REPO=$(GITHUB_REPO)"
     />
   </Target>

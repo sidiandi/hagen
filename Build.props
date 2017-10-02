@@ -12,6 +12,6 @@
   </ItemGroup>
   
   <!-- define secret NugetApiKey property in a private .props file. See build/api_key_example.props for an example -->
-	<Import Project="$(HOMEPATH)\Documents\myget_sidiandi_api_key.txt" Condition="Exists('$(HOMEPATH)\Documents\myget_sidiandi_api_key.txt')" />
+	<Import Project="$(HOMEPATH)\Documents\myget_sidiandi_api_key.txt" Condition="$(NugetApiKey) == '' and Exists('$(HOMEPATH)\Documents\myget_sidiandi_api_key.txt')" />
   
 </Project>

@@ -19,6 +19,6 @@
   <PropertyGroup Condition="$(SECRET_PROPS) == ''">
     <SECRET_PROPS>$(HOMEPATH)\Documents\hagen-secrets.props</SECRET_PROPS>
   </PropertyGroup>
-  <Import Project="$(SECRET_PROPS)" Condition="$(NugetApiKey) == ''" />
+  <Import Project="$(SECRET_PROPS)" />
   
 </Project>

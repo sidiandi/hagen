@@ -19,6 +19,8 @@
   <PropertyGroup Condition="$(SECRET_PROPS) == ''">
     <SECRET_PROPS>$(HOMEPATH)\Documents\hagen-secrets.props</SECRET_PROPS>
   </PropertyGroup>
-  <Import Project="$(SECRET_PROPS)" />
+
+  <!-- Only import the secret props file if the secrets are not available as environment variables. -->
+  <Import Project="$(SECRET_PROPS)" Condition="$(GITHUB_TOKEN) == ''" />
   
 </Project>

@@ -1,4 +1,8 @@
-rem %1 : build target. Default: Release
+@echo off
+
+rem script to start the build pipeline
+rem usage: build [Target]
+rem Target: build target. Default: Release. See build/build.targets for available targets
 
 set Target=%1
 if "%Target%" == "" (

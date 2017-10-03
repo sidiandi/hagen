@@ -44,7 +44,7 @@ File.WriteAllText(PropsFile, @"<?xml version=""1.0"" encoding=""utf-8""?>
 
   <Target Name="RestorePackages" DependsOnTargets="CreateBuildDir" >
     <Exec Command="nuget restore &quot;$(SourceDir)\$(ProductName).sln&quot;" />
-    <CreatePackageVersionProps PackagesFile="C:\work\hagen\hagen.coreTests\packages.config" PropsFile="$(BuildDir)\nuget.props" />
+    <CreatePackageVersionProps PackagesFile="$(SourceDir)\hagen.coreTests\packages.config" PropsFile="$(BuildDir)\nuget.props" />
   </Target>
   
   <!-- This target puts the build.log file into the build directory -->

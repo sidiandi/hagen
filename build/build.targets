@@ -27,7 +27,7 @@ along with sidi-util. If not, see <http://www.gnu.org/licenses/>.-->
   
   <!-- Tools -->
 	<PropertyGroup>
-		<NUnitConsole>&quot;$(NugetPackagesDir)\NUnit.ConsoleRunner.$(NugetPackageVersion_NUnit_ConsoleRunner)\tools\nunit3-console.exe&quot;</NUnitConsole>
+		<NUnitConsole>$(NugetPackagesDir)\NUnit.ConsoleRunner.$(NugetPackageVersion_NUnit_ConsoleRunner)\tools\nunit3-console.exe</NUnitConsole>
 		<Nuget>NuGet.exe</Nuget>
 		<Git>git</Git>
     <GithubRelease>github-release.exe</GithubRelease>
@@ -76,7 +76,7 @@ along with sidi-util. If not, see <http://www.gnu.org/licenses/>.-->
     <ItemGroup>
       <TestTargets Include="%(Targets.Identity)" Condition="$([System.Text.RegularExpressions.Regex]::IsMatch(%(Filename), 'Test'))"/>
     </ItemGroup>
-    <Exec Command="$(NUnitConsole) --labels=On --work=$(TestDir) --result=$(TestDir)\TestResult.xml --labels=All @(TestTargets, ' ')" />
+    <Exec Command="&quot;$(NUnitConsole)&quot; --labels=On --work=&quot;$(TestDir)&quot; --result=&quot;$(TestDir)\TestResult.xml&quot; --labels=All @(TestTargets -> '&quot;%(Identity)&quot;', ' ')" />
   </Target>
 
   <Target Name="Pack" DependsOnTargets="GetVersion">
@@ -128,11 +128,14 @@ along with sidi-util. If not, see <http://www.gnu.org/licenses/>.-->
   </Target>
   
   <Target Name="Release" DependsOnTargets="Build;Test;BuildSetup" >
-    <Exec IgnoreExitCode="true" Command="$(GithubRelease) release --tag $(ReleaseTag)" 
-      EnvironmentVariables="GITHUB_TOKEN=$(GITHUB_TOKEN);GITHUB_USER=$(GITHUB_USER);GITHUB_REPO=$(GITHUB_REPO)"
+    <PropertyGroup>
+      <GithubReleaseEnvironmentVariables>GITHUB_TOKEN=$(GITHUB_TOKEN);GITHUB_USER=$(GITHUB_USER);GITHUB_REPO=$(GITHUB_REPO)</GithubReleaseEnvironmentVariables>
+    </PropertyGroup>
+    <Exec IgnoreExitCode="true" Command="&quot;$(GithubRelease)&quot; release --tag $(ReleaseTag)" 
+      EnvironmentVariables="$(GithubReleaseEnvironmentVariables)"
     />
-    <Exec Command="$(GithubRelease) upload --tag $(ReleaseTag) --name $(ProductName)-$(GfvFullSemVer).msi --replace --file @(SetupFile, ' ')" 
-      EnvironmentVariables="GITHUB_TOKEN=$(GITHUB_TOKEN);GITHUB_USER=$(GITHUB_USER);GITHUB_REPO=$(GITHUB_REPO)"
+    <Exec Command="&quot;$(GithubRelease)&quot; upload --tag $(ReleaseTag) --name &quot;$(ProductName)-$(GfvFullSemVer).msi&quot; --replace --file @(SetupFile -> '&quot;%(Identity)&quot;', ' ')" 
+      EnvironmentVariables="$(GithubReleaseEnvironmentVariables)"
     />
   </Target>
 

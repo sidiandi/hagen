@@ -27,10 +27,10 @@ along with sidi-util. If not, see <http://www.gnu.org/licenses/>.-->
   
   <!-- Tools -->
 	<PropertyGroup>
-		<NUnitConsole>$(NugetPackagesDir)\NUnit.ConsoleRunner.$(NugetPackageVersion_NUnit_ConsoleRunner)\tools\nunit3-console.exe</NUnitConsole>
+		<NUnitConsole>&quot$(NugetPackagesDir)\NUnit.ConsoleRunner.$(NugetPackageVersion_NUnit_ConsoleRunner)\tools\nunit3-console.exe&quot</NUnitConsole>
 		<Nuget>NuGet.exe</Nuget>
 		<Git>git</Git>
-    <GithubRelease>C:\bin\github-release.exe</GithubRelease>
+    <GithubRelease>github-release.exe</GithubRelease>
   </PropertyGroup>
 
   <Import Project="$(NugetPackagesDir)\GitVersionTask.$(NugetPackageVersion_GitVersionTask)\Build\portable-net+sl+win+wpa+wp\GitVersionTask.targets" />

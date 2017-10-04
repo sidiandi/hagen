@@ -85,7 +85,7 @@ along with sidi-util. If not, see <http://www.gnu.org/licenses/>.-->
 	</PropertyGroup>
 	<RemoveDir Directories="$(PackageDir)"/>
 	<MakeDir Directories="$(PackageDir)" />
-	<Exec WorkingDirectory="$(ReleaseDir)" Command="$(Nuget) pack $(SourceDir)\%(Package.Identity)\%(Package.Identity).csproj -OutputDirectory $(PackageDir) -Version $(GfvNuGetVersion)" />
+	<Exec WorkingDirectory="$(ReleaseDir)" Command="&quot;$(Nuget)&quot; pack &quot;$(SourceDir)\%(Package.Identity)\%(Package.Identity).csproj&quot; -OutputDirectory &quot;$(PackageDir)&quot; -Version $(GfvNuGetVersion)" />
 	<ItemGroup>
 		<PackageFiles Include="$(PackageDir)\%(Package.Identity).$(GfvNuGetVersion).nupkg" />
 	</ItemGroup>
@@ -93,7 +93,7 @@ along with sidi-util. If not, see <http://www.gnu.org/licenses/>.-->
 
   <!-- Push nuget packages to feed -->
   <Target Name="Push" DependsOnTargets="Test;Pack">
-    <Exec WorkingDirectory="$(ReleaseDir)" Command="$(Nuget) push %(PackageFiles.Identity) $(NugetApiKey) -Source $(NugetFeed)" />
+    <Exec WorkingDirectory="$(ReleaseDir)" Command="&quot;$(Nuget)&quot; push &quot;%(PackageFiles.Identity)&quot; -ApiKey $(NugetApiKey) -Source $(NugetFeed)" />
   </Target>
 
   <Target Name="BuildSetup" DependsOnTargets="GetVersion;Tag">

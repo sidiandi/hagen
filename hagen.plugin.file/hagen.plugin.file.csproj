@@ -42,8 +42,8 @@
       <HintPath>..\..\nuget-packages\Sidi.HandsFree.0.1.1\lib\net46\Sidi.HandsFree.dll</HintPath>
       <Private>True</Private>
     </Reference>
-    <Reference Include="Sidi.Util, Version=12.3.0.0, Culture=neutral, PublicKeyToken=1e33c1a5eebc53e1, processorArchitecture=MSIL">
-      <HintPath>..\..\nuget-packages\sidi-util.12.3.0\lib\net45\Sidi.Util.dll</HintPath>
+    <Reference Include="Sidi.Util, Version=12.4.0.0, Culture=neutral, PublicKeyToken=1e33c1a5eebc53e1, processorArchitecture=MSIL">
+      <HintPath>..\..\nuget-packages\sidi-util.12.4.0\lib\net45\Sidi.Util.dll</HintPath>
     </Reference>
     <Reference Include="System" />
     <Reference Include="System.AppContext">

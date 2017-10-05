@@ -12,7 +12,7 @@ using System.Text.RegularExpressions;
 namespace hagen
 {
 
-    public class Notes : EnumerableActionSource
+    internal class Notes : EnumerableActionSource
     {
         private static readonly log4net.ILog log = log4net.LogManager.GetLogger(System.Reflection.MethodBase.GetCurrentMethod().DeclaringType);
 
@@ -42,19 +42,6 @@ namespace hagen
                 .Select(_ => new FileSystemWatcherNotesProvider(_)));
         }
 
-        public static Regex SafeRegex(string pattern)
-        {
-            try
-            {
-                return new Regex(pattern, RegexOptions.IgnoreCase, TimeSpan.FromMilliseconds(100));
-            }
-            catch (System.ArgumentException)
-            {
-            }
-
-            return new Regex(Regex.Escape(pattern), RegexOptions.IgnoreCase, TimeSpan.FromMilliseconds(100));
-        }
-
         protected override IEnumerable<IResult> GetResults(IQuery query)
         {
             if (query.Text.Length < 2)
@@ -62,7 +49,7 @@ namespace hagen
                 return Enumerable.Empty<IResult>();
             }
 
-            var all = query.Text.Equals("notes", StringComparison.CurrentCultureIgnoreCase);
+            var all = new[] { "notes", "help" }.Any(_ => query.Text.Equals(_, StringComparison.CurrentCultureIgnoreCase));
             if (all)
             {
                 return notes
@@ -70,7 +57,7 @@ namespace hagen
                     .Select(_ => _.ToResult(Priority.Normal));
             }
 
-            var re = SafeRegex(query.Text);
+            var re = new MultiWordMatch(query.Text);
             return notes.Where(n => re.IsMatch(n.Name))
                 .Select(_ => new NoteAction(_, query.Context.LastExecutedStore))
                 .Select(_ => _.ToResult(Priority.Normal));

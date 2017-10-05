@@ -28,7 +28,7 @@ using Sidi.Extensions;
 
 namespace hagen.Plugin.Db
 {
-    public class DatabaseLookup : IActionSource3
+    class DatabaseLookup : IActionSource3
     {
         private static readonly log4net.ILog log = log4net.LogManager.GetLogger(System.Reflection.MethodBase.GetCurrentMethod().DeclaringType);
 

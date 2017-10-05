@@ -26,7 +26,7 @@ using Sidi.Extensions;
 
 namespace hagen.Plugin.Db
 {
-    public class FileActionFactory
+    class FileActionFactory
     {
         private static readonly log4net.ILog log = log4net.LogManager.GetLogger(System.Reflection.MethodBase.GetCurrentMethod().DeclaringType);
 

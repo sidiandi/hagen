@@ -137,11 +137,13 @@
   <ItemGroup>
     <Compile Include="AutoText.cs" />
     <Compile Include="EnumerableExtensions.cs" />
+    <Compile Include="Extensions.cs" />
     <Compile Include="FileSystemWatcherNotesProvider.cs" />
     <Compile Include="HandsFreeDial.cs" />
     <Compile Include="INotesProvider.cs" />
     <Compile Include="MarkdownNotesReader.cs" />
     <Compile Include="MultiNotesProvider.cs" />
+    <Compile Include="MultiWordMatch.cs" />
     <Compile Include="Note.cs" />
     <Compile Include="NoteAction.cs" />
     <Compile Include="Notes.cs" />

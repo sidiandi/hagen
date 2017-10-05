@@ -11,7 +11,7 @@ using System.Text.RegularExpressions;
 
 namespace hagen
 {
-    public class HandsFreeDial : EnumerableActionSource
+    class HandsFreeDial : EnumerableActionSource
     {
         private static readonly log4net.ILog log = log4net.LogManager.GetLogger(System.Reflection.MethodBase.GetCurrentMethod().DeclaringType);
 

@@ -35,7 +35,7 @@ using System.Windows.Forms;
 
 namespace hagen.Plugin.Db
 {
-    public class Action : INotifyPropertyChanged, IAction
+    class Action : INotifyPropertyChanged, IAction
     {
         [RowId]
         public long Id;

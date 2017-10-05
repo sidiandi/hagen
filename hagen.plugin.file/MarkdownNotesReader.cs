@@ -8,7 +8,7 @@ using Sidi.Extensions;
 
 namespace hagen
 {
-    public class MarkdownNotesReader
+    internal class MarkdownNotesReader
     {
         class TitleData
         {

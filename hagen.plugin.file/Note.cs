@@ -2,7 +2,7 @@
 
 namespace hagen
 {
-    public class Note
+    internal class Note
     {
         public string Name;
         public string Content;

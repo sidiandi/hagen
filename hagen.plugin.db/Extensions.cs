@@ -30,7 +30,7 @@ using Sidi.Extensions;
 
 namespace hagen.Plugin.Db
 {
-    public static class Extensions
+    internal static class Extensions
     {
         public static string ReadFixedLengthUnicodeString(this Stream s, int length)
         {

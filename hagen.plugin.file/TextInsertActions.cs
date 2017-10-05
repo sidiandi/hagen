@@ -27,7 +27,7 @@ using Sidi.Extensions;
 namespace hagen
 {
     [Usage("Actions for inserting text")]
-    public class TextInsertActions
+    internal class TextInsertActions
     {
         [Usage("inserts files in clipboard as text")]
         public void InsertFilesAsText()

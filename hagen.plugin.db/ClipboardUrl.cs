@@ -29,7 +29,7 @@ using Sidi.Extensions;
 
 namespace hagen.Plugin.Db
 {
-    public class ClipboardUrl
+    class ClipboardUrl
     {
         private static readonly log4net.ILog log = log4net.LogManager.GetLogger(System.Reflection.MethodBase.GetCurrentMethod().DeclaringType);
 

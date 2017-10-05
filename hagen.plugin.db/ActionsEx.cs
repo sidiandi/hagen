@@ -32,7 +32,7 @@ using Sidi.Test;
 
 namespace hagen.Plugin.Db
 {
-    public static class ActionExtensions
+    internal static class ActionExtensions
     {
         private static readonly log4net.ILog log = log4net.LogManager.GetLogger(System.Reflection.MethodBase.GetCurrentMethod().DeclaringType);
 

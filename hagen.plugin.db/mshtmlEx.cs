@@ -29,7 +29,7 @@ using Sidi.Extensions;
 
 namespace hagen.Plugin.Db
 {
-    public static class mshtmlEx
+    static class mshtmlEx
     {
         public static bool IsInternetExplorer(this InternetExplorer ie)
         {

@@ -8,7 +8,7 @@ using System.Reactive.Linq;
 
 namespace hagen.Plugin.Db
 {
-    public static class Filters
+    static class Filters
     {
         static StartProcess GetStartProcess(IAction a)
         {

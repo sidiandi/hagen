@@ -12,7 +12,7 @@ using System.Diagnostics;
 namespace hagen
 {
     [Usage("File system operations")]
-    public class FileActions
+    class FileActions
     {
         [Usage("Remove empty direcories")]
         public void RemoveEmptyDirectories(PathList paths)

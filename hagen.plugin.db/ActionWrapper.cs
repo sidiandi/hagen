@@ -24,7 +24,7 @@ using System.Windows.Forms;
 
 namespace hagen.Plugin.Db
 {   
-    public class ActionWrapper : IAction, IStorable
+    class ActionWrapper : IAction, IStorable
     {
         public ActionWrapper(Action action, Sidi.Persistence.Collection<Action> data)
         {

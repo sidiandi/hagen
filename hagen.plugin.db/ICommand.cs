@@ -28,7 +28,7 @@ namespace hagen.Plugin.Db
     [XmlInclude(typeof(StartProcess))]
     [XmlInclude(typeof(InsertText))]
     [TypeConverter(typeof(ExpandableObjectConverter))]
-    public abstract class ICommand
+    abstract class ICommand
     {
         public abstract void Execute();
 

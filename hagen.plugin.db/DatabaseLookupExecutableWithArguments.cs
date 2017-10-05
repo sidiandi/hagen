@@ -31,7 +31,7 @@ using System.ComponentModel;
 
 namespace hagen.Plugin.Db
 {
-    public class DatabaseLookupExecutableWithArguments : IActionSource2
+    class DatabaseLookupExecutableWithArguments : IActionSource2
     {
         private static readonly log4net.ILog log = log4net.LogManager.GetLogger(System.Reflection.MethodBase.GetCurrentMethod().DeclaringType);
 
@@ -42,7 +42,7 @@ namespace hagen.Plugin.Db
 
         Sidi.Persistence.Collection<Action> actions;
 
-        public class ActionWrapper : IAction
+        class ActionWrapper : IAction
         {
             public ActionWrapper(hagen.Plugin.Db.Action action, string arguments)
             {

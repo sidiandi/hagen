@@ -27,7 +27,7 @@ using Sidi.Test;
 
 namespace hagen
 {
-    public class TextPosition
+    internal class TextPosition
     {
         private static readonly log4net.ILog log = log4net.LogManager.GetLogger(System.Reflection.MethodBase.GetCurrentMethod().DeclaringType);
 

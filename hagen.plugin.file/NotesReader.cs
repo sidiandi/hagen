@@ -10,13 +10,8 @@ using Sidi.IO;
 using Sidi.Parse;
 using System.IO;
 
-namespace Sidi
+namespace hagen
 {
-    public class Note
-    {
-        public string Name;
-        public string Content;
-    }
 
     public class NotesReader : Sidi.Parse.Parser
     {

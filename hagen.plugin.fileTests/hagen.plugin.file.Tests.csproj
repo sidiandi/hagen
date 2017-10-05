@@ -36,6 +36,9 @@
     <Reference Include="Sidi.Util, Version=12.4.0.0, Culture=neutral, PublicKeyToken=1e33c1a5eebc53e1, processorArchitecture=MSIL">
       <HintPath>..\..\nuget-packages\sidi-util.12.4.0\lib\net45\Sidi.Util.dll</HintPath>
     </Reference>
+    <Reference Include="Sprache, Version=2.1.0.0, Culture=neutral, processorArchitecture=MSIL">
+      <HintPath>..\..\nuget-packages\Sprache.2.1.0\lib\net40\Sprache.dll</HintPath>
+    </Reference>
     <Reference Include="System" />
     <Reference Include="System.AppContext">
       <HintPath>..\..\nuget-packages\System.AppContext.4.3.0\lib\net46\System.AppContext.dll</HintPath>
@@ -123,6 +126,7 @@
     <Otherwise />
   </Choose>
   <ItemGroup>
+    <Compile Include="MarkdownNotesReaderTests.cs" />
     <Compile Include="NotesReaderTests.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
     <Compile Include="TextPositionTests.cs" />

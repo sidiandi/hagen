@@ -9,7 +9,7 @@ using Sidi.Extensions;
 using hagen;
 using System.Text.RegularExpressions;
 
-namespace Sidi
+namespace hagen
 {
     public class HandsFreeDial : EnumerableActionSource
     {

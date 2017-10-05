@@ -8,7 +8,7 @@ using System.Text;
 using System.Threading.Tasks;
 using Sidi.Extensions;
 
-namespace Sidi.Tests
+namespace hagen
 {
     [TestFixture()]
     public class NotesReaderTests : TestBase

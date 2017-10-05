@@ -1,5 +1,4 @@
-﻿
-// Copyright (c) 2016, Andreas Grimme
+﻿// Copyright (c) 2016, Andreas Grimme
 
 using System;
 using System.Collections.Generic;
@@ -11,7 +10,7 @@ using hagen;
 using System.Windows.Forms;
 using System.IO;
 
-namespace Sidi
+namespace hagen
 {
     class NoteAction : IAction
     {

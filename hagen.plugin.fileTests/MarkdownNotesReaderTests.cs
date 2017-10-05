@@ -24,7 +24,7 @@ namespace hagen
             // assert
             Assert.AreEqual(3, notes.Length);
             var n = notes[2];
-            Assert.AreEqual("Birthday > Donald Duck > Person", n.Name);
+            Assert.AreEqual("Birthday < Donald Duck < Person", n.Name);
             Assert.AreEqual("1.1.2000", n.Content);
         }
     }

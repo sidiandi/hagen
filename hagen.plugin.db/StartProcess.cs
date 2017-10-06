@@ -36,7 +36,7 @@ namespace hagen.Plugin.Db
 {
     [Serializable]
     [TypeConverter(typeof(ExpandableObjectConverter))]
-    class StartProcess : ICommand
+    public class StartProcess : ICommand
     {
         public StartProcess()
         {

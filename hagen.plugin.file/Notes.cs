@@ -39,7 +39,7 @@ namespace hagen
             var dropboxNotesDir = Sidi.IO.Paths.GetFolderPath(Environment.SpecialFolder.UserProfile).CatDir("Dropbox", "hagen", "Notes");
 
             _notesProvider = new MultiNotesProvider(new[] { notesDir, dropboxNotesDir }.Where(_ => _.IsDirectory)
-                .Select(_ => new FileSystemWatcherNotesProvider(_)).ToList());
+                .Select(_ => new FileSystemWatcherNotesProvider(_)).ToArray());
         }
 
         protected override IEnumerable<IResult> GetResults(IQuery query)

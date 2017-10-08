@@ -5,9 +5,9 @@ namespace hagen
 {
     internal class MultiNotesProvider : INotesProvider
     {
-        readonly IEnumerable<INotesProvider> providers;
+        readonly INotesProvider[] providers;
 
-        public MultiNotesProvider(IEnumerable<INotesProvider> providers)
+        public MultiNotesProvider(INotesProvider[] providers)
         {
             this.providers = providers;
         }

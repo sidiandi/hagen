@@ -80,6 +80,7 @@ namespace hagen
             Application.Run(main);
         }
 
+
         Hagen hagen;
         Main main;
 

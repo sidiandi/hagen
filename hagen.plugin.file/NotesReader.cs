@@ -19,9 +19,18 @@ namespace hagen
 
         public static IList<Note> Read(LPath notesFile)
         {
-            using (var r = notesFile.ReadText())
+            try
             {
-                return EnumerableExtensions.UntilNull(() => ReadNote(r)).ToList();
+                using (var r = notesFile.ReadText())
+                {
+                    var notes = EnumerableExtensions.UntilNull(() => ReadNote(r)).ToList();
+                    log.InfoFormat("Read {1} notes from {0}", notesFile, notes.Count);
+                    return notes;
+                }
+            }
+            catch (Exception ex)
+            {
+                throw new Exception(String.Format("Error reading {0}", notesFile), ex);
             }
         }
 

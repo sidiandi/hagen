@@ -18,9 +18,9 @@ namespace hagen
         public FileSystemWatcherNotesProvider(LPath notesDir)
         {
             this.notesDir = notesDir;
-            ReadNotes();
-
+            this.ReadNotes();
             this.watcher = new FileSystemWatcher(notesDir);
+            this.watcher.NotifyFilter = NotifyFilters.Size | NotifyFilters.LastWrite;
             this.watcher.Changed += Watcher_Changed;
             this.watcher.EnableRaisingEvents = true;
         }
@@ -30,14 +30,52 @@ namespace hagen
             ReadNotes();
         }
 
+        IList<IFileSystemInfo> files = null;
+
+        static IEnumerable<Note> Read(IFileSystemInfo info)
+        {
+            if (string.Equals(".md", info.Extension, StringComparison.InvariantCultureIgnoreCase))
+            {
+                return MarkdownNotesReader.Read(info.FullName);
+            }
+            else if (string.Equals(".txt", info.Extension, StringComparison.InvariantCultureIgnoreCase))
+            {
+                return NotesReader.Read(info.FullName);
+            }
+            return Enumerable.Empty<Note>();
+        }
+
+        static Tuple<string, DateTime> ChangeAndName(IFileSystemInfo i)
+        {
+            return Tuple.Create(i.FullName.ToString(), i.LastWriteTimeUtc);
+        }
+
         void ReadNotes()
         {
+            var newFiles = notesDir.Info.GetFiles();
+
             lock (this)
             {
-                notes = notesDir.GetFiles("*.txt").SafeSelectMany(f => NotesReader.Read(f))
-                    .Concat(notesDir.GetFiles("*.md").SafeSelectMany(_ => MarkdownNotesReader.Read(_)))
-                    .ToList();
-                log.Info(notes.ListFormat().Add(_ => _.Name, _=> _.Content));
+                if (files != null && files.Select(ChangeAndName).SequenceEqual(newFiles.Select(ChangeAndName)))
+                {
+                    return; // skip - nothing has changed
+                }
+
+                files = newFiles;
+            }
+
+            log.Info(files.Select(ChangeAndName).ListFormat());
+
+            var notes = files.SafeSelectMany(Read).ToList();
+
+            if (log.IsDebugEnabled)
+            {
+                log.Debug(notes.ListFormat().Add(_ => _.Name, _ => _.Content));
+            }
+
+            lock (this)
+            {
+                this.notes = notes;
             }
         }
 

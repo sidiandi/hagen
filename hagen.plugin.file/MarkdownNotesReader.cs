@@ -10,6 +10,8 @@ namespace hagen
 {
     internal class MarkdownNotesReader
     {
+        private static readonly log4net.ILog log = log4net.LogManager.GetLogger(System.Reflection.MethodBase.GetCurrentMethod().DeclaringType);
+
         class TitleData
         {
             public int level;
@@ -46,11 +48,9 @@ namespace hagen
             }
         }
 
-        public static IEnumerable<Note> Read(LPath markdownFile)
+        static IEnumerable<Note> ExtractNotes(object[] items)
         {
-            var items = Content.Parse(markdownFile.ReadAllText()).ToArray();
-
-            for (int i=0; i< items.Length; ++i)
+            for (int i = 0; i < items.Length; ++i)
             {
                 if (items[i] is string)
                 {
@@ -61,6 +61,21 @@ namespace hagen
                     }
                     yield return new Note { Content = text, Name = Titles(items, i).Join(" < ") };
                 }
+            }
+        }
+
+        public static IEnumerable<Note> Read(LPath markdownFile)
+        {
+            try
+            {
+                var items = Content.Parse(markdownFile.ReadAllText()).ToArray();
+                var notes = ExtractNotes(items).ToList();
+                log.InfoFormat("Read {1} notes from {0}", markdownFile, notes.Count);
+                return notes;
+            }
+            catch (Exception ex)
+            {
+                throw new Exception(String.Format("Error reading {0}", markdownFile), ex);
             }
         }
     }

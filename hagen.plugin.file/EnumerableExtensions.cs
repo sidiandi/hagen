@@ -21,8 +21,9 @@ namespace hagen
                 {
                     return selector(_);
                 }
-                catch
+                catch (Exception ex)
                 {
+                    log.Warn(ex);
                     return Enumerable.Empty<TResult>();
                 }
             });

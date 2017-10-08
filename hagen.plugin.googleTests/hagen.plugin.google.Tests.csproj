@@ -245,12 +245,6 @@
     <None Include="app.config" />
     <None Include="packages.config" />
   </ItemGroup>
-  <ItemGroup>
-    <ProjectReference Include="..\hagen.plugin.google\hagen.plugin.google.csproj">
-      <Project>{DCCF9122-A232-46E8-BC4E-608533BEABAC}</Project>
-      <Name>hagen.plugin.google</Name>
-    </ProjectReference>
-  </ItemGroup>
   <Choose>
     <When Condition="'$(VisualStudioVersion)' == '10.0' And '$(IsCodedUITest)' == 'True'">
       <ItemGroup>

@@ -18,6 +18,11 @@ along with sidi-util. If not, see <http://www.gnu.org/licenses/>.-->
 <Project xmlns="http://schemas.microsoft.com/developer/msbuild/2003">
 
   <Import Project="$(BuildDir)\nuget.props" />
+  
+  <PropertyGroup>
+    <Configuration>Release</Configuration>
+    <Platform>Any CPU</Platform>
+  </PropertyGroup>
 
   <!-- Directories -->
 	<PropertyGroup>
@@ -31,6 +36,7 @@ along with sidi-util. If not, see <http://www.gnu.org/licenses/>.-->
 		<Nuget>NuGet.exe</Nuget>
 		<Git>git</Git>
     <GithubRelease>github-release.exe</GithubRelease>
+    <GithubReleaseEnvironmentVariables>GITHUB_TOKEN=$(GITHUB_TOKEN);GITHUB_USER=$(GITHUB_USER);GITHUB_REPO=$(GITHUB_REPO)</GithubReleaseEnvironmentVariables>
   </PropertyGroup>
 
   <Import Project="$(NugetPackagesDir)\GitVersionTask.$(NugetPackageVersion_GitVersionTask)\Build\portable-net+sl+win+wpa+wp\GitVersionTask.targets" />
@@ -57,12 +63,32 @@ along with sidi-util. If not, see <http://www.gnu.org/licenses/>.-->
 		</GetVersion>
 		<Message Text="$(GfvSemVer)" />
 		<Message Text="$(GfvNuGetVersion)" />
+		<Message Text="$(GfvInformationalVersion)" />
 	</Target>
 
 	<Target Name="Build" DependsOnTargets="GetVersion" >
-    <MSBuild Projects="$(SourceDir)\$(ProductName).sln" Properties="Configuration=$(Configuration);Platform=Any CPU;BuildDir=$(BuildDir)">
-		<Output ItemName="Targets" TaskParameter="TargetOutputs"/>
+    <MSBuild Projects="$(SourceDir)\$(ProductName).sln" Properties="Configuration=$(Configuration);Platform=$(Platform);BuildDir=$(BuildDir);Version=$(GfvNuGetVersion)" >
+      <Output ItemName="Targets" TaskParameter="TargetOutputs" />
     </MSBuild>
+  </Target>
+
+  <Target Name="BuildSetup" DependsOnTargets="Build">
+  <MSBuild
+        Projects="$(SourceDir)\wix\wix.wixproj" Properties="
+          CompanyName=$(CompanyName);
+          ProductName=$(ProductName);
+          Version=$(GfvMajorMinorPatch);
+          Description=$(GfvSemVer);
+          Configuration=$(Configuration);
+          Platform=AnyCPU;
+          OutputPath=$(BuildDir)\setup;
+          BinDir=$(OutDir);
+          UpgradeCode=$(UpgradeCode);
+          IntermediateOutputPath=$(BaseIntermediateOutputPath)\setup\
+          ">
+      <Output ItemName="SetupFiles" TaskParameter="TargetOutputs"/>
+    </MSBuild>
+    <Message Text="@(SetupFiles, ' ')" />
   </Target>
 
   <Target Name="Tag" DependsOnTargets="GetVersion">
@@ -96,47 +122,29 @@ along with sidi-util. If not, see <http://www.gnu.org/licenses/>.-->
     <Exec WorkingDirectory="$(ReleaseDir)" Command="&quot;$(Nuget)&quot; push &quot;%(PackageFiles.Identity)&quot; -ApiKey $(NugetApiKey) -Source $(NugetFeed)" />
   </Target>
 
-  <Target Name="BuildSetup" DependsOnTargets="GetVersion;Tag">
-	<MSBuild
-        Projects="$(SourceDir)\setup\setup.wixproj" Properties="
-			CompanyName=$(CompanyName);
-			ProductName=$(ProductName);
-			Version=$(GfvMajorMinorPatch);
-      Description=$(GfvSemVer);
-			Configuration=Release;
-			Platform=Any CPU;
-			OutputPath=$(BuildDir)\setup;
-			BinDir=$(OutDir);
-			UpgradeCode=$(UpgradeCode);
-			IntermediateOutputPath=$(BaseIntermediateOutputPath)\setup\
-			">
-      <Output ItemName="SetupFile" TaskParameter="TargetOutputs"/>
-    </MSBuild>
-  </Target>
-  
   <Target Name="Run" DependsOnTargets="Build">
 	<Exec Command="$(OutDir)\hagen.exe Popup" />
   </Target>
   
   <Target Name="Install" DependsOnTargets="BuildSetup">
-    <Message Text="@(SetupFile, ' ')" />
-	<Exec Command="@(SetupFile, ' ')" />
+    <Exec Command="&quot;@(SetupFiles, ' ')&quot;" />
   </Target>
   
-  <Target Name="PublishToDropbox" DependsOnTargets="Build;Test;BuildSetup;Push" >
-	<Copy SourceFiles="$(SetupFile)"  DestinationFolder="C:\Users\Andreas\Dropbox\bin\hagen" />
+  <Target Name="PublishToDropbox" DependsOnTargets="BuildSetup" >
+    <Copy SourceFiles="@(SetupFiles)"  DestinationFolder="C:\Users\Andreas\Dropbox\bin\hagen" />
   </Target>
   
-  <Target Name="Release" DependsOnTargets="Build;Test;BuildSetup" >
-    <PropertyGroup>
-      <GithubReleaseEnvironmentVariables>GITHUB_TOKEN=$(GITHUB_TOKEN);GITHUB_USER=$(GITHUB_USER);GITHUB_REPO=$(GITHUB_REPO)</GithubReleaseEnvironmentVariables>
-    </PropertyGroup>
-    <Exec IgnoreExitCode="true" Command="&quot;$(GithubRelease)&quot; release --tag $(ReleaseTag)" 
+  <Target Name="Release" DependsOnTargets="Test;BuildSetup;Tag" >
+    <Exec IgnoreExitCode="true" IgnoreStandardErrorWarningFormat="true" Command="&quot;$(GithubRelease)&quot; release --tag $(ReleaseTag)" 
       EnvironmentVariables="$(GithubReleaseEnvironmentVariables)"
     />
-    <Exec Command="&quot;$(GithubRelease)&quot; upload --tag $(ReleaseTag) --name &quot;$(ProductName)-$(GfvFullSemVer).msi&quot; --replace --file @(SetupFile -> '&quot;%(Identity)&quot;', ' ')" 
+    <Exec Command="&quot;$(GithubRelease)&quot; upload --tag $(ReleaseTag) --name &quot;$(ProductName)-$(GfvFullSemVer).msi&quot; --replace --file @(SetupFiles -> '&quot;%(Identity)&quot;', ' ')" 
       EnvironmentVariables="$(GithubReleaseEnvironmentVariables)"
     />
+  </Target>
+  
+  <Target Name="Clean" >
+    <RemoveDir Directories="$(BuildDir)" />
   </Target>
 
 </Project>

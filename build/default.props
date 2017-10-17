@@ -3,7 +3,7 @@
 <Project xmlns="http://schemas.microsoft.com/developer/msbuild/2003">
   <PropertyGroup>
     <Configuration>Release</Configuration>
-    <Platform>AnyCPU</Platform>
+    <Platform>Any CPU</Platform>
     <NugetFeed>https://www.myget.org/F/sidiandi/api/v2/package</NugetFeed>
   </PropertyGroup>
 </Project>

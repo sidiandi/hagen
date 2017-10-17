@@ -49,9 +49,8 @@ File.WriteAllText(PropsFile, @"<?xml version=""1.0"" encoding=""utf-8""?>
   
   <!-- This target puts the build.log file into the build directory -->
   <Target Name="Bootstrap" DependsOnTargets="RestorePackages" >
-    <Exec
-		Command="&quot;$(MSBuildBinPath)\msbuild.exe&quot; &quot;$(MSBuildProjectDir)Build.proj&quot; /t:$(BuildTarget) /verbosity:minimal &quot;/fileLoggerParameters:LogFile=$(BuildDir)\build.log;Verbosity=diagnostic;Encoding=UTF-8&quot;"
-		/>
+    <MakeDir Directories="$(BuildDir)\log" />
+    <Exec Command="&quot;$(MSBuildBinPath)\msbuild.exe&quot; &quot;$(MSBuildProjectDir)Build.proj&quot; /t:$(BuildTarget) &quot;/fileLoggerParameters:LogFile=$(BuildDir)\log\build.log;Verbosity=diagnostic;Encoding=UTF-8&quot;" />
   </Target>
 
 </Project>

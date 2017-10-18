@@ -25,6 +25,7 @@ var props = String.Join("\r\n", doc.Root.Elements().Select(p =>
     var value = p.Attribute("version").Value;
     return "<" + propertyName + ">" + value + "</" + propertyName + ">";
   }));
+Directory.CreateDirectory(Path.GetDirectoryName(PropsFile));
 File.WriteAllText(PropsFile, @"<?xml version=""1.0"" encoding=""utf-8""?>
 <!-- Generated. Changes will be lost. -->
 <Project xmlns=""http://schemas.microsoft.com/developer/msbuild/2003"">
@@ -44,7 +45,7 @@ File.WriteAllText(PropsFile, @"<?xml version=""1.0"" encoding=""utf-8""?>
 
   <Target Name="RestorePackages" DependsOnTargets="CreateBuildDir" >
     <Exec Command="nuget restore &quot;$(SourceDir)\$(ProductName).sln&quot;" />
-    <CreatePackageVersionProps PackagesFile="$(SourceDir)\hagen.coreTests\packages.config" PropsFile="$(BuildDir)\nuget.props" />
+    <CreatePackageVersionProps PackagesFile="$(SourceDir)\hagen.coreTests\packages.config" PropsFile="$(BuildDir)\obj\nuget.props" />
   </Target>
   
   <!-- This target puts the build.log file into the build directory -->

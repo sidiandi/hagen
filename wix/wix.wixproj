@@ -57,6 +57,7 @@
         Manufacturer=$(CompanyName);
         UpgradeCode=$(UpgradeCode);
         StageDirectory=$(StageDirectory);
+        SourceDir=$(SourceDir);
         $(DefineConstants)
       </DefineConstants>
     </PropertyGroup>

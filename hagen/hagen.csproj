@@ -9,6 +9,9 @@
   <PropertyGroup>
     <ApplicationManifest>app.manifest</ApplicationManifest>
   </PropertyGroup>
+  <PropertyGroup>
+    <ApplicationIcon>hagen.ico</ApplicationIcon>
+  </PropertyGroup>
   <Import Project="..\build\Exe.props" />
   <ItemGroup>
     <Compile Include="ActionChooser.cs" />
@@ -128,6 +131,7 @@
   </ItemGroup>
   <ItemGroup>
     <None Include="Resources\Icon1.ico" />
+    <Content Include="hagen.ico" />
     <Content Include="SciLexer.dll">
       <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
     </Content>

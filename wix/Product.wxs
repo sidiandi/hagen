@@ -9,10 +9,15 @@
 
     <Feature Id="ProductFeature" Title="Product" Level="1">
       <ComponentGroupRef Id="ProductComponents" />
+      <ComponentRef Id="ApplicationShortcut"/>
     </Feature>
   </Product>
 
   <Fragment>
+  
+    <Icon Id="icon.ico" SourceFile="$(var.SourceDir)\$(var.ProductName).ico" />
+    <Property Id="ARPPRODUCTICON" Value="icon.ico" />
+  
     <Directory Id="TARGETDIR" Name="SourceDir">
       <Directory Id="ProgramFilesFolder">
         <Directory Id="ManufacturerFolder" Name="!(bind.property.Manufacturer)">
@@ -20,6 +25,23 @@
           </Directory>
         </Directory>
       </Directory>
+      <Directory Id="ProgramMenuFolder">
+        <Directory Id="ApplicationProgramsFolder" Name="$(var.ProductName)"/>
+      </Directory>
     </Directory>
-	</Fragment>
+    
+    <DirectoryRef Id="ApplicationProgramsFolder">
+    <Component Id="ApplicationShortcut" Guid="edb02483-facc-4a17-b10b-580ec5580599">
+      <Shortcut Id="ApplicationStartMenuShortcut" 
+            Name="$(var.ProductName)"
+            Description="Launch application and activity tracker"
+            Target="[#filCADD6ACD650D2362D78D09F17E9F63C4]"
+            WorkingDirectory="APPLICATIONROOTDIRECTORY"
+            Icon="icon.ico"
+            />
+      <RemoveFolder Id="ApplicationProgramsFolder" On="uninstall"/>
+      <RegistryValue Root="HKCU" Key="Software\sidiandi\hagen" Name="installed" Type="integer" Value="1" KeyPath="yes"/>
+    </Component>
+</DirectoryRef>
+  </Fragment>
 </Wix>

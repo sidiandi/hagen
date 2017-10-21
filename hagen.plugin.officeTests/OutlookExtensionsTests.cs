@@ -86,5 +86,39 @@ namespace hagen.plugin.office.Tests
                     .Add(_ => _.End)
             );
         }
+
+        [Test(), Explicit("requires outlook")]
+        public void TryGetSelectedMailTest()
+        {
+            var app = OutlookExtensions.ProvideApplication();
+            Assert.IsTrue(app.TryGetSelectedMail(out var mail));
+            log.Info(mail.Subject);
+        }
+
+        [Test(), Explicit("requires outlook")]
+        public void InviteEveryoneTest()
+        {
+            var app = OutlookExtensions.ProvideApplication();
+            Assert.IsTrue(app.TryGetSelectedMail(out var mail));
+            app.InviteEveryone(mail);
+        }
+
+        [Test(), Explicit("requires outlook")]
+        public void ReplyDuTest()
+        {
+            var app = OutlookExtensions.ProvideApplication();
+            Assert.IsTrue(app.TryGetSelectedMail(out var mail));
+            app.ReplyDu(mail);
+        }
+
+        [Test(), Explicit("requires outlook")]
+        public void DelegateTest()
+        {
+            var app = OutlookExtensions.ProvideApplication();
+            Assert.IsTrue(app.TryGetSelectedMail(out var mail));
+            app.Delegate(mail);
+        }
+
+
     }
 }

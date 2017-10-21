@@ -10,6 +10,7 @@ using Sidi.Extensions;
 using System.Runtime.InteropServices;
 using Microsoft.Office.Interop.Outlook;
 using Sidi.Util;
+using System.Text.RegularExpressions;
 
 namespace hagen.plugin.office
 {
@@ -107,6 +108,149 @@ namespace hagen.plugin.office
             i.Sort("[Start]");
             var appointments = i.Restrict(q);
             return appointments.OfType<AppointmentItem>().ToList();
+        }
+
+        public static bool TryGetSelectedMail(this Application outlook, out MailItem mail)
+        {
+            var explorer = outlook.ActiveExplorer();
+            if (explorer.Selection.Count > 0)
+            {
+                mail = explorer.Selection[1] as MailItem;
+                return mail != null;
+            }
+
+            mail = null;
+            return false;
+        }
+
+        /// <summary>
+        /// Forward mail for delegation. All (To) recipients of the original mail and the sender will be in (CC).
+        /// </summary>
+        /// <param name="outlook"></param>
+        /// <param name="mail"></param>
+        public static void Delegate(this Application outlook, MailItem mail)
+        {
+            var forwardMail = mail.Forward();
+            forwardMail.Body = @"Hello,
+
+Please take over.
+
+Best regards,
+
+Andreas
+
+====
+" + forwardMail.Body;
+
+            foreach (Recipient r in mail.Recipients)
+            {
+                if (r.Type == (int) OlMailRecipientType.olTo)
+                {
+                    var nr = forwardMail.Recipients.Add(r);
+                    nr.Type = (int) OlMailRecipientType.olCC;
+                }
+            }
+
+            {
+                var originalSender = forwardMail.Recipients.Add(mail.Sender);
+                originalSender.Type = (int)OlMailRecipientType.olCC;
+            }
+
+            var inspector = (Inspector)outlook.Inspectors.Add(forwardMail);
+            inspector.Activate();
+        }
+
+        public static void ReplyDu(this Application outlook, MailItem mail)
+        {
+            var replyMail = mail.Reply();
+            if (mail.Sender.TryGetGreetingName(out var greetingName))
+            {
+                replyMail.Body = String.Format(@"Hallo {0},
+
+
+
+Freundliche Grüße,
+
+Andreas
+", greetingName) + replyMail.Body;
+            }
+
+            var inspector = (Inspector)outlook.Inspectors.Add(replyMail);
+            inspector.Activate();
+        }
+
+        public static Recipient Add(this Recipients recipients, Recipient recipientToAdd)
+        {
+            var r = recipients.Add(recipientToAdd.Name);
+            r.Type = recipientToAdd.Type;
+            r.AddressEntry = recipientToAdd.AddressEntry;
+            return r;
+        }
+
+        public static Recipient Add(this Recipients recipients, AddressEntry addressEntry)
+        {
+            var r = recipients.Add(addressEntry.Name);
+            r.AddressEntry = addressEntry;
+            return r;
+        }
+
+        public static bool TryGetGreetingName(this AddressEntry addressEntry, out string greetingName)
+        {
+            var displayName = addressEntry.Name;
+
+            // lastname, first names
+            var p = Regex.Split(displayName, @",\s+");
+            if (p.Length > 1)
+            {
+                greetingName = p[1];
+                return true;
+            }
+
+            // firtnames lastname
+            p = Regex.Split(displayName, @"\s+");
+            if (p.Length > 0)
+            {
+                greetingName = p[0];
+                return true;
+            }
+
+            greetingName = null;
+            return false;
+        }
+
+        public static void InviteEveryone(this Application outlook, MailItem mail)
+        {
+            var appointment = outlook.CreateItem(OlItemType.olAppointmentItem) as AppointmentItem;
+            appointment.Start = DateTime.Now.NextFullHour();
+            appointment.End = appointment.Start.AddHours(0.5);
+            appointment.Subject = mail.Subject;
+            appointment.Attachments.Add(mail);
+            appointment.BusyStatus = OlBusyStatus.olBusy;
+            appointment.MeetingStatus = OlMeetingStatus.olMeeting;
+
+            // add to and cc from mail as recipients
+            foreach (Recipient recipient in mail.Recipients)
+            {
+                var addedRecipient = appointment.Recipients.Add(recipient.Name);
+                addedRecipient.Type = recipient.Type;
+                addedRecipient.AddressEntry = recipient.AddressEntry;
+            }
+
+            // add mail sender as attendee
+            {
+                var addedRecipient = appointment.Recipients.Add(mail.Sender.Name);
+                addedRecipient.AddressEntry = mail.Sender;
+            }
+
+            // Remove myself
+            var recipients = appointment.Recipients;
+            for (int i=1; i<appointment.Recipients.Count; ++i)
+            {
+                log.Info(recipients[i].Name);
+            }
+
+            var inspector = (Inspector)outlook.Inspectors.Add(appointment);
+            inspector.Activate();
         }
     }
 }

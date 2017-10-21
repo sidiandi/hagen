@@ -128,6 +128,36 @@ namespace hagen.plugin.office
             task.Save();
         }
 
+        [Usage("Invite everyone on the selected mail to a meeting.")]
+        public void InviteEveryone()
+        {
+            var app = OutlookExtensions.ProvideApplication();
+            if (app.TryGetSelectedMail(out var mail))
+            {
+                app.InviteEveryone(mail);
+            }
+        }
+
+        [Usage("Delegate answering a mail to someone else")]
+        public void Delegate()
+        {
+            var app = OutlookExtensions.ProvideApplication();
+            if (app.TryGetSelectedMail(out var mail))
+            {
+                app.Delegate(mail);
+            }
+        }
+
+        [Usage("Reply to mail")]
+        public void ReplyDu()
+        {
+            var app = OutlookExtensions.ProvideApplication();
+            if (app.TryGetSelectedMail(out var mail))
+            {
+                app.ReplyDu(mail);
+            }
+        }
+
         [Usage("Dismiss reminders for started appointments")]
         public void DismissReminders()
         {

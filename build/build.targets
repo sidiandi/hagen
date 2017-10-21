@@ -134,11 +134,11 @@ along with sidi-util. If not, see <http://www.gnu.org/licenses/>.-->
     <Exec Command="&quot;@(SetupFiles, ' ')&quot;" />
   </Target>
   
-  <Target Name="PublishToDropbox" DependsOnTargets="Setup" >
-    <Copy SourceFiles="@(SetupFiles)"  DestinationFolder="C:\Users\Andreas\Dropbox\bin\hagen" />
+  <Target Name="PublishOnDropbox" DependsOnTargets="Setup" >
+    <Copy SourceFiles="@(SetupFiles)"  DestinationFolder="$(USERPROFILE)\Dropbox\hagen\setup" />
   </Target>
   
-  <Target Name="Release" DependsOnTargets="Test;Setup;Tag" >
+  <Target Name="PublishAsGithubRelease" DependsOnTargets="Setup" >
     <Exec IgnoreExitCode="true" IgnoreStandardErrorWarningFormat="true" Command="&quot;$(GithubRelease)&quot; release --tag $(ReleaseTag)" 
       EnvironmentVariables="$(GithubReleaseEnvironmentVariables)"
     />
@@ -146,6 +146,10 @@ along with sidi-util. If not, see <http://www.gnu.org/licenses/>.-->
       EnvironmentVariables="$(GithubReleaseEnvironmentVariables)"
     />
   </Target>
+  
+  <Target Name="Release" DependsOnTargets="Test;Setup;Tag;PublishAsGithubRelease" />
+  
+  <Target Name="PreRelease" DependsOnTargets="Test;Setup;Tag;PublishOnDropbox" />
   
   <Target Name="Clean" >
     <RemoveDir Directories="$(BuildDir)" />

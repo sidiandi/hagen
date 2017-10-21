@@ -21,6 +21,7 @@
     <HarvestDirectorySuppressCom>true</HarvestDirectorySuppressCom>
     <HarvestVerboseOutput>true</HarvestVerboseOutput>
     <HarvestDirectorySuppressRootDirectory>true</HarvestDirectorySuppressRootDirectory>
+    <LinkerSuppressSpecificWarnings>1076</LinkerSuppressSpecificWarnings>
   </PropertyGroup>
   <ItemGroup>
     <HarvestDirectory Include="$(StageDirectory)">

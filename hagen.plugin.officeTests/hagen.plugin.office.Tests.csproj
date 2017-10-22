@@ -125,6 +125,7 @@
   <ItemGroup>
     <Compile Include="OutlookExtensionsTests.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
+    <Compile Include="TimeParserTests.cs" />
   </ItemGroup>
   <ItemGroup>
     <None Include="App.config" />

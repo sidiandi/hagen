@@ -118,13 +118,16 @@ namespace hagen.plugin.office
 
         private Timer showOutlookAppointmentRemindersTimer;
 
-        [Usage("Add a task item to Outlook")]
+        [Usage("Add a task item to Outlook. Use e.g. \"until friday\" or \"in 4 weeks\" to set a due date.")]
         public void Todo(string subject)
         {
-            var app = OutlookExtensions.ProvideApplication();
+            var app = OutlookExtensions.GetRunningApplication();
             var task = app.CreateTaskItem();
             task.Subject = subject;
-            task.DueDate = DateTime.Today.AddDays(1);
+            var s = new TimeParser().ParseSubject(subject);
+            task.DueDate = s.DueDate;
+            task.StartDate = DateTime.Now;
+            task.Subject = s.Text;
             task.Save();
         }
 

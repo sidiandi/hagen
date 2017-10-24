@@ -133,7 +133,7 @@ text text";
 text text", newBody);
         }
 
-        [Test]
+        [Test, Explicit]
         public void ManipulateBody()
         {
             var outlook = OutlookExtensions.GetRunningApplication();

@@ -20,8 +20,8 @@ namespace hagen.plugin.office
     {
         private static readonly log4net.ILog log = log4net.LogManager.GetLogger(System.Reflection.MethodBase.GetCurrentMethod().DeclaringType);
 
-        private TimeSpan appointmentReminderInterval = TimeSpan.FromSeconds(3);
-        private TimeSpan appointmentReminderLookahead = TimeSpan.FromMinutes(10);
+        private TimeSpan appointmentReminderInterval = TimeSpan.FromSeconds(30);
+        private TimeSpan appointmentReminderLookahead = TimeSpan.FromMinutes(5);
 
         readonly IContext _context;
         private DateTime minStartTimeForReminders = DateTime.MinValue;
@@ -149,6 +149,19 @@ namespace hagen.plugin.office
             {
                 app.Delegate(mail);
             }
+        }
+
+        [Usage("Add a greeting from recipients")]
+        public void Hello()
+        {
+            var app = OutlookExtensions.ProvideApplication();
+            var inspector = app.ActiveInspector();
+            if (inspector == null) return;
+
+            var item = inspector.CurrentItem as MailItem;
+            if (item == null) return;
+
+            inspector.Hello();
         }
 
         [Usage("Reply to mail")]

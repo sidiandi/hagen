@@ -123,6 +123,33 @@ namespace hagen.plugin.office
             return false;
         }
 
+        class InspectorWrapper
+        {
+            readonly Inspector inspector;
+            readonly object item;
+
+            public static InspectorWrapper KeepAliveUntilClose(Inspector inspector)
+            {
+                return new InspectorWrapper(inspector);
+            }
+
+            InspectorWrapper(Inspector inspector)
+            {
+                this.inspector = inspector;
+                this.item = inspector.CurrentItem;
+                trackedInspectors.Add(this);
+                ((InspectorEvents_10_Event)inspector).Close += InspectorWrapper_Close;
+            }
+
+            private void InspectorWrapper_Close()
+            {
+                trackedInspectors.Remove(this);
+                ((InspectorEvents_10_Event)inspector).Close -= InspectorWrapper_Close;
+            }
+
+            static List<InspectorWrapper> trackedInspectors = new List<InspectorWrapper>();
+        }
+
         /// <summary>
         /// Forward mail for delegation. All (To) recipients of the original mail and the sender will be in (CC).
         /// </summary>
@@ -131,20 +158,18 @@ namespace hagen.plugin.office
         public static void Delegate(this Application outlook, MailItem mail)
         {
             var forwardMail = mail.Forward();
-            forwardMail.Body = @"Hello,
+            forwardMail.Body = @"Hallo,
 
-Please take over.
+bitte beantworten.
 
-Best regards,
+Freundliche Grüße,
 
-Andreas
+Andreas" + forwardMail.Body;
 
-====
-" + forwardMail.Body;
-
+            var ownAddress = outlook.Session.CurrentUser.Address;
             foreach (Recipient r in mail.Recipients)
             {
-                if (r.Type == (int) OlMailRecipientType.olTo)
+                if (r.Type == (int) OlMailRecipientType.olTo && !(string.Equals(ownAddress, r.Address)))
                 {
                     var nr = forwardMail.Recipients.Add(r);
                     nr.Type = (int) OlMailRecipientType.olCC;
@@ -158,6 +183,31 @@ Andreas
 
             var inspector = (Inspector)outlook.Inspectors.Add(forwardMail);
             inspector.Activate();
+        }
+
+        public static void Hello(this Inspector inspector)
+        {
+            var mailItem = (MailItem) inspector.CurrentItem;
+
+            var names = mailItem.Recipients.Cast<Recipient>()
+                .Where(_ => _.Type == (int)OlMailRecipientType.olTo)
+                .Select(_ => { _.AddressEntry.TryGetGreetingName(out var name); return name; })
+                .Where(_ => _ != null);
+
+            var greeting = String.Format(@"Hallo {0},
+
+text
+
+Freundliche Grüße,
+
+Andreas
+"
+                , names.Join(", "));
+
+            dynamic editor = inspector.WordEditor;
+            dynamic selection = editor.Windows[1].Selection;
+            selection.Delete();
+            selection.InsertAfter(greeting);
         }
 
         public static void ReplyDu(this Application outlook, MailItem mail)
@@ -225,14 +275,13 @@ Andreas
             appointment.End = appointment.Start.AddHours(0.5);
             appointment.Subject = mail.Subject;
             appointment.Attachments.Add(mail);
-            appointment.BusyStatus = OlBusyStatus.olBusy;
             appointment.MeetingStatus = OlMeetingStatus.olMeeting;
 
             // add to and cc from mail as recipients
             foreach (Recipient recipient in mail.Recipients)
             {
                 var addedRecipient = appointment.Recipients.Add(recipient.Name);
-                addedRecipient.Type = recipient.Type;
+                addedRecipient.Type = (int) OlMeetingRecipientType.olRequired;
                 addedRecipient.AddressEntry = recipient.AddressEntry;
             }
 
@@ -240,6 +289,7 @@ Andreas
             {
                 var addedRecipient = appointment.Recipients.Add(mail.Sender.Name);
                 addedRecipient.AddressEntry = mail.Sender;
+                addedRecipient.Type = (int)OlMeetingRecipientType.olRequired;
             }
 
             // Remove myself

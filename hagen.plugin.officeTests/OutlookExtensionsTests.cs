@@ -9,6 +9,7 @@ using Sidi.Test;
 using Microsoft.Office.Interop.Outlook;
 using Sidi.Extensions;
 using Sidi.Util;
+using System.Text.RegularExpressions;
 
 namespace hagen.plugin.office.Tests
 {
@@ -119,6 +120,27 @@ namespace hagen.plugin.office.Tests
             app.Delegate(mail);
         }
 
+        [Test]
+        public void UpdateGreeting()
+        {
+            var body = @"Hallo Andreas, 
 
+text text";
+
+            var newBody = Regex.Replace(body, @"^Hallo .*,\ \r\n\r\n", "Hallo Christian, \r\n\r\n");
+            Assert.AreEqual(@"Hallo Christian, 
+
+text text", newBody);
+        }
+
+        [Test]
+        public void ManipulateBody()
+        {
+            var outlook = OutlookExtensions.GetRunningApplication();
+            var inspector = outlook.ActiveInspector();
+            dynamic editor = inspector.WordEditor;
+            dynamic selection = editor.Windows[1].Selection;
+            selection.InsertBefore("Hello");
+        }
     }
 }

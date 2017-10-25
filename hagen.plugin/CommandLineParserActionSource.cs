@@ -89,8 +89,8 @@ namespace hagen
         static bool IsVisible(IContext context, Sidi.CommandLine.Action a)
         {
             var m = a.MethodInfo;
-            var visibilityCondition = (VisibilityConditionAttribute) m.GetCustomAttributes(typeof(VisibilityConditionAttribute), false).FirstOrDefault();
-            return visibilityCondition != null && visibilityCondition.GetIsVisible(context);
+            var visibilityCondition = m.GetCustomAttributes<VisibilityConditionAttribute>();
+            return visibilityCondition != null && visibilityCondition.All(_ => _.GetIsVisible(context));
         }
 
         static IAction ToIAction<T>(IContext context, Sidi.CommandLine.Action a, T arg1, string arg1String = null)

@@ -11,6 +11,10 @@ namespace hagen
     public interface IContext
     {
         void InsertText(string text);
+        
+        /// <summary>
+        /// True if top level window is a console window
+        /// </summary>
         bool IsConsole { get; }
         AutomationElement SavedFocusedElement { get; }
         PathList SelectedPathList { get; }
@@ -41,5 +45,13 @@ namespace hagen
         /// </summary>
         /// <param name="message"></param>
         void Notify(string message);
+    }
+
+    public static class IContextExtensions
+    {
+        public static string GetTopLevelWindowClassName(this IContext context)
+        {
+            return context.SavedFocusedElement.GetTopLevelElement().Current.ClassName;
+        }
     }
 }

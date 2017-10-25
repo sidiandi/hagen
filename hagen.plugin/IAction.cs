@@ -72,8 +72,18 @@ namespace hagen
             }
         }
 
+        /// <summary>
+        /// Converts an IAction to an IResult. 
+        /// </summary>
+        /// <param name="action">If null, no IResult is created and method returns null</param>
+        /// <param name="priority"></param>
+        /// <returns></returns>
         public static IResult ToResult(this IAction action, Priority priority)
         {
+            if (action == null)
+            {
+                return null;
+            }
             return new ActionWrapper(action, priority);
         }
     }

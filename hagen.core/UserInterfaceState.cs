@@ -41,8 +41,7 @@ namespace hagen
         {
             get
             {
-                var className = SavedFocusedElement.GetTopLevelElement().Current.ClassName;
-                return object.Equals(className, "ConsoleWindowClass");
+                return object.Equals(topLevelWindowClassName, "ConsoleWindowClass");
             }
         }
 
@@ -54,6 +53,9 @@ namespace hagen
             {
                 log.InfoFormat("Files selected in Explorer: {0}", selectedPathList);
             }
+            var topLevel = SavedFocusedElement.GetTopLevelElement().Current;
+            topLevelWindowClassName = topLevel.ClassName;
+            log.InfoFormat("Top Level Window: {0}", topLevelWindowClassName);
         }
 
         static IEnumerable<LPath> GetSelectedFiles(SHDocVw.InternetExplorer w)
@@ -129,6 +131,7 @@ namespace hagen
         }
 
         IntPtr focusedElement = IntPtr.Zero;
+        string topLevelWindowClassName;
 
         public AutomationElement SavedFocusedElement
         {

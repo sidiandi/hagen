@@ -15,6 +15,15 @@ using Exception = System.Exception;
 
 namespace hagen.plugin.office
 {
+    [AttributeUsage(AttributeTargets.Method)]
+    public class OutlookInspectorIsInForeground : VisibilityConditionAttribute
+    {
+        public override bool GetIsVisible(IContext context)
+        {
+            return string.Equals("rctrl_renwnd32", context.GetTopLevelWindowClassName());
+        }
+    }
+
     [Usage("Outlook commands")]
     public class Outlook
     {
@@ -118,6 +127,7 @@ namespace hagen.plugin.office
 
         private Timer showOutlookAppointmentRemindersTimer;
 
+        [OutlookInspectorIsInForeground]
         [Usage("Add a task item to Outlook. Use e.g. \"until friday\" or \"in 4 weeks\" to set a due date.")]
         public void Todo(string subject)
         {
@@ -131,6 +141,7 @@ namespace hagen.plugin.office
             task.Save();
         }
 
+        [OutlookInspectorIsInForeground]
         [Usage("Invite everyone on the selected mail to a meeting.")]
         public void InviteEveryone()
         {
@@ -141,6 +152,7 @@ namespace hagen.plugin.office
             }
         }
 
+        [OutlookInspectorIsInForeground]
         [Usage("Delegate answering a mail to someone else")]
         public void Delegate()
         {
@@ -164,6 +176,7 @@ namespace hagen.plugin.office
             inspector.Hello();
         }
 
+        [OutlookInspectorIsInForeground]
         [Usage("Reply to mail")]
         public void ReplyDu()
         {

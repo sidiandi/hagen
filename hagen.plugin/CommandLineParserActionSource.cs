@@ -34,9 +34,13 @@ using System.Reflection;
 
 namespace hagen
 {
+    /// <summary>
+    /// Controls visibility of actions derived from methods with the [Usage] attribute.
+    /// </summary>
+    /// Use a class derived from this class to control if an action is displayed at all. Example: ForegroundWindowMustBeExplorerAttribute 
     public class VisibilityConditionAttribute : Attribute
     {
-        public virtual bool GetIsVisible()
+        public virtual bool GetIsVisible(IContext context)
         {
             return true;
         }
@@ -45,9 +49,10 @@ namespace hagen
     [AttributeUsage(AttributeTargets.Method)]
     public class ForegroundWindowMustBeExplorerAttribute : VisibilityConditionAttribute
     {
-        public override bool GetIsVisible()
+        public override bool GetIsVisible(IContext context)
         {
-            return false;
+            var className = context.GetTopLevelWindowClassName();
+            return string.Equals("ExploreWClass", className) || string.Equals("CabinetWClass", className);
         }
     }
     
@@ -57,22 +62,23 @@ namespace hagen
 
         IContext context;
         public Parser Parser;
-        
+
+        static CommandLineParserActionSource()
+        {
+            _icon = Sidi.Properties.Resources.Play;
+        }
         public CommandLineParserActionSource(IContext context, Parser parser)
         {
             this.context = context;
             this.Parser = parser;
-            _icon = Sidi.Properties.Resources.Play;
         }
 
-        System.Drawing.Icon _icon;
+        static System.Drawing.Icon _icon;
 
         public override string ToString()
         {
             return Parser.MainSource.Instance.GetType().ToString();
         }
-
-        static List<string> emptyArgs = new List<string>();
 
         static bool TakesSingleParameter<T>(Sidi.CommandLine.Action a)
         {
@@ -80,59 +86,25 @@ namespace hagen
             return pi.Length == 1 && pi[0].ParameterType == typeof(T);
         }
 
-        static bool IsVisible(Sidi.CommandLine.Action a)
+        static bool IsVisible(IContext context, Sidi.CommandLine.Action a)
         {
             var m = a.MethodInfo;
             var visibilityCondition = (VisibilityConditionAttribute) m.GetCustomAttributes(typeof(VisibilityConditionAttribute), false).FirstOrDefault();
-            return visibilityCondition != null && visibilityCondition.GetIsVisible();
+            return visibilityCondition != null && visibilityCondition.GetIsVisible(context);
         }
 
-        IAction ToIAction(Sidi.CommandLine.Action a)
+        static IAction ToIAction<T>(IContext context, Sidi.CommandLine.Action a, T arg1, string arg1String = null)
         {
-            if (IsVisible(a) && context.SelectedPathList != null && context.SelectedPathList.Any())
+            if (!IsVisible(context, a))
             {
-                var pathList = context.SelectedPathList;
-                return new SimpleAction(
-                    context.LastExecutedStore,
-                    a.Name,
-                    String.Format("{0}({2}) ({1})", a.Name, a.Usage, pathList.JoinTruncated(", ", 80)),
-                    () =>
-                    {
-                        a.Handle(new List<string>() { pathList.ToString() }, true);
-                    })
-                {
-                    Icon = _icon
-                };
+                return null;
             }
-            else
-            {
-                return new SimpleAction(
-                    context.LastExecutedStore,
-                    a.Name,
-                    String.Format("{0}.{1} ({2})", a.Source.Instance.GetType().Name, a.Name, a.Usage),
-                    () =>
-                    {
-                        if (a.MethodInfo.GetParameters().Length == 0)
-                        {
-                            a.Handle(emptyArgs, true);
-                        }
-                        else
-                        {
-                            this.Parser.Parse(new string[] { "ShowDialog", a.Name });
-                        }
-                    })
-                {
-                    Icon = _icon
-                };
-            }
-        }
 
-        IAction ToIAction<T>(Sidi.CommandLine.Action a, T arg1, string arg1String = null)
-        {
             if (arg1String == null)
             {
                 arg1String = arg1.ToString();
             }
+
             return new SimpleAction(
                 context.LastExecutedStore,
                 a.Name,
@@ -146,33 +118,9 @@ namespace hagen
             };
         }
 
-        string DisplayText(Sidi.CommandLine.Action a)
+        static string DisplayText(Sidi.CommandLine.Action a)
         {
             return a.Source.Instance.GetType().Name + "." + a.Name;
-        }
-
-        IAction ToIAction(Sidi.CommandLine.Action a, PathList arg1, string arg1String = null)
-        {
-            if (TakesSingleParameter<LPath>(a))
-            {
-                return ToIAction<LPath>(a, arg1.First(), GetNiceText(arg1));
-            }
-            return ToIAction<PathList>(a, arg1, arg1String);
-        }
-
-        IAction ToIAction(Sidi.CommandLine.Action a, List<string> args)
-        {
-            return new SimpleAction(
-                context.LastExecutedStore,
-                a.Name,
-                String.Format("{0}({1}) - ({2})", DisplayText(a), args.Join(" " ), a.Usage),
-                () =>
-                {
-                    a.Handle(args, true);
-                })
-            {
-                Icon = _icon
-            };
         }
 
         static bool TakesSingleString(MethodInfo m)
@@ -181,8 +129,13 @@ namespace hagen
             return p.Length == 1 && object.Equals(p[0].ParameterType, typeof(string));
         }
 
-        IAction ToIAction(Sidi.CommandLine.Action a, string args)
+        static IAction ToIAction(IContext context, Sidi.CommandLine.Action a, string args)
         {
+            if (!IsVisible(context, a))
+            {
+                return null;
+            }
+
             args = args.Trim();
 
             return new SimpleAction(
@@ -218,14 +171,14 @@ namespace hagen
         }
         IList<Sidi.CommandLine.Action> actions;
 
-        public static int MatchLength(string input, string pattern)
+        internal static int MatchLength(string input, string pattern)
         {
             return MatchLength(input, 0, pattern, 0);
         }
 
         const int NoMatch = -1;
 
-        public static int MatchLength(string input, int i, string pattern, int p)
+        internal static int MatchLength(string input, int i, string pattern, int p)
         {
             if (p >= pattern.Length)
             {
@@ -333,16 +286,11 @@ namespace hagen
             {
                 if (isFileAction(pa))
                 {
-                    var a = ToIAction(pa, query.Context.SelectedPathList);
-                    return a.ToResult(Priority.High);
+                    return ToIAction(context, pa, query.Context.SelectedPathList).ToResult(Priority.High);
                 }
                 else if (isMatch(pa))
                 {
-                    var a = ToIAction(pa, argsText);
-                    if (a != null)
-                    {
-                        return a.ToResult(Priority.Normal);
-                    };
+                    return ToIAction(context, pa, argsText).ToResult(Priority.Normal);
                 }
                 return null;
             })

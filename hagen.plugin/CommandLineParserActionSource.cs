@@ -93,6 +93,15 @@ namespace hagen
             return visibilityCondition != null && visibilityCondition.All(_ => _.GetIsVisible(context));
         }
 
+        static IAction ToIActionPathList(IContext context, Sidi.CommandLine.Action a, PathList arg1, string arg1String = null)
+        {
+            if (TakesSingleParameter<LPath>(a))
+            {
+                return ToIAction<LPath>(context, a, arg1.First(), GetNiceText(arg1));
+            }
+            return ToIAction<PathList>(context, a, arg1, arg1String);
+        }
+
         static IAction ToIAction<T>(IContext context, Sidi.CommandLine.Action a, T arg1, string arg1String = null)
         {
             if (!IsVisible(context, a))
@@ -286,7 +295,7 @@ namespace hagen
             {
                 if (isFileAction(pa))
                 {
-                    return ToIAction(context, pa, query.Context.SelectedPathList).ToResult(Priority.High);
+                    return ToIActionPathList(context, pa, query.Context.SelectedPathList).ToResult(Priority.High);
                 }
                 else if (isMatch(pa))
                 {

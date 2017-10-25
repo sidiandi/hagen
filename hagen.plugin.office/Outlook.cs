@@ -127,7 +127,6 @@ namespace hagen.plugin.office
 
         private Timer showOutlookAppointmentRemindersTimer;
 
-        [OutlookInspectorIsInForeground]
         [Usage("Add a task item to Outlook. Use e.g. \"until friday\" or \"in 4 weeks\" to set a due date.")]
         public void Todo(string subject)
         {

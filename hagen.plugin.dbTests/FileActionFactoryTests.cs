@@ -5,6 +5,8 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
+using Sidi.IO;
+using System.Reflection;
 
 namespace hagen.Plugin.Db.Tests
 {
@@ -14,8 +16,7 @@ namespace hagen.Plugin.Db.Tests
         [Test]
         public void Create()
         {
-            string p = Environment.GetFolderPath(Environment.SpecialFolder.StartMenu);
-
+            string p = Assembly.GetExecutingAssembly().GetLocalPath();
             FileActionFactory f = new FileActionFactory();
             Action a = f.FromFile(p);
             var sp = (StartProcess)a.CommandObject;

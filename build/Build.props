@@ -17,10 +17,10 @@
 
   <!-- define secret project properties in a private .props file. See build/api_key_example.props for an example -->
   <PropertyGroup Condition="$(SECRET_PROPS) == ''">
-    <SECRET_PROPS>$(HOMEPATH)\Documents\hagen-secrets.props</SECRET_PROPS>
+    <SECRET_PROPS>$(HOMEPATH)\Documents\$(ProductName)-secrets.props</SECRET_PROPS>
   </PropertyGroup>
 
-  <!-- Only import the secret props file if the secrets are not available as environment variables. -->
-  <Import Project="$(SECRET_PROPS)" Condition="$(GITHUB_TOKEN) == ''" />
+  <!-- Only import the secret props file if it exists and if the secrets are not available as environment variables. -->
+  <Import Project="$(SECRET_PROPS)" Condition="Exists('$(SECRET_PROPS)') and $(GITHUB_TOKEN) == ''" />
   
 </Project>

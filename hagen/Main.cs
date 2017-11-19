@@ -395,9 +395,9 @@ Hours: {0:G3}",
                     }
                 }
             }
-            catch (Exception ex)
+            catch (System.Security.SecurityException)
             {
-                log.Warn("Cannot enable drag-and-drop from Internet Explorer. Start application in elevated mode.", ex);
+                log.Warn("Cannot enable drag-and-drop from Internet Explorer. Start application in elevated mode.");
             }
         }
 

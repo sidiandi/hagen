@@ -12,7 +12,6 @@ using System.IO;
 using Sidi.Util;
 using System.Drawing;
 using Sidi.Extensions;
-using BrightIdeasSoftware;
 using Sidi.Test;
 
 namespace Sidi.Forms

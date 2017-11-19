@@ -33,7 +33,6 @@ using System.IO;
 using mshtml;
 using Sidi.Extensions;
 using L = Sidi.IO;
-using BrightIdeasSoftware;
 using Sidi.Test;
 using WeifenLuo.WinFormsUI.Docking;
 using Sidi.CommandLine;

@@ -9,7 +9,7 @@ using Sidi.Extensions;
 
 namespace hagen
 {
-    internal static class PrivateExtensions
+    public static class PrivateExtensions
     {
         private static readonly log4net.ILog log = log4net.LogManager.GetLogger(System.Reflection.MethodBase.GetCurrentMethod().DeclaringType);
 

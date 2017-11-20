@@ -17,7 +17,6 @@
     <PdbOutputPath>$(BuildDir)\obj\wix</PdbOutputPath>
     <StageDirectory>$(BuildDir)\stage</StageDirectory>
     <OutDir>$(BuildDir)</OutDir>
-    <BinDir>$(BuildDir)\bin</BinDir>
     <HarvestDirectorySuppressCom>true</HarvestDirectorySuppressCom>
     <HarvestVerboseOutput>true</HarvestVerboseOutput>
     <HarvestDirectorySuppressRootDirectory>true</HarvestDirectorySuppressRootDirectory>
@@ -64,7 +63,7 @@
     </PropertyGroup>
     <!-- copy to stage -->
     <ItemGroup>
-      <FilesToInstall Include="$(BinDir)/**/*" Exclude="$(BinDir)/**/*.pdb;$(BinDir)/**/*.xml;$(BinDir)/**/*.Tests.*" />
+      <FilesToInstall Include="$(OutDir)/hagen/bin/**/*" Exclude="$(OutDir)/hagen/bin/**/*.pdb;$(OutDir)/hagen/bin/**/*.xml" />
     </ItemGroup>
     <RemoveDir Directories="$(StageDirectory)" />
     <Copy

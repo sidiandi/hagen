@@ -6,11 +6,11 @@
 	<SourceDir>$([System.IO.Path]::GetDirectoryName($([System.IO.Path]::GetDirectoryName($(MSBuildThisFileFullPath)))))</SourceDir>
 	<BuildDir>$(OutDir)</BuildDir>
 	<BuildDir Condition="$(OutDir) == ''" >$(SourceDir)\out\$(Configuration)-$(Platform)</BuildDir>
-	<OutDir>$(BuildDir)\bin</OutDir>
+	<OutDir>$(BuildDir)\$(MSBuildProjectName)\bin</OutDir>
 	<OutputPath>$(OutDir)</OutputPath>
-	<BaseIntermediateOutputPath>$(BuildDir)\obj</BaseIntermediateOutputPath>
+	<BaseIntermediateOutputPath>$(BuildDir)\$(MSBuildProjectName)\obj</BaseIntermediateOutputPath>
     <LibDir>$(SolutionDir)lib\</LibDir>
-	<TestDir>$(BuildDir)\test-data</TestDir>
+	<TestDir>$(BuildDir)\$(MSBuildProjectName)\test-data</TestDir>
 	<SetupWixproj>$(SourceDir)\setup\setup.wixproj</SetupWixproj>
   </PropertyGroup>
 </Project>

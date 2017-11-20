@@ -33,3 +33,5 @@ using System.Runtime.InteropServices;
 
 // The following GUID is for the ID of the typelib if this project is exposed to COM
 [assembly: Guid("a8f87117-65a2-4f4e-9472-81db1fed035a")]
+
+[assembly: InternalsVisibleTo("activityReport.Test")]

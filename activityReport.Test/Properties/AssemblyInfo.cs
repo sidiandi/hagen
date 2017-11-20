@@ -22,7 +22,7 @@ using System.Runtime.InteropServices;
 // General Information about an assembly is controlled through the following 
 // set of attributes. Change these attribute values to modify the information
 // associated with an assembly.
-[assembly: AssemblyTitle("hagen.plugin")]
+[assembly: AssemblyTitle("activityReport.Test")]
 [assembly: AssemblyDescription("")]
 [assembly: AssemblyConfiguration("")]
 
@@ -32,6 +32,4 @@ using System.Runtime.InteropServices;
 [assembly: ComVisible(false)]
 
 // The following GUID is for the ID of the typelib if this project is exposed to COM
-[assembly: Guid("35748b2c-e43a-416d-ad1e-3b64ad4c29c2")]
-
-[assembly: InternalsVisibleTo("hagen.Plugin.Test")]
+[assembly: Guid("a8f87117-65a2-4f4e-9472-81db1fed035a")]

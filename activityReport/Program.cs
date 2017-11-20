@@ -29,7 +29,6 @@ using System.Data.SQLite;
 using System.Windows.Forms;
 using System.Drawing;
 using System.IO;
-using NUnit.Framework;
 using System.Text.RegularExpressions;
 using Sidi.Visualization;
 using Sidi.Extensions;
@@ -732,7 +731,7 @@ Work > {0} hours in {1:yyyy-MM}
             sum.MouseMove += i.MouseMove;
         }
         
-        IEnumerable<Input> Summarize(IEnumerable<Input> raw)
+        internal IEnumerable<Input> Summarize(IEnumerable<Input> raw)
         {
             Input s = null;
             foreach (var i in raw)
@@ -751,48 +750,6 @@ Work > {0} hours in {1:yyyy-MM}
                 }
 
                 Add(ref s, i);
-            }
-        }
-
-        [TestFixture]
-        public class Test : Sidi.Test.TestBase
-        {
-            [Test, Explicit("interactive")]
-            public void Stats()
-            {
-                System.Windows.Forms.Application.Run(new Program(new Hagen()).StatisticsWindow());
-            }
-
-            [Test]
-            public void Report()
-            {
-                new Program(new Hagen()).Report(Console.Out, TimeIntervalExtensions.LastDays(30));
-            }
-
-            [Test, Explicit("interactive")]
-            public void Summarize()
-            {
-                var hagen = new Hagen();
-                var p = new Program(hagen);
-                
-                using (var inputs = hagen.OpenInputs())
-                {
-                    var raw = inputs.Range(new TimeInterval(new DateTime(2015, 1, 8), new DateTime(2015, 1, 9)));
-                    raw.ListFormat()
-                        .Add(_=> _.Begin, _=>_.End, _ => _.TimeInterval.Duration.TotalHours, _=>_.IsActive)
-                        .RenderText();
-                    var sum = p.Summarize(raw);
-                    sum.ListFormat()
-                        .Add(_=> _.Begin, _=>_.End, _ => _.TimeInterval.Duration.TotalHours, _=>_.IsActive).RenderText();
-                }
-            }
-
-            [Test, Explicit("interactive")]
-            public void OfficeReport()
-            {
-                var r = new Program(new Hagen());
-                r.input = new Collection<Input>(@"D:\temp\2010-01-30_worktime\hagen\hagen.sqlite");
-                System.Windows.Forms.Application.Run(r.StatisticsWindow());
             }
         }
     }

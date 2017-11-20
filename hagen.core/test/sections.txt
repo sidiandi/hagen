@@ -1,8 +1,0 @@
-﻿= A
-This is text A.
-
-= B
-This is text B.
-
-= Hello
-Hello, World

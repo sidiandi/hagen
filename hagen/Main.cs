@@ -76,7 +76,7 @@ namespace hagen
 
             hagen.Context.AddJob = this.jobListView.JobList.Jobs.Add;
 
-            var pluginProvider = new PluginProvider(hagen.Context, new PathList() { Paths.BinDir });
+            var pluginProvider = new PluginProvider2(hagen.Context, Paths.BinDir);
 
             var actionSource = new Composite(pluginProvider.GetActionSources().ToArray());
 

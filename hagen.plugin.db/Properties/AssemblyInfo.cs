@@ -34,4 +34,4 @@ using System.Runtime.InteropServices;
 // The following GUID is for the ID of the typelib if this project is exposed to COM
 [assembly: Guid("d481716f-8892-41a5-9909-8cd1e0f9f012")]
 
-[assembly: InternalsVisibleTo("hagen.plugin.db.Tests")]
+[assembly: InternalsVisibleTo("hagen.plugin.db.Test")]

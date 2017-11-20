@@ -8,7 +8,7 @@
     TaskFactory="CodeTaskFactory"  
     AssemblyFile="$(MSBuildToolsPath)\Microsoft.Build.Tasks.v12.0.dll" >  
     <ParameterGroup>  
-      <PackagesFile Required="true" />
+      <SolutionDir Required="true" />
       <PropsFile Required="true" />
     </ParameterGroup>  
     <Task>  
@@ -18,13 +18,24 @@
       <Using Namespace="System.Text.RegularExpressions" />  
       <Code Type="Fragment" Language="cs"><![CDATA[  
       
-var doc = XDocument.Load(PackagesFile);
-var props = String.Join("\r\n", doc.Root.Elements().Select(p => 
-  {
-    var propertyName = "NugetPackageVersion_" + Regex.Replace(p.Attribute("id").Value, "[^\\w]", "_");
-    var value = p.Attribute("version").Value;
-    return "<" + propertyName + ">" + value + "</" + propertyName + ">";
-  }));
+var props = String.Empty;
+
+var packagesFiles = Directory.GetDirectories(SolutionDir)
+	.Select(_ => Path.Combine(_, "packages.config"))
+	.Where(_ => File.Exists(_))
+	.ToList();
+
+foreach (var packagesFile in packagesFiles)
+{
+	var doc = XDocument.Load(packagesFile);
+	props = props + "\r\n" + String.Join("\r\n", doc.Root.Elements().Select(p => 
+	{
+		var propertyName = "NugetPackageVersion_" + Regex.Replace(p.Attribute("id").Value, "[^\\w]", "_");
+		var value = p.Attribute("version").Value;
+		return "<" + propertyName + ">" + value + "</" + propertyName + ">";
+	}));
+}
+	
 Directory.CreateDirectory(Path.GetDirectoryName(PropsFile));
 File.WriteAllText(PropsFile, @"<?xml version=""1.0"" encoding=""utf-8""?>
 <!-- Generated. Changes will be lost. -->
@@ -45,7 +56,7 @@ File.WriteAllText(PropsFile, @"<?xml version=""1.0"" encoding=""utf-8""?>
 
   <Target Name="RestorePackages" DependsOnTargets="CreateBuildDir" >
     <Exec Command="nuget restore &quot;$(SourceDir)\$(ProductName).sln&quot;" />
-    <CreatePackageVersionProps PackagesFile="$(SourceDir)\hagen.coreTests\packages.config" PropsFile="$(BuildDir)\obj\nuget.props" />
+    <CreatePackageVersionProps SolutionDir="$(SourceDir)" PropsFile="$(BuildDir)\obj\nuget.props" />
   </Target>
   
   <!-- This target puts the build.log file into the build directory -->

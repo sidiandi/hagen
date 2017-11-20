@@ -2,11 +2,17 @@
 <Project ToolsVersion="4.0" DefaultTargets="Build" xmlns="http://schemas.microsoft.com/developer/msbuild/2003">
   <Import Project="Paths.props" />
   <PropertyGroup>
+	<ProjectBuildDir>$(BuildDir)\$(MSBuildProjectName)</ProjectBuildDir>
+	<OutputPath>$(ProjectBuildDir)\bin</OutputPath>
+	<OutDir>$(OutputPath)</OutDir>
+	<TestDir>$(ProjectBuildDir)\test-data</TestDir>
+	<TestDir>$(ProjectBuildDir)\test-data</TestDir>
+	<BaseIntermediateOutputPath>$(ProjectBuildDir)\obj</BaseIntermediateOutputPath>
     <PlatformTarget>AnyCPU</PlatformTarget>
     <NoWarn>1591</NoWarn>
-    <DocumentationFile>$(OutputPath)\$(AssemblyName).xml</DocumentationFile>
     <AllowUnsafeBlocks>true</AllowUnsafeBlocks>
     <AssemblyName>$(MSBuildProjectName)</AssemblyName>
+    <DocumentationFile>$(OutputPath)\$(AssemblyName).xml</DocumentationFile>
     <OutputType>Library</OutputType>
     <AppDesignerFolder>Properties</AppDesignerFolder>
     <RootNamespace>Sidi</RootNamespace>

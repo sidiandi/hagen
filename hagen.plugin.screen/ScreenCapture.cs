@@ -22,7 +22,6 @@ using System.Text;
 using Sidi.IO;
 using System.Windows.Forms;
 using System.Drawing;
-using NUnit.Framework;
 using System.Runtime.InteropServices;
 using System.Windows.Automation;
 using Sidi.Test;

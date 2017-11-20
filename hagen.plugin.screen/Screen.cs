@@ -25,7 +25,6 @@ using Sidi.CommandLine;
 using System.Diagnostics;
 using System.Runtime.InteropServices;
 using Microsoft.Office.Interop.Outlook;
-using NUnit.Framework;
 using System.Web;
 using System.Reflection;
 using System.Reactive.Linq;
@@ -178,11 +177,6 @@ namespace hagen.ActionSource
 </body>
 </html>", id);
             ((_Inspector)mailInspector).Activate();
-        }
-
-        [TestFixture]
-        public class Test
-        {
         }
 
         #region IDisposable Support

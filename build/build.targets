@@ -28,6 +28,7 @@ along with sidi-util. If not, see <http://www.gnu.org/licenses/>.-->
 	<PropertyGroup>
 		<SourceDir>$([System.IO.Directory]::GetParent($(MSBuildProjectDirectory)))</SourceDir>
 		<NugetPackagesDir>$(SourceDir)\..\packages</NugetPackagesDir>
+		<TestDir>$(BuildDir)\test</TestDir>
   </PropertyGroup>
   
   <!-- Tools -->

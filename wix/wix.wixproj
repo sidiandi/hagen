@@ -47,6 +47,72 @@
 	<Target Name="AfterBuild">
 	</Target>
 	-->
+
+  <UsingTask  
+    TaskName="CopyPlugin"  
+    TaskFactory="CodeTaskFactory"  
+    AssemblyFile="$(MSBuildToolsPath)\Microsoft.Build.Tasks.v12.0.dll" >  
+    <ParameterGroup>  
+      <Source Required="true" />
+      <Destination Required="true" />
+    </ParameterGroup>  
+    <Task>  
+      <Reference Include="System.Xml" />
+      <Reference Include="System.Xml.Linq" />  
+      <Using Namespace="System.Xml.Linq" />  
+      <Using Namespace="System.Text.RegularExpressions" />  
+      <Code Type="Fragment" Language="cs"><![CDATA[  
+      
+		Action<string> EnsureParentDirectoryExists = (p) =>
+		{
+			var d = Path.GetDirectoryName(p);
+			if (!Directory.Exists(d))
+			{
+				Directory.CreateDirectory(d);
+			}
+		};
+	  
+	  Action<string, string, string, string> DirectoryCopy = null;
+
+	  DirectoryCopy = (string sourceDirName, string destDirName, string compareDirName, string relative) =>
+	  {
+		var s = Path.Combine(sourceDirName, relative);
+		var c = Path.Combine(compareDirName, relative);
+		var d = Path.Combine(destDirName, relative);
+		
+		if (File.Exists(s))
+		{
+			if (string.Equals(Path.GetExtension(s), ".pdb") || string.Equals(Path.GetExtension(s), ".xml"))
+			{
+				Console.WriteLine("skip {0} -> {1} because it is a build output", s, d);
+				return;
+			}
+		
+			if (File.Exists(c))
+			{
+				Console.WriteLine("skip {0} -> {1} because {2} exists.", s, d, c);
+				return;
+			}
+
+			EnsureParentDirectoryExists(d);
+			Console.WriteLine("{0} -> {1}", s, d);
+			File.Copy(s, d);
+		}
+		else if (Directory.Exists(s))
+		{
+			foreach (var i in new DirectoryInfo(s).GetFileSystemInfos())
+			{
+				DirectoryCopy(sourceDirName, destDirName, compareDirName, Path.Combine(relative, i.Name));
+			}
+		}
+	 };
+	
+	 DirectoryCopy(Path.Combine(Source, "bin"), Path.Combine(Destination, "plugin", Path.GetFileName(Source)), Destination, ".");
+  
+      ]]></Code>  
+    </Task>  
+  </UsingTask>  
+
   <Target Name="BeforeBuild">
     <PropertyGroup>
       <DefineConstants>
@@ -71,5 +137,9 @@
       SourceFiles="@(FilesToInstall)"
       UseHardlinksIfPossible="true"
     />
+	<CopyPlugin Source="$(OutDir)hagen.plugin.db" Destination="$(StageDirectory)" />
+	<CopyPlugin Source="$(OutDir)hagen.plugin.file" Destination="$(StageDirectory)" />
+	<CopyPlugin Source="$(OutDir)hagen.plugin.web" Destination="$(StageDirectory)" />
+	<CopyPlugin Source="$(OutDir)hagen.plugin.screen" Destination="$(StageDirectory)" />
   </Target>
 </Project>

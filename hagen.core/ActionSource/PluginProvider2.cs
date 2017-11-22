@@ -64,31 +64,16 @@ namespace hagen.ActionSource
 
             log.Info(pluginDirectories.ListFormat());
 
-            return pluginDirectories.SelectMany(_ => LoadPlugin(context, _, mainProgramDirectory))
+            return pluginDirectories.SelectMany(_ => LoadPluginDirectory(context, _, mainProgramDirectory))
                 .Where(_ => _ != null).ToList();
         }
 
-        static internal IList<IPlugin3> LoadPlugin(Context context, LPath pluginDirectory, LPath mainProgramDirectory)
+        static internal IEnumerable<IPlugin3> LoadPluginDirectory(Context context, LPath pluginDirectory, LPath mainProgramDirectory)
         {
-            try
-            {
-                log.InfoFormat("Load plugin {0}", pluginDirectory);
+            var pluginDlls = pluginDirectory.GetFiles("*plugin*.dll")
+                .Where(_ => !_.FileName.Equals("hagen.plugin.dll"));
 
-                var pluginDll = pluginDirectory.GetFiles("*plugin*.dll")
-                    .Where(_ => !_.FileName.Equals("hagen.plugin.dll"))
-                    .Single();
-
-                var assembly = LoadPluginAssembly(pluginDll, mainProgramDirectory);
-
-                var plugins = GetPlugins(assembly, context);
-                log.InfoFormat("{0} plugins found in {1}", plugins.Count, pluginDll);
-                return plugins;
-            }
-            catch (Exception ex)
-            {
-                log.Warn(String.Format("Loading of plugin {0} failed.", pluginDirectory), ex);
-                return null;
-            }
+            return pluginDlls.SelectMany(_ => LoadPlugin(_, context, mainProgramDirectory));
         }
 
         // assembly loading scheme for plugins:
@@ -141,7 +126,28 @@ namespace hagen.ActionSource
             return Assembly.LoadFile(path);
         }
 
-        static IList<IPlugin3> GetPlugins(Assembly assembly, Context context)
+        public static IEnumerable<IPlugin3> LoadPlugin(LPath pluginAssemblyPath, Context context, LPath mainProgramDirectory)
+        {
+            try
+            {
+                log.InfoFormat("Load plugin {0}", pluginAssemblyPath);
+
+                var pluginDll = pluginAssemblyPath;
+
+                var assembly = LoadPluginAssembly(pluginDll, mainProgramDirectory);
+
+                var plugins = GetPlugins(assembly, context);
+                log.InfoFormat("{0} plugins found in {1}", plugins.Count(), pluginDll);
+                return plugins;
+            }
+            catch (Exception ex)
+            {
+                log.Warn(String.Format("Loading of plugin {0} failed.", pluginAssemblyPath), ex);
+                return null;
+            }
+        }
+
+        static IEnumerable<IPlugin3> GetPlugins(Assembly assembly, Context context)
         {
             try
             {

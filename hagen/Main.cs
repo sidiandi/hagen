@@ -57,6 +57,7 @@ namespace hagen
 
             hagen.Context.MainMenu = this.MainMenuStrip;
             hagen.Context.NotifyAction = text => this.Invoke(() => notifyIcon.ShowBalloonTip(10000, "hagen Alert", text, ToolTipIcon.Info));
+            hagen.Context.TagsSource = () => searchBox1.Query.Tags as IReadOnlyCollection<string>;
 
             this.IsMdiContainer = true;
             this.FormBorderStyle = System.Windows.Forms.FormBorderStyle.None;
@@ -78,7 +79,7 @@ namespace hagen
 
             var pluginProvider = new PluginProvider2(hagen.Context, Paths.BinDir);
 
-            var actionSource = new Composite(pluginProvider.GetActionSources().ToArray());
+            actionSource = new Composite(pluginProvider.GetActionSources().ToArray());
 
             searchBox1 = new SearchBox(this.hagen.Context, actionSource)
             {
@@ -119,6 +120,18 @@ namespace hagen
             alertTimer.Start();
 
             this.reportsToolStripMenuItem.DropDownItems.AddRange(GetTextReportMenuItems().ToArray());
+        }
+
+        Composite actionSource;
+
+        internal void LoadPlugin(LPath pluginAssemblyPath)
+        {
+            var plugin = PluginProvider2.LoadPlugin(pluginAssemblyPath, this.hagen.Context, Paths.BinDir);
+
+            foreach (var i in plugin.SelectMany(_ => _.GetActionSources()))
+            {
+                actionSource.Add(i);
+            }
         }
 
         IEnumerable<ToolStripItem> GetTextReportMenuItems()

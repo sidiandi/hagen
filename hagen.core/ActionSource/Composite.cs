@@ -47,6 +47,11 @@ namespace hagen.ActionSource
             return actionObservables.Merge();
         }
 
-        public IList<IActionSource3> Sources;
+        IList<IActionSource3> Sources;
+
+        public void Add(IActionSource3 source)
+        {
+            Sources = Sources.Concat(source).ToList();
+        }
     }
 }

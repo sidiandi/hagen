@@ -24,11 +24,12 @@ using System.IO;
 using System.Reflection;
 using Sidi.CommandLine;
 using Sidi.Forms;
+using Sidi.IO;
 
 namespace hagen
 {
     [Usage("Quick starter")]
-    public class Program : IDisposable
+    public class Program : IDisposable, IArgumentHandler
     {
         private static readonly log4net.ILog log = log4net.LogManager.GetLogger(System.Reflection.MethodBase.GetCurrentMethod().DeclaringType);
 
@@ -40,12 +41,15 @@ namespace hagen
         {
             using (var p = new Program())
             {
-                new Parser(p).Parse(args);
-                p.RunUserInterface();
+                GetOpt.Run(p, args);
             }
         }
 
         public Program()
+        {
+        }
+
+        public void RunUserInterface()
         {
             Application.EnableVisualStyles();
             Application.SetCompatibleTextRenderingDefault(false);
@@ -68,27 +72,35 @@ namespace hagen
             hagen.Context.Choose = _ => ActionChooser.Choose(hagen.Context, _);
 
             main = new Main(hagen);
-            hagen.Context.MainMenu = main.MainMenuStrip;
-            hagen.Context.TagsSource = () => main.searchBox1.Query.Tags as IReadOnlyCollection<string>;
 
+            foreach (var i in this.pluginAssemblyPaths)
+            {
+                main.LoadPlugin(i);
+            }
 
             logViewer.AsDockContent().Show(main.dockPanel, WeifenLuo.WinFormsUI.Docking.DockState.DockBottom);
-        }
 
-        public void RunUserInterface()
-        {
+            if (Popup)
+            {
+                main.Popup();
+            }
+
             Application.Run(main);
         }
-
 
         Hagen hagen;
         Main main;
 
-        [Usage("Show main window")]
-        public void Popup()
+        [Usage("Show main window no startup")]
+        public bool Popup { get; set; }
+
+        [Usage("Add a plugin.")]
+        public void Plugin(string pluginAssemblyPath)
         {
-            main.Popup();
+            pluginAssemblyPaths.Add(pluginAssemblyPath);
         }
+
+        IList<LPath> pluginAssemblyPaths = new List<LPath>();
 
         /// <summary>
         /// Kills all other already running processes with the same file name
@@ -137,6 +149,11 @@ namespace hagen
             Dispose(true);
             // TODO: uncomment the following line if the finalizer is overridden above.
             // GC.SuppressFinalize(this);
+        }
+
+        public void ProcessArguments(string[] args)
+        {
+            RunUserInterface();
         }
         #endregion
     }

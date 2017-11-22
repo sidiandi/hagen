@@ -110,7 +110,7 @@ along with sidi-util. If not, see <http://www.gnu.org/licenses/>.-->
     <Exec Command="&quot;$(NUnitConsole)&quot; --labels=On --work=&quot;$(TestDir)&quot; --result=&quot;$(TestDir)\TestResult.xml&quot; --labels=All @(TestTargets -> '&quot;%(Identity)&quot;', ' ')" />
   </Target>
 
-  <Target Name="Pack" DependsOnTargets="GetVersion">
+  <Target Name="PackNugetPackages" DependsOnTargets="Build">
     <PropertyGroup>
 		<PackageDir>$(BuildDir)\package</PackageDir>
 	</PropertyGroup>
@@ -123,7 +123,7 @@ along with sidi-util. If not, see <http://www.gnu.org/licenses/>.-->
   </Target>
 
   <!-- Push nuget packages to feed -->
-  <Target Name="Push" DependsOnTargets="Test;Pack">
+  <Target Name="PushNugetPackages" DependsOnTargets="Test;PackNugetPackages">
     <Exec WorkingDirectory="$(ReleaseDir)" Command="&quot;$(Nuget)&quot; push &quot;%(PackageFiles.Identity)&quot; -ApiKey $(NugetApiKey) -Source $(NugetFeed)" />
   </Target>
 
@@ -148,7 +148,7 @@ along with sidi-util. If not, see <http://www.gnu.org/licenses/>.-->
     />
   </Target>
   
-  <Target Name="Release" DependsOnTargets="Test;Setup;Tag;PublishAsGithubRelease" />
+  <Target Name="Release" DependsOnTargets="Test;Setup;Tag;PublishAsGithubRelease;PushNugetPackages" />
   
   <Target Name="PreRelease" DependsOnTargets="Test;Setup;Tag;PublishOnDropbox" />
   

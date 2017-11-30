@@ -16,8 +16,8 @@
       <HintPath>..\..\packages\NUnit.3.9.0\lib\net45\nunit.framework.dll</HintPath>
       <Private>True</Private>
     </Reference>
-    <Reference Include="Sidi.Util, Version=14.1.0.0, Culture=neutral, PublicKeyToken=1e33c1a5eebc53e1, processorArchitecture=MSIL">
-      <HintPath>..\..\packages\sidi-util.14.1.0\lib\net461\Sidi.Util.dll</HintPath>
+    <Reference Include="Sidi.Util, Version=14.2.1.0, Culture=neutral, PublicKeyToken=1e33c1a5eebc53e1, processorArchitecture=MSIL">
+      <HintPath>..\..\packages\sidi-util.14.2.1\lib\net461\Sidi.Util.dll</HintPath>
     </Reference>
     <Reference Include="System" />
     <Reference Include="System.ComponentModel.Composition" />

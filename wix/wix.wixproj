@@ -139,6 +139,7 @@
     />
 	<CopyPlugin Source="$(OutDir)hagen.plugin.db" Destination="$(StageDirectory)" />
 	<CopyPlugin Source="$(OutDir)hagen.plugin.file" Destination="$(StageDirectory)" />
+	<CopyPlugin Source="$(OutDir)hagen.plugin.office" Destination="$(StageDirectory)" />
 	<CopyPlugin Source="$(OutDir)hagen.plugin.web" Destination="$(StageDirectory)" />
 	<CopyPlugin Source="$(OutDir)hagen.plugin.screen" Destination="$(StageDirectory)" />
   </Target>

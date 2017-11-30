@@ -29,6 +29,7 @@ along with sidi-util. If not, see <http://www.gnu.org/licenses/>.-->
 		<SourceDir>$([System.IO.Directory]::GetParent($(MSBuildProjectDirectory)))</SourceDir>
 		<NugetPackagesDir>$(SourceDir)\..\packages</NugetPackagesDir>
 		<TestDir>$(BuildDir)\test</TestDir>
+		<StageDir>$(BuildDir)\stage</StageDir>
   </PropertyGroup>
   
   <!-- Tools -->
@@ -136,7 +137,14 @@ along with sidi-util. If not, see <http://www.gnu.org/licenses/>.-->
   </Target>
   
   <Target Name="PublishOnDropbox" DependsOnTargets="Setup" >
-    <Copy SourceFiles="@(SetupFiles)"  DestinationFolder="$(USERPROFILE)\Dropbox\hagen\setup" />
+    <Copy SourceFiles="@(SetupFiles)" DestinationFolder="$(USERPROFILE)\Dropbox\hagen\setup" />
+  </Target>
+  
+  <Target Name="PublishStageOnDropbox" DependsOnTargets="Setup" >
+    <ItemGroup>
+		<StageFiles Include="$(StageDir)/**/*" />
+	</ItemGroup>
+	<Copy SourceFiles="@(StageFiles)" DestinationFolder="$(USERPROFILE)\Dropbox\hagen\bin\%(RecursiveDir)" />
   </Target>
   
   <Target Name="PublishAsGithubRelease" DependsOnTargets="Setup" >
@@ -148,12 +156,10 @@ along with sidi-util. If not, see <http://www.gnu.org/licenses/>.-->
     />
   </Target>
   
-  <Target Name="Release" DependsOnTargets="Test;Setup;Tag;PublishAsGithubRelease;PushNugetPackages" />
-  
-  <Target Name="PreRelease" DependsOnTargets="Test;Setup;Tag;PublishOnDropbox" />
-  
   <Target Name="Clean" >
     <RemoveDir Directories="$(BuildDir)" />
   </Target>
 
+  <Target Name="Release" DependsOnTargets="Test;Setup;Tag;PublishOnDropbox;PublishStageOnDropbox;PushNugetPackages" />
+  
 </Project>

@@ -1,0 +1,9 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<Project xmlns="http://schemas.microsoft.com/developer/msbuild/2003">
+  <PropertyGroup>
+    <CompanyName>sidiandi</CompanyName>
+    <ProductName>hagen</ProductName>
+    <UpgradeCode>57CAC978-D1D8-4375-A93F-E906E4E66D60</UpgradeCode>
+    <GITHUB_REPO>hagen</GITHUB_REPO>
+  </PropertyGroup>
+</Project>

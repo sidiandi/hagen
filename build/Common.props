@@ -1,30 +1,26 @@
 ﻿<?xml version="1.0" encoding="utf-8"?>
 <Project ToolsVersion="4.0" DefaultTargets="Build" xmlns="http://schemas.microsoft.com/developer/msbuild/2003">
-  <Import Project="Paths.props" />
+  <Import Project="Base.props" />
   <PropertyGroup>
 	<ProjectBuildDir>$(BuildDir)\$(MSBuildProjectName)</ProjectBuildDir>
 	<OutputPath>$(ProjectBuildDir)\bin</OutputPath>
 	<OutDir>$(OutputPath)</OutDir>
-	<TestDir>$(ProjectBuildDir)\test-data</TestDir>
-	<TestDir>$(ProjectBuildDir)\test-data</TestDir>
 	<BaseIntermediateOutputPath>$(ProjectBuildDir)\obj</BaseIntermediateOutputPath>
     <PlatformTarget>AnyCPU</PlatformTarget>
     <NoWarn>1591</NoWarn>
+    <DocumentationFile>$(OutputPath)\$(AssemblyName).xml</DocumentationFile>
     <AllowUnsafeBlocks>true</AllowUnsafeBlocks>
     <AssemblyName>$(MSBuildProjectName)</AssemblyName>
-    <DocumentationFile>$(OutputPath)\$(AssemblyName).xml</DocumentationFile>
     <OutputType>Library</OutputType>
     <AppDesignerFolder>Properties</AppDesignerFolder>
-    <RootNamespace>Sidi</RootNamespace>
-    <!--
-    <SignAssembly>true</SignAssembly>
-    <AssemblyOriginatorKeyFile>$(SolutionDir)key.snk</AssemblyOriginatorKeyFile>
+    <RootNamespace>$(ProductName)</RootNamespace>
+    <!-- 
+      <SignAssembly>true</SignAssembly>
+      <AssemblyOriginatorKeyFile>$(SolutionDir)key.snk</AssemblyOriginatorKeyFile>
     -->
     <TargetFrameworkVersion>v4.6.1</TargetFrameworkVersion>
     <RestorePackages>true</RestorePackages>
     <DocumentationFile>$(OutputPath)\$(AssemblyName).xml</DocumentationFile>
-    <RestorePackages>true</RestorePackages>
-    <Prefer32Bit>false</Prefer32Bit>
   </PropertyGroup>
   <PropertyGroup Condition="'$(Configuration)|$(Platform)' == 'Debug|AnyCPU'">
     <DebugSymbols>true</DebugSymbols>
@@ -40,6 +36,6 @@
     <CodeAnalysisDictionary Include="CustomDictionary.xml" />
   </ItemGroup>
   <ItemGroup>
-    <Compile Include="..\CommonAssemblyInfo.cs" />
+    <Compile Include="$(BuildDir)\..\CommonAssemblyInfo.cs" />
   </ItemGroup>
 </Project>

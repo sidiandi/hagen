@@ -65,7 +65,7 @@ namespace hagen
 
         static CommandLineParserActionSource()
         {
-            _icon = Sidi.Properties.Resources.Play;
+            _icon = hagen.Properties.Resources.Play;
         }
         public CommandLineParserActionSource(IContext context, Parser parser)
         {

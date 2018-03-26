@@ -22,14 +22,14 @@ using System.Windows.Forms;
 using System.Diagnostics;
 using System.IO;
 using System.Reflection;
-using Sidi.CommandLine;
 using Sidi.Forms;
 using Sidi.IO;
+using Sidi.GetOpt;
 
 namespace hagen
 {
     [Usage("Quick starter")]
-    public class Program : IDisposable, IArgumentHandler
+    public class Program : IDisposable
     {
         private static readonly log4net.ILog log = log4net.LogManager.GetLogger(System.Reflection.MethodBase.GetCurrentMethod().DeclaringType);
 
@@ -49,6 +49,7 @@ namespace hagen
         {
         }
 
+        [Usage("Run hagen")]
         public void RunUserInterface()
         {
             Application.EnableVisualStyles();
@@ -95,9 +96,12 @@ namespace hagen
         public bool Popup { get; set; }
 
         [Usage("Add a plugin.")]
-        public void Plugin(string pluginAssemblyPath)
+        public string Plugin
         {
-            pluginAssemblyPaths.Add(pluginAssemblyPath);
+            set
+            {
+                pluginAssemblyPaths.Add(value);
+            }
         }
 
         IList<LPath> pluginAssemblyPaths = new List<LPath>();
@@ -125,8 +129,11 @@ namespace hagen
             {
                 if (disposing)
                 {
-                    hagen.Dispose();
-                    hagen = null;
+                    if (hagen != null)
+                    {
+                        hagen.Dispose();
+                        hagen = null;
+                    }
                 }
 
                 // TODO: free unmanaged resources (unmanaged objects) and override a finalizer below.
@@ -151,10 +158,6 @@ namespace hagen
             // GC.SuppressFinalize(this);
         }
 
-        public void ProcessArguments(string[] args)
-        {
-            RunUserInterface();
-        }
         #endregion
     }
 }

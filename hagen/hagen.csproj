@@ -179,6 +179,9 @@
       <SpecificVersion>False</SpecificVersion>
       <HintPath>..\lib\Shortcut.dll</HintPath>
     </Reference>
+    <Reference Include="Sidi.GetOpt, Version=0.4.5.0, Culture=neutral, processorArchitecture=MSIL">
+      <HintPath>..\..\packages\Sidi.GetOpt.0.4.5\lib\net461\Sidi.GetOpt.dll</HintPath>
+    </Reference>
     <Reference Include="Sidi.Util, Version=14.3.0.0, Culture=neutral, PublicKeyToken=1e33c1a5eebc53e1, processorArchitecture=MSIL">
       <HintPath>..\..\packages\sidi-util.14.3.0\lib\net461\Sidi.Util.dll</HintPath>
     </Reference>

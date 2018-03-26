@@ -67,9 +67,13 @@ namespace hagen
         public void InsertPassword()
         {
             var r = new Random();
-            var text = Enumerable.Range(0, 3)
-                .Select(p => new string(Enumerable.Range(0, 4).Select(c => (char)('a' + r.Next('z' - 'a'))).ToArray()))
-                .Join(".");
+            var text = 
+                new []
+                {
+                    new string(Enumerable.Range(0, 4).Select(c => (char)('a' + r.Next('z' - 'a'))).ToArray()),
+                    new string(Enumerable.Range(0, 4).Select(c => (char)('A' + r.Next('Z' - 'A'))).ToArray()),
+                    new string(Enumerable.Range(0, 4).Select(c => (char)('0' + r.Next('9' - '0'))).ToArray())
+                }.Join(".");
             InsertText(text);
         }
     }

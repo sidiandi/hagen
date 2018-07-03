@@ -60,6 +60,7 @@
     <Compile Include="Plugin.cs" />
     <None Include="packages.config" />
     <None Include="SidiTools.cs" />
+    <Compile Include="TextEditor.cs" />
     <Compile Include="TextPosition.cs" />
     <Compile Include="FileActions.cs" />
     <Compile Include="TextInsertActions.cs" />

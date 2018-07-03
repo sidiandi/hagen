@@ -103,18 +103,32 @@ namespace hagen
         {
         }
 
+        [Usage("Insert Readme.md file and open with text editor")]
+        public void InsertReadmeMd(PathList pathList)
+        {
+            var dir = pathList.FirstOrDefault();
+            if (!dir.IsDirectory)
+            {
+                dir = dir.Parent;
+            }
+
+            var readmeFile = dir.CatDir("Readme.md");
+            if (!readmeFile.IsFile)
+            {
+                readmeFile.WriteAllText($@"# Readme
+{DateTime.Now.ToString("o")}
+");
+            }
+            TextEditor.Open(readmeFile);
+        }
+
+
         [Usage("Open with text editor")]
         public void EditText(PathList pathList)
         {
-            var editorExe = Paths.GetFolderPath(Environment.SpecialFolder.ProgramFilesX86).CatDir(@"Notepad++\notepad++.exe");
-            if (!editorExe.IsFile)
-            {
-                editorExe = "notepad.exe";
-            }
-
             foreach (var i in pathList)
             {
-                Process.Start(editorExe, i.Quote());
+                TextEditor.Open(i);
             }
         }
     }

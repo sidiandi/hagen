@@ -1,0 +1,40 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<package xmlns="http://schemas.microsoft.com/packaging/2013/05/nuspec.xsd">
+  <metadata>
+    <id>NUnit.Runners</id>
+    <version>3.9.0</version>
+    <title>NUnit Console Runner - Deprecated: Use NUnit.Console</title>
+    <authors>Charlie Poole</authors>
+    <owners>Charlie Poole</owners>
+    <requireLicenseAcceptance>false</requireLicenseAcceptance>
+    <licenseUrl>https://raw.githubusercontent.com/nunit/nunit-console/master/LICENSE.txt</licenseUrl>
+    <projectUrl>http://nunit.org/</projectUrl>
+    <iconUrl>https://cdn.rawgit.com/nunit/resources/master/images/icon/nunit_256.png</iconUrl>
+    <description>This package is now obsolete and has been replaced by the NUnit.Console package.
+
+      It includes the nunit3-console runner and test engine for version 3 of the NUnit unit-testing framework.
+
+      The following extensions are included with this package:
+      * NUnitProjectLoader     - loads tests from NUnit projects
+      * VSProjectLoader        - loads tests from Visual Studio projects
+      * NUnitV2ResultWriter    - saves results in NUnit V2 format.
+      * NUnitV2FrameworkDriver - runs NUnit V2 tests.
+      * TeamCityEventListener - supports special progress messages used by teamcity.
+
+      Other extensions, if needed, must be installed separately.</description>
+    <summary>Deprecated NUnit 3 console runner - use NUnit.Console or NUnit.ConsoleRunner.</summary>
+    <releaseNotes>This release uses the latest version of the TeamCityEventListener extension.</releaseNotes>
+    <copyright>Copyright (c) 2018 Charlie Poole</copyright>
+    <language>en-US</language>
+    <tags>nunit test testing tdd runner</tags>
+    <repository type="git" url="https://github.com/nunit/nunit-console" />
+    <dependencies>
+      <dependency id="NUnit.ConsoleRunner" version="3.9.0" />
+      <dependency id="NUnit.Extension.NUnitProjectLoader" version="3.5.0" />
+      <dependency id="NUnit.Extension.VSProjectLoader" version="3.8.0" />
+      <dependency id="NUnit.Extension.NUnitV2ResultWriter" version="3.5.0" />
+      <dependency id="NUnit.Extension.NUnitV2Driver" version="3.6.0" />
+      <dependency id="NUnit.Extension.TeamCityEventListener" version="1.0.3" />
+    </dependencies>
+  </metadata>
+</package>

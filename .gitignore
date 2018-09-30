@@ -16,5 +16,7 @@ obj
 /log4net.pdb/4115840AA4D14A2BA64D87F135AA8E641
 /Google.GData.Contacts.pdb/C78C35802EBC458AA7D3039FBB643B911
 build-output
-out
+/out
+/tools
 /hagen.pluginTests/*.user
+/wix/out

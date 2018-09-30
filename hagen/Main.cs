@@ -109,6 +109,13 @@ namespace hagen
             var binding = hotkeyBinder.Bind(Shortcut.Modifiers.Alt | Shortcut.Modifiers.Control, Keys.Space);
             binding.To(Popup);
 
+            StartWorkTimeAlert();
+
+            this.reportsToolStripMenuItem.DropDownItems.AddRange(GetTextReportMenuItems().ToArray());
+        }
+
+        void StartWorkTimeAlert()
+        {
             alertTimer = new System.Windows.Forms.Timer()
             {
                 Interval = (int)alertInterval.TotalMilliseconds
@@ -118,8 +125,6 @@ namespace hagen
                 CheckWorkTime();
             });
             alertTimer.Start();
-
-            this.reportsToolStripMenuItem.DropDownItems.AddRange(GetTextReportMenuItems().ToArray());
         }
 
         Composite actionSource;
@@ -246,6 +251,10 @@ namespace hagen
         {
             base.OnClosed(e);
             hotkeyBinder.Dispose();
+            if (alertTimer != null)
+            {
+                alertTimer.Dispose();
+            }
         }
 
         private void exitToolStripMenuItem_Click(object sender, EventArgs e)
@@ -295,7 +304,7 @@ namespace hagen
             }
         }
 
-        System.Windows.Forms.Timer alertTimer;
+        System.Windows.Forms.Timer alertTimer = null;
         TimeSpan alertInterval = TimeSpan.FromMinutes(5);
         TimeSpan warnBefore = TimeSpan.FromHours(1);
         TimeSpan warnAfter = TimeSpan.FromMinutes(30);

@@ -1,6 +1,5 @@
-#tool "nuget:?package=GitVersion.CommandLine"
 #tool "nuget:?package=NUnit.ConsoleRunner"
-#tool "nuget:?package=GitVersion"
+#tool "nuget:?package=GitVersion.CommandLine&version=4.0.0-beta0014"
 
 using System.IO;
 

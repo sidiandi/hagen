@@ -50,18 +50,20 @@ namespace hagen.Plugin.Db
 
             var seen = new HashSet<string>();
 
-            foreach (var i in GetResults(terms.Concat(query.Tags)))
+            if (query.Tags.Any())
             {
-                i.Priority = Priority.High;
-                seen.Add(i.Action.Name);
-                yield return i;
+                foreach (var i in GetResults(terms.Concat(query.Tags)))
+                {
+                    i.Priority = Priority.High;
+                    seen.Add(i.Action.Name);
+                    yield return i;
+                }
             }
 
             foreach (var i in GetResults(terms))
             {
                 if (!seen.Contains(i.Action.Name))
                 {
-                    i.Priority = Priority.Low;
                     yield return i;
                 }
             }
@@ -101,8 +103,20 @@ namespace hagen.Plugin.Db
                 log.Info(e);
                 return Enumerable.Empty<IResult>();
             }
-            var results = r.SelectMany(action => ToIActions(action)).Select(a => a.ToResult(Priority.High)).ToList();
+            var results = r.SelectMany(action => ToIActions(action))
+                .Select(a => a.ToResult(GetPriority(a, terms)))
+                .ToList();
             return results;
+        }
+
+        static Priority GetPriority(IAction a, IEnumerable<string> terms)
+        {
+            var p = terms.Any(t => a.Name.StartsWith(t, StringComparison.InvariantCultureIgnoreCase)) ? Priority.High : Priority.Normal;
+            if (p == Priority.High)
+            {
+                log.InfoFormat("{2}: {0} {1}: {2}", a.Name, terms.Join(","), p);
+            }
+            return p;
         }
 
         public bool IncludeInSearch;

@@ -207,10 +207,13 @@ namespace hagen
                             .Subscribe(_ =>
                             {
                                 results = results.Concat(_)
-                                    .OrderByDescending(x => x.Action.LastExecuted).ThenByDescending(x => x.Priority).ToList();
+                                    .OrderByDescending(x => x.Priority) // (x => x.Action.LastExecuted)
+                                    // .ThenByDescending
+                                    .ToList();
+
                                 var si = Math.Max(itemView.SelectedIndex, 0);
                                 itemView.SetObjects(results);
-                                itemView.SelectedIndex = si;
+                                itemView.SelectedIndex = 0;
                             });
                     });
         }
@@ -362,6 +365,7 @@ namespace hagen
         public void Properties()
         {
             var actionToEdit = SelectedActions.FirstOrDefault();
+            var resultToEdit = SelectedResults.FirstOrDefault();
 
             var dlg = new ActionProperties
             {

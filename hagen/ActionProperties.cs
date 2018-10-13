@@ -45,7 +45,10 @@ namespace hagen
                 propertyGrid.SelectedObject = value;
                 propertyGrid.ExpandAllGridItems();
                 var sel = propertyGrid.EnumerateAllItems().FirstOrDefault(i => i.Label.Equals("Name"));
-                sel.Select();
+                if (sel != null)
+                {
+                    sel.Select();
+                }
                 propertyGrid.Select();
             }
         }

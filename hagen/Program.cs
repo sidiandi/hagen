@@ -25,6 +25,7 @@ using System.Reflection;
 using Sidi.Forms;
 using Sidi.IO;
 using Sidi.GetOpt;
+using WeifenLuo.WinFormsUI.Docking;
 
 namespace hagen
 {
@@ -62,7 +63,6 @@ namespace hagen
                 Text = "Log",
                 Threshold = log4net.Core.Level.Info
             };
-
             logViewer.AddToRoot();
 
             log.Info("Startup");
@@ -79,7 +79,7 @@ namespace hagen
                 main.LoadPlugin(i);
             }
 
-            logViewer.AsDockContent().Show(main.dockPanel, WeifenLuo.WinFormsUI.Docking.DockState.DockBottom);
+            main.AddPanel(logViewer);
 
             if (Popup)
             {

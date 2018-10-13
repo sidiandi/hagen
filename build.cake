@@ -6,6 +6,7 @@ using System.IO;
 var target = Argument("target", "Default");
 var configuration = Argument("configuration", "Release");
 var outDir = Directory($"./out/{configuration}");
+var generatedCodeDir = Directory($"./out/generated");
 var IntermediateOutputPath = outDir + Directory("temp");
 
 var CompanyName = "Andreas Grimme";
@@ -40,7 +41,8 @@ Task("WriteCommonAssemblyInfo")
 .IsDependentOn("GetVersion")
 .Does(() =>
 {
-  var Output = $"{outDir}/CommonAssemblyInfo.cs";
+  CreateDirectory(generatedCodeDir);
+  var Output = $"{generatedCodeDir}/CommonAssemblyInfo.cs";
   System.IO.File.WriteAllText(Output, $@"// Generated. Changes will be lost.
 [assembly: System.Reflection.AssemblyCopyright({Quote($"Copyright (c) {CompanyName} {DateTime.Now.Year}")})]
 [assembly: System.Reflection.AssemblyCompany({Quote(CompanyName)})]
@@ -56,9 +58,15 @@ Task("Build")
   .IsDependentOn("WriteCommonAssemblyInfo")
   .Does(() =>
 {
-  MSBuild("hagen.sln", new MSBuildSettings()
-  .WithProperty("Configuration", configuration)
-  .WithTarget("Restore;Build"));
+  var settings = new MSBuildSettings
+  {
+    Configuration = configuration,
+    Verbosity = Verbosity.Minimal
+  };
+  settings.Targets.Add("Restore");
+  settings.Targets.Add("Build");
+
+  MSBuild("hagen.sln", settings);
 });
 
 Task("UnitTest")
@@ -81,7 +89,11 @@ Task("Setup")
 .IsDependentOn("Build")
 .Does(() =>
 {
-  MSBuild("wix/wix.wixproj", new MSBuildSettings()
+  var settings = new MSBuildSettings
+  {
+    Configuration = configuration,
+    Verbosity = Verbosity.Minimal
+  }
   .WithProperty("CompanyName", CompanyName)
   .WithProperty("ProductName", ProductName)
   .WithProperty("Version", version)
@@ -91,8 +103,9 @@ Task("Setup")
   .WithProperty("OutputPath", outDir)
   .WithProperty("BinDir", outDir)
   .WithProperty("UpgradeCode", UpgradeCode)
-  .WithProperty("IntermediateOutputPath", $"{IntermediateOutputPath}/setup/")
-  );
+  .WithProperty("IntermediateOutputPath", $"{IntermediateOutputPath}/setup/");
+
+  MSBuild("wix/wix.wixproj", settings);
 });
 
 Task("Install")

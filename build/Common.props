@@ -36,6 +36,6 @@
     <CodeAnalysisDictionary Include="CustomDictionary.xml" />
   </ItemGroup>
   <ItemGroup>
-    <Compile Include="$(BuildDir)\CommonAssemblyInfo.cs" />
+    <Compile Include="$(GeneratedCodeDir)\CommonAssemblyInfo.cs" />
   </ItemGroup>
 </Project>

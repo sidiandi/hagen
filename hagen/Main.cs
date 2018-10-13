@@ -51,29 +51,32 @@ namespace hagen
         
         void InitUserInterface()
         {
+            dockPanel = new DockPanel()
+            {
+                Dock = DockStyle.Fill,
+                DocumentStyle = DocumentStyle.DockingMdi,
+                DocumentTabStripLocation = DocumentTabStripLocation.Top,
+                Theme = new VS2015LightTheme(),
+                TabIndex = 0
+            };
+            this.IsMdiContainer = true;
+            this.Controls.Add(dockPanel);
+
             InitializeComponent();
 
             EnableDragAndDropFromInternetExplorer();
 
             hagen.Context.MainMenu = this.MainMenuStrip;
             hagen.Context.NotifyAction = text => this.Invoke(() => notifyIcon.ShowBalloonTip(10000, "hagen Alert", text, ToolTipIcon.Info));
-            hagen.Context.TagsSource = () => searchBox1.Query.Tags as IReadOnlyCollection<string>;
+            hagen.Context.TagsSource = () => searchBox.Query.Tags as IReadOnlyCollection<string>;
 
             this.IsMdiContainer = true;
             this.FormBorderStyle = System.Windows.Forms.FormBorderStyle.None;
-
-            dockPanel = new DockPanel()
-            {
-                Dock = DockStyle.Fill,
-                DocumentStyle = DocumentStyle.DockingMdi,
-            };
-            this.Controls.Add(dockPanel);
 
             jobListView = new JobListView()
             {
                 Text = "Jobs"
             };
-            jobListView.AsDockContent().Show(dockPanel, DockState.DockBottom);
 
             hagen.Context.AddJob = this.jobListView.JobList.Jobs.Add;
 
@@ -81,24 +84,17 @@ namespace hagen
 
             actionSource = new Composite(pluginProvider.GetActionSources().ToArray());
 
-            searchBox1 = new SearchBox(this.hagen.Context, actionSource)
+            searchBox = new SearchBox(this.hagen.Context, actionSource)
             {
                 Text = "Search",
             };
-            searchBox1.ItemsActivated += new EventHandler(searchBox1_ItemsActivated);
-            searchBox1.AsDockContent().Show(dockPanel, DockState.Document);
+            searchBox.ItemsActivated += new EventHandler(searchBox_ItemsActivated);
+
+            AddPanel(searchBox);
+            AddPanel(jobListView);
 
             DragEnter += new DragEventHandler(Main_DragEnter);
             DragDrop += new DragEventHandler(Main_DragDrop);
-
-            /*
-            var logViewer = new LogViewer2()
-            {
-                Text = "Log",
-            };
-            logViewer.AsDockContent().Show(dockPanel, DockState.DockBottom);
-            logViewer.AddToRoot();
-            */
 
             this.AllowDrop = true;
             this.Load += new EventHandler(Main_Load);
@@ -112,6 +108,13 @@ namespace hagen
             StartWorkTimeAlert();
 
             this.reportsToolStripMenuItem.DropDownItems.AddRange(GetTextReportMenuItems().ToArray());
+        }
+
+        public void AddPanel(Control c)
+        {
+            var d = c.AsDockContent();
+            d.MdiParent = this;
+            d.Show(dockPanel, DockState.Document);
         }
 
         void StartWorkTimeAlert()
@@ -182,8 +185,8 @@ namespace hagen
             throw new NotImplementedException();
         }
 
-        public DockPanel dockPanel;
-        public SearchBox searchBox1;
+        DockPanel dockPanel;
+        public SearchBox searchBox;
         Hagen hagen;
 
         public Main(Hagen hagen)
@@ -201,9 +204,9 @@ namespace hagen
             Hide();
         }
 
-        void searchBox1_ItemsActivated(object sender, EventArgs e)
+        void searchBox_ItemsActivated(object sender, EventArgs e)
         {
-            foreach (var i in searchBox1.SelectedActions)
+            foreach (var i in searchBox.SelectedActions)
             {
                 Activate(i);
             }
@@ -229,7 +232,7 @@ namespace hagen
         public void Popup()
         {
             this.hagen.Context.SaveFocus();
-            searchBox1.Context = this.hagen.Context;
+            searchBox.Context = this.hagen.Context;
             WindowState = FormWindowState.Maximized;
             this.Visible = true;
             if (Clipboard.ContainsText())
@@ -239,11 +242,11 @@ namespace hagen
                 if (lastCLipboardHash != hash)
                 {
                     lastCLipboardHash = hash;
-                    searchBox1.QueryText = t.Truncate(4096);
+                    searchBox.QueryText = t.Truncate(4096);
                 }
             }
-            searchBox1.Start();
-            searchBox1.Focus();
+            searchBox.Start();
+            searchBox.Focus();
             this.Activate();
         }
 
@@ -264,7 +267,7 @@ namespace hagen
 
         private void propertiesToolStripMenuItem_Click(object sender, EventArgs e)
         {
-            searchBox1.Properties();
+            searchBox.Properties();
         }
 
         private void statisticsToolStripMenuItem_Click(object sender, EventArgs e)
@@ -383,7 +386,7 @@ Hours: {0:G3}",
 
         private void deleteToolStripMenuItem_Click(object sender, EventArgs e)
         {
-            searchBox1.Remove();
+            searchBox.Remove();
         }
 
         /// <summary>

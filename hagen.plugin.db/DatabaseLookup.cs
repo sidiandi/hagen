@@ -111,12 +111,9 @@ namespace hagen.Plugin.Db
 
         static Priority GetPriority(IAction a, IEnumerable<string> terms)
         {
-            var p = terms.Any(t => a.Name.StartsWith(t, StringComparison.InvariantCultureIgnoreCase)) ? Priority.High : Priority.Normal;
-            if (p == Priority.High)
-            {
-                log.InfoFormat("{2}: {0} {1}: {2}", a.Name, terms.Join(","), p);
-            }
-            return p;
+            // higher priority if the action name starts with one of the search terms
+            var priority = terms.Any(t => a.Name.StartsWith(t, StringComparison.InvariantCultureIgnoreCase)) ? Priority.High : Priority.Normal;
+            return priority;
         }
 
         public bool IncludeInSearch;

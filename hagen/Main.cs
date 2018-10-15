@@ -217,6 +217,7 @@ namespace hagen
             if (e.KeyCode == Keys.Escape)
             {
                 this.Hide();
+                e.SuppressKeyPress = true;
             }
         }
 

@@ -62,6 +62,7 @@ Task("Build")
   {
     Configuration = configuration,
     Verbosity = Verbosity.Minimal
+      // .Verbose
   };
   settings.Targets.Add("Restore");
   settings.Targets.Add("Build");

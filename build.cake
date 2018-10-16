@@ -13,6 +13,8 @@ var CompanyName = "Andreas Grimme";
 var ProductName = "hagen";
 var Platform = "AnyCPU";
 
+GitVersion gitVersion;
+
 var UpgradeCode = "57CAC978-D1D8-4375-A93F-E906E4E66D60";
 
 string version = null;
@@ -32,7 +34,7 @@ Task("Clean")
 Task("GetVersion")
 .Does(() =>
 {
-  var gitVersion = GitVersion();
+  gitVersion = GitVersion();
   version = gitVersion.SemVer;
   informationalVersion = gitVersion.InformationalVersion;
 });
@@ -47,8 +49,8 @@ Task("WriteCommonAssemblyInfo")
 [assembly: System.Reflection.AssemblyCopyright({Quote($"Copyright (c) {CompanyName} {DateTime.Now.Year}")})]
 [assembly: System.Reflection.AssemblyCompany({Quote(CompanyName)})]
 [assembly: System.Reflection.AssemblyProduct({Quote(ProductName)})]
-[assembly: System.Reflection.AssemblyFileVersion({Quote(version)})]
-[assembly: System.Reflection.AssemblyVersion({Quote(version)})]
+[assembly: System.Reflection.AssemblyFileVersion({Quote(gitVersion.MajorMinorPatch)})]
+[assembly: System.Reflection.AssemblyVersion({Quote(gitVersion.MajorMinorPatch)})]
 [assembly: System.Reflection.AssemblyInformationalVersion({Quote(informationalVersion)})]
 ");
 

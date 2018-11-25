@@ -9,14 +9,18 @@ namespace hagen
     {
         internal static void Open(LPath textFile)
         {
-            var editorExe = new[] {
-                new LPath(Environment.GetEnvironmentVariable("ProgramW6432")).CatDir(@"Notepad++\notepad++.exe"),
-                Paths.GetFolderPath(Environment.SpecialFolder.ProgramFilesX86).CatDir(@"Notepad++\notepad++.exe"),
-            }.Where(_ => _.IsFile)
-            .Concat(new[] { new LPath("notepad.exe") })
-            .First();
+            NotepadPlusPlus.Get().Match(
+                _ => _.Open(textFile),
+                () => Process.Start("notepad.exe", textFile)
+                );
+        }
 
-            Process.Start(editorExe, textFile);
+        internal static void Open(TextLocation location)
+        {
+            NotepadPlusPlus.Get().Match(
+                _ => _.Open(location),
+                () => Process.Start("notepad.exe", location.FileName)
+                );
         }
     }
 }

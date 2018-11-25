@@ -24,6 +24,7 @@
     <Compile Include="IActionSource.cs" />
     <Compile Include="IActionSource2.cs" />
     <Compile Include="IActionSource3.cs" />
+    <Compile Include="IActionSourceFactory.cs" />
     <Compile Include="IconHelper.cs" />
     <Compile Include="Icons.cs" />
     <Compile Include="IContext.cs" />

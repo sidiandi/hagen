@@ -59,31 +59,35 @@ namespace hagen
 
             var actionSources = types
                 .Where(t => !t.Name.StartsWith("Test_"))
-                .Select(t =>
+                .SelectMany(t =>
                     {
+                        if (typeof(IActionSourceFactory).IsAssignableFrom(t))
+                        {
+                            var factory = (IActionSourceFactory)t.GetConstructor(new[] { typeof(IContext) }).Invoke(new[] { this.Context });
+                            return factory.CreateActionSources();
+                        }
                         if (typeof(IActionSource3).IsAssignableFrom(t))
                         {
-                            return Create<IActionSource3>(t);
+                            return new[] { Create<IActionSource3>(t) };
                         }
                         else if (typeof(IActionSource2).IsAssignableFrom(t))
                         {
-                            return Create<IActionSource2>(t).ToActionSource3();
-                        } 
+                            return new[] { Create<IActionSource2>(t).ToActionSource3() };
+                        }
                         else if (typeof(IActionSource).IsAssignableFrom(t))
                         {
                             var a = Create<IActionSource>(t);
                             if (a == null)
                             {
-                                return null;
+                                return Enumerable.Empty<IActionSource3>();
                             }
-                            return a.ToIActionSource2().ToActionSource3();
+                            return new[] { a.ToIActionSource2().ToActionSource3() };
                         }
                         else
                         {
-                            return null;
+                            return Enumerable.Empty<IActionSource3>();
                         }
                     })
-                .Where(t => t != null)
 
                 .Concat(types
                     .Where(t => t.GetCustomAttributes(typeof(Usage), false).Any())

@@ -110,11 +110,12 @@ namespace hagen
             this.reportsToolStripMenuItem.DropDownItems.AddRange(GetTextReportMenuItems().ToArray());
         }
 
-        public void AddPanel(Control c)
+        public DockContent AddPanel(Control c)
         {
             var d = c.AsDockContent();
             d.MdiParent = this;
             d.Show(dockPanel, DockState.Document);
+            return d;
         }
 
         void StartWorkTimeAlert()
@@ -238,16 +239,17 @@ namespace hagen
             this.Visible = true;
             if (Clipboard.ContainsText())
             {
-                var t = Clipboard.GetText();
-                var hash = t.GetHashCode();
+                var textFromClipboard = Clipboard.GetText().Truncate(512);
+                var hash = textFromClipboard.GetHashCode();
                 if (lastCLipboardHash != hash)
                 {
                     lastCLipboardHash = hash;
-                    searchBox.QueryText = t.Truncate(4096);
+                    searchBox.QueryText = textFromClipboard;
                 }
             }
             searchBox.Start();
             searchBox.Focus();
+            searchBox.AsDockContent().Activate();
             this.Activate();
         }
 

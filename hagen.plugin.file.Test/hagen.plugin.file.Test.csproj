@@ -49,6 +49,7 @@
     <Compile Include="MarkdownNotesReaderTests.cs" />
     <Compile Include="MultiWordMatchTests.cs" />
     <Compile Include="NotesReaderTests.cs" />
+    <Compile Include="ProcessOutputTest.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
     <Compile Include="TextPositionTests.cs" />
   </ItemGroup>

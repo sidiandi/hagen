@@ -104,7 +104,7 @@ namespace hagen
         }
 
         [Usage("Insert Readme.md file and open with text editor")]
-        public void InsertReadmeMd(PathList pathList)
+        public void Readme(PathList pathList)
         {
             var dir = pathList.FirstOrDefault();
             if (!dir.IsDirectory)
@@ -122,6 +122,21 @@ namespace hagen
             TextEditor.Open(readmeFile);
         }
 
+        [Usage("Open cmd shell here ")]
+        public void CmdHere(PathList pathList)
+        {
+            var dir = pathList.FirstOrDefault();
+            if (!dir.IsDirectory)
+            {
+                dir = dir.Parent;
+            }
+
+            Process.Start(new ProcessStartInfo
+            {
+                FileName = "cmd.exe",
+                WorkingDirectory = dir
+            });
+        }
 
         [Usage("Open with text editor")]
         public void EditText(PathList pathList)

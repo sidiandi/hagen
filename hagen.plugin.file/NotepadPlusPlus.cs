@@ -24,8 +24,8 @@ namespace hagen
             var notepadPlusPlusExe = @"Notepad++\notepad++.exe";
 
             var programDirectories = new[] {
-                new LPath(Environment.GetEnvironmentVariable("ProgramW6432")),
-                Paths.GetFolderPath(Environment.SpecialFolder.ProgramFilesX86)
+                new LPath(System.Environment.GetEnvironmentVariable("ProgramW6432")),
+                Paths.GetFolderPath(System.Environment.SpecialFolder.ProgramFilesX86)
             };
 
             return programDirectories

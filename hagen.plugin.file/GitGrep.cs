@@ -14,6 +14,7 @@ using Optional;
 using YamlDotNet.Serialization;
 using YamlDotNet.Serialization.NamingConventions;
 using Sidi.IO;
+using Sidi.Util;
 
 namespace hagen
 {
@@ -73,38 +74,44 @@ namespace hagen
         private static readonly log4net.ILog log = log4net.LogManager.GetLogger(System.Reflection.MethodBase.GetCurrentMethod().DeclaringType);
         private readonly IContext context;
         private readonly string repositoryDirectory;
+        private readonly string name;
 
         public GitGrep(IContext context, string repositoryDirectory)
         {
             this.context = context;
             this.repositoryDirectory = repositoryDirectory;
+            this.name = Path.GetFileName(repositoryDirectory);
         }
 
         protected override IEnumerable<IResult> GetResults(IQuery query)
         {
-            if (query.Text.Length < 2)
+            var terms = Tokenizer.ToList(query.Text.OneLine(80));
+
+            if (terms.Count >= 2 && string.Equals(terms[0], name, StringComparison.InvariantCulture))
+            {
+                return new ProcessStartInfo
+                {
+                    FileName = "git.exe",
+                    Arguments = $@"-C {repositoryDirectory.Quote()} grep -n {query.Text.Quote()}",
+                    StandardOutputEncoding = UTF8Encoding.UTF8
+                }.GetOutputLines()
+                .Select(line =>
+                    TextLocationFromGitGrepOutput(line, repositoryDirectory)
+                    .Map(location =>
+                        new SimpleAction(
+                            context.LastExecutedStore,
+                            location.ToString(),
+                            location.ToString(),
+                            () => Open(location)))
+                    .Map(a => a.ToResult())
+                )
+                .Select(_ => _.ValueOr(default(IResult)))
+                .Where(_ => _ != null);
+            }
+            else
             {
                 return Enumerable.Empty<IResult>();
             }
-
-            return new ProcessStartInfo
-            {
-                FileName = "git.exe",
-                Arguments = $@"-C {repositoryDirectory.Quote()} grep -n {query.Text.Quote()}",
-                StandardOutputEncoding = UTF8Encoding.UTF8
-            }.GetOutputLines()
-            .Select(line =>
-                TextLocationFromGitGrepOutput(line, repositoryDirectory)
-                .Map(location =>
-                    new SimpleAction(
-                        context.LastExecutedStore,
-                        location.ToString(),
-                        location.ToString(),
-                        () => Open(location)))
-                .Map(a => a.ToResult())
-            )
-            .Select(_ => _.ValueOr(default(IResult)))
-            .Where(_ => _ != null);
         }
 
         static Option<TextLocation> TextLocationFromGitGrepOutput(string gitGrepOutputLine, string repositoryDirectory)

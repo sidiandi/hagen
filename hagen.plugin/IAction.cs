@@ -20,6 +20,7 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 using System.ComponentModel;
+using Sidi.Util;
 
 namespace hagen
 {
@@ -51,6 +52,19 @@ namespace hagen
         public static IResult ToResult(this IAction action)
         {
             return action.ToResult(Priority.Normal);
+        }
+
+        /// higher priority if the action name starts with one of the search terms
+        public static Priority GetPriority(this IAction a, IEnumerable<string> terms)
+        {
+            var priority = terms.Any(t => a.Name.StartsWith(t, StringComparison.InvariantCultureIgnoreCase)) ? Priority.High : Priority.Normal;
+            return priority;
+        }
+
+        public static IResult ToResult(this IAction action, IQuery query)
+        {
+            var terms = Tokenizer.ToList(query.Text);
+            return action.ToResult(GetPriority(action, terms));
         }
 
         class ActionWrapper : IResult

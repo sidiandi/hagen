@@ -8,10 +8,10 @@ using System.Threading.Tasks;
 using Sidi.Extensions;
 using hagen;
 using System.Text.RegularExpressions;
+using Sidi.Util;
 
 namespace hagen
 {
-
     internal class Notes : EnumerableActionSource
     {
         private static readonly log4net.ILog log = log4net.LogManager.GetLogger(System.Reflection.MethodBase.GetCurrentMethod().DeclaringType);
@@ -36,7 +36,7 @@ namespace hagen
             var notesDir = context.DocumentDirectory.CatDir("Notes");
             notesDir.EnsureDirectoryExists();
 
-            var dropboxNotesDir = Sidi.IO.Paths.GetFolderPath(Environment.SpecialFolder.UserProfile).CatDir("Dropbox", "hagen", "Notes");
+            var dropboxNotesDir = Sidi.IO.Paths.GetFolderPath(System.Environment.SpecialFolder.UserProfile).CatDir("Dropbox", "hagen", "Notes");
 
             _notesProvider = new MultiNotesProvider(new[] { notesDir, dropboxNotesDir }.Where(_ => _.IsDirectory)
                 .Select(_ => new FileSystemWatcherNotesProvider(_)).ToArray());
@@ -57,10 +57,18 @@ namespace hagen
                     .Select(_ => _.ToResult(Priority.Normal));
             }
 
+            var terms = Tokenizer.ToList(query.Text.OneLine(80));
             var re = new MultiWordMatch(query.Text);
             return notes.Where(n => re.IsMatch(n.Name))
                 .Select(_ => new NoteAction(_, query.Context.LastExecutedStore))
-                .Select(_ => _.ToResult(Priority.Normal));
+                .Select(_ => _.ToResult(GetPriority(_, terms)));
+        }
+
+        static Priority GetPriority(IAction a, IEnumerable<string> terms)
+        {
+            // higher priority if the action name starts with one of the search terms
+            var priority = terms.Any(t => a.Name.StartsWith(t, StringComparison.InvariantCultureIgnoreCase)) ? Priority.High : Priority.Normal;
+            return priority;
         }
     }
 }

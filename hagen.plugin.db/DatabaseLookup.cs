@@ -104,16 +104,9 @@ namespace hagen.Plugin.Db
                 return Enumerable.Empty<IResult>();
             }
             var results = r.SelectMany(action => ToIActions(action))
-                .Select(a => a.ToResult(GetPriority(a, terms)))
+                .Select(a => a.ToResult(a.GetPriority(terms)))
                 .ToList();
             return results;
-        }
-
-        static Priority GetPriority(IAction a, IEnumerable<string> terms)
-        {
-            // higher priority if the action name starts with one of the search terms
-            var priority = terms.Any(t => a.Name.StartsWith(t, StringComparison.InvariantCultureIgnoreCase)) ? Priority.High : Priority.Normal;
-            return priority;
         }
 
         public bool IncludeInSearch;

@@ -38,6 +38,7 @@
     <Compile Include="NoteAction.cs" />
     <Compile Include="GitGrep.cs" />
     <Compile Include="NotepadPlusPlus.cs" />
+    <Compile Include="Environment.cs" />
     <Compile Include="Notes.cs" />
     <Compile Include="NotesReader.cs" />
     <Compile Include="PathLookup.cs" />

@@ -12,6 +12,7 @@
   <Import Project="..\build\Common.props" />
   <ItemGroup>
     <Compile Include="DateTimeExtensions.cs" />
+    <Compile Include="MarkdownMeetingMinutes.cs" />
     <Compile Include="Outlook.cs" />
     <Compile Include="OutlookExtensions.cs" />
     <Compile Include="Plugin.cs" />

@@ -52,6 +52,42 @@ namespace hagen
             throw new System.IO.IOException("Cannot make a unique path for {0}".F(p));
         }
 
+        [Usage("Remove one directory hierarchy in the selected items if no conflicts")]
+        public void OneUp(PathList paths)
+        {
+            var op = new Operation();
+            foreach (var i in paths)
+            {
+                var iTemp = i.CatName("." + System.IO.Path.GetRandomFileName());
+                i.Move(iTemp);
+                foreach (var c in iTemp.Children)
+                {
+                    var d = c.Parent.Parent.CatDir(c.FileName);
+                    if (!d.Exists)
+                    {
+                        c.Move(d);
+                    }
+                }
+            }
+        }
+
+        [Usage("Enumerate directories")]
+        public void Enumerate(PathList paths)
+        {
+            if (paths.All(_ => _.IsDirectory))
+            {
+                var sorted = paths.OrderBy(_ => _);
+
+                var index = 1;
+                foreach (var i in sorted)
+                {
+                    var d = i.Parent.CatDir(index.ToString("D3"));
+                    i.Move(d);
+                    ++index;
+                }
+            }
+        }
+
         [Usage("Flatten the directory hierarchy in the selected directories")]
         public void Flatten(PathList paths)
         {

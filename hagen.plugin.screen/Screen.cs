@@ -24,11 +24,12 @@ using System.Windows.Forms;
 using Sidi.CommandLine;
 using System.Diagnostics;
 using System.Runtime.InteropServices;
-using Microsoft.Office.Interop.Outlook;
+
 using System.Web;
 using System.Reflection;
 using System.Reactive.Linq;
 using System.Reactive.Concurrency;
+using Microsoft.Office.Interop.Outlook;
 
 namespace hagen.ActionSource
 {

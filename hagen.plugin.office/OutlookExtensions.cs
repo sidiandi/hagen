@@ -8,9 +8,11 @@ using System.Text;
 using System.Threading.Tasks;
 using Sidi.Extensions;
 using System.Runtime.InteropServices;
-using Microsoft.Office.Interop.Outlook;
+
 using Sidi.Util;
 using System.Text.RegularExpressions;
+using NetOffice.OutlookApi;
+using NetOffice.OutlookApi.Enums;
 
 namespace hagen.plugin.office
 {
@@ -20,38 +22,29 @@ namespace hagen.plugin.office
 
         public static Application ProvideApplication()
         {
-            var instance = GetRunningApplication();
+            var instance = Application.GetActiveInstance();
             if (instance != null)
             {
                 return instance;
             }
-            return new Microsoft.Office.Interop.Outlook.Application();
+            return new Application();
         }
 
+        /// <summary>
+        /// Running outlook instance or null
+        /// </summary>
+        /// <returns></returns>
         public static Application GetRunningApplication()
         {
-            try
-            {
-                var instance = Marshal.GetActiveObject("Outlook.Application") as Microsoft.Office.Interop.Outlook.Application;
-                if (instance != null)
-                {
-                    return instance;
-                }
-            }
-            catch
-            {
-            }
-
-            return null;
+            return Application.GetActiveInstance();
         }
 
         public static TaskItem CreateTaskItem(this Application app)
         {
-            var task = (Microsoft.Office.Interop.Outlook.TaskItem)app.CreateItem(Microsoft.Office.Interop.Outlook.OlItemType.olTaskItem);
-            return task;
+            return (TaskItem)app.CreateItem(NetOffice.OutlookApi.Enums.OlItemType.olTaskItem);
         }
 
-        public static NameSpace GetSession(this Application app)
+        public static _NameSpace GetSession(this Application app)
         {
             return app.ActiveExplorer().Session;
         }
@@ -67,6 +60,13 @@ namespace hagen.plugin.office
 
             var newFolder = rootFolder.Folders.Add(name, System.Reflection.Missing.Value);
             return newFolder;
+        }
+
+        public static MAPIFolder GetCalendar(this Application application)
+        {
+            var ns = application.GetNamespace("MAPI");
+            var calendarFolder = ns.GetDefaultFolder(OlDefaultFolders.olFolderCalendar);
+            return calendarFolder;
         }
 
         public static MAPIFolder GetCalendar(this Application application, string calendarName)
@@ -95,6 +95,16 @@ namespace hagen.plugin.office
             calendarFolder.Items.Sort("[Start]", false);
             calendarFolder.Items.IncludeRecurrences = true;
             var q = String.Format("[Start] >= {0} And [End] < {1}", time.Begin.OutlookQueryFormat().Quote(), time.End.OutlookQueryFormat().Quote());
+            log.Info(q);
+            var appointments = calendarFolder.Items.Restrict(q);
+            return appointments.OfType<AppointmentItem>().ToList();
+        }
+
+        public static IList<AppointmentItem> GetOutlookAppointmentsActiveIn(this MAPIFolder calendarFolder, TimeInterval time)
+        {
+            calendarFolder.Items.Sort("[Start]", false);
+            calendarFolder.Items.IncludeRecurrences = true;
+            var q = String.Format($"[Start] <= {time.End.OutlookQueryFormat().Quote()} And [End] > {time.End.OutlookQueryFormat().Quote()}");
             log.Info(q);
             var appointments = calendarFolder.Items.Restrict(q);
             return appointments.OfType<AppointmentItem>().ToList();
@@ -138,13 +148,13 @@ namespace hagen.plugin.office
                 this.inspector = inspector;
                 this.item = inspector.CurrentItem;
                 trackedInspectors.Add(this);
-                ((InspectorEvents_10_Event)inspector).Close += InspectorWrapper_Close;
+                inspector.CloseEvent += InspectorWrapper_Close;
             }
 
             private void InspectorWrapper_Close()
             {
                 trackedInspectors.Remove(this);
-                ((InspectorEvents_10_Event)inspector).Close -= InspectorWrapper_Close;
+                inspector.CloseEvent -= InspectorWrapper_Close;
             }
 
             static List<InspectorWrapper> trackedInspectors = new List<InspectorWrapper>();
@@ -185,7 +195,7 @@ Andreas" + forwardMail.Body;
             inspector.Activate();
         }
 
-        public static void Hello(this Inspector inspector)
+        public static void Hello(this _Inspector inspector)
         {
             var mailItem = (MailItem) inspector.CurrentItem;
 

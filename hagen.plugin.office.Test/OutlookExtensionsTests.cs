@@ -6,10 +6,12 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 using Sidi.Test;
-using Microsoft.Office.Interop.Outlook;
+
 using Sidi.Extensions;
 using Sidi.Util;
 using System.Text.RegularExpressions;
+using NetOffice.OutlookApi.Enums;
+using NetOffice.OutlookApi;
 
 namespace hagen.plugin.office.Tests
 {

@@ -50,5 +50,18 @@ namespace hagen.plugin.office
             }
             return n;
         }
+
+        public static string GetHumanreadableRelativeTime(this DateTime t)
+        {
+            var r = t - DateTime.Now;
+            if (r < TimeSpan.Zero)
+            {
+                return String.Format("Since {0:F0} minutes", -r.TotalMinutes);
+            }
+            else
+            {
+                return String.Format("In {0:F0} minutes", r.TotalMinutes);
+            }
+        }
     }
 }

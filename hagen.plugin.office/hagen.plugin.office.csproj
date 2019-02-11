@@ -13,6 +13,7 @@
   <ItemGroup>
     <Compile Include="DateTimeExtensions.cs" />
     <Compile Include="MarkdownMeetingMinutes.cs" />
+    <Compile Include="NotepadPlusPlus.cs" />
     <Compile Include="Outlook.cs" />
     <Compile Include="OutlookExtensions.cs" />
     <Compile Include="Plugin.cs" />
@@ -22,6 +23,8 @@
       <DesignTimeSharedInput>True</DesignTimeSharedInput>
       <DependentUpon>Settings.settings</DependentUpon>
     </Compile>
+    <Compile Include="TextEditor.cs" />
+    <Compile Include="TextLocation.cs" />
     <Compile Include="TimeParser.cs" />
   </ItemGroup>
   <ItemGroup>
@@ -66,6 +69,9 @@
       <HintPath>..\..\packages\log4net.2.0.8\lib\net45-full\log4net.dll</HintPath>
     </Reference>
     <Reference Include="Microsoft.CSharp" />
+    <Reference Include="Optional, Version=4.0.0.0, Culture=neutral, processorArchitecture=MSIL">
+      <HintPath>..\..\packages\Optional.4.0.0\lib\net45\Optional.dll</HintPath>
+    </Reference>
     <Reference Include="Sidi.Util, Version=14.3.0.0, Culture=neutral, PublicKeyToken=1e33c1a5eebc53e1, processorArchitecture=MSIL">
       <HintPath>..\..\packages\sidi-util.14.3.0\lib\net461\Sidi.Util.dll</HintPath>
     </Reference>

@@ -1,6 +1,7 @@
 ﻿using hagen.plugin.office;
 using Microsoft.Office.Interop.Outlook;
 using Sidi.CommandLine;
+using Sidi.IO;
 using System;
 using System.Collections.Generic;
 using System.IO;
@@ -16,7 +17,7 @@ namespace hagen.plugin.office
     {
         static IEnumerable<string> GetParticipants(AppointmentItem a)
         {
-            return a.Recipients.Cast<Recipient>().Select(_ => _.Name);
+            return a.Recipients.Cast<Recipient>().Select(_ => $"{_.Name};");
         }
 
         static string GetHumanReadableDate(AppointmentItem a)
@@ -46,7 +47,25 @@ namespace hagen.plugin.office
 
             if (selectedAppointment == null) return;
 
-            Console.WriteLine(GetMarkdown(selectedAppointment));
+            var mdFile = CreateMeetingMinutesMarkdownFile(selectedAppointment);
+
+            TextEditor.Open(mdFile);
+        }
+
+        static LPath CreateMeetingMinutesMarkdownFile(AppointmentItem selectedAppointment)
+        {
+            var chpRoot = new LPath(@"C:\src\chp");
+            var mdFile = chpRoot.CatDir(
+                "doc", "meetings",
+                $"{selectedAppointment.Start:yyyy-MM-dd} {Sidi.IO.LPath.GetValidFilename(selectedAppointment.Subject)}", 
+                "Readme.md");
+
+            if (!mdFile.Exists)
+            {
+                mdFile.EnsureParentDirectoryExists();
+                mdFile.WriteAllText(GetMarkdown(selectedAppointment));
+            }
+            return mdFile;
         }
 
         static string GetMarkdown(AppointmentItem a)

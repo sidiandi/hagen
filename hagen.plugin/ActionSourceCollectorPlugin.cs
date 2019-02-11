@@ -87,7 +87,7 @@ namespace hagen
                         {
                             return Enumerable.Empty<IActionSource3>();
                         }
-                    })
+                    }).Where(_ => _ != null)
 
                 .Concat(types
                     .Where(t => t.GetCustomAttributes(typeof(Usage), false).Any())

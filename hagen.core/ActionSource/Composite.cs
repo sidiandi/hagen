@@ -34,6 +34,10 @@ namespace hagen.ActionSource
 
         public Composite(params IActionSource3[] sources)
         {
+            if (sources.Any(_ => _ == null))
+            {
+                throw new ArgumentNullException(nameof(sources));
+            }
             this.Sources = sources.ToList();
         }
 
@@ -51,6 +55,11 @@ namespace hagen.ActionSource
 
         public void Add(IActionSource3 source)
         {
+            if (source == null)
+            {
+                throw new ArgumentNullException(nameof(source));
+            }
+
             Sources = Sources.Concat(source).ToList();
         }
     }

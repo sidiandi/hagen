@@ -135,11 +135,18 @@ namespace hagen
 
         internal void LoadPlugin(LPath pluginAssemblyPath)
         {
-            var plugin = PluginProvider2.LoadPlugin(pluginAssemblyPath, this.hagen.Context, Paths.BinDir);
-
-            foreach (var i in plugin.SelectMany(_ => _.GetActionSources()))
+            try
             {
-                actionSource.Add(i);
+                var plugin = PluginProvider2.LoadPlugin(pluginAssemblyPath, this.hagen.Context, Paths.BinDir);
+
+                foreach (var i in plugin.SelectMany(_ => _.GetActionSources()))
+                {
+                    actionSource.Add(i);
+                }
+            }
+            catch (Exception ex)
+            {
+                log.Error($"Failed to load {pluginAssemblyPath}.", ex);
             }
         }
 

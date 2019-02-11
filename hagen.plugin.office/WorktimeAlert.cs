@@ -3,40 +3,29 @@ using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Text;
+using System.Threading;
 using System.Threading.Tasks;
 using System.Windows.Forms;
 
 namespace hagen
 {
-    class WorktimeAlert
+    class WorktimeAlert : IDisposable
     {
         public WorktimeAlert(IContext context)
         {
             this.context = context;
             workTime = context.GetService<IWorkTime>();
+            checkTimer = new System.Threading.Timer(new TimerCallback(state => CheckWorkTime()), null, TimeSpan.FromSeconds(1), checkInterval);
         }
 
         IContract Contract => workTime.Contract;
         IWorkTime workTime;
-
+        private readonly System.Threading.Timer checkTimer;
         System.Windows.Forms.Timer alertTimer = null;
-        TimeSpan alertInterval = TimeSpan.FromMinutes(5);
+        TimeSpan checkInterval = TimeSpan.FromMinutes(5);
         TimeSpan warnBefore = TimeSpan.FromHours(1);
         TimeSpan warnAfter = TimeSpan.FromMinutes(30);
         private readonly IContext context;
-
-        void StartWorkTimeAlert()
-        {
-            alertTimer = new System.Windows.Forms.Timer()
-            {
-                Interval = (int)alertInterval.TotalMilliseconds
-            };
-            alertTimer.Tick += new EventHandler((s, e) =>
-            {
-                CheckWorkTime();
-            });
-            alertTimer.Start();
-        }
 
         void CheckWorkTime()
         {
@@ -87,6 +76,11 @@ Hours: {0:G3}",
             }
         
             context.Notify(text);
+        }
+
+        public void Dispose()
+        {
+            checkTimer.Dispose();
         }
     }
 }

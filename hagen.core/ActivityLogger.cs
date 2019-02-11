@@ -44,7 +44,7 @@ namespace hagen
             // TimeSpan.FromSeconds(1);
 
         IDisposable subscriptions;
-        Hagen hagen;
+        ILogDatabase logDatabase;
         Collection<ProgramUse> programUse;
         Collection<Input> inputs;
 
@@ -53,12 +53,12 @@ namespace hagen
             get; private set;
         }
 
-        public ActivityLogger(Hagen hagen)
+        public ActivityLogger(ILogDatabase logDatabase)
         {
-            this.hagen = hagen;
+            this.logDatabase = logDatabase;
 
-            programUse = hagen.OpenProgramUses();
-            inputs = hagen.OpenInputs();
+            programUse = logDatabase.OpenProgramUses();
+            inputs = logDatabase.OpenInputs();
 
             var hidMonitor = Debugger.IsAttached ? null : new HumanInterfaceDeviceMonitor();
             var winEventHook = new WinEventHook();

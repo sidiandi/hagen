@@ -18,24 +18,6 @@ namespace hagen
             this.logDatabasePath = LogDatabasePath;
         }
 
-        public DateTime? GetWorkBegin(DateTime time)
-        {
-            var workDayBegin = time.Date;
-            using (var inputs = OpenInputs())
-            {
-                var r = inputs.Range(new TimeInterval(workDayBegin, time));
-                var b = r.FirstOrDefault();
-                if (b == null)
-                {
-                    return null;
-                }
-                else
-                {
-                    return b.Begin;
-                }
-            }
-        }
-
         public Collection<Input> OpenInputs()
         {
             return new Collection<Input>(logDatabasePath);

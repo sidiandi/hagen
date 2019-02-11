@@ -35,9 +35,11 @@ namespace hagen.plugin.office
         {
             this._context = context;
             this.appointmentReminder = new AppointmentReminder(context);
+            this.worktimeAlert = new WorktimeAlert(context);
         }
 
         readonly AppointmentReminder appointmentReminder;
+        private readonly WorktimeAlert worktimeAlert;
 
         static DateTime Max(DateTime a, DateTime b)
         {
@@ -119,6 +121,7 @@ namespace hagen.plugin.office
         public void Dispose()
         {
             appointmentReminder.Dispose();
+            worktimeAlert.Dispose();
         }
     }
 }

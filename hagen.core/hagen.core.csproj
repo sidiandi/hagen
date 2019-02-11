@@ -52,11 +52,12 @@
     <Compile Include="RxExtensions.cs" />
     <Compile Include="StringEx.cs" />
     <Compile Include="TimeIntervalExtensions.cs" />
-    <Compile Include="UserInterfaceState.cs" />
+    <Compile Include="Context.cs" />
     <Compile Include="WindowInformation.cs" />
     <Compile Include="Windows.cs" />
     <Compile Include="WinEventHook.cs" />
     <Compile Include="WorkInterval.cs" />
+    <Compile Include="WorkTime.cs" />
     <EmbeddedResource Include="Properties\Resources.resx">
       <Generator>ResXFileCodeGenerator</Generator>
       <LastGenOutput>Resources.Designer.cs</LastGenOutput>

@@ -6,7 +6,7 @@ using System.Threading.Tasks;
 
 namespace hagen
 {
-    interface ILogDatabase
+    public interface ILogDatabase
     {
         Sidi.Persistence.Collection<Input> OpenInputs();
         Sidi.Persistence.Collection<ProgramUse> OpenProgramUses();

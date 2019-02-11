@@ -203,6 +203,18 @@ namespace hagen
             NotifyAction(message);
         }
 
+        public object GetService(Type serviceType)
+        {
+            return services[serviceType];
+        }
+        IDictionary<Type, object> services = new Dictionary<Type, object>();
+
+        public Context AddService<T>(T service)
+        {
+            services[typeof(T)] = service;
+            return this;
+        }
+
         public Func<IReadOnlyCollection<string>> TagsSource { get; set; }
         public Action<string> NotifyAction { get; set; }
     }

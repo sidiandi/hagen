@@ -20,17 +20,20 @@
     <Compile Include="FileGroupDescriptor.cs" />
     <Compile Include="globalKeyboardHook.cs" />
     <Compile Include="Hagen.cs" />
+    <Compile Include="ILogDatabase.cs" />
     <Compile Include="InputAggregator.cs" />
     <Compile Include="InputEx.cs" />
     <Compile Include="HumanInterfaceDeviceMonitor.cs" />
     <Compile Include="InternetShortcut.cs" />
     <Compile Include="IObservable.cs" />
     <Compile Include="LastExecutedDbStore.cs" />
+    <Compile Include="LogDatabase.cs" />
     <Compile Include="mshtmlEx.cs" />
     <Compile Include="NativeMethods.cs" />
     <Compile Include="ObservableTimeInterval.cs" />
     <Compile Include="OutlookDataObject.cs" />
     <Compile Include="ActionSource\Plugins.cs" />
+    <Compile Include="Place.cs" />
     <Compile Include="ProgramUseAggregator.cs" />
     <Compile Include="Properties\AssemblyInfo.cs">
       <SubType>Code</SubType>

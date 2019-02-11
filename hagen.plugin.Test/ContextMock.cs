@@ -116,5 +116,10 @@ namespace hagen.plugin.Tests
         {
             log.Info(message);
         }
+
+        public object GetService(Type serviceType)
+        {
+            throw new NotImplementedException();
+        }
     }
 }

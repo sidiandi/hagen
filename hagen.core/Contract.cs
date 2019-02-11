@@ -23,34 +23,13 @@ using Sidi.Persistence;
 
 namespace hagen
 {
-    public enum Place
+    public class Contract : IContract
     {
-        Office,
-        OverHr,
-        Home
-    };
-
-    public class Contract
-    {
-        public static Contract instance;
-
-        public static Contract Current
-        {
-            get
-            {
-                if (instance == null)
-                {
-                    instance = new Contract();
-                }
-                return instance;
-            }
-        }
-
-        public TimeSpan MaxWorkTimePerDay = TimeSpan.FromHours(10.75);
-        public TimeSpan MaxHomeOfficeIdleTime = TimeSpan.FromMinutes(1);
-        public TimeSpan RegularWorkTimePerWeek = TimeSpan.FromHours(40);
-        public int WorkDaysPerWeek = 5;
-        public TimeSpan PauseTimePerDay = TimeSpan.FromHours(0.75);
-        public TimeSpan RegularWorkTimePerDay = TimeSpan.FromHours(8);
+        public TimeSpan MaxWorkTimePerDay { get; } = TimeSpan.FromHours(10.75);
+        public TimeSpan MaxHomeOfficeIdleTime { get; } = TimeSpan.FromMinutes(1);
+        public TimeSpan RegularWorkTimePerWeek { get; } = TimeSpan.FromHours(40);
+        public int WorkDaysPerWeek { get; } = 5;
+        public TimeSpan PauseTimePerDay { get; } = TimeSpan.FromHours(0.75);
+        public TimeSpan RegularWorkTimePerDay { get; } = TimeSpan.FromHours(8);
     }
 }

@@ -8,7 +8,7 @@ using System.Windows.Automation;
 
 namespace hagen
 {
-    public interface IContext
+    public interface IContext : IServiceProvider
     {
         void InsertText(string text);
         
@@ -52,6 +52,11 @@ namespace hagen
         public static string GetTopLevelWindowClassName(this IContext context)
         {
             return context.SavedFocusedElement.GetTopLevelElement().Current.ClassName;
+        }
+
+        public static T GetService<T>(this IServiceProvider serviceProvider)
+        {
+            return (T)serviceProvider.GetService(typeof(T));
         }
     }
 }

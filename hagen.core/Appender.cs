@@ -37,13 +37,10 @@ namespace hagen
 
     public class Appender : log4net.Appender.AppenderSkeleton, IDisposable
     {
-        public Appender(Hagen hagen)
+        public Appender(ILogDatabase logDatabase)
         {
-            this.hagen = hagen;
-            logs = hagen.OpenLogs();
+            logs = logDatabase.OpenLogs();
         }
-
-        Hagen hagen;
 
         Collection<Log> logs;
 

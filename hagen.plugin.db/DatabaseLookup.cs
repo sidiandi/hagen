@@ -52,7 +52,7 @@ namespace hagen.Plugin.Db
 
             if (query.Tags.Any())
             {
-                foreach (var i in GetResults(terms.Concat(query.Tags)))
+                foreach (var i in GetResults(query.Tags, terms))
                 {
                     i.Priority = Priority.High;
                     seen.Add(i.Action.Name);
@@ -76,12 +76,12 @@ namespace hagen.Plugin.Db
         /// <returns>List of results. Empty list if terms contain an SQL problem</returns>
         IEnumerable<IResult> GetResults(IEnumerable<string> terms)
         {
-            var cmd = actions.Connection.CreateCommand();
-
             if (!terms.Any(_ => _.Length >= 1))
             {
                 return Enumerable.Empty<IResult>();
             }
+
+            var cmd = actions.Connection.CreateCommand();
 
             var termsQuery = terms.Select((t, i) =>
             {
@@ -92,6 +92,50 @@ namespace hagen.Plugin.Db
             }).Join(" and ");
 
             cmd.CommandText = String.Format("select oid from {1} where {0} order by LastUseTime desc limit 50", termsQuery, actions.Table);
+
+            IList<Action> r;
+            try
+            {
+                r = actions.Query(cmd);
+            }
+            catch (System.Data.SQLite.SQLiteException e)
+            {
+                log.Info(e);
+                return Enumerable.Empty<IResult>();
+            }
+            var results = r.SelectMany(action => ToIActions(action))
+                .Select(a => a.ToResult(a.GetPriority(terms)))
+                .ToList();
+            return results;
+        }
+
+        IEnumerable<IResult> GetResults(IEnumerable<string> tags, IEnumerable<string> terms)
+        {
+            if (!tags.Any() && !terms.Any(_ => _.Length >= 1))
+            {
+                return Enumerable.Empty<IResult>();
+            }
+
+            var cmd = actions.Connection.CreateCommand();
+
+            var termsQuery = terms.Select((t, i) =>
+            {
+                var paramName = String.Format("@term{0}", i);
+                var parameter = cmd.Parameters.Add(paramName, System.Data.DbType.String);
+                parameter.Value = String.Format("%{0}%", t);
+                return String.Format("Name like {0}", paramName);
+            }).Join(" and ");
+
+            var tagsQuery = terms.Select((t, i) =>
+            {
+                var paramName = String.Format("@tag{0}", i);
+                var parameter = cmd.Parameters.Add(paramName, System.Data.DbType.String);
+                parameter.Value = String.Format("%{0}%", t);
+                return String.Format("Name like {0}", paramName);
+            }).Join(" and ");
+
+            cmd.CommandText = String.Format($"select oid from {actions.Table} where ({tagsQuery}) and ({termsQuery}) order by LastUseTime desc limit 50");
+            log.Info(cmd.CommandText);
 
             IList<Action> r;
             try

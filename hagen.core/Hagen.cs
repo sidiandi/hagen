@@ -76,14 +76,20 @@ namespace hagen
 
             this.dataDirectory = dataDirectory;
 
-            activityLogger = new ActivityLogger(this);
+            LogDatabase = new LogDatabase(this.LogDatabasePath);
+            activityLogger = new ActivityLogger(LogDatabase);
 
             this.Context = new Context(this)
             {
                 DataDirectory = dataDirectory,
                 DocumentDirectory = Paths.GetFolderPath(Environment.SpecialFolder.MyDocuments).CatDir("hagen")
-            };
+            }
+            .AddService(this.LogDatabase)
+            .AddService<IContract>(new Contract())
+            .AddService<IWorkTime>(_ => new WorkTime(_.GetService<ILogDatabase>(), _.GetService<IContract>()));
         }
+
+        ILogDatabase LogDatabase { get; }
 
         public LPath ActionsDatabasePath
         {
@@ -126,39 +132,6 @@ namespace hagen
         }
 
         public Context Context { get; private set; }
-
-        public DateTime? GetWorkBegin(DateTime time)
-        {
-            var workDayBegin = time.Date;
-            using (var inputs = OpenInputs())
-            {
-                var r = inputs.Range(new TimeInterval(workDayBegin, time));
-                var b = r.FirstOrDefault();
-                if (b == null)
-                {
-                    return null;
-                }
-                else
-                {
-                    return b.Begin;
-                }
-            }
-        }
-
-        public Collection<Input> OpenInputs()
-        {
-            return new Collection<Input>(LogDatabasePath);
-        }
-
-        public Collection<ProgramUse> OpenProgramUses()
-        {
-            return new Collection<ProgramUse>(LogDatabasePath);
-        }
-
-        public Collection<Log> OpenLogs()
-        {
-            return new Collection<Log>(LogDatabasePath);
-        }
 
         #region IDisposable Support
         private bool disposedValue = false; // To detect redundant calls

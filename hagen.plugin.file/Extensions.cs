@@ -18,5 +18,10 @@ namespace hagen
             return new Regex(Regex.Escape(pattern), RegexOptions.IgnoreCase, TimeSpan.FromMilliseconds(100));
         }
 
+        public static Regex EscapedRegex(string pattern)
+        {
+            return new Regex(Regex.Escape(pattern), RegexOptions.IgnoreCase, TimeSpan.FromMilliseconds(100));
+        }
+
     }
 }

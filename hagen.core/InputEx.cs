@@ -44,7 +44,7 @@ namespace hagen
             });
         }
 
-        public static WorkInterval AtOffice(this IEnumerable<Input> data)
+        public static WorkInterval AtOffice(this IEnumerable<Input> data, IContract contract)
         {
             if (data.Any(x => !x.TerminalServerSession))
             {
@@ -52,11 +52,11 @@ namespace hagen
                 w.TimeInterval = new Sidi.Util.TimeInterval(
                     data.First(x => !x.TerminalServerSession).Begin,
                     data.Last(x => !x.TerminalServerSession).End);
-                if (w.TimeInterval.Duration > Contract.Current.MaxWorkTimePerDay)
+                if (w.TimeInterval.Duration > contract.MaxWorkTimePerDay)
                 {
                     w.TimeInterval = new Sidi.Util.TimeInterval(
                         w.TimeInterval.Begin,
-                        w.TimeInterval.Begin + Contract.Current.MaxWorkTimePerDay);
+                        w.TimeInterval.Begin + contract.MaxWorkTimePerDay);
                 }
                 w.Place = Place.Office;
                 return w;
@@ -67,7 +67,7 @@ namespace hagen
             }
         }
 
-        public static IEnumerable<WorkInterval> WorkIntervals(this IEnumerable<Input> data)
+        public static IEnumerable<WorkInterval> WorkIntervals(this IEnumerable<Input> data, IContract contract)
         {
             WorkInterval atOffice = null;
             WorkInterval extraOffice = null;
@@ -82,11 +82,11 @@ namespace hagen
                         data.First(x => !x.TerminalServerSession).Begin,
                         leave)
                 };
-                if (atOffice.TimeInterval.Duration > Contract.Current.MaxWorkTimePerDay)
+                if (atOffice.TimeInterval.Duration > contract.MaxWorkTimePerDay)
                 {
                     atOffice.TimeInterval = new TimeInterval(
                         atOffice.TimeInterval.Begin,
-                        Contract.Current.MaxWorkTimePerDay);
+                        contract.MaxWorkTimePerDay);
 
                     extraOffice = new WorkInterval()
                     {
@@ -120,7 +120,7 @@ namespace hagen
             {
                 if (w != null)
                 {
-                    if (w.TimeInterval.End + Contract.Current.MaxHomeOfficeIdleTime >= i.Begin)
+                    if (w.TimeInterval.End + contract.MaxHomeOfficeIdleTime >= i.Begin)
                     {
                         w.TimeInterval = new TimeInterval(w.TimeInterval.Begin, i.End);
                     }

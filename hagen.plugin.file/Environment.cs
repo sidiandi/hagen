@@ -18,7 +18,12 @@ namespace hagen
 
         protected override IEnumerable<IResult> GetResults(IQuery query)
         {
-            var m = new MultiWordMatch(query.Text);
+            if (query.Text.Length < 3)
+            {
+                return Enumerable.Empty<IResult>();
+            }
+
+            var m = new MultiWordMatch(query);
 
             return System.Environment.GetEnvironmentVariables()
                 .Cast<DictionaryEntry>()
@@ -26,7 +31,7 @@ namespace hagen
                 .Select(_ => new SimpleAction(
                     context.LastExecutedStore,
                     _.Key.ToString(),
-                    $"{_.Key}={_.Value}",
+                    $"#environment {_.Key}={_.Value}",
                     () =>
                     {
                         context.InsertText(_.Value.ToString());

@@ -105,8 +105,6 @@ namespace hagen
             var binding = hotkeyBinder.Bind(Shortcut.Modifiers.Alt | Shortcut.Modifiers.Control, Keys.Space);
             binding.To(Popup);
 
-            StartWorkTimeAlert();
-
             this.reportsToolStripMenuItem.DropDownItems.AddRange(GetTextReportMenuItems().ToArray());
         }
 
@@ -116,19 +114,6 @@ namespace hagen
             d.MdiParent = this;
             d.Show(dockPanel, DockState.Document);
             return d;
-        }
-
-        void StartWorkTimeAlert()
-        {
-            alertTimer = new System.Windows.Forms.Timer()
-            {
-                Interval = (int)alertInterval.TotalMilliseconds
-            };
-            alertTimer.Tick += new EventHandler((s, e) =>
-            {
-                CheckWorkTime();
-            });
-            alertTimer.Start();
         }
 
         Composite actionSource;
@@ -153,7 +138,7 @@ namespace hagen
         IEnumerable<ToolStripItem> GetTextReportMenuItems()
         {
             var type = typeof(activityReport.Program);
-            Func<object> instance = () => new activityReport.Program(this.hagen);
+            Func<object> instance = () => new activityReport.Program(LogDatabase);
 
 
             var reports = type.GetMethods()
@@ -200,9 +185,7 @@ namespace hagen
         public Main(Hagen hagen)
         {
             this.hagen = hagen;
-
             InitUserInterface();
-            CheckWorkTime();
         }
 
         Sidi.Forms.JobListView jobListView;
@@ -264,10 +247,6 @@ namespace hagen
         {
             base.OnClosed(e);
             hotkeyBinder.Dispose();
-            if (alertTimer != null)
-            {
-                alertTimer.Dispose();
-            }
         }
 
         private void exitToolStripMenuItem_Click(object sender, EventArgs e)
@@ -282,7 +261,7 @@ namespace hagen
 
         private void statisticsToolStripMenuItem_Click(object sender, EventArgs e)
         {
-            new activityReport.Program(hagen).StatisticsWindow().Show();
+            new activityReport.Program(LogDatabase).StatisticsWindow().Show();
         }
 
         private void sqliteConsoleToolStripMenuItem_Click(object sender, EventArgs e)
@@ -301,8 +280,10 @@ namespace hagen
 
         private void reportMailToolStripMenuItem_Click(object sender, EventArgs e)
         {
-            new activityReport.Program(hagen).ShowReport();
+            new activityReport.Program(LogDatabase).ShowReport();
         }
+
+        ILogDatabase LogDatabase => this.hagen.Context.GetService<ILogDatabase>();
 
         private void notifyIcon_MouseDoubleClick(object sender, MouseEventArgs e)
         {
@@ -317,65 +298,8 @@ namespace hagen
             }
         }
 
-        System.Windows.Forms.Timer alertTimer = null;
-        TimeSpan alertInterval = TimeSpan.FromMinutes(5);
-        TimeSpan warnBefore = TimeSpan.FromHours(1);
-        TimeSpan warnAfter = TimeSpan.FromMinutes(30);
-
         private void notifyIcon_MouseClick(object sender, MouseEventArgs e)
         {
-            ShowWorkTimeAlert();
-        }
-
-        void CheckWorkTime()
-        {
-            var now = DateTime.Now;
-            var begin = hagen.GetWorkBegin(now);
-            if (begin == null)
-            {
-                return;
-            }
-
-            var mustGo = begin.Value + Contract.Current.MaxWorkTimePerDay;
-            var warn = new TimeInterval(mustGo - warnBefore, mustGo + warnAfter);
-
-            if (warn.Contains(now))
-            {
-                ShowWorkTimeAlert();
-            }
-        }
-
-        public void ShowWorkTimeAlert()
-        {
-            var now = DateTime.Now;
-            var begin = hagen.GetWorkBegin(now);
-            string text;
-            if (begin == null)
-            {
-                begin = DateTime.Now;
-            }
-
-            {
-                var mustGo = begin.Value + Contract.Current.MaxWorkTimePerDay;
-                var go = begin.Value + (Contract.Current.RegularWorkTimePerDay + Contract.Current.PauseTimePerDay);
-
-                text = String.Format(
-    @"Go: {5:HH:mm:ss}
-Latest go: {2:HH:mm:ss}
-Time left: {4:hh\:mm}
-
-Current: {3:HH:mm:ss}
-Come: {1:HH:mm:ss}
-Hours: {0:G3}",
-                    (now - begin.Value).TotalHours,
-                    begin.Value,
-                    mustGo,
-                    now,
-                    mustGo - now,
-                    go);
-            }
-
-            notifyIcon.ShowBalloonTip(10000, "Work Time Alert", text, ToolTipIcon.Info);
         }
 
         private void Main_FormClosing(object sender, FormClosingEventArgs e)

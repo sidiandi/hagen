@@ -20,17 +20,20 @@
     <Compile Include="FileGroupDescriptor.cs" />
     <Compile Include="globalKeyboardHook.cs" />
     <Compile Include="Hagen.cs" />
+    <Compile Include="ILogDatabase.cs" />
     <Compile Include="InputAggregator.cs" />
     <Compile Include="InputEx.cs" />
     <Compile Include="HumanInterfaceDeviceMonitor.cs" />
     <Compile Include="InternetShortcut.cs" />
     <Compile Include="IObservable.cs" />
     <Compile Include="LastExecutedDbStore.cs" />
+    <Compile Include="LogDatabase.cs" />
     <Compile Include="mshtmlEx.cs" />
     <Compile Include="NativeMethods.cs" />
     <Compile Include="ObservableTimeInterval.cs" />
     <Compile Include="OutlookDataObject.cs" />
     <Compile Include="ActionSource\Plugins.cs" />
+    <Compile Include="Place.cs" />
     <Compile Include="ProgramUseAggregator.cs" />
     <Compile Include="Properties\AssemblyInfo.cs">
       <SubType>Code</SubType>
@@ -49,11 +52,12 @@
     <Compile Include="RxExtensions.cs" />
     <Compile Include="StringEx.cs" />
     <Compile Include="TimeIntervalExtensions.cs" />
-    <Compile Include="UserInterfaceState.cs" />
+    <Compile Include="Context.cs" />
     <Compile Include="WindowInformation.cs" />
     <Compile Include="Windows.cs" />
     <Compile Include="WinEventHook.cs" />
     <Compile Include="WorkInterval.cs" />
+    <Compile Include="WorkTime.cs" />
     <EmbeddedResource Include="Properties\Resources.resx">
       <Generator>ResXFileCodeGenerator</Generator>
       <LastGenOutput>Resources.Designer.cs</LastGenOutput>

@@ -208,7 +208,7 @@ namespace hagen
                             {
                                 results = results.Concat(_)
                                     .OrderByDescending(x => x.Priority) // (x => x.Action.LastExecuted)
-                                    // .ThenByDescending
+                                    .ThenByDescending(x => x.Action.LastExecuted)
                                     .ToList();
 
                                 var si = Math.Max(itemView.SelectedIndex, 0);

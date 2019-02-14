@@ -8,9 +8,17 @@ namespace hagen
     {
         private Regex[] terms;
 
+        public MultiWordMatch(IQuery query)
+        {
+            terms = Tokenizer.ToArray(query.Text).Select(Extensions.SafeRegex)
+                .Concat(query.Tags.Select(Extensions.EscapedRegex))
+                .ToArray();
+        }
+
         public MultiWordMatch(string query)
         {
-            terms = Tokenizer.ToArray(query).Select(Extensions.SafeRegex).ToArray();
+            terms = Tokenizer.ToArray(query)
+                .Select(Extensions.SafeRegex).ToArray();
         }
 
         public bool IsMatch(string text)

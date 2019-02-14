@@ -1,5 +1,5 @@
 ﻿using hagen.plugin.office;
-using Microsoft.Office.Interop.Outlook;
+using NetOffice.OutlookApi;
 using Sidi.CommandLine;
 using Sidi.IO;
 using System;

@@ -11,6 +11,7 @@ namespace hagen
 {
     public enum Priority
     {
+        None,
         Lowest,
         Low,
         Normal,

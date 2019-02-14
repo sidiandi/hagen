@@ -90,7 +90,8 @@ namespace hagen.plugin.Tests
 
         [Test]
         public void MatchLength()
-        {
+        {         
+            Assert.AreEqual(-1, CommandLineParserActionSource.MatchLength("#AutoText Today Today \r\n  insert date", "culture.CompareInfo.IndexOf(paragraph,"));
             Assert.AreEqual(16, CommandLineParserActionSource.MatchLength("SampleActionsDelete", "sadel"));
             Assert.AreEqual(-1, CommandLineParserActionSource.MatchLength("Remove", "rove"));
             Assert.AreEqual(-1, CommandLineParserActionSource.MatchLength("HelloWorld", "w"));

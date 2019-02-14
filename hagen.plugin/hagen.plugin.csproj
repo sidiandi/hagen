@@ -48,6 +48,7 @@
     <Compile Include="Query.cs" />
     <Compile Include="ShellAction.cs" />
     <Compile Include="SimpleAction.cs" />
+    <Compile Include="StringExtensions.cs" />
   </ItemGroup>
   <ItemGroup>
     <None Include="App.config" />

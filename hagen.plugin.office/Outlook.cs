@@ -116,6 +116,7 @@ namespace hagen.plugin.office
         public void DismissReminders()
         {
             appointmentReminder.Dismiss();
+            worktimeAlert.Dismiss();
         }
 
         public void Dispose()

@@ -26,10 +26,16 @@ namespace hagen
         TimeSpan warnBefore = TimeSpan.FromHours(1);
         TimeSpan warnAfter = TimeSpan.FromMinutes(30);
         private readonly IContext context;
+        DateTime dismissUntil = DateTime.MinValue;
 
         void CheckWorkTime()
         {
             var now = DateTime.Now;
+            if (now < dismissUntil)
+            {
+                return;
+            }
+
             var begin = workTime.GetWorkBegin(now);
             if (begin == null)
             {
@@ -81,6 +87,11 @@ Hours: {0:G3}",
         public void Dispose()
         {
             checkTimer.Dispose();
+        }
+
+        internal void Dismiss()
+        {
+            dismissUntil = DateTime.Now.Date.AddDays(1);
         }
     }
 }

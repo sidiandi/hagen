@@ -117,7 +117,7 @@ namespace hagen
             return new SimpleAction(
                 context.LastExecutedStore,
                 a.Name,
-                String.Format("{0}({1}) - {2}", DisplayText(a), arg1String.OneLine(128), a.Usage),
+                String.Format("{0} argument: {1} ({2})", DisplayText(a), arg1String.OneLine(128), a.Usage),
                 () =>
                 {
                     a.MethodInfo.Invoke(a.Source.Instance, new object[] { arg1 });
@@ -129,7 +129,8 @@ namespace hagen
 
         static string DisplayText(Sidi.CommandLine.Action a)
         {
-            return a.Source.Instance.GetType().Name + "." + a.Name;
+            var className = a.Source.Instance.GetType().Name;
+            return $"{a.Name} < {className}";
         }
 
         static bool TakesSingleString(MethodInfo m)
@@ -150,7 +151,7 @@ namespace hagen
             return new SimpleAction(
                 context.LastExecutedStore,
                 a.Name,
-                String.Format("{0}({1}) - ({2})", DisplayText(a), args, a.Usage),
+                String.Format("{0} ({2})", DisplayText(a), args, a.Usage),
                 () =>
                 {
                     if (TakesSingleString(a.MethodInfo))
@@ -228,7 +229,7 @@ namespace hagen
                 }
                 else
                 {
-                    for (; i < input.Length && char.IsLower(input[i]); ++i)
+                    for (; i < input.Length && !char.IsUpper(input[i]); ++i)
                     {
                     }
                     return MatchLength(input, i, pattern, p);
@@ -239,39 +240,46 @@ namespace hagen
         static string GetMatchText(Sidi.CommandLine.Action a)
         {
             var sourceName = a.Source.Instance.GetType().Name;
-            return sourceName + a.Name;
+            return $"#{sourceName} {a.Name} {a.UsageText}";
+        }
+
+        static bool MatchesTags(IQuery query, string input)
+        {
+            return query.Tags.Any() && query.Tags.All(t => input.ContainsIgnoreCase(t));
         }
 
         protected override IEnumerable<IResult> GetResults(IQuery query)
         {
             var args = Tokenizer.ToList(query.Text);
-            if (args.Count < 1)
-            {
-                return Enumerable.Empty<IResult>();
-            }
-            var pattern = args.PopHead();
-            var argsText = query.Text.Substring(pattern.Length);
+            var commandName = args.Count > 0 ? args.PopHead() : String.Empty;
+            var argsText = query.Text.Substring(commandName.Length);
 
-            Func<Sidi.CommandLine.Action, bool> isMatch = a =>
+            Func<Sidi.CommandLine.Action, Priority> isMatch = a =>
             {
-                return
-                    (pattern.Length >= 2) &&
-                    (
-                        MatchLength(a.Name, pattern) >= 0 ||
-                        MatchLength(GetMatchText(a), pattern) >= 0
-                    );
+                var matchCommand = MatchLength(a.Name, commandName) > 0;
+                var matchTags = MatchesTags(query, $"#{a.Source.Instance.GetType().Name} #command");
+
+                if (!matchCommand && !matchTags)
+                {
+                    return Priority.None;
+                }
+
+                if (!IsVisible(context, a))
+                {
+                    return Priority.None;
+                }
+
+                return Priority.Normal - 1 + (matchCommand ? 1 : 0) + (matchTags ? 1 : 0);
             };
 
-            if (
-                object.Equals(pattern, "?") ||
-                object.Equals(pattern, "help"))
+            var originalIsMatch = isMatch;
+
+            isMatch = a =>
             {
-                var re = args.Count >= 1 ? new Regex(args[0], RegexOptions.IgnoreCase) : new Regex(".*");
-                isMatch = a =>
-                {
-                    return re.IsMatch(GetMatchText(a));
-                };
-            }
+                var p = originalIsMatch(a);
+                log.Info($"{a}: {p}");
+                return p;
+            };
 
             int selectedPathCount = query.Context.SelectedPathList.Count;
             var parameterString = args.Skip(1).Join(" ");
@@ -286,24 +294,32 @@ namespace hagen
                         (selectedPathCount >= 1 && TakesSingleParameter<PathList>(a))
                     ) && 
                     (
-                        MatchLength(a.Name, pattern) >= 0 ||
-                        MatchLength(GetMatchText(a), pattern) >= 0
+                        MatchLength(a.Name, commandName) >= 0 ||
+                        MatchLength(GetMatchText(a), commandName) >= 0
                     );
             };
 
             return Actions.Select(pa =>
             {
+                /*
                 if (isFileAction(pa))
                 {
                     return ToIActionPathList(context, pa, query.Context.SelectedPathList).ToResult(Priority.High);
                 }
-                else if (isMatch(pa))
+                else
+                */
                 {
-                    return ToIAction(context, pa, argsText).ToResult(Priority.Normal);
+                    var priority = isMatch(pa);
+                    if (priority > Priority.None)
+                    {
+                        return ToIAction(context, pa, argsText).ToResult(priority);
+                    }
+                    else
+                    {
+                        return null;
+                    }
                 }
-                return null;
-            })
-            .Where(_ => _ != null);
+            }).Where(_ => _ != null);
         }
 
         static string GetNiceText(PathList p)

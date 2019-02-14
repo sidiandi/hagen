@@ -50,16 +50,17 @@ namespace activityReport
 
         static void Main(string[] args)
         {
-            Parser.Run(new Program(new Hagen()), args);
+            var hagen = new Hagen();
+            var logDatabase = hagen.Context.GetService<ILogDatabase>();
+            Parser.Run(new Program(logDatabase), args);
         }
 
-        Hagen hagen;
+        readonly ILogDatabase logDatabase;
 
-        public Program(Hagen hagen)
+        public Program(ILogDatabase logDatabase)
         {
-            this.hagen = hagen;
-
-            input = hagen.OpenInputs();
+            this.logDatabase = logDatabase;
+            input = logDatabase.OpenInputs();
             connection = (System.Data.SQLite.SQLiteConnection)input.Connection;
             dataContext = new DataContext(input.Connection);
         }
@@ -132,10 +133,10 @@ namespace activityReport
         [Usage("Shows a day-by-day worktime report")]
         public void ShowReport()
         {
-            var p = hagen.DataDirectory.CatDir("work-time-report.txt");
+            var p = new LPath("work-time-report.txt");
             using (var output = new StreamWriter(p))
             {
-                new activityReport.Program(this.hagen).WorktimeReport(output, TimeIntervalExtensions.LastDays(180));
+                new activityReport.Program(this.logDatabase).WorktimeReport(output, TimeIntervalExtensions.LastDays(180));
             }
             Process.Start("notepad.exe", p.ToString().Quote());
         }
@@ -339,7 +340,7 @@ Work > {0} hours in {1:yyyy-MM}
         [Usage("Program use")]
         public void ProgramUse()
         {
-            using (var pu = hagen.OpenProgramUses())
+            using (var pu = logDatabase.OpenProgramUses())
             {
                 var t = TimeIntervalExtensions.LastDays(60);
                 var programs = pu.Query(p => p.Begin > t.Begin && p.Begin < t.End)
@@ -358,7 +359,7 @@ Work > {0} hours in {1:yyyy-MM}
         [Usage("Program use")]
         public void Captions()
         {
-            using (var pu = hagen.OpenProgramUses())
+            using (var pu = logDatabase.OpenProgramUses())
             {
                 var t = TimeIntervalExtensions.LastDays(60);
                 var programs = pu.Query(p => p.Begin > t.Begin && p.Begin < t.End)

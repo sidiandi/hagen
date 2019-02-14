@@ -44,7 +44,7 @@ namespace hagen
 
         protected override IEnumerable<IResult> GetResults(IQuery query)
         {
-            if (query.Text.Length < 2)
+            if (!query.Tags.Any() && query.Text.Length < 2)
             {
                 return Enumerable.Empty<IResult>();
             }
@@ -58,7 +58,7 @@ namespace hagen
             }
 
             var terms = Tokenizer.ToList(query.Text.OneLine(80));
-            var re = new MultiWordMatch(query.Text);
+            var re = new MultiWordMatch(query);
             return notes.Where(n => re.IsMatch(n.Name))
                 .Select(_ => new NoteAction(_, query.Context.LastExecutedStore))
                 .Select(_ => _.ToResult(GetPriority(_, terms)));

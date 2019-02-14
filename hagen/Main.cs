@@ -131,7 +131,7 @@ namespace hagen
         IEnumerable<ToolStripItem> GetTextReportMenuItems()
         {
             var type = typeof(activityReport.Program);
-            Func<object> instance = () => new activityReport.Program(this.hagen);
+            Func<object> instance = () => new activityReport.Program(LogDatabase);
 
 
             var reports = type.GetMethods()
@@ -254,7 +254,7 @@ namespace hagen
 
         private void statisticsToolStripMenuItem_Click(object sender, EventArgs e)
         {
-            new activityReport.Program(hagen).StatisticsWindow().Show();
+            new activityReport.Program(LogDatabase).StatisticsWindow().Show();
         }
 
         private void sqliteConsoleToolStripMenuItem_Click(object sender, EventArgs e)
@@ -273,8 +273,10 @@ namespace hagen
 
         private void reportMailToolStripMenuItem_Click(object sender, EventArgs e)
         {
-            new activityReport.Program(hagen).ShowReport();
+            new activityReport.Program(LogDatabase).ShowReport();
         }
+
+        ILogDatabase LogDatabase => this.hagen.Context.GetService<ILogDatabase>();
 
         private void notifyIcon_MouseDoubleClick(object sender, MouseEventArgs e)
         {

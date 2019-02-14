@@ -59,7 +59,11 @@ namespace hagen
                     {
                         continue;
                     }
-                    yield return new Note { Content = text, Name = Titles(items, i).Join(" < ") };
+
+                    var titles = Titles(items, i).Reverse().ToList();
+                    var tags = new[] { "snippet" }.Concat(titles.TakeAllBut(1)).Select(_ => $"#{_}");
+                    var name = titles.Last();
+                    yield return new Note { Content = text, Name = tags.Concat(new[] { name }).Join(" ") };
                 }
             }
         }

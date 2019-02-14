@@ -62,6 +62,10 @@
       <Project>{e383806e-cf6c-4f40-b838-33574ac4a18c}</Project>
       <Name>hagen.plugin.file</Name>
     </ProjectReference>
+    <ProjectReference Include="..\hagen.plugin\hagen.plugin.csproj">
+      <Project>{9bf01205-1bd3-4121-909d-16cec6d47143}</Project>
+      <Name>hagen.plugin</Name>
+    </ProjectReference>
   </ItemGroup>
   <Choose>
     <When Condition="'$(VisualStudioVersion)' == '10.0' And '$(IsCodedUITest)' == 'True'">

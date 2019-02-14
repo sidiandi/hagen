@@ -130,7 +130,7 @@ namespace hagen
         static string DisplayText(Sidi.CommandLine.Action a)
         {
             var className = a.Source.Instance.GetType().Name;
-            return $"{a.Name} < {className}";
+            return $"#command #{className} {a.Name}";
         }
 
         static bool TakesSingleString(MethodInfo m)

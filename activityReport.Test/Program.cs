@@ -50,22 +50,27 @@ namespace activityReport.Test
         [Test, Explicit("interactive")]
         public void Stats()
         {
-            System.Windows.Forms.Application.Run(new activityReport.Program(new Hagen()).StatisticsWindow());
+            var hagen = new Hagen();
+            var logDatabase = hagen.Context.GetService<ILogDatabase>();
+            System.Windows.Forms.Application.Run(new activityReport.Program(logDatabase).StatisticsWindow());
         }
 
         [Test]
         public void Report()
         {
-            new Program(new Hagen()).Report(Console.Out, TimeIntervalExtensions.LastDays(30));
+            var hagen = new Hagen();
+            var logDatabase = hagen.Context.GetService<ILogDatabase>();
+            new Program(logDatabase).Report(Console.Out, TimeIntervalExtensions.LastDays(30));
         }
 
         [Test, Explicit("interactive")]
         public void Summarize()
         {
             var hagen = new Hagen();
-            var p = new activityReport.Program(hagen);
+            var logDatabase = hagen.Context.GetService<ILogDatabase>();
+            var p = new activityReport.Program(logDatabase);
 
-            using (var inputs = hagen.OpenInputs())
+            using (var inputs = logDatabase.OpenInputs())
             {
                 var raw = inputs.Range(new TimeInterval(new DateTime(2015, 1, 8), new DateTime(2015, 1, 9)));
                 raw.ListFormat()
@@ -80,8 +85,9 @@ namespace activityReport.Test
         [Test, Explicit("interactive")]
         public void OfficeReport()
         {
-            var r = new Program(new Hagen());
-            r.input = new Collection<Input>(@"D:\temp\2010-01-30_worktime\hagen\hagen.sqlite");
+            var hagen = new Hagen();
+            var logDatabase = hagen.Context.GetService<ILogDatabase>();
+            var r = new Program(logDatabase);
             System.Windows.Forms.Application.Run(r.StatisticsWindow());
         }
     }

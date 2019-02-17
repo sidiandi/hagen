@@ -26,7 +26,7 @@ namespace hagen.plugin.office
                 // same-day
                 return $"{a.Start:yyyy-MM-dd}, {a.Start:HH:mm} - {a.End:HH:mm}";
             }
-            else;
+            else
             {
                 return $"{a.Start:yyyy-MM-dd} {a.Start:HH:mm} - {a.End:yyyy-MM-dd} {a.End:HH:mm}";
             }

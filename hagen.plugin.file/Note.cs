@@ -6,6 +6,7 @@ namespace hagen
     {
         public string Name;
         public string Content;
+        public TextLocation Source;
 
         public override string ToString()
         {

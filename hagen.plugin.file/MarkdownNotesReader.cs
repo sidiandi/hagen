@@ -72,8 +72,11 @@ namespace hagen
         {
             try
             {
+                var source = new TextLocation(markdownFile, 1);
                 var items = Content.Parse(markdownFile.ReadAllText()).ToArray();
-                var notes = ExtractNotes(items).ToList();
+                var notes = ExtractNotes(items)
+                    .Select(note => { note.Source = source; return note; })
+                    .ToList();
                 log.InfoFormat("Read {1} notes from {0}", markdownFile, notes.Count);
                 return notes;
             }

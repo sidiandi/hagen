@@ -24,7 +24,7 @@ using System.Windows.Forms;
 
 namespace hagen.Plugin.Db
 {   
-    class ActionWrapper : IAction, IStorable
+    class ActionWrapper : IAction, IStorable, ISecondaryActions
     {
         public ActionWrapper(Action action, Sidi.Persistence.Collection<Action> data)
         {
@@ -59,6 +59,13 @@ namespace hagen.Plugin.Db
         public void Remove()
         {
             Data.Remove(this.Action);
+        }
+
+        public IEnumerable<IAction> GetActions()
+        {
+            return Action is ISecondaryActions
+                ? ((ISecondaryActions)Action).GetActions()
+                : Enumerable.Empty<IAction>();
         }
 
         public string Name

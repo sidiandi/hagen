@@ -273,6 +273,7 @@ namespace hagen
         public void Start()
         {
             var q = hagen.Query.Parse(Context, textBoxQuery.Text);
+            textBoxQuery.Text = q.ParsedString;
             textBoxQuery.Select(q.TextBegin, q.TextEnd);
             UpdateResult();
         }

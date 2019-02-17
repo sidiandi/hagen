@@ -272,15 +272,6 @@ namespace hagen
                 return Priority.Normal - 1 + (matchCommand ? 1 : 0) + (matchTags ? 1 : 0);
             };
 
-            var originalIsMatch = isMatch;
-
-            isMatch = a =>
-            {
-                var p = originalIsMatch(a);
-                log.Info($"{a}: {p}");
-                return p;
-            };
-
             int selectedPathCount = query.Context.SelectedPathList.Count;
             var parameterString = args.Skip(1).Join(" ");
 

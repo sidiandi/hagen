@@ -39,11 +39,22 @@ namespace hagen
             this.lastExecutedStore = lastExecutedStore;
         }
 
+        public SimpleAction(string id, string name, System.Action action)
+        {
+            this.id = id;
+            this.name = name;
+            this.action = action;
+            this.lastExecutedStore = null;
+        }
+
         public void Execute()
         {
             try
             {
-                lastExecutedStore.Set(id);
+                if (lastExecutedStore != null)
+                {
+                    lastExecutedStore.Set(id);
+                }
                 action();
 
             }
@@ -75,7 +86,9 @@ namespace hagen
         {
             get
             {
-                return lastExecutedStore.Get(id);
+                return lastExecutedStore == null
+                    ? DateTime.MinValue
+                    : lastExecutedStore.Get(id);
             }
         }
     }

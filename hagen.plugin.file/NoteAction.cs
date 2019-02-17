@@ -12,7 +12,7 @@ using System.IO;
 
 namespace hagen
 {
-    class NoteAction : IAction
+    class NoteAction : IAction, ISecondaryActions
     {
         private static readonly log4net.ILog log = log4net.LogManager.GetLogger(System.Reflection.MethodBase.GetCurrentMethod().DeclaringType);
 
@@ -71,6 +71,22 @@ namespace hagen
             {
                 return EnumerableExtensions.UntilNull(() => r.ReadLine()).Join(" - ");
             }
+        }
+
+        void Edit()
+        {
+            if (note.Source != null)
+            {
+                TextEditor.Open(note.Source);
+            }
+        }
+
+        public IEnumerable<IAction> GetActions()
+        {
+            return new IAction[]
+            {
+                new SimpleAction(nameof(Edit), nameof(Edit), Edit)
+            };
         }
     }
 }

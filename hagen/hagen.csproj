@@ -25,6 +25,7 @@
     <Compile Include="Main.Designer.cs">
       <DependentUpon>Main.cs</DependentUpon>
     </Compile>
+    <Compile Include="MarkdownTextRenderer.cs" />
     <Compile Include="Options.cs">
       <SubType>Form</SubType>
     </Compile>

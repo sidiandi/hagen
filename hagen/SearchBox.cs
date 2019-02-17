@@ -34,6 +34,7 @@ using BrightIdeasSoftware;
 using Sidi.Extensions;
 using System.Reactive.Linq;
 using System.Reactive.Subjects;
+using System.Text.RegularExpressions;
 
 namespace hagen
 {
@@ -97,6 +98,9 @@ namespace hagen
             System.Threading.Thread.CurrentThread.CurrentCulture = CultureInfo.InvariantCulture;
             System.Threading.Thread.CurrentThread.CurrentUICulture = CultureInfo.InvariantCulture;
 
+            var font = this.Font;
+            var brush = new SolidBrush(Color.Black);
+
             itemView = new ObjectListView()
             {
                 HeaderStyle = ColumnHeaderStyle.None,
@@ -118,7 +122,6 @@ namespace hagen
                 AlternateRowBackColor = Color.FromArgb(0xff, 0xf0, 0xf0, 0xf0),
                 UseHotItem = true,
                 FullRowSelect = true,
-                // Font = new Font(FontFamily.GenericSansSerif, 12.0f),
             };
 
             itemView.Columns.Add(new OLVColumn()
@@ -141,6 +144,8 @@ namespace hagen
                 Width = size,
             });
 
+            var markdownTextRenderer = new MarkdownTextRenderer(new Font(FontFamily.GenericSansSerif, 11.0f));
+
             itemView.Columns.Add(new OLVColumn()
             {
                 Name = "Name",
@@ -151,6 +156,16 @@ namespace hagen
                 },
                 WordWrap = true,
                 FillsFreeSpace = true,
+                /*
+                RendererDelegate = delegate(EventArgs e, Graphics g, Rectangle r, Object rowObject)
+                {
+                    var a = ((IResult)rowObject).Action;
+                    var text = Highlight(a.Name, this.Query);
+                    g.FillRectangle(Brushes.White, r);
+                    markdownTextRenderer.DrawText(g, text, r);
+                    return true;
+                }
+                */
             });
 
             // todo: react on updated icons
@@ -216,6 +231,20 @@ namespace hagen
                                 itemView.SelectedIndex = 0;
                             });
                     });
+        }
+
+        static string Highlight(string text, IQuery query)
+        {
+            return Highlight(text, query.GetTerms().Concat(query.Tags));
+        }
+
+        static string Highlight(string text, IEnumerable<string> terms)
+        {
+            foreach (var i in terms)
+            {
+                text = Regex.Replace(text, i, $"*{i}*", RegexOptions.IgnoreCase);
+            }
+            return text;
         }
 
         IDisposable currentItemsReceiver;

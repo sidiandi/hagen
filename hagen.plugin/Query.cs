@@ -73,6 +73,15 @@ namespace hagen
             {
                 i = 0;
             }
+            else
+            {
+                if (i == queryString.Length)
+                {
+                    queryString = queryString + " ";
+                    ++i;
+                }
+            }
+
             var text = queryString.Substring(i).OneLine(80);
 
             return new Query(context)

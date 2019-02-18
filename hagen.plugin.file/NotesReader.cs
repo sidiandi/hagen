@@ -21,9 +21,12 @@ namespace hagen
         {
             try
             {
+                var source = new TextLocation(notesFile, 1);
                 using (var r = notesFile.ReadText())
                 {
-                    var notes = EnumerableExtensions.UntilNull(() => ReadNote(r)).ToList();
+                    var notes = EnumerableExtensions.UntilNull(() => ReadNote(r))
+                        .Select(_ => { _.Source = source; return _; })
+                        .ToList();
                     log.InfoFormat("Read {1} notes from {0}", notesFile, notes.Count);
                     return notes;
                 }

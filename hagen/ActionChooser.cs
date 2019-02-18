@@ -46,11 +46,12 @@ namespace hagen
                 f.Visible = false;
                 sb.ItemsActivated += (s, e) =>
                 {
-                    foreach (var i in sb.SelectedActions)
+                    var selectedActions = sb.SelectedActions.ToList();
+                    f.Close();
+                    foreach (var i in selectedActions)
                     {
                         i.Execute();
                     }
-                    f.Close();
                 };
 
                 f.Shown += (s, e) => { sb.QueryText = String.Empty; };

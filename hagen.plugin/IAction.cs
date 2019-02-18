@@ -21,6 +21,7 @@ using System.Linq;
 using System.Text;
 using System.ComponentModel;
 using Sidi.Util;
+using Sidi.Extensions;
 
 namespace hagen
 {
@@ -41,6 +42,11 @@ namespace hagen
         DateTime LastExecuted { get; }
     }
 
+    public interface ISecondaryActions
+    {
+        IEnumerable<IAction> GetActions();
+    }
+
     public interface IStorable
     {
         void Store();
@@ -55,16 +61,30 @@ namespace hagen
         }
 
         /// higher priority if the action name starts with one of the search terms
-        public static Priority GetPriority(this IAction a, IEnumerable<string> terms)
+        public static Priority GetPriority(this IAction a, IQuery query)
         {
-            var priority = terms.Any(t => a.Name.StartsWith(t, StringComparison.InvariantCultureIgnoreCase)) ? Priority.High : Priority.Normal;
+            var terms = query.GetTerms();
+            var priority = Priority.Normal;
+            if (terms.Any(t => a.Name.StartsWith(t, StringComparison.InvariantCultureIgnoreCase)))
+            {
+                ++priority;
+            }
+            if (query.Tags.Any(t => a.Name.ContainsIgnoreCase(t)))
+            {
+                ++priority;
+            }
             return priority;
+        }
+
+        public static IEnumerable<string> GetTerms(this IQuery query)
+        {
+            return Tokenizer.ToList(query.Text.OneLine(80));
         }
 
         public static IResult ToResult(this IAction action, IQuery query)
         {
             var terms = Tokenizer.ToList(query.Text);
-            return action.ToResult(GetPriority(action, terms));
+            return action.ToResult(GetPriority(action, query));
         }
 
         class ActionWrapper : IResult

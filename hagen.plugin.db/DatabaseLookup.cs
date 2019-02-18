@@ -28,89 +28,28 @@ using Sidi.Extensions;
 
 namespace hagen.Plugin.Db
 {
-    class DatabaseLookup : IActionSource3
+    class DatabaseLookup : EnumerableActionSource
     {
         private static readonly log4net.ILog log = log4net.LogManager.GetLogger(System.Reflection.MethodBase.GetCurrentMethod().DeclaringType);
+
+        readonly Sidi.Persistence.Collection<Action> actions;
+        public bool IncludeInSearch;
 
         public DatabaseLookup(Sidi.Persistence.Collection<Action> actions)
         {
             this.actions = actions;
         }
 
-        Sidi.Persistence.Collection<Action> actions;
-
         IEnumerable<IAction> ToIActions(Action action)
         {
             yield return new ActionWrapper(action, actions);
         }
 
-        IEnumerable<IResult> GetResults(IQuery query)
+        protected override IEnumerable<IResult> GetResults(IQuery query)
         {
-            var terms = Tokenizer.ToList(query.Text.OneLine(80));
+            var terms = query.GetTerms();
+            var tags = query.Tags;
 
-            var seen = new HashSet<string>();
-
-            if (query.Tags.Any())
-            {
-                foreach (var i in GetResults(query.Tags, terms))
-                {
-                    i.Priority = Priority.High;
-                    seen.Add(i.Action.Name);
-                    yield return i;
-                }
-            }
-
-            foreach (var i in GetResults(terms))
-            {
-                if (!seen.Contains(i.Action.Name))
-                {
-                    yield return i;
-                }
-            }
-        }
-
-        /// <summary>
-        /// Selects results that match the terms
-        /// </summary>
-        /// <param name="terms"></param>
-        /// <returns>List of results. Empty list if terms contain an SQL problem</returns>
-        IEnumerable<IResult> GetResults(IEnumerable<string> terms)
-        {
-            if (!terms.Any(_ => _.Length >= 1))
-            {
-                return Enumerable.Empty<IResult>();
-            }
-
-            var cmd = actions.Connection.CreateCommand();
-
-            var termsQuery = terms.Select((t, i) =>
-            {
-                var paramName = String.Format("@term{0}", i);
-                var parameter = cmd.Parameters.Add(paramName, System.Data.DbType.String);
-                parameter.Value = String.Format("%{0}%", t);
-                return String.Format("Name like {0}", paramName);
-            }).Join(" and ");
-
-            cmd.CommandText = String.Format("select oid from {1} where {0} order by LastUseTime desc limit 50", termsQuery, actions.Table);
-
-            IList<Action> r;
-            try
-            {
-                r = actions.Query(cmd);
-            }
-            catch (System.Data.SQLite.SQLiteException e)
-            {
-                log.Info(e);
-                return Enumerable.Empty<IResult>();
-            }
-            var results = r.SelectMany(action => ToIActions(action))
-                .Select(a => a.ToResult(a.GetPriority(terms)))
-                .ToList();
-            return results;
-        }
-
-        IEnumerable<IResult> GetResults(IEnumerable<string> tags, IEnumerable<string> terms)
-        {
             if (!tags.Any() && !terms.Any(_ => _.Length >= 1))
             {
                 return Enumerable.Empty<IResult>();
@@ -118,23 +57,23 @@ namespace hagen.Plugin.Db
 
             var cmd = actions.Connection.CreateCommand();
 
-            var termsQuery = terms.Select((t, i) =>
+            var termsQuery = And(terms.Select((t, i) =>
             {
                 var paramName = String.Format("@term{0}", i);
                 var parameter = cmd.Parameters.Add(paramName, System.Data.DbType.String);
                 parameter.Value = String.Format("%{0}%", t);
                 return String.Format("Name like {0}", paramName);
-            }).Join(" and ");
+            }));
 
-            var tagsQuery = terms.Select((t, i) =>
+            var tagsQuery = And(tags.Select((t, i) =>
             {
                 var paramName = String.Format("@tag{0}", i);
                 var parameter = cmd.Parameters.Add(paramName, System.Data.DbType.String);
                 parameter.Value = String.Format("%{0}%", t);
                 return String.Format("Name like {0}", paramName);
-            }).Join(" and ");
+            }));
 
-            cmd.CommandText = String.Format($"select oid from {actions.Table} where ({tagsQuery}) and ({termsQuery}) order by LastUseTime desc limit 50");
+            cmd.CommandText = String.Format($"select oid from {actions.Table} where {And(tagsQuery, termsQuery)} order by LastUseTime desc limit 50");
             log.Info(cmd.CommandText);
 
             IList<Action> r;
@@ -148,22 +87,20 @@ namespace hagen.Plugin.Db
                 return Enumerable.Empty<IResult>();
             }
             var results = r.SelectMany(action => ToIActions(action))
-                .Select(a => a.ToResult(a.GetPriority(terms)))
+                .Select(a => a.ToResult(query))
                 .ToList();
             return results;
         }
 
-        public bool IncludeInSearch;
-
-        public IObservable<IResult> GetActions(IQuery query)
+        static string And(params string[] booleanClause)
         {
-            if (!IncludeInSearch)
-            {
-                return Observable.Empty<IResult>();
-            }
-
-            var results = GetResults(query);
-            return results.ToObservable(ThreadPoolScheduler.Instance);
+            return And((IEnumerable<string>)booleanClause);
         }
+
+        static string And(IEnumerable<string> booleanClause)
+        {
+            return booleanClause.Where(_ => !String.IsNullOrEmpty(_)).Select(_ => $"({_})").Join(" and ");
+        }
+
     }
 }

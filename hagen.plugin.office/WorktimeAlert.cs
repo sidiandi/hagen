@@ -21,7 +21,6 @@ namespace hagen
         IContract Contract => workTime.Contract;
         IWorkTime workTime;
         private readonly System.Threading.Timer checkTimer;
-        System.Windows.Forms.Timer alertTimer = null;
         TimeSpan checkInterval = TimeSpan.FromMinutes(5);
         TimeSpan warnBefore = TimeSpan.FromHours(1);
         TimeSpan warnAfter = TimeSpan.FromMinutes(30);

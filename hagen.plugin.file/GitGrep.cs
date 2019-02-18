@@ -120,13 +120,11 @@ namespace hagen
             var p = gitGrepOutputLine.Split(new[] { ':' }, 3);
             if (p.Length < 3) goto fail;
 
-            return new TextLocation
-            {
-                FileName = Path.Combine(repositoryDirectory, p[0]),
-                Column = 0,
-                Line = Int32.Parse(p[1]),
-                Text = p[2]
-            }.Some();
+            return new TextLocation(
+                Path.Combine(repositoryDirectory, p[0]),
+                Int32.Parse(p[1]),
+                0,
+                p[2]).Some();
 
             fail:
                 return Option.None<TextLocation>();

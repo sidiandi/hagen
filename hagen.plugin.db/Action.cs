@@ -35,7 +35,7 @@ using System.Windows.Forms;
 
 namespace hagen.Plugin.Db
 {
-    class Action : INotifyPropertyChanged, IAction
+    class Action : INotifyPropertyChanged, IAction, ISecondaryActions
     {
         [RowId]
         public long Id;
@@ -191,24 +191,43 @@ namespace hagen.Plugin.Db
             try
             {
                 UsedNow();
-                if (System.Windows.Forms.Control.ModifierKeys == Keys.Shift)
-                {
-                    var sp = commandObject as StartProcess;
-                    if (sp != null)
-                    {
-                        Clipboard.SetText(sp.FileName);
-                        SendKeys.Send("+{INS}");
-                    }
-                }
-                else
-                {
-                    commandObject.Execute();
-                }
+                commandObject.Execute();
             }
             catch (Exception e)
             {
                 MessageBox.Show(e.Message);
             }
+        }
+
+        public void Paste()
+        {
+            var sp = commandObject as StartProcess;
+            if (sp != null)
+            {
+                Clipboard.SetText(sp.FileName);
+                SendKeys.Send("+{INS}");
+            }
+        }
+
+        void LocateInExplorer()
+        {
+            var sp = commandObject as StartProcess;
+            var fsPath = sp.FileName;
+            if (File.Exists(fsPath))
+            {
+                fsPath = Path.GetDirectoryName(fsPath);
+            }
+            Explorer.OpenDirectory(fsPath);
+        }
+
+        public IEnumerable<IAction> GetActions()
+        {
+            return new IAction[]
+            {
+                new SimpleAction(nameof(Paste), nameof(Paste), Paste),
+                new SimpleAction(nameof(LocateInExplorer), "Locate in Explorer", LocateInExplorer)
+                
+            };
         }
 
         #region INotifyPropertyChanged Members

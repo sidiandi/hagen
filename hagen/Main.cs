@@ -214,6 +214,15 @@ namespace hagen
 
         void Activate(IAction a)
         {
+            if (System.Windows.Forms.Control.ModifierKeys == Keys.Shift)
+            {
+                if (a is ISecondaryActions)
+                {
+                    var secondary = (ISecondaryActions)a;
+                    a = this.hagen.Context.CreateChoice("secondary", () => (secondary.GetActions()));
+                }
+            }
+
             this.Hide();
             a.Execute();
         }

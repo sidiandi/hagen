@@ -73,6 +73,21 @@ namespace hagen.plugin.office.Tests
             Assert.AreEqual("24.10.2002 00:00", new DateTime(2002, 10, 24, 0, 0, 0).OutlookQueryFormat());
         }
 
+        [Test, Explicit("Requires outlook")]
+        public void GetOutlookAppointmentsActiveIn()
+        {
+            var app = OutlookExtensions.GetRunningApplication();
+            var calendar = app.GetCalendar();
+
+            var time = new TimeInterval(new DateTime(2019, 2, 20, 10, 0, 0), new DateTime(2019, 2, 20, 20, 15, 0));
+            var appointments = calendar.GetOutlookAppointmentsActiveIn(time);
+            foreach (var i in appointments)
+            {
+                Console.WriteLine($"{i.Start} {i.End} {i.RecurrenceState} {i.Subject}");
+            }
+            Assert.AreEqual(4, appointments.Count());
+        }
+
         [Test, Explicit("does not run on Jenkins")]
         public void AppointmentReminder()
         {

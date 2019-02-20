@@ -87,7 +87,7 @@ namespace hagen.plugin.office
         {
             // "October 24, 2002 12:00 AM" 
             // return t.ToString("MMMM dd, yyyy hh:mm tt", CultureInfo.InvariantCulture);
-            return t.ToString("dd.MM.yyyy HH:mm", CultureInfo.InvariantCulture);
+            return t.ToString("g");
         }
 
         public static IList<AppointmentItem> GetOutlookAppointments(this Application outlook, MAPIFolder calendarFolder, TimeInterval time)
@@ -102,12 +102,35 @@ namespace hagen.plugin.office
 
         public static IList<AppointmentItem> GetOutlookAppointmentsActiveIn(this MAPIFolder calendarFolder, TimeInterval time)
         {
-            calendarFolder.Items.Sort("[Start]", false);
-            calendarFolder.Items.IncludeRecurrences = true;
-            var q = String.Format($"[Start] <= {time.End.OutlookQueryFormat().Quote()} And [End] > {time.End.OutlookQueryFormat().Quote()}");
-            log.Info(q);
-            var appointments = calendarFolder.Items.Restrict(q);
-            return appointments.OfType<AppointmentItem>().ToList();
+            return calendarFolder.EnumerateOutlookAppointmentsActiveIn(time).ToList();
+        }
+
+        public static IEnumerable<AppointmentItem> EnumerateOutlookAppointmentsActiveIn(this MAPIFolder calendarFolder, TimeInterval time)
+        {
+            var items = calendarFolder.Items;
+            items.Sort("[Start]", Type.Missing);
+            items.IncludeRecurrences = true;
+            var q = String.Format($"[End] > {time.Begin.OutlookQueryFormat().Quote()}");
+            for (
+                var a = (AppointmentItem)items.Find(q);
+                a != null && a.Start < time.End;
+                a = (AppointmentItem) items.FindNext())
+            {
+                yield return a;
+            }
+        }
+
+        public static IEnumerable<T> ToEnumerable<T>(this _Items items)
+        {
+            while (true)
+            {
+                var a = items.FindNext();
+                if (a == null)
+                {
+                    break;
+                }
+                yield return (T)a;
+            }
         }
 
         public static IList<AppointmentItem> GetOutlookAppointmentsStartingIn(this Application outlook, MAPIFolder calendarFolder, TimeInterval time)

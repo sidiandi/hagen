@@ -112,6 +112,28 @@ namespace hagen.plugin.office
             }
         }
 
+        [OutlookInspectorIsInForeground]
+        [Usage("Unsubscribe from mailing list")]
+        public void Unsubscribe()
+        {
+            var app = OutlookExtensions.ProvideApplication();
+            if (app.TryGetSelectedMail(out var mail))
+            {
+                var reply = app.OpenReply(mail);
+                reply.Body = @"unsubscribe
+
+To whom it may concern: 
+
+I kindly ask you not not to send any further unsolicited mails to my email address.
+
+Please unsubscribe my email address from your distribution list.
+
+Best regards
+
+" + reply.Body;
+            }
+        }
+
         [Usage("Dismiss reminders for started appointments")]
         public void DismissReminders()
         {

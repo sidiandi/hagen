@@ -262,6 +262,14 @@ Andreas
             inspector.Activate();
         }
 
+        public static MailItem OpenReply(this Application outlook, MailItem mail)
+        {
+            var replyMail = mail.Reply();
+            var inspector = (Inspector)outlook.Inspectors.Add(replyMail);
+            inspector.Activate();
+            return replyMail;
+        }
+
         public static Recipient Add(this Recipients recipients, Recipient recipientToAdd)
         {
             var r = recipients.Add(recipientToAdd.Name);

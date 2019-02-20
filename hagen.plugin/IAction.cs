@@ -60,15 +60,19 @@ namespace hagen
             return action.ToResult(Priority.Normal);
         }
 
-        /// higher priority if the action name starts with one of the search terms
+        /// higher priority if tags are matched
         public static Priority GetPriority(this IAction a, IQuery query)
         {
             var terms = query.GetTerms();
             var priority = Priority.Normal;
+            
+            /*
             if (terms.Any(t => a.Name.StartsWith(t, StringComparison.InvariantCultureIgnoreCase)))
             {
                 ++priority;
             }
+            */
+
             if (query.Tags.Any(t => a.Name.ContainsIgnoreCase(t)))
             {
                 ++priority;

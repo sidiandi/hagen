@@ -15,7 +15,7 @@ namespace hagen.plugin.Tests
         public void ParseTest()
         {
             var q = Query.Parse(new ContextMock(), "#tag1 #tag2 hello world");
-            Assert.AreEqual(2, q.Tags.Count);
+            Assert.AreEqual(2, q.Tags.Count());
             Assert.IsTrue(q.Tags.Contains("#tag1"));
             Assert.IsTrue(q.Tags.Contains("#tag2"));
             Assert.AreEqual("hello world", q.Text);

@@ -17,7 +17,7 @@ namespace hagen
 
         private static readonly log4net.ILog log = log4net.LogManager.GetLogger(System.Reflection.MethodBase.GetCurrentMethod().DeclaringType);
 
-        public Query(IContext context)
+        Query(IContext context)
         {
             if (context == null)
             {
@@ -115,15 +115,7 @@ namespace hagen
 
         public string Text { get { return text; } set { text = value; } } 
 
-        public System.Collections.Generic.ICollection<string> Tags { get { return tags; } }
-
-        IReadOnlyCollection<string> IQuery.Tags
-        {
-            get
-            {
-                return tags;
-            }
-        }
+        public IEnumerable<string> Tags => tags;
 
         public IContext Context { get; private set; }
     }

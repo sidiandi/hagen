@@ -29,7 +29,7 @@ namespace hagen.plugin.Tests
             parser.ItemSources.Add(new Sidi.CommandLine.ItemSource(sampleActions));
             var c = new CommandLineParserActionSource(context, parser);
 
-            var results = c.GetActions(Query.Parse(context, "File")).ToEnumerable().ToList();
+            var results = c.GetActions(Query.Parse(context, @"File C:\temp\hello.txt")).ToEnumerable().ToList();
 
             Assert.AreEqual(1, results.Count);
             results[0].Action.Execute();
@@ -45,10 +45,7 @@ namespace hagen.plugin.Tests
             parser.ItemSources.Add(new Sidi.CommandLine.ItemSource(sampleActions));
             var c = new CommandLineParserActionSource(context, parser);
 
-            var q = new Query(context)
-            {
-                Text = "DoSomething"
-            };
+            var q = Query.Parse(context, "DoSomething");
 
             var results = c.GetActions(q).ToEnumerable().ToList();
 
@@ -56,10 +53,7 @@ namespace hagen.plugin.Tests
             results[0].Action.Execute();
             Assert.IsTrue(sampleActions.DoSomethingExecuted);
 
-            q = new Query(context)
-            {
-                Text = "Greet Hello"
-            };
+            q = Query.Parse(context, "Greet Hello");
 
             results = c.GetActions(q).ToEnumerable().ToList();
 
@@ -77,15 +71,15 @@ namespace hagen.plugin.Tests
             parser.ItemSources.Add(new Sidi.CommandLine.ItemSource(sampleActions));
             var c = new CommandLineParserActionSource(context, parser);
 
-            AssertMatch(context, c, "del", "SampleActions.Delete");
-            AssertMatch(context, c, "sadel", "SampleActions.Delete");
+            AssertMatch(context, c, "del", "#SampleActions Delete");
+            AssertMatch(context, c, "#sample del", "#SampleActions Delete");
         }
 
         void AssertMatch(IContext context, IActionSource3 c, string input, string expectedActionText)
         {
-            var q = new Query(context) { Text = input };
-            var results = c.GetActions(q).ToEnumerable().ToList();
-            Assert.IsTrue(results.Single().Action.Name.StartsWith(expectedActionText));
+            var q = Query.Parse(context, input);
+            var results = c.GetActions(q).ToEnumerable().OrderByDescending(_ => _.Priority).ToList();
+            Assert.IsTrue(results.First().Action.Name.Contains(expectedActionText));
         }
 
         [Test]

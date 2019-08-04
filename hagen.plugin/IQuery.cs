@@ -9,7 +9,7 @@ namespace hagen
     public interface IQuery
     {
         string Text { get; }
-        System.Collections.Generic.IReadOnlyCollection<string> Tags { get; }
+        IEnumerable<string> Tags { get; }
 
         IContext Context { get; }
     }

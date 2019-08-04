@@ -23,7 +23,7 @@
 	<SolutionFile>$(SourceDir)\$(Productname).sln</SolutionFile>
 	<BuildDir>$(OutDir)</BuildDir>
 	<BuildDir Condition="$(OutDir) == ''" >$(SourceDir)\out\$(Configuration)</BuildDir>
-	<GeneratedCodeDir>$(SourceDir)\out\generated</GeneratedCodeDir>
+	<GeneratedCodeDir>$(BuildDir)\generated</GeneratedCodeDir>
 	<OutDir>$(BuildDir)\bin</OutDir>
 	<OutputPath>$(OutDir)</OutputPath>
 	<BaseIntermediateOutputPath>$(BuildDir)\obj</BaseIntermediateOutputPath>

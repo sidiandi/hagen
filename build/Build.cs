@@ -11,29 +11,29 @@ using System.Linq;
 public partial class BuildTargets
 {
     static int Main(string[] args) => Runner.Run<BuildTargets>(args);
-    
+
     private static readonly Serilog.ILogger Logger = Serilog.Log.Logger.ForContext(System.Reflection.MethodBase.GetCurrentMethod().DeclaringType);
 
     string productName => name;
     string year => DateTime.UtcNow.ToString("yyyy");
     string copyright => $"Copyright (c) {company} {year}";
-    string configuration => "Debug";
+    string configuration => "Release";
 
     string Root { get; set; } = ".".Absolute();
     string OutDir => Root.Combine("out", configuration);
     string PackagesDir => OutDir.Combine("packages");
     string SrcDir => Root;
-    string CommonAssemblyInfoFile => OutDir.Combine("CommonAssemblyInfo.cs");
-    string VersionPropsFile => OutDir.Combine("Version.props");
+    string CommonAssemblyInfoFile => OutDir.Combine("generated", "CommonAssemblyInfo.cs");
+    string VersionPropsFile => OutDir.Combine("generated", "Version.props");
 
     string SlnFile => SrcDir.Combine($"{name}.sln");
     string LibDir => SrcDir.Combine(name);
 
     [Once]
-	protected virtual Amg.Build.Builtin.Dotnet Dotnet => new Amg.Build.Builtin.Dotnet();
-    
-	[Once]
-	protected virtual Amg.Build.Builtin.Git Git => new Amg.Build.Builtin.Git();
+    protected virtual Amg.Build.Builtin.Dotnet Dotnet => new Amg.Build.Builtin.Dotnet();
+
+    [Once]
+    protected virtual Amg.Build.Builtin.Git Git => new Amg.Build.Builtin.Git();
 
     [Once]
     protected virtual ITool Msbuild => new Tool(@"C:\Program Files (x86)\Microsoft Visual Studio\2019\Enterprise\MSBuild\Current\Bin\MSBuild.exe")
@@ -43,7 +43,7 @@ public partial class BuildTargets
     [Description("Nuget restore")]
     public virtual async Task Restore()
     {
-        await Nuget.Run("restore");
+        await Nuget.Run("restore", SlnFile);
     }
 
     [Once]
@@ -53,14 +53,26 @@ public partial class BuildTargets
         await WriteVersionPropsFile();
     }
 
-    [Once] [Description("Build")]
+    [Once]
+    protected virtual async Task TerminateRunningApplication()
+    {
+        var p = Process.GetProcessesByName("hagen");
+        foreach (var i in p)
+        {
+            Logger.Information("Kill {process}", i.ProcessName);
+            i.Kill();
+        }
+    }
+
+    [Once]
+    [Description("Build")]
     public virtual async Task Build()
     {
-        await Task.WhenAll(Restore(), GenerateCode());
-        await Msbuild.Run(SlnFile);
+        await Task.WhenAll(Restore(), GenerateCode(), TerminateRunningApplication());
+        await Msbuild.Run(SlnFile, "/p:Configuration=" + configuration);
     }
-	
-	[Once] 
+
+    [Once]
     protected virtual async Task<string> WriteAssemblyInformationFile()
     {
         var v = await Git.GetVersion();
@@ -75,8 +87,8 @@ $@"// Generated. Changes will be lost.
 ");
     }
 
-    [Once] 
-	protected virtual async Task<string> WriteVersionPropsFile()
+    [Once]
+    protected virtual async Task<string> WriteVersionPropsFile()
     {
         var v = await Git.GetVersion();
         return await VersionPropsFile.WriteAllTextIfChangedAsync(
@@ -100,7 +112,8 @@ $@"<?xml version=""1.0"" encoding=""utf-8""?>
     [Once]
     protected virtual Task<ITool> NunitConsole() => NugetTool("nunit.consolerunner", "nunit3-console.exe");
 
-    [Once][Description("run unit tests")]
+    [Once]
+    [Description("run unit tests")]
     public virtual async Task Test()
     {
         await Task.WhenAll(NunitConsole(), Build());
@@ -145,10 +158,10 @@ $@"<?xml version=""1.0"" encoding=""utf-8""?>
         return new Tool(installDir.Combine("tools", exe));
     }
 
-    [Once][Description("run")]
+    [Once]
+    [Description("run")]
     public virtual async Task Run()
     {
-        await new Tool("pskill").DoNotCheckExitCode().Run("hagen");
         var hagen = (OutDir.Combine(name, "bin", $"{name}.exe"));
         Logger.Information(hagen);
         if (hagen.IsOutOfDate(SrcDir.Glob("**")
@@ -161,13 +174,39 @@ $@"<?xml version=""1.0"" encoding=""utf-8""?>
         Start(hagen);
     }
 
-    [Once][Default]
-	public virtual async Task Default()
-	{
-		await Test();
-	}
+    [Once]
+    [Description("Delete all build results")]
+    public virtual async Task Clean()
+    {
+        await TerminateRunningApplication();
+        await EnsureNotExists(OutDir);
+    }
 
-    [Once][Description("Open in Visual Studio")]
+    static async Task<string> EnsureNotExists(string path)
+    {
+        await Task.Factory.StartNew(() =>
+        {
+            if (path.IsFile())
+            {
+                path.EnsureFileNotExists();
+            }
+            else if (path.IsDirectory())
+            {
+                Directory.Delete(path, true);
+            }
+        }, TaskCreationOptions.LongRunning);
+        return path;
+    }
+
+    [Once]
+    [Default]
+    public virtual async Task Default()
+    {
+        await Test();
+    }
+
+    [Once]
+    [Description("Open in Visual Studio")]
     public virtual async Task OpenInVisualStudio()
     {
         await Task.WhenAll(Restore(), GenerateCode());

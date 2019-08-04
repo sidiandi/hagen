@@ -56,8 +56,7 @@ public partial class BuildTargets
     [Once] [Description("Build")]
     public virtual async Task Build()
     {
-        await Restore();
-        await GenerateCode();
+        await Task.WhenAll(Restore(), GenerateCode());
         await Msbuild.Run(SlnFile);
     }
 	

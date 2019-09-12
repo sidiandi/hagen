@@ -2,7 +2,6 @@ using System.Threading.Tasks;
 using System;
 using System.IO;
 using Amg.Build;
-using Amg.Build.Builtin;
 using System.Diagnostics;
 using System.ComponentModel;
 using System.Text.RegularExpressions;
@@ -30,14 +29,21 @@ public partial class BuildTargets
     string LibDir => SrcDir.Combine(name);
 
     [Once]
-    protected virtual Amg.Build.Builtin.Dotnet Dotnet => new Amg.Build.Builtin.Dotnet();
+    protected virtual Dotnet Dotnet => Runner.Once<Dotnet>();
 
     [Once]
-    protected virtual Amg.Build.Builtin.Git Git => new Amg.Build.Builtin.Git();
+    protected virtual Git Git => Runner.Once<Git>(_ => _.RootDirectory = Runner.RootDirectory());
 
     [Once]
-    protected virtual ITool Msbuild => new Tool(@"C:\Program Files (x86)\Microsoft Visual Studio\2019\Enterprise\MSBuild\Current\Bin\MSBuild.exe")
-        .WithArguments("-verbosity:minimal");
+    protected virtual ITool Msbuild => 
+        new Tool(
+        new[]
+        {
+            @"Microsoft Visual Studio\2019\Enterprise\MSBuild\Current\Bin\MSBuild.exe",
+            @"Microsoft Visual Studio\2017\Enterprise\MSBuild\15.0\Bin\msbuild.exe"
+        }.Select(_ => @"C:\Program Files (x86)".Combine(_))
+        .First(_ => _.IsFile()))
+            .WithArguments("-verbosity:minimal");
 
     [Once]
     [Description("Nuget restore")]

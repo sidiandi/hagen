@@ -16,10 +16,13 @@ public partial class BuildTargets
     string productName => name;
     string year => DateTime.UtcNow.ToString("yyyy");
     string copyright => $"Copyright (c) {company} {year}";
-    string configuration => "Release";
 
-    string Root { get; set; } = ".".Absolute();
-    string OutDir => Root.Combine("out", configuration);
+    [Description("Release|Debug")]
+    public string Configuration { get; set; } = "Release";
+
+    string Root { get; set; } = Runner.RootDirectory();
+
+    string OutDir => Root.Combine("out", Configuration);
     string PackagesDir => OutDir.Combine("packages");
     string SrcDir => Root;
     string CommonAssemblyInfoFile => OutDir.Combine("generated", "CommonAssemblyInfo.cs");
@@ -75,7 +78,7 @@ public partial class BuildTargets
     public virtual async Task Build()
     {
         await Task.WhenAll(Restore(), GenerateCode(), TerminateRunningApplication());
-        await Msbuild.Run(SlnFile, "/p:Configuration=" + configuration);
+        await Msbuild.Run(SlnFile, "/p:Configuration=" + Configuration);
     }
 
     [Once]
@@ -215,8 +218,37 @@ $@"<?xml version=""1.0"" encoding=""utf-8""?>
     [Description("Open in Visual Studio")]
     public virtual async Task OpenInVisualStudio()
     {
-        await Task.WhenAll(Restore(), GenerateCode());
+        foreach (var configuration in new[] { "Release", "Debug" })
+        {
+            var build = Runner.Once<BuildTargets>(_ => _.Configuration = configuration);
+            await build.GenerateCode();
+        }
         Start(SlnFile);
+    }
+
+    [Once][Description("Install to c:\bin")]
+    public virtual async Task Install()
+    {
+        await TerminateRunningApplication();
+        await Build();
+        var installDir = @"C:\bin\hagen";
+        foreach (var assemblyOutput in OutDir.Glob("hagen/bin").EnumerateFileSystemInfos().Where(_ => _ is DirectoryInfo))
+        {
+            await assemblyOutput.FullName.CopyTree(installDir);
+        }
+
+        var plugins = OutDir.Glob("hagen.plugin.*/bin").EnumerateFileSystemInfos()
+            .Where(_ => _ is DirectoryInfo)
+            .Select(_ => _.FullName.Parent().FileName())
+            .Where(_ => !_.EndsWith(".Test"))
+            .ToList();
+
+        foreach (var plugin in plugins)
+        {
+            var assemblyOutput = OutDir.Combine(plugin, "bin");
+            await assemblyOutput.CopyTree(installDir.Combine("plugin", plugin));
+        }
+        Start(installDir.Combine(name + ".exe"));
     }
 }
 

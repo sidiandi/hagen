@@ -2,7 +2,6 @@ using System.Threading.Tasks;
 using System;
 using System.IO;
 using Amg.Build;
-using Amg.Build.Builtin;
 using System.Diagnostics;
 using System.ComponentModel;
 using System.Text.RegularExpressions;
@@ -30,10 +29,10 @@ public partial class BuildTargets
     string LibDir => SrcDir.Combine(name);
 
     [Once]
-    protected virtual Amg.Build.Builtin.Dotnet Dotnet => new Amg.Build.Builtin.Dotnet();
+    protected virtual Dotnet Dotnet => Runner.Once<Dotnet>();
 
     [Once]
-    protected virtual Amg.Build.Builtin.Git Git => new Amg.Build.Builtin.Git();
+    protected virtual Git Git => Runner.Once<Git>();
 
     [Once]
     protected virtual ITool Msbuild => new Tool(@"C:\Program Files (x86)\Microsoft Visual Studio\2019\Enterprise\MSBuild\Current\Bin\MSBuild.exe")
@@ -62,6 +61,7 @@ public partial class BuildTargets
             Logger.Information("Kill {process}", i.ProcessName);
             i.Kill();
         }
+        await Task.CompletedTask;
     }
 
     [Once]
@@ -171,7 +171,7 @@ $@"<?xml version=""1.0"" encoding=""utf-8""?>
         {
             await Build();
         }
-        Start(hagen);
+        await Start(hagen);
     }
 
     [Once]
@@ -210,7 +210,7 @@ $@"<?xml version=""1.0"" encoding=""utf-8""?>
     public virtual async Task OpenInVisualStudio()
     {
         await Task.WhenAll(Restore(), GenerateCode());
-        Start(SlnFile);
+        await Start(SlnFile);
     }
 }
 

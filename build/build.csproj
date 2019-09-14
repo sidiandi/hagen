@@ -6,7 +6,7 @@
   </PropertyGroup>
 
   <ItemGroup>
-    <PackageReference Include="Amg.Build" Version="0.3.1-*" />
+    <PackageReference Include="Amg.Build" Version="0.*" />
   </ItemGroup>
 
 </Project>

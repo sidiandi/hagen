@@ -2,6 +2,7 @@
 setlocal EnableDelayedExpansion
 set buildDll=%~dp0%~n0\bin\Debug\netcoreapp2.2\build.dll
 set exitCodeRebuildRequired=2
+set exitCodeAssemblyNotFound=-2147450740
 
 mkdir %buildDll%\.. 2>nul
 echo startup time > %buildDll%.startup
@@ -10,6 +11,9 @@ if exist %buildDll% (
     dotnet %buildDll% %*
     set buildScriptExitCode=!errorlevel!
     if !buildScriptExitCode! equ %exitCodeRebuildRequired% (
+        call :rebuild %*
+    )
+    if !buildScriptExitCode! equ %exitCodeAssemblyNotFound% (
         call :rebuild %*
     )
     exit /b !buildScriptExitCode!

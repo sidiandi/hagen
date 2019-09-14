@@ -16,10 +16,13 @@ public partial class BuildTargets
     string productName => name;
     string year => DateTime.UtcNow.ToString("yyyy");
     string copyright => $"Copyright (c) {company} {year}";
-    string configuration => "Release";
 
-    string Root { get; set; } = ".".Absolute();
-    string OutDir => Root.Combine("out", configuration);
+    [Description("Release|Debug")]
+    public string Configuration { get; set; } = "Release";
+
+    string Root { get; set; } = Runner.RootDirectory();
+
+    string OutDir => Root.Combine("out", Configuration);
     string PackagesDir => OutDir.Combine("packages");
     string SrcDir => Root;
     string CommonAssemblyInfoFile => OutDir.Combine("generated", "CommonAssemblyInfo.cs");
@@ -32,11 +35,18 @@ public partial class BuildTargets
     protected virtual Dotnet Dotnet => Runner.Once<Dotnet>();
 
     [Once]
-    protected virtual Git Git => Runner.Once<Git>();
+    protected virtual Git Git => Runner.Once<Git>(_ => _.RootDirectory = Runner.RootDirectory());
 
     [Once]
-    protected virtual ITool Msbuild => new Tool(@"C:\Program Files (x86)\Microsoft Visual Studio\2019\Enterprise\MSBuild\Current\Bin\MSBuild.exe")
-        .WithArguments("-verbosity:minimal");
+    protected virtual ITool Msbuild => 
+        new Tool(
+        new[]
+        {
+            @"Microsoft Visual Studio\2019\Enterprise\MSBuild\Current\Bin\MSBuild.exe",
+            @"Microsoft Visual Studio\2017\Enterprise\MSBuild\15.0\Bin\msbuild.exe"
+        }.Select(_ => @"C:\Program Files (x86)".Combine(_))
+        .First(_ => _.IsFile()))
+            .WithArguments("-verbosity:minimal");
 
     [Once]
     [Description("Nuget restore")]
@@ -61,7 +71,6 @@ public partial class BuildTargets
             Logger.Information("Kill {process}", i.ProcessName);
             i.Kill();
         }
-        await Task.CompletedTask;
     }
 
     [Once]
@@ -69,7 +78,7 @@ public partial class BuildTargets
     public virtual async Task Build()
     {
         await Task.WhenAll(Restore(), GenerateCode(), TerminateRunningApplication());
-        await Msbuild.Run(SlnFile, "/p:Configuration=" + configuration);
+        await Msbuild.Run(SlnFile, "/p:Configuration=" + Configuration);
     }
 
     [Once]
@@ -171,7 +180,7 @@ $@"<?xml version=""1.0"" encoding=""utf-8""?>
         {
             await Build();
         }
-        await Start(hagen);
+        Start(hagen);
     }
 
     [Once]
@@ -209,8 +218,37 @@ $@"<?xml version=""1.0"" encoding=""utf-8""?>
     [Description("Open in Visual Studio")]
     public virtual async Task OpenInVisualStudio()
     {
-        await Task.WhenAll(Restore(), GenerateCode());
-        await Start(SlnFile);
+        foreach (var configuration in new[] { "Release", "Debug" })
+        {
+            var build = Runner.Once<BuildTargets>(_ => _.Configuration = configuration);
+            await build.GenerateCode();
+        }
+        Start(SlnFile);
+    }
+
+    [Once][Description("Install to c:\bin")]
+    public virtual async Task Install()
+    {
+        await TerminateRunningApplication();
+        await Build();
+        var installDir = @"C:\bin\hagen";
+        foreach (var assemblyOutput in OutDir.Glob("hagen/bin").EnumerateFileSystemInfos().Where(_ => _ is DirectoryInfo))
+        {
+            await assemblyOutput.FullName.CopyTree(installDir);
+        }
+
+        var plugins = OutDir.Glob("hagen.plugin.*/bin").EnumerateFileSystemInfos()
+            .Where(_ => _ is DirectoryInfo)
+            .Select(_ => _.FullName.Parent().FileName())
+            .Where(_ => !_.EndsWith(".Test"))
+            .ToList();
+
+        foreach (var plugin in plugins)
+        {
+            var assemblyOutput = OutDir.Combine(plugin, "bin");
+            await assemblyOutput.CopyTree(installDir.Combine("plugin", plugin));
+        }
+        Start(installDir.Combine(name + ".exe"));
     }
 }
 

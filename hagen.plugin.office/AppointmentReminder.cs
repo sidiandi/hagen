@@ -34,7 +34,7 @@ namespace hagen.plugin.office
         /// </summary>
         public void Dismiss()
         {
-            minStartTimeForReminders = DateTime.Now;
+            minStartTimeForReminders = DateTime.Now + lookahead;
         }
 
         private void ShowOutlookAppointmentsReminder()

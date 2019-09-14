@@ -1,5 +1,4 @@
 <Project Sdk="Microsoft.NET.Sdk">
-
   <PropertyGroup>
     <OutputType>Exe</OutputType>
     <TargetFramework>netcoreapp2.2</TargetFramework>
@@ -8,5 +7,4 @@
   <ItemGroup>
     <PackageReference Include="Amg.Build" Version="0.*" />
   </ItemGroup>
-
 </Project>

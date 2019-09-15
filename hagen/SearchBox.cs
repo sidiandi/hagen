@@ -198,39 +198,63 @@ namespace hagen
 
             ActionSource = actionSource;
 
-            var resultStream = textBoxQuery.GetTextChangedObservable()
-                .Throttle(TimeSpan.FromMilliseconds(200))
-                .Select(text => { var c = Context; return c == null ? null : Query.Parse(c, text); })
-                .Where(_ => _ != null)
-                .Merge(ManualUpdate)
-                .Select(query => ActionSource.GetActions(query));
+            textBoxQuery.HandleCreated += (s, e) =>
+            {
 
-            resultStream
-                .ObserveOn(this)
-                .Subscribe(result =>
+                var resultStream = textBoxQuery.GetTextChangedObservable()
+                    .Throttle(TimeSpan.FromMilliseconds(200))
+                    .Select(text => { var c = Context; return c == null ? null : Query.Parse(c, text); })
+                    .Where(_ => _ != null)
+                    .Merge(ManualUpdate)
+                    .Select(query =>
                     {
-                        results = new List<IResult>();
-
-                        if (currentItemsReceiver != null)
-                        {
-                            currentItemsReceiver.Dispose();
-                        }
-
-                        currentItemsReceiver = result
-                            .Buffer(TimeSpan.FromMilliseconds(200), 50)
-                            .ObserveOn(this)
-                            .Subscribe(_ =>
-                            {
-                                results = results.Concat(_)
-                                    .OrderByDescending(x => x.Priority) // (x => x.Action.LastExecuted)
-                                    .ThenByDescending(x => x.Action.LastExecuted)
-                                    .ToList();
-
-                                var si = Math.Max(itemView.SelectedIndex, 0);
-                                itemView.SetObjects(results);
-                                itemView.SelectedIndex = 0;
-                            });
+                        log.Info("Query: " + query.Text);
+                        return ActionSource.GetActions(query);
                     });
+
+                resultStream.Subscribe(result =>
+                {
+                    results = new List<IResult>();
+
+                    if (currentItemsReceiver != null)
+                    {
+                        currentItemsReceiver.Dispose();
+                    }
+
+                    currentItemsReceiver = result
+                        .Buffer(TimeSpan.FromMilliseconds(200), 50)
+                        .Select(_ =>
+                        {
+                            results = results.Concat(_)
+                                .OrderByDescending(x => x.Priority) // (x => x.Action.LastExecuted)
+                                .ThenByDescending(x => x.Action.LastExecuted)
+                                .ToList();
+                            return results;
+                        })
+                        .ObserveOn(this)
+                        .Subscribe(results =>
+                        {
+                            itemView.SetObjects(results.Take(100).ToList());
+                            itemView.SelectedIndex = 0;
+                        });
+                });
+            };
+        }
+
+        int lastCLipboardHash = 0;
+
+        public void SetTextFromClipboard()
+        {
+            if (Clipboard.ContainsText())
+            {
+                var textFromClipboard = Clipboard.GetText().Truncate(512);
+                var hash = textFromClipboard.GetHashCode();
+                if (lastCLipboardHash != hash)
+                {
+                    lastCLipboardHash = hash;
+                    QueryText = textFromClipboard;
+                }
+            }
         }
 
         static string Highlight(string text, IQuery query)
@@ -304,7 +328,7 @@ namespace hagen
             var q = hagen.Query.Parse(Context, textBoxQuery.Text);
             textBoxQuery.Text = q.ParsedString;
             textBoxQuery.Select(q.TextBegin, q.TextEnd);
-            UpdateResult();
+            // UpdateResult();
         }
 
         public event EventHandler ItemsActivated;

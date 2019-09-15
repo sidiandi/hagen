@@ -61,6 +61,8 @@ namespace hagen
             };
             this.IsMdiContainer = true;
             this.Controls.Add(dockPanel);
+            this.WindowState = FormWindowState.Maximized;
+
 
             InitializeComponent();
 
@@ -71,7 +73,7 @@ namespace hagen
             hagen.Context.TagsSource = () => searchBox.Query.Tags as IReadOnlyCollection<string>;
 
             this.IsMdiContainer = true;
-            this.FormBorderStyle = System.Windows.Forms.FormBorderStyle.None;
+            // this.FormBorderStyle = System.Windows.Forms.FormBorderStyle.None;
 
             jobListView = new JobListView()
             {
@@ -192,7 +194,8 @@ namespace hagen
 
         void Main_Load(object sender, EventArgs e)
         {
-            Hide();
+            WindowState = FormWindowState.Maximized;
+            Popup();
         }
 
         void searchBox_ItemsActivated(object sender, EventArgs e)
@@ -207,7 +210,7 @@ namespace hagen
         {
             if (e.KeyCode == Keys.Escape)
             {
-                this.Hide();
+                Popdown();
                 e.SuppressKeyPress = true;
             }
         }
@@ -223,33 +226,28 @@ namespace hagen
                 }
             }
 
-            this.Hide();
+            Popdown();
             a.Execute();
         }
 
-        int lastCLipboardHash = 0;
+        void Popdown()
+        {
+            this.WindowState = FormWindowState.Minimized;
+        }
 
         [Usage("Activate the program's main window")]
         public void Popup()
         {
             this.hagen.Context.SaveFocus();
-            searchBox.Context = this.hagen.Context;
-            WindowState = FormWindowState.Maximized;
-            this.Visible = true;
-            if (Clipboard.ContainsText())
-            {
-                var textFromClipboard = Clipboard.GetText().Truncate(512);
-                var hash = textFromClipboard.GetHashCode();
-                if (lastCLipboardHash != hash)
-                {
-                    lastCLipboardHash = hash;
-                    searchBox.QueryText = textFromClipboard;
-                }
-            }
-            searchBox.Start();
-            searchBox.Focus();
-            searchBox.AsDockContent().Activate();
+
+            this.Restore();
             this.Activate();
+
+            searchBox.AsDockContent().Activate();
+            searchBox.Context = this.hagen.Context;
+            searchBox.Focus();
+            searchBox.Start();
+            searchBox.SetTextFromClipboard();
         }
 
         protected override void OnClosed(EventArgs e)
@@ -297,14 +295,6 @@ namespace hagen
         private void notifyIcon_MouseDoubleClick(object sender, MouseEventArgs e)
         {
             Popup();
-        }
-
-        private void Main_Resize(object sender, EventArgs e)
-        {
-            if (WindowState == FormWindowState.Minimized)
-            {
-                Hide();
-            }
         }
 
         private void notifyIcon_MouseClick(object sender, MouseEventArgs e)

@@ -245,9 +245,9 @@ namespace hagen
 
             searchBox.AsDockContent().Activate();
             searchBox.Context = this.hagen.Context;
+            searchBox.SetTextFromClipboard();
             searchBox.Focus();
             searchBox.Start();
-            searchBox.SetTextFromClipboard();
         }
 
         protected override void OnClosed(EventArgs e)

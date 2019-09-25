@@ -38,8 +38,7 @@ public partial class BuildTargets
     protected virtual Git Git => Runner.Once<Git>(_ => _.RootDirectory = Runner.RootDirectory());
 
     [Once]
-    protected virtual ITool Msbuild => 
-        new Tool(
+    protected virtual ITool Msbuild => Tools.Default.WithFileName(
         new[]
         {
             @"Microsoft Visual Studio\2019\Enterprise\MSBuild\Current\Bin\MSBuild.exe",
@@ -114,8 +113,7 @@ $@"<?xml version=""1.0"" encoding=""utf-8""?>
 
     static async Task Start(string command)
     {
-        var cmd = new Tool("cmd.exe").WithArguments("/c", "start");
-        await cmd.Run(" ", command);
+        await Tools.Cmd.Run("start", command.Quote(), command);
     }
 
     [Once]
@@ -136,7 +134,7 @@ $@"<?xml version=""1.0"" encoding=""utf-8""?>
             .Run(tests.EnumerateFiles().ToArray());
     }
 
-    ITool Nuget => new Tool("Nuget.exe");
+    ITool Nuget => Tools.Default.WithFileName("Nuget.exe");
 
     [Once]
     protected virtual async Task<ITool> NugetTool(string name, string exe)
@@ -164,7 +162,7 @@ $@"<?xml version=""1.0"" encoding=""utf-8""?>
 
         var installDir = dir.Combine(new[] { packageId, version }.Join("."));
 
-        return new Tool(installDir.Combine("tools", exe));
+        return Tools.Default.WithFileName(installDir.Combine("tools", exe));
     }
 
     [Once]
@@ -180,7 +178,7 @@ $@"<?xml version=""1.0"" encoding=""utf-8""?>
         {
             await Build();
         }
-        Start(hagen);
+        await Start(hagen);
     }
 
     [Once]
@@ -223,7 +221,7 @@ $@"<?xml version=""1.0"" encoding=""utf-8""?>
             var build = Runner.Once<BuildTargets>(_ => _.Configuration = configuration);
             await build.GenerateCode();
         }
-        Start(SlnFile);
+        await Start(SlnFile);
     }
 
     [Once][Description("Install to c:\bin")]
@@ -248,7 +246,7 @@ $@"<?xml version=""1.0"" encoding=""utf-8""?>
             var assemblyOutput = OutDir.Combine(plugin, "bin");
             await assemblyOutput.CopyTree(installDir.Combine("plugin", plugin));
         }
-        Start(installDir.Combine(name + ".exe"));
+        await Start(installDir.Combine(name + ".exe"));
     }
 }
 

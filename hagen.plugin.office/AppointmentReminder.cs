@@ -64,11 +64,19 @@ namespace hagen.plugin.office
             }
         }
 
+        static DateTime Max(DateTime a, DateTime b)
+        {
+            return a > b
+                ? a
+                : b;
+        }
+
         static IList<AppointmentItem> GetUpcomingAppointments(
             MAPIFolder calendarFolder, 
             TimeSpan appointmentReminderLookahead, 
             DateTime minStartTimeForReminders)
         {
+            minStartTimeForReminders = Max(minStartTimeForReminders, DateTime.Now.AddMinutes(-10));
                 var now = DateTime.Now;
                 var startTime = new TimeInterval(now, now + appointmentReminderLookahead);
                 var upcoming = calendarFolder.GetOutlookAppointmentsActiveIn(startTime)

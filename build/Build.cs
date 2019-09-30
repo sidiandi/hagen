@@ -11,6 +11,15 @@ public partial class BuildTargets
 {
     static int Main(string[] args) => Runner.Run<BuildTargets>(args);
 
+    public BuildTargets(string configuration)
+    {
+        Configuration = configuration;
+    }
+
+    public BuildTargets()
+    {
+    }
+
     private static readonly Serilog.ILogger Logger = Serilog.Log.Logger.ForContext(System.Reflection.MethodBase.GetCurrentMethod().DeclaringType);
 
     string productName => name;
@@ -32,21 +41,24 @@ public partial class BuildTargets
     string LibDir => SrcDir.Combine(name);
 
     [Once]
-    protected virtual Dotnet Dotnet => Runner.Once<Dotnet>();
+    protected virtual Dotnet Dotnet => Once.Create<Dotnet>();
 
     [Once]
-    protected virtual Git Git => Runner.Once<Git>(_ => _.RootDirectory = Runner.RootDirectory());
+    protected virtual Git Git => Git.Create(Runner.RootDirectory());
 
-    [Once]
-    protected virtual ITool Msbuild => 
-        new Tool(
-        new[]
+    static string FindMsbuild()
+    {
+        return new[]
         {
             @"Microsoft Visual Studio\2019\Enterprise\MSBuild\Current\Bin\MSBuild.exe",
             @"Microsoft Visual Studio\2017\Enterprise\MSBuild\15.0\Bin\msbuild.exe"
-        }.Select(_ => @"C:\Program Files (x86)".Combine(_))
-        .First(_ => _.IsFile()))
-            .WithArguments("-verbosity:minimal");
+        }.Select(_ => @"C:\Program Files (x86)".Combine(_)).First(_ => _.IsFile());
+    }
+
+    [Once]
+    protected virtual ITool Msbuild => Tools.Default
+        .WithFileName(FindMsbuild())
+        .WithArguments("-verbosity:minimal");
 
     [Once]
     [Description("Nuget restore")]
@@ -63,7 +75,7 @@ public partial class BuildTargets
     }
 
     [Once]
-    protected virtual async Task TerminateRunningApplication()
+    protected virtual Task TerminateRunningApplication() => Task.Factory.StartNew(() =>
     {
         var p = Process.GetProcessesByName("hagen");
         foreach (var i in p)
@@ -71,7 +83,7 @@ public partial class BuildTargets
             Logger.Information("Kill {process}", i.ProcessName);
             i.Kill();
         }
-    }
+    }, TaskCreationOptions.LongRunning);
 
     [Once]
     [Description("Build")]
@@ -114,8 +126,8 @@ $@"<?xml version=""1.0"" encoding=""utf-8""?>
 
     static async Task Start(string command)
     {
-        var cmd = new Tool("cmd.exe").WithArguments("/c", "start");
-        await cmd.Run(" ", command);
+        Process.Start(command);
+        await Task.CompletedTask;
     }
 
     [Once]
@@ -136,7 +148,7 @@ $@"<?xml version=""1.0"" encoding=""utf-8""?>
             .Run(tests.EnumerateFiles().ToArray());
     }
 
-    ITool Nuget => new Tool("Nuget.exe");
+    ITool Nuget => Tools.Default.WithFileName("Nuget.exe");
 
     [Once]
     protected virtual async Task<ITool> NugetTool(string name, string exe)
@@ -164,7 +176,9 @@ $@"<?xml version=""1.0"" encoding=""utf-8""?>
 
         var installDir = dir.Combine(new[] { packageId, version }.Join("."));
 
-        return new Tool(installDir.Combine("tools", exe));
+        var fileName = installDir.Combine("tools", exe);
+        Logger.Information("nuget tool {name} uses {fileName}", name, fileName);
+        return Tools.Default.WithFileName(fileName);
     }
 
     [Once]
@@ -180,7 +194,7 @@ $@"<?xml version=""1.0"" encoding=""utf-8""?>
         {
             await Build();
         }
-        Start(hagen);
+        await Start(hagen);
     }
 
     [Once]
@@ -220,10 +234,10 @@ $@"<?xml version=""1.0"" encoding=""utf-8""?>
     {
         foreach (var configuration in new[] { "Release", "Debug" })
         {
-            var build = Runner.Once<BuildTargets>(_ => _.Configuration = configuration);
+            var build = Once.Create<BuildTargets>(configuration);
             await build.GenerateCode();
         }
-        Start(SlnFile);
+        await Start(SlnFile);
     }
 
     [Once][Description("Install to c:\bin")]
@@ -248,7 +262,7 @@ $@"<?xml version=""1.0"" encoding=""utf-8""?>
             var assemblyOutput = OutDir.Combine(plugin, "bin");
             await assemblyOutput.CopyTree(installDir.Combine("plugin", plugin));
         }
-        Start(installDir.Combine(name + ".exe"));
+        await Start(installDir.Combine(name + ".exe"));
     }
 }
 

@@ -38,9 +38,9 @@ namespace hagen
             var indexEntries = Find(re);
 
             return indexEntries
-                .Select(indexEntry => new ShellAction(
-                    rootDir.Combine(indexEntry.Path),
-                    $"git {rootDir}: {indexEntry.Path}").ToResult())
+                .Select(path => new ShellAction(
+                    rootDir.Combine(path),
+                    $"git {rootDir}: {path}").ToResult())
                 .Take(100);
         }
 
@@ -52,10 +52,40 @@ namespace hagen
             return new Regex(terms.Select(Regex.Escape).Join(".*"), RegexOptions.IgnoreCase);
         }
 
-        IEnumerable<IndexEntry> Find(Regex re)
+        static string ParentPath(string p)
+        {
+            var i = p.LastIndexOf('/');
+            return i < 0 
+                ? null
+                : p.Substring(0, i);
+        }
+
+        IEnumerable<string> Find(Regex re)
         {
             var repoName = rootDir.FileName();
-            return repo.Index.Where(_ => re.IsMatch(repoName + "/" + _.Path));
+            var seen = new HashSet<string>();
+
+            IEnumerable<string> MatchingLineage(IndexEntry _)
+            {
+                for (var path = repoName + "/" + _.Path; path != null; path = ParentPath(path))
+                {
+                    if (seen.Contains(path))
+                    {
+                        break;
+                    }
+                    if (re.IsMatch(path))
+                    {
+                        seen.Add(path);
+                        yield return path;
+                    }
+                    else
+                    {
+                        break;
+                    }
+                }
+            }
+
+            return repo.Index.SelectMany(MatchingLineage);
         }
     }
 }

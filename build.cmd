@@ -1,28 +1,9 @@
-@echo off
-setlocal EnableDelayedExpansion
-set buildDll=%~dp0%~n0\bin\Debug\netcoreapp2.2\build.dll
-set exitCodeRebuildRequired=2
-set exitCodeAssemblyNotFound=-2147450740
-
-mkdir %buildDll%\.. 2>nul
-echo startup time > %buildDll%.startup
-
-if exist %buildDll% (
-    dotnet %buildDll% %*
-    set buildScriptExitCode=!errorlevel!
-    if !buildScriptExitCode! equ %exitCodeRebuildRequired% (
-        call :rebuild %*
-    )
-    if !buildScriptExitCode! equ %exitCodeAssemblyNotFound% (
-        call :rebuild %*
-    )
-    exit /b !buildScriptExitCode!
-) else (
-    call :rebuild %*
-)
-goto :eof
-
-:rebuild
-    dotnet run --force -vd --project %~dp0%~n0 -- --ignore-clean %*
-	set buildScriptExitCode=!errorlevel!
-	exit /b !buildScriptExitCode!
+rem @echo off
+rem Do not modify below this line
+rem Bootstrapper script of https://github.com/sidiandi/Amg.Build
+setlocal
+set AmgBuildTargetFramework=netcoreapp3.0
+set name=%~n0
+set dll=%~dp0%name%\bin\Debug\%AmgBuildTargetFramework%\%name%.dll
+set project=%~dp0%name%\%name%.csproj
+if exist %dll% ( dotnet %dll% %* ) else ( dotnet run --project %project% - %* )

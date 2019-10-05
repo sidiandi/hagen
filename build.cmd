@@ -1,9 +1,9 @@
-rem @echo off
-rem Do not modify below this line
+@echo off
+rem Do not modify
 rem Bootstrapper script of https://github.com/sidiandi/Amg.Build
 setlocal
 set AmgBuildTargetFramework=netcoreapp3.0
 set name=%~n0
-set dll=%~dp0%name%\bin\Debug\%AmgBuildTargetFramework%\%name%.dll
+set exe=%~dp0%name%\bin\Debug\%AmgBuildTargetFramework%\%name%.exe
 set project=%~dp0%name%\%name%.csproj
-if exist %dll% ( dotnet %dll% %* ) else ( dotnet run --project %project% - %* )
+if exist %exe% (%exe% %*) else (dotnet run --project %project% -- %*)

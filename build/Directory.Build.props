@@ -1,9 +1,7 @@
 <Project>
   <PropertyGroup>
-    <OutputType>Exe</OutputType>
-    <TargetFramework>netcoreapp3.0</TargetFramework>
     <Configuration>Debug</Configuration>
-    <AmgBuildVersion Condition="$(AmgBuildVersion)==''" >0.*</AmgBuildVersion>
+    <AmgBuildVersion Condition="$(AmgBuildVersion)==''" >0.25.1-ci0001</AmgBuildVersion>
   </PropertyGroup>
   <ItemGroup>
     <PackageReference Include="Amg.Build" Version="$(AmgBuildVersion)" />

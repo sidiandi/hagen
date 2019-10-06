@@ -1,7 +1,7 @@
 <Project>
   <PropertyGroup>
     <Configuration>Debug</Configuration>
-    <AmgBuildVersion Condition="$(AmgBuildVersion)==''" >0.25.1-ci0001</AmgBuildVersion>
+    <AmgBuildVersion Condition="$(AmgBuildVersion)==''" >0.26.7</AmgBuildVersion>
   </PropertyGroup>
   <ItemGroup>
     <PackageReference Include="Amg.Build" Version="$(AmgBuildVersion)" />

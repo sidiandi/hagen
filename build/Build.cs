@@ -29,7 +29,7 @@ public partial class BuildTargets
     [Description("Release|Debug")]
     public string Configuration { get; set; } = "Release";
 
-    string Root { get; set; } = Runner.RootDirectory();
+    string Root => Runner.RootDirectory();
 
     string OutDir => Root.Combine("out", Configuration);
     string PackagesDir => OutDir.Combine("packages");

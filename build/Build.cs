@@ -26,8 +26,8 @@ public partial class BuildTargets
     string year => DateTime.UtcNow.ToString("yyyy");
     string copyright => $"Copyright (c) {company} {year}";
 
-    [Description("Release|Debug")]
-    public string Configuration { get; set; } = "Release";
+    [Once, Description("Release|Debug")]
+    public virtual string Configuration { get; set; } = "Release";
 
     string Root => Runner.RootDirectory();
 
@@ -126,8 +126,7 @@ $@"<?xml version=""1.0"" encoding=""utf-8""?>
 
     static async Task Start(string command)
     {
-        Process.Start(command);
-        await Task.CompletedTask;
+        await Tools.Cmd.Run("start", command);
     }
 
     [Once]

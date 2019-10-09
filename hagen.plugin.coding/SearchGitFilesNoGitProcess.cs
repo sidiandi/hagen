@@ -25,7 +25,7 @@ namespace hagen
 
         protected override IEnumerable<IResult> GetResults(IQuery query)
         {
-            if (query.Text.Length < 3)
+            if (!(query.Tags.Contains("#git") && query.Text.Length > 3))
             {
                 return Enumerable.Empty<IResult>();
             }

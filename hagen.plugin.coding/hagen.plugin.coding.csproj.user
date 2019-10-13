@@ -2,6 +2,6 @@
 <Project ToolsVersion="Current" xmlns="http://schemas.microsoft.com/developer/msbuild/2003">
   <PropertyGroup Condition="'$(Configuration)|$(Platform)' == 'Debug|AnyCPU'">
     <StartAction>Program</StartAction>
-    <StartProgram>C:\work\hagen\out\Debug\hagen\bin\hagen.exe</StartProgram>
+    <StartProgram>C:\src\hagen\out\Debug\hagen\bin\hagen.exe</StartProgram>
   </PropertyGroup>
 </Project>

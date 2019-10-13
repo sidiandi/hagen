@@ -232,7 +232,8 @@ namespace hagen
 
         void Popdown()
         {
-            this.WindowState = FormWindowState.Minimized;
+            // this.WindowState = FormWindowState.Minimized;
+            this.Visible = false;
         }
 
         [Usage("Activate the program's main window")]
@@ -241,6 +242,7 @@ namespace hagen
             this.hagen.Context.SaveFocus();
 
             this.Restore();
+            this.Visible = true; 
             this.Activate();
 
             searchBox.AsDockContent().Activate();
@@ -299,22 +301,6 @@ namespace hagen
 
         private void notifyIcon_MouseClick(object sender, MouseEventArgs e)
         {
-        }
-
-        private void Main_FormClosing(object sender, FormClosingEventArgs e)
-        {
-            /*
-            var r = MessageBox.Show("End program?", "hagen", MessageBoxButtons.OKCancel);
-            if (r != DialogResult.OK)
-            {
-                e.Cancel = true;
-            }
-             */
-        }
-
-        private void searchBox1_Load(object sender, EventArgs e)
-        {
-
         }
 
         private void deleteToolStripMenuItem_Click(object sender, EventArgs e)

@@ -16,14 +16,19 @@ namespace hagen
         }
     }
 
-    class Plugin : IPlugin3
+    class Plugin : ActionSourceCollector
     {
-        public IEnumerable<IActionSource3> GetActionSources()
+        public override IEnumerable<IActionSource3> GetActionSources()
         {
-            return @"C:\src".Glob("*/.git")
+            var found = base.GetActionSources();
+
+            var gitSearch = @"C:\src".Glob("*/.git")
                 .Where(_ => _.IsDirectory())
                 .Select(_ => _.Parent())
                 .Select(_ => (IActionSource3)new SearchGitFilesNoGitProcess(_));
+
+            var actionSources = found.Concat(gitSearch).ToList();
+            return actionSources;
         }
     }
 }

@@ -5,6 +5,7 @@ using System.Text;
 using Sidi.Forms;
 using System.Text.RegularExpressions;
 using System.Reactive.Linq;
+using System.Windows.Forms;
 
 namespace hagen
 {
@@ -42,8 +43,8 @@ namespace hagen
             using (var sb = new SearchBox(context, new SimpleActionSource(actions)))
             {
                 var f = sb.AsForm("Select");
-                f.WindowState = System.Windows.Forms.FormWindowState.Maximized;
                 f.Visible = false;
+
                 sb.ItemsActivated += (s, e) =>
                 {
                     var selectedActions = sb.SelectedActions.ToList();
@@ -55,6 +56,7 @@ namespace hagen
                 };
 
                 f.Shown += (s, e) => { sb.QueryText = String.Empty; };
+                f.WindowState = FormWindowState.Maximized;
                 f.ShowDialog();
             }
         }

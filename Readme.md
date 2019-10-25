@@ -9,7 +9,7 @@ hagen is a launch application and an activity tracker.
 * Extend hagen with plugins. Examples: auto-dial if the entered text is a phone number
 
 ## Todo
-* nuget update
-* Remove GitVersionTaskVersion, NUnitVersion from [Build.props]
 
 ## Done
+
+* code search: show in explorer

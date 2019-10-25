@@ -16,6 +16,7 @@
     <Compile Include="Plugin.cs" />
     <Compile Include="SearchGitFilesNoGitProcess.cs" />
     <Compile Include="SearchGitFiles.cs" />
+    <Compile Include="SourceCodeFileAction.cs" />
     <Compile Include="TextLocation.cs" />
     <Compile Include="WebLookup.cs" />
   </ItemGroup>

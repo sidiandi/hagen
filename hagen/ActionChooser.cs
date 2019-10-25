@@ -38,11 +38,23 @@ namespace hagen
             }
         }
 
+        public static void AddCancel(Form f)
+        {
+            var buttonCancel = new Button();
+            buttonCancel.Location = new System.Drawing.Point(94, 451);
+            buttonCancel.Name = "buttonCancel";
+            buttonCancel.Size = new System.Drawing.Size(75, 23);
+            buttonCancel.DialogResult = System.Windows.Forms.DialogResult.Cancel;
+            f.Controls.Add(buttonCancel);
+            f.CancelButton = buttonCancel;
+        }
+
         public static void Choose(IContext context, IList<IAction> actions)
         {
             using (var sb = new SearchBox(context, new SimpleActionSource(actions)))
             {
                 var f = sb.AsForm("Select");
+                AddCancel(f);
                 f.Visible = false;
 
                 sb.ItemsActivated += (s, e) =>

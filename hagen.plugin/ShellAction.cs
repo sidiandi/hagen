@@ -35,13 +35,14 @@ namespace hagen
         {
             this.startInfo = new ProcessStartInfo() { FileName = command };
             this.name = command;
-            this.iconProvider = iconProvider;
+            this.iconProvider = iconProvider ?? throw new ArgumentNullException(nameof(iconProvider));
             this.LastExecuted = DateTime.MinValue;
         }
 
         public ShellAction(IFileIconProvider iconProvider, string command, string name)
         {
             this.startInfo = new ProcessStartInfo() { FileName = command };
+            this.iconProvider = iconProvider;
             this.name = name;
         }
 

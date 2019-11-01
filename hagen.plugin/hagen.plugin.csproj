@@ -29,6 +29,7 @@
     <Compile Include="Icons.cs" />
     <Compile Include="IContext.cs" />
     <Compile Include="IContract.cs" />
+    <Compile Include="IFileIconProvider.cs" />
     <Compile Include="IInputAggregator.cs" />
     <Compile Include="ILastExecutedStore.cs" />
     <Compile Include="IPlugin.cs" />

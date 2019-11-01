@@ -18,6 +18,7 @@
     <Compile Include="Extensions.cs" />
     <Compile Include="FileGroup.cs" />
     <Compile Include="FileGroupDescriptor.cs" />
+    <Compile Include="FileIconProvider.cs" />
     <Compile Include="globalKeyboardHook.cs" />
     <Compile Include="Hagen.cs" />
     <Compile Include="ILogDatabase.cs" />

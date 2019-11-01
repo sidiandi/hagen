@@ -112,6 +112,8 @@ namespace hagen.plugin.Tests
             }
         }
 
+        public string ClipboardText { get; set; }
+
         public void Notify(string message)
         {
             log.Info(message);

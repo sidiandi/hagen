@@ -39,6 +39,7 @@ using Sidi.CommandLine;
 using hagen.ActionSource;
 using System.Reflection;
 using Microsoft.Win32;
+using System.Security.Permissions;
 
 namespace hagen
 {
@@ -308,6 +309,12 @@ namespace hagen
             searchBox.Remove();
         }
 
+        static bool CanWrite(string key)
+        {
+            var perm = new RegistryPermission(RegistryPermissionAccess.Write, key);
+            return perm.IsUnrestricted();
+        }
+
         /// <summary>
         /// 
         /// </summary>
@@ -326,9 +333,10 @@ namespace hagen
         /// executable file. AppPath (REG_SZ) is the user-selected install location of your application's executable file. 
         static void EnableDragAndDropFromInternetExplorer()
         {
-            try
+            var dragDropKey = @"SOFTWARE\Microsoft\Internet Explorer\Low Rights\DragDrop";
+            if (CanWrite("HKLM\\" + dragDropKey))
             {
-                using (var dragDrop = Registry.LocalMachine.OpenSubKey(@"SOFTWARE\Microsoft\Internet Explorer\Low Rights\DragDrop", true))
+                using (var dragDrop = Registry.LocalMachine.OpenSubKey(dragDropKey, true))
                 {
                     using (var hagenDragDrop = dragDrop.CreateSubKey("{F41E8255-3897-4cf4-AEC7-4F85171A0B3C}"))
                     {
@@ -339,7 +347,7 @@ namespace hagen
                     }
                 }
             }
-            catch (System.Security.SecurityException)
+            else
             {
                 log.Warn("Cannot enable drag-and-drop from Internet Explorer. Start application in elevated mode.");
             }

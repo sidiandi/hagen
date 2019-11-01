@@ -1,4 +1,6 @@
 ﻿using Amg.Build;
+using Amg.Extensions;
+using Amg.FileSystem;
 using LibGit2Sharp;
 using System;
 using System.Collections.Generic;
@@ -16,19 +18,21 @@ namespace hagen
             private readonly string repoDir;
             private readonly IRepository repository;
             private readonly string pathInRepo;
+            private readonly IFileIconProvider iconProvider;
 
-            public SourceCodeFileAction(string repoDir, IRepository repository, string pathInRepo)
+            public SourceCodeFileAction(string repoDir, IRepository repository, string pathInRepo, IFileIconProvider iconProvider)
             {
                 this.repoDir = repoDir;
                 this.repository = repository;
                 this.pathInRepo = pathInRepo;
+                this.iconProvider = iconProvider;
             }
 
             public string Name => $"{RepoName} $/{pathInRepo}";
 
             string RepoName => System.IO.Path.GetFileName(repoDir);
 
-            public System.Drawing.Icon Icon => Icons.Browser;
+            public System.Drawing.Icon Icon => iconProvider.GetIcon(Path);
 
             public string Id => pathInRepo;
 
@@ -131,7 +135,9 @@ namespace hagen
 
             private void OpenInWebBrowser()
             {
-                new ShellAction(WebUrl, "open in web").Execute();
+                new ShellAction(
+                    this.iconProvider,
+                    WebUrl, "open in web").Execute();
             }
         }
     }

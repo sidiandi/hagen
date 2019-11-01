@@ -50,6 +50,8 @@ Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "activityReport.Test", "acti
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "hagen.plugin.coding", "hagen.plugin.coding\hagen.plugin.coding.csproj", "{90E62A64-879E-4161-B3C7-AFCD503E4B4C}"
 EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "hagen.plugin.coding.Test", "hagen.plugin.coding.Test\hagen.plugin.coding.Test.csproj", "{780D0440-5CFA-4906-99E0-025E50A34CCC}"
+EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		Debug|Any CPU = Debug|Any CPU
@@ -351,6 +353,24 @@ Global
 		{90E62A64-879E-4161-B3C7-AFCD503E4B4C}.Release|x64.Build.0 = Release|Any CPU
 		{90E62A64-879E-4161-B3C7-AFCD503E4B4C}.Release|x86.ActiveCfg = Release|Any CPU
 		{90E62A64-879E-4161-B3C7-AFCD503E4B4C}.Release|x86.Build.0 = Release|Any CPU
+		{780D0440-5CFA-4906-99E0-025E50A34CCC}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{780D0440-5CFA-4906-99E0-025E50A34CCC}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{780D0440-5CFA-4906-99E0-025E50A34CCC}.Debug|x64.ActiveCfg = Debug|Any CPU
+		{780D0440-5CFA-4906-99E0-025E50A34CCC}.Debug|x64.Build.0 = Debug|Any CPU
+		{780D0440-5CFA-4906-99E0-025E50A34CCC}.Debug|x86.ActiveCfg = Debug|Any CPU
+		{780D0440-5CFA-4906-99E0-025E50A34CCC}.Debug|x86.Build.0 = Debug|Any CPU
+		{780D0440-5CFA-4906-99E0-025E50A34CCC}.Publish|Any CPU.ActiveCfg = Release|Any CPU
+		{780D0440-5CFA-4906-99E0-025E50A34CCC}.Publish|Any CPU.Build.0 = Release|Any CPU
+		{780D0440-5CFA-4906-99E0-025E50A34CCC}.Publish|x64.ActiveCfg = Release|Any CPU
+		{780D0440-5CFA-4906-99E0-025E50A34CCC}.Publish|x64.Build.0 = Release|Any CPU
+		{780D0440-5CFA-4906-99E0-025E50A34CCC}.Publish|x86.ActiveCfg = Release|Any CPU
+		{780D0440-5CFA-4906-99E0-025E50A34CCC}.Publish|x86.Build.0 = Release|Any CPU
+		{780D0440-5CFA-4906-99E0-025E50A34CCC}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{780D0440-5CFA-4906-99E0-025E50A34CCC}.Release|Any CPU.Build.0 = Release|Any CPU
+		{780D0440-5CFA-4906-99E0-025E50A34CCC}.Release|x64.ActiveCfg = Release|Any CPU
+		{780D0440-5CFA-4906-99E0-025E50A34CCC}.Release|x64.Build.0 = Release|Any CPU
+		{780D0440-5CFA-4906-99E0-025E50A34CCC}.Release|x86.ActiveCfg = Release|Any CPU
+		{780D0440-5CFA-4906-99E0-025E50A34CCC}.Release|x86.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE

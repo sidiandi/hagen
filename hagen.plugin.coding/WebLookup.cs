@@ -28,6 +28,7 @@ namespace hagen
         protected override IEnumerable<IResult> GetResults(IQuery queryObject)
         {
             var query = queryObject.Text.Trim();
+            var iconProvider = queryObject.Context.GetService<IFileIconProvider>();
             if (query.Length >= 3)
             {
                 if (Uri.IsWellFormedUriString(query, UriKind.Absolute))
@@ -35,13 +36,17 @@ namespace hagen
                 }
                 else
                 {
-                    yield return WebLookupAction("dev.azure.com Work Item", "https://dev.azure.com/CommonHostPlatform/chp/_search?text={0}*&type=workitem", query);
-                    yield return WebLookupAction("Stackoverflow", "https://stackoverflow.com/search?q={0}", query);
+                    yield return WebLookupAction(iconProvider, "dev.azure.com Work Item", "https://dev.azure.com/CommonHostPlatform/chp/_search?text={0}*&type=workitem", query);
+                    yield return WebLookupAction(iconProvider, "Stackoverflow", "https://stackoverflow.com/search?q={0}", query);
                 }
             }
         }
 
-        IResult WebLookupAction(string title, string urlTemplate, string query)
+        IResult WebLookupAction(
+            IFileIconProvider iconProvider,
+            string title, 
+            string urlTemplate, 
+            string query)
         {
             var lastUsed = DateTime.MinValue;
 
@@ -57,6 +62,7 @@ namespace hagen
             }
 
             var a = new ShellAction(
+                iconProvider,
                 String.Format(urlTemplate, System.Web.HttpUtility.UrlEncode(query)),
                 String.Format("{0} \"{1}\"", title, query))
             {

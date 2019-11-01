@@ -29,15 +29,17 @@ namespace hagen
     {
         ProcessStartInfo startInfo;
         string name;
+        private readonly IFileIconProvider iconProvider;
 
-        public ShellAction(string command)
+        public ShellAction(IFileIconProvider iconProvider, string command)
         {
             this.startInfo = new ProcessStartInfo() { FileName = command };
             this.name = command;
+            this.iconProvider = iconProvider;
             this.LastExecuted = DateTime.MinValue;
         }
 
-        public ShellAction(string command, string name)
+        public ShellAction(IFileIconProvider iconProvider, string command, string name)
         {
             this.startInfo = new ProcessStartInfo() { FileName = command };
             this.name = name;
@@ -61,10 +63,7 @@ namespace hagen
             get { return name; }
         }
 
-        public System.Drawing.Icon Icon
-        {
-            get { return GetIcon(startInfo.FileName); }
-        }
+        public System.Drawing.Icon Icon => iconProvider.GetIcon(startInfo.FileName); 
 
         public string Id
         {
@@ -79,32 +78,5 @@ namespace hagen
             get;
             set;
         }
-
-        public static System.Drawing.Icon GetIcon(string FileName)
-        {
-           System.Drawing.Icon icon = null;
-
-            if (FileName.StartsWith("http://") || FileName.StartsWith("https://"))
-            {
-                return Icons.Browser;
-            }
-            else
-            {
-                if (LPath.IsValidFilename(FileName))
-                {
-                    var p = new LPath(FileName);
-                    if (p.IsDirectory)
-                    {
-                        icon = IconReader.GetFolderIcon(IconReader.IconSize.Large, IconReader.FolderType.Closed);
-                    }
-                    else if (p.IsFile)
-                    {
-                        icon = IconReader.GetFileIcon(p, IconReader.IconSize.Large, false);
-                    }
-                }
-            }
-            return icon;
-        }
-
     }
 }

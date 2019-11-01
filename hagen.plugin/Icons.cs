@@ -29,6 +29,8 @@ namespace hagen
     {
         static Icon browserIcon = null;
 
+        public static Icon Default => Browser;
+
         public static Icon Browser
         {
             get

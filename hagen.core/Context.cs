@@ -56,6 +56,7 @@ namespace hagen
             var topLevel = SavedFocusedElement.GetTopLevelElement().Current;
             topLevelWindowClassName = topLevel.ClassName;
             log.InfoFormat("Top Level Window: {0}", topLevelWindowClassName);
+            ClipboardText = Clipboard.GetText();
         }
 
         static IEnumerable<LPath> GetSelectedFiles(SHDocVw.InternetExplorer w)
@@ -223,5 +224,7 @@ namespace hagen
 
         public Func<IReadOnlyCollection<string>> TagsSource { get; set; }
         public Action<string> NotifyAction { get; set; }
+
+        public string ClipboardText { get; set; }
     }
 }

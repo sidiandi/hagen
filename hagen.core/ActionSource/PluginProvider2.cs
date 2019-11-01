@@ -106,7 +106,7 @@ namespace hagen.ActionSource
 
         private static Assembly CurrentDomain_AssemblyResolve(object sender, ResolveEventArgs args)
         {
-            log.Info(args.Details());
+            // log.Info(args.Details());
             var name = new AssemblyName(args.Name).Name;
             var fileName = name + ".dll";
 

@@ -86,7 +86,8 @@ namespace hagen
             }
             .AddService(this.LogDatabase)
             .AddService<IContract>(new Contract())
-            .AddService<IWorkTime>(_ => new WorkTime(_.GetService<ILogDatabase>(), _.GetService<IContract>()));
+            .AddService<IWorkTime>(_ => new WorkTime(_.GetService<ILogDatabase>(), _.GetService<IContract>()))
+            .AddService<IFileIconProvider>(_ => new FileIconProvider());
         }
 
         ILogDatabase LogDatabase { get; }

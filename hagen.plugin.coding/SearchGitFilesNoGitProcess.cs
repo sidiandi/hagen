@@ -1,4 +1,6 @@
 ﻿using Amg.Build;
+using Amg.Extensions;
+using Amg.FileSystem;
 using LibGit2Sharp;
 using Sidi.Util;
 using System;

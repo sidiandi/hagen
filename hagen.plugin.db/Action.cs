@@ -209,6 +209,15 @@ namespace hagen.Plugin.Db
             }
         }
 
+        public void CopyMarkdownLink()
+        {
+            var sp = commandObject as StartProcess;
+            if (sp != null)
+            {
+                Clipboard.SetText($"[{Name}]({sp.FileName})");
+            }
+        }
+
         void LocateInExplorer()
         {
             var sp = commandObject as StartProcess;
@@ -225,6 +234,7 @@ namespace hagen.Plugin.Db
             return new IAction[]
             {
                 new SimpleAction(nameof(Paste), nameof(Paste), Paste),
+                new SimpleAction(nameof(CopyMarkdownLink), nameof(CopyMarkdownLink), CopyMarkdownLink),
                 new SimpleAction(nameof(LocateInExplorer), "Locate in Explorer", LocateInExplorer)
                 
             };

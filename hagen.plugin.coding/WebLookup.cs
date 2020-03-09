@@ -37,6 +37,11 @@ namespace hagen
                 {
                     yield return WebLookupAction("dev.azure.com Work Item", "https://dev.azure.com/CommonHostPlatform/chp/_search?text={0}*&type=workitem", query);
                     yield return WebLookupAction("Stackoverflow", "https://stackoverflow.com/search?q={0}", query);
+                    yield return WebLookupAction("Microsoft Docs", "https://docs.microsoft.com/en-US/search/?search={0}", query);
+                    yield return WebLookupAction("CHP", "https://chp.healthineers.siemens.com/?q={0}", query);
+                    yield return WebLookupAction("SOC", "https://soc.siemens.cloud/search?term={0}&tab=All%20Results", query);
+                    yield return WebLookupAction("SCD", "https://scd.siemens.com/luz/IdentitySearch?cn={0}&maxanz=50&suchart=schnell&utI=I&utX=X&utT=T&rtH=H&rtS=S&rtZ=Z&rtO=O&rtAktiv=A", query);
+                    yield return WebLookupAction("LinkedIn", "https://www.linkedin.com/search/results/all/?keywords={0}", query);
                 }
             }
         }

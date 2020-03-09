@@ -90,7 +90,8 @@ namespace hagen
                 TextBegin = i,
                 TextEnd = queryString.Length,
                 tags = tags,
-                text = text
+                text = text,
+                RawText = queryString
             };
         }
 
@@ -118,5 +119,7 @@ namespace hagen
         public IEnumerable<string> Tags => tags;
 
         public IContext Context { get; private set; }
+
+        public string RawText { get; private set;  }
     }
 }

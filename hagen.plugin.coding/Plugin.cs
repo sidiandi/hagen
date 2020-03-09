@@ -1,4 +1,4 @@
-﻿using Amg.Build;
+﻿using Amg.FileSystem;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -25,7 +25,18 @@ namespace hagen
             var gitSearch = @"C:\src".Glob("*/.git")
                 .Where(_ => _.IsDirectory())
                 .Select(_ => _.Parent())
-                .Select(_ => (IActionSource3)new SearchGitFilesNoGitProcess(_));
+                .Select(_ =>
+                {
+                    try
+                    {
+                        return (IActionSource3)new SearchGitFilesNoGitProcess(_);
+                    }
+                    catch
+                    {
+                        return null;
+                    }
+                })
+                .Where(_ => !(_ is null));
 
             var actionSources = found.Concat(gitSearch).ToList();
             return actionSources;

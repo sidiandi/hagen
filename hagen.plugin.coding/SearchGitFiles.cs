@@ -1,4 +1,6 @@
 ﻿using Amg.Build;
+using Amg.Extensions;
+using Amg.FileSystem;
 using Sidi.Util;
 using System;
 using System.Collections.Generic;
@@ -10,20 +12,22 @@ namespace hagen
 {
     public class Tool
     {
-        public static Tool Create(string rootDirectory)
+        public static Tool Create(string rootDirectory) => Once.Create<Tool>(rootDirectory);
+
+        protected Tool(string rootDirectory)
         {
-            return Amg.Build.Runner.Once<Tool>(_ => _.RootDirectory = rootDirectory);
+            RootDirectory = rootDirectory;
         }
 
         [Once]
-        Git Git => Amg.Build.Runner.Once<Git>(_ => _.RootDirectory = RootDirectory);
+        Git Git => Git.Create(RootDirectory);
 
         [Once]
         public ITool LsFiles => Git.GitTool
             .WithArguments("ls-files", "--full-name", "--")
             .WithEnvironment("GIT_ICASE_PATHSPECS", "1");
 
-        public string RootDirectory { get; set; }
+        public string RootDirectory { get; }
     }
 
     class SearchGitFiles : EnumerableActionSource

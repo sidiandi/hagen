@@ -10,7 +10,7 @@ namespace hagen
     {
         string Text { get; }
         IEnumerable<string> Tags { get; }
-
         IContext Context { get; }
+        string RawText { get; }
     }
 }

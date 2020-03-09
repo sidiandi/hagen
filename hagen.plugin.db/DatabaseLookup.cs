@@ -25,6 +25,8 @@ using Sidi.Util;
 using System.Reactive.Linq;
 using System.Reactive.Concurrency;
 using Sidi.Extensions;
+using System.Windows.Forms;
+using Sidi.Forms;
 
 namespace hagen.Plugin.Db
 {
@@ -86,9 +88,37 @@ namespace hagen.Plugin.Db
                 log.Info(e);
                 return Enumerable.Empty<IResult>();
             }
+
             var results = r.SelectMany(action => ToIActions(action))
                 .Select(a => a.ToResult(query))
                 .ToList();
+
+            if (results.Count == 0)
+            {
+                var markdownLink = MarkdownLink.Parse(query.RawText);
+                if (markdownLink != null)
+                {
+                    results.Add(new SimpleAction("add", $"Add {markdownLink.Title}", () =>
+                    {
+                        var factory = new FileActionFactory();
+                        var title = Prompt.GetText("Title");
+                        var action = factory.FromUrl(markdownLink.Href, markdownLink.Title);
+                        actions.Add(action);
+                    }).ToResult());
+                }
+
+                var namedUrl = NamedUrl.Parse(query.RawText);
+                if (namedUrl != null)
+                {
+                    results.Add(new SimpleAction("add", $"Add {namedUrl.Title}", () =>
+                    {
+                        var factory = new FileActionFactory();
+                        var title = Prompt.GetText("Title");
+                        var action = factory.FromUrl(namedUrl.Url, namedUrl.Title);
+                        actions.Add(action);
+                    }).ToResult());
+                }
+            }
             return results;
         }
 

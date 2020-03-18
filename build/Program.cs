@@ -226,12 +226,8 @@ namespace Build
             await TerminateRunningApplication();
             await Build();
             var installDir = @"C:\bin\hagen";
-            foreach (var assemblyOutput in OutDir.Glob("hagen/bin/*")
-                .EnumerateFileSystemInfos()
-                .OfType<DirectoryInfo>())
-            {
-                await assemblyOutput.FullName.CopyTree(installDir);
-            }
+
+            await OutDir.Combine(@"hagen/bin").CopyTree(installDir);
 
             var plugins = OutDir.Glob("hagen.plugin.*/bin").EnumerateFileSystemInfos()
                 .Where(_ => _ is DirectoryInfo)
@@ -244,7 +240,13 @@ namespace Build
                 var assemblyOutput = OutDir.Combine(plugin, "bin");
                 await assemblyOutput.CopyTree(installDir.Combine("plugin", plugin));
             }
-            await Start(installDir.Combine(name + ".exe"));
+
+            var installedExe = installDir.Combine(name + ".exe");
+            Process.Start(new ProcessStartInfo
+            {
+                FileName = installedExe,
+                UseShellExecute = true
+            });
         }
     }
 }

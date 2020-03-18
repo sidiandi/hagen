@@ -29,7 +29,8 @@ using System.Web;
 using System.Reflection;
 using System.Reactive.Linq;
 using System.Reactive.Concurrency;
-using Microsoft.Office.Interop.Outlook;
+using NetOffice.OutlookApi;
+using NetOffice.OutlookApi.Enums;
 
 namespace hagen.ActionSource
 {
@@ -143,11 +144,11 @@ namespace hagen.ActionSource
 
         const string PR_HIDE_ATTACH = "http://schemas.microsoft.com/mapi/id/{00062008-0000-0000-C000-000000000046}/8514000B";
 
-        Microsoft.Office.Interop.Outlook.Application GetOutlook()
+        NetOffice.OutlookApi.Application GetOutlook()
         {
             try
             {
-                var instance = Marshal.GetActiveObject("Outlook.Application") as Microsoft.Office.Interop.Outlook.Application;
+                var instance = NetOffice.OutlookApi.Application.GetActiveInstance();
                 if (instance != null)
                 {
                     return instance;
@@ -157,13 +158,13 @@ namespace hagen.ActionSource
             {
             }
 
-            return new Microsoft.Office.Interop.Outlook.Application();
+            return new NetOffice.OutlookApi.Application();
         }
         
         public void CreateOutlookEmailWithEmbeddedPicture(LPath imagePath)
         {
             var outlook = GetOutlook();
-            var mailItem = (MailItem) outlook.CreateItem(Microsoft.Office.Interop.Outlook.OlItemType.olMailItem);
+            var mailItem = (MailItem) outlook.CreateItem(OlItemType.olMailItem);
             mailItem.Subject = imagePath.FileName;
             mailItem.BodyFormat = OlBodyFormat.olFormatHTML;
             var mailInspector = (Inspector) outlook.Inspectors.Add(mailItem);

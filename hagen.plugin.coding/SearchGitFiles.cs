@@ -10,14 +10,9 @@ using System.Threading.Tasks;
 
 namespace hagen
 {
-    public class Tool
+    class Tool
     {
         public static Tool Create(string rootDirectory) => Once.Create<Tool>(rootDirectory);
-
-        protected Tool(string rootDirectory)
-        {
-            return Once.Create<Tool>(rootDirectory);
-        }
 
         protected Tool(string rootDirectory)
         {

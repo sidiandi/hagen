@@ -39,7 +39,7 @@ namespace hagen
             if (yamlFile.IsFile)
             {
                 var deserializer = new DeserializerBuilder()
-                    .WithNamingConvention(new CamelCaseNamingConvention())
+                    .WithNamingConvention(CamelCaseNamingConvention.Instance)
                     .Build();
 
                 using (var r = yamlFile.ReadText())

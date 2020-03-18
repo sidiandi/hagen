@@ -27,14 +27,19 @@ namespace hagen.ActionSource
 {
     public class WebLookup : EnumerableActionSource
     {
+        IFileIconProvider iconProvider;
+
         protected override IEnumerable<IResult> GetResults(IQuery queryObject)
         {
             var query = queryObject.Text.Trim();
+            iconProvider = queryObject.Context.GetService<IFileIconProvider>();
             if (query.Length >= 3)
             {
                 if (Uri.IsWellFormedUriString(query, UriKind.Absolute))
                 {
-                    yield return new ShellAction(query, String.Format("Open URL {0}", query)).ToResult(Priority.Highest);
+                    yield return new ShellAction(
+                        iconProvider,
+                        query, String.Format("Open URL {0}", query)).ToResult(Priority.Highest);
                 }
                 else
                 {
@@ -63,6 +68,7 @@ namespace hagen.ActionSource
             }
 
             var a = new ShellAction(
+                iconProvider,
                 String.Format(urlTemplate, System.Web.HttpUtility.UrlEncode(query)),
                 String.Format("{0} \"{1}\"", title, query))
             {

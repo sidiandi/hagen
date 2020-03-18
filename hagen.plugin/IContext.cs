@@ -11,6 +11,8 @@ namespace hagen
     public interface IContext : IServiceProvider
     {
         void InsertText(string text);
+
+        string ClipboardText { get; }
         
         /// <summary>
         /// True if top level window is a console window

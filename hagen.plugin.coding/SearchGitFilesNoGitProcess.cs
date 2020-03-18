@@ -45,12 +45,14 @@ namespace hagen
 
             var pathSpec = matchAllCharacters + terms.Join(matchAllCharacters) + matchAllCharacters;
             var re = PathSpecToRegularExpression(pathSpec);
-            log.Info(re);
+            log.Info($"{this.rootDir}: {re}");
 
             var indexEntries = Find(re);
 
+            var iconProvider = query.Context.GetService<IFileIconProvider>();
+
             return indexEntries
-                .Select(path => new SourceCodeFileAction(rootDir, this.repo, path).ToResult())
+                .Select(path => new SourceCodeFileAction(rootDir, this.repo, path, iconProvider).ToResult())
                 .Take(32);
         }
 

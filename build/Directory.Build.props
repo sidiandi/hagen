@@ -1,9 +1,0 @@
-<Project>
-  <PropertyGroup>
-    <Configuration>Debug</Configuration>
-    <AmgBuildVersion Condition="$(AmgBuildVersion)==''" >0.29.2</AmgBuildVersion>
-  </PropertyGroup>
-  <ItemGroup>
-    <PackageReference Include="Amg.Build" Version="$(AmgBuildVersion)" />
-  </ItemGroup>
-</Project>

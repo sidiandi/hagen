@@ -8,6 +8,7 @@ using System.Diagnostics;
 using Amg.Extensions;
 using System.Text.RegularExpressions;
 using System.IO;
+using Amg.GetOpt;
 
 namespace Build
 {
@@ -15,7 +16,7 @@ namespace Build
     {
         static int Main(string[] args) => Runner.Run<Program>(args);
 
-        private static readonly Serilog.ILogger Logger = Serilog.Log.Logger.ForContext(System.Reflection.MethodBase.GetCurrentMethod().DeclaringType);
+        private static readonly Serilog.ILogger Logger = Serilog.Log.Logger.ForContext(System.Reflection.MethodBase.GetCurrentMethod()!.DeclaringType);
 
         string ProductName => name;
         string Year => DateTime.UtcNow.ToString("yyyy");
@@ -121,7 +122,8 @@ namespace Build
 
         static async Task Start(string command)
         {
-            await Tools.Cmd.Run("start", command);
+            Process.Start(command);
+            await Task.CompletedTask;
         }
 
         [Once]
@@ -152,7 +154,7 @@ namespace Build
             var m = Regex.Match(r.Output, @"Installing package '([^']+)' to '([^']+)'.");
             var packageId = m.Groups[1].Value;
             var dir = m.Groups[2].Value;
-            string version = null;
+            string? version = null;
 
             m = Regex.Match(r.Output, @"Successfully installed '([^ ]+) ([^ ]+)' to");
             if (m.Success)
@@ -175,8 +177,7 @@ namespace Build
             return Tools.Default.WithFileName(fileName);
         }
 
-        [Once]
-        [Description("run")]
+        [Once, Description("run program")]
         public virtual async Task Run()
         {
             var hagen = (OutDir.Combine(name, "bin", $"{name}.exe"));
@@ -199,15 +200,13 @@ namespace Build
             await OutDir.EnsureNotExists();
         }
 
-        [Once]
-        [Default]
+        [Once, Default]
         public virtual async Task Default()
         {
             await Test();
         }
 
-        [Once]
-        [Description("Open in Visual Studio")]
+        [Once, Description("Open in Visual Studio")]
         public virtual async Task OpenInVisualStudio()
         {
             foreach (var configuration in new[] { "Release", "Debug" })
@@ -219,8 +218,7 @@ namespace Build
             await Start(SlnFile);
         }
 
-        [Once]
-        [Description(@"Install to c:\bin")]
+        [Once, Description(@"Install to c:\bin")]
         public virtual async Task Install()
         {
             await TerminateRunningApplication();

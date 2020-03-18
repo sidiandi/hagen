@@ -16,11 +16,16 @@ namespace hagen
 
         protected Tool(string rootDirectory)
         {
-            RootDirectory = rootDirectory;
+            return Once.Create<Tool>(rootDirectory);
+        }
+
+        protected Tool(string rootDirectory)
+        {
+            this.RootDirectory = rootDirectory;
         }
 
         [Once]
-        Git Git => Git.Create(RootDirectory);
+        Git Git => Once.Create<Git>(RootDirectory);
 
         [Once]
         public ITool LsFiles => Git.GitTool
@@ -55,6 +60,7 @@ namespace hagen
             var lines = result.Output.SplitLines();
 
             return lines.Select(line => new ShellAction(
+                query.Context.GetService<IFileIconProvider>(),
                 tool.RootDirectory.Combine(line),
                 $"git {tool.RootDirectory}: {line}").ToResult());
         }

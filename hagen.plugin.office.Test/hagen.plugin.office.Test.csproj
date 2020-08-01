@@ -13,19 +13,19 @@
       <HintPath>..\..\packages\log4net.2.0.8\lib\net45-full\log4net.dll</HintPath>
     </Reference>
     <Reference Include="Microsoft.CSharp" />
-    <Reference Include="NetOffice, Version=1.7.3.0, Culture=neutral, PublicKeyToken=acf636d62c39f8f5, processorArchitecture=MSIL">
-      <HintPath>..\..\packages\NetOffice.Core.1.7.4.4\lib\net45\NetOffice.dll</HintPath>
+    <Reference Include="NetOffice, Version=1.7.4.11, Culture=neutral, PublicKeyToken=297f57b43ae7c1de, processorArchitecture=MSIL">
+      <HintPath>..\..\packages\NetOfficeFw.Core.1.7.4.11\lib\net40\NetOffice.dll</HintPath>
       <EmbedInteropTypes>False</EmbedInteropTypes>
     </Reference>
     <Reference Include="nunit.framework, Version=3.12.0.0, Culture=neutral, PublicKeyToken=2638cd05610744eb, processorArchitecture=MSIL">
       <HintPath>..\..\packages\NUnit.3.12.0\lib\net45\nunit.framework.dll</HintPath>
     </Reference>
-    <Reference Include="OfficeApi, Version=1.7.3.0, Culture=neutral, PublicKeyToken=7c1c3e9d16cace88, processorArchitecture=MSIL">
-      <HintPath>..\..\packages\NetOffice.Core.1.7.4.4\lib\net45\OfficeApi.dll</HintPath>
+    <Reference Include="OfficeApi, Version=1.7.4.11, Culture=neutral, PublicKeyToken=a39beb0835c43c8e, processorArchitecture=MSIL">
+      <HintPath>..\..\packages\NetOfficeFw.Core.1.7.4.11\lib\net40\OfficeApi.dll</HintPath>
       <EmbedInteropTypes>False</EmbedInteropTypes>
     </Reference>
-    <Reference Include="OutlookApi, Version=1.7.3.0, Culture=neutral, PublicKeyToken=865d86a9c321c488, processorArchitecture=MSIL">
-      <HintPath>..\..\packages\NetOffice.Outlook.1.7.4.4\lib\net45\OutlookApi.dll</HintPath>
+    <Reference Include="OutlookApi, Version=1.7.4.11, Culture=neutral, PublicKeyToken=b118031aaa1097f3, processorArchitecture=MSIL">
+      <HintPath>..\..\packages\NetOfficeFw.Outlook.1.7.4.11\lib\net40\OutlookApi.dll</HintPath>
       <EmbedInteropTypes>False</EmbedInteropTypes>
     </Reference>
     <Reference Include="Sidi.Util, Version=14.3.0.0, Culture=neutral, PublicKeyToken=1e33c1a5eebc53e1, processorArchitecture=MSIL">
@@ -41,8 +41,8 @@
       <Private>True</Private>
     </Reference>
     <Reference Include="System.XML" />
-    <Reference Include="VBIDEApi, Version=1.7.3.0, Culture=neutral, PublicKeyToken=a3637beacf571e8a, processorArchitecture=MSIL">
-      <HintPath>..\..\packages\NetOffice.Core.1.7.4.4\lib\net45\VBIDEApi.dll</HintPath>
+    <Reference Include="VBIDEApi, Version=1.7.4.11, Culture=neutral, PublicKeyToken=931cec8882205047, processorArchitecture=MSIL">
+      <HintPath>..\..\packages\NetOfficeFw.Core.1.7.4.11\lib\net40\VBIDEApi.dll</HintPath>
       <EmbedInteropTypes>False</EmbedInteropTypes>
     </Reference>
     <Reference Include="WindowsBase" />

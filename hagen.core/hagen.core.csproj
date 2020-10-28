@@ -5,6 +5,8 @@
     <ProjectGuid>{B8A11330-3766-4244-9962-8B0D25E98005}</ProjectGuid>
     <NuGetPackageImportStamp>
     </NuGetPackageImportStamp>
+    <TargetFrameworkVersion>v4.6.1</TargetFrameworkVersion>
+    <TargetFrameworkProfile />
   </PropertyGroup>
   <Import Project="..\build\Common.props" />
   <ItemGroup>

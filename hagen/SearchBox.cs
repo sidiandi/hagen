@@ -149,10 +149,11 @@ namespace hagen
             itemView.Columns.Add(new OLVColumn()
             {
                 Name = "Name",
-                AspectGetter = _ =>
+                AspectGetter = data =>
                 {
-                    var a = ((IResult)_).Action;
-                    return String.Format("{0}", a.Name);
+                    var result = (IResult)data;
+                    var action = result.Action;
+                    return String.Format("{0}", action.Name);
                 },
                 WordWrap = true,
                 FillsFreeSpace = true,
@@ -226,7 +227,7 @@ namespace hagen
                         .Select(_ =>
                         {
                             results = results.Concat(_)
-                                .OrderByDescending(x => x.Priority) // (x => x.Action.LastExecuted)
+                                .OrderByDescending(x => x.Priority)
                                 .ThenByDescending(x => x.Action.LastExecuted)
                                 .ToList();
                             return results;

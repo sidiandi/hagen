@@ -74,7 +74,7 @@ namespace hagen
             return Regex.Replace(s, @"\s+", " ");
         }
 
-        IEnumerable<string> Files(string dir)
+        public IEnumerable<string> Files(string dir)
         {
             return new DirectoryInfo(dir).EnumerateFileSystemInfos()
                 .OrderByDescending(_ => _.Name)

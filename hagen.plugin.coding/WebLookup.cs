@@ -36,18 +36,20 @@ namespace hagen
                 }
                 else
                 {
-                    yield return WebLookupAction(iconProvider, "dev.azure.com Work Item", "https://dev.azure.com/CommonHostPlatform/chp/_search?text={0}*&type=workitem", query);
+                    yield return AzureDevopsSearch(iconProvider, "CommonHostPlatform", query);
+                    yield return AzureDevopsSearch(iconProvider, "shs-baukasten", query);
                     yield return WebLookupAction(iconProvider, "Stackoverflow", "https://stackoverflow.com/search?q={0}", query);
                     yield return WebLookupAction(iconProvider, "Microsoft Docs", "https://docs.microsoft.com/en-US/search/?search={0}", query);
-                    yield return WebLookupAction(iconProvider, "CHP", "https://chp.healthineers.siemens.com/?q={0}", query);
-                    yield return WebLookupAction(iconProvider, "SOC", "https://soc.siemens.cloud/search?term={0}&tab=All%20Results", query);
+                    yield return WebLookupAction(iconProvider, "ChpWeb", "https://chp.healthineers.siemens.com/?q={0}", query);
+                    yield return WebLookupAction(iconProvider, "SOC", "https://soc.siemens.cloud/search/user?searchterm={0}", query);
                     yield return WebLookupAction(iconProvider, "SCD", "https://scd.siemens.com/luz/IdentitySearch?cn={0}&maxanz=50&suchart=schnell&utI=I&utX=X&utT=T&rtH=H&rtS=S&rtZ=Z&rtO=O&rtAktiv=A", query);
                     yield return WebLookupAction(iconProvider, "LinkedIn", "https://www.linkedin.com/search/results/all/?keywords={0}", query);
-                    yield return WebLookupAction(iconProvider, "dev.azure.com Work Item", "https://dev.azure.com/CommonHostPlatform/chp/_search?text={0}*&type=workitem", query);
-                    yield return WebLookupAction(iconProvider, "Stackoverflow", "https://stackoverflow.com/search?q={0}", query);
                 }
             }
         }
+
+        IResult AzureDevopsSearch(IFileIconProvider iconProvider, string organization, string query)
+            =>  WebLookupAction(iconProvider, organization + " Azure Devops", $"https://dev.azure.com/{organization}/_search?text={{0}}*&type=wiki", query);
 
         IResult WebLookupAction(
             IFileIconProvider iconProvider,
@@ -64,7 +66,7 @@ namespace hagen
 
             if (p.Length >= 2 && title.StartsWith(p[0], StringComparison.InvariantCultureIgnoreCase))
             {
-                priority = Priority.High;
+               priority = Priority.High;
                 query = String.Join(" ", p.Skip(1));
             }
 

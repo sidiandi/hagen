@@ -43,7 +43,7 @@ namespace hagen.ActionSource
                 }
                 else
                 {
-                    yield return WebLookupAction("Google", "http://www.google.com/search?q={0}", query);
+                    yield return WebLookupAction("Google", "http://www.google.com/search?q={0}", query, 1);
                     yield return WebLookupAction("Wikipedia", "http://en.wikipedia.org/wiki/Special:Search?search={0}&go=Go", query);
                     yield return WebLookupAction("Translate", "http://translate.google.com/#auto/en/{0}", query);
                     yield return WebLookupAction("Leo", "http://dict.leo.org/?lp=ende&search={0}", query);
@@ -52,7 +52,7 @@ namespace hagen.ActionSource
             }
         }
 
-        IResult WebLookupAction(string title, string urlTemplate, string query)
+        IResult WebLookupAction(string title, string urlTemplate, string query, int priorityBoost = 0)
         {
             var lastUsed = DateTime.MinValue;
 
@@ -75,7 +75,11 @@ namespace hagen.ActionSource
                 LastExecuted = lastUsed
             };
 
+            priority = Boost(priority, priorityBoost);
+
             return a.ToResult(priority);
         }
+
+        static Priority Boost(Priority p, int boost) => (Priority)Math.Min((int)Priority.Highest, ((int)p + boost));
     }
 }

@@ -15,6 +15,7 @@
 // You should have received a copy of the GNU General Public License
 // along with hagen. If not, see <http://www.gnu.org/licenses/>.
 
+using Amg.Extensions;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -31,31 +32,43 @@ namespace hagen
             var iconProvider = queryObject.Context.GetService<IFileIconProvider>();
             if (query.Length >= 3)
             {
-                if (Uri.IsWellFormedUriString(query, UriKind.Absolute))
+                if (!Uri.IsWellFormedUriString(query, UriKind.Absolute))
                 {
-                }
-                else
-                {
-                    yield return AzureDevopsSearch(iconProvider, "CommonHostPlatform", query);
-                    yield return AzureDevopsSearch(iconProvider, "shs-baukasten", query);
-                    yield return WebLookupAction(iconProvider, "Stackoverflow", "https://stackoverflow.com/search?q={0}", query);
-                    yield return WebLookupAction(iconProvider, "Microsoft Docs", "https://docs.microsoft.com/en-US/search/?search={0}", query);
-                    yield return WebLookupAction(iconProvider, "ChpWeb", "https://chp.healthineers.siemens.com/?q={0}", query);
-                    yield return WebLookupAction(iconProvider, "SOC", "https://soc.siemens.cloud/search/user?searchterm={0}", query);
-                    yield return WebLookupAction(iconProvider, "SCD", "https://scd.siemens.com/luz/IdentitySearch?cn={0}&maxanz=50&suchart=schnell&utI=I&utX=X&utT=T&rtH=H&rtS=S&rtZ=Z&rtO=O&rtAktiv=A", query);
-                    yield return WebLookupAction(iconProvider, "LinkedIn", "https://www.linkedin.com/search/results/all/?keywords={0}", query);
+                    return new[]{
+                        AzureDevopsSearch(iconProvider, "CommonHostPlatform", query),
+                        AzureDevopsSearch(iconProvider, "shs-baukasten", query),
+                        WebLookupAction(
+                            iconProvider,
+                            "Workitem ID",
+                            "https://helios.healthcare.siemens.com/tfs/Projects/Numaris/_workitems/edit/{0}",
+                            query,
+                            queryFilter: query => Regex.IsMatch(query, @"^\d{4,8}$")
+                            ),
+                        WebLookupAction(iconProvider, "Helios", "https://helios.healthcare.siemens.com/tfs/Projects/_search?text={0}", query),
+                        WebLookupAction(iconProvider, "Stackoverflow", "https://stackoverflow.com/search?q={0}", query),
+                        WebLookupAction(iconProvider, "Microsoft Docs", "https://docs.microsoft.com/en-US/search/?search={0}", query),
+                        WebLookupAction(iconProvider, "ChpWeb", "https://chp.healthineers.siemens.com/?q={0}", query),
+                        WebLookupAction(iconProvider, "SOC", "https://soc.siemens.cloud/search/user?searchterm={0}", query),
+                        WebLookupAction(iconProvider, "SCD", "https://scd.siemens.com/luz/IdentitySearch?cn={0}&maxanz=50&suchart=schnell&utI=I&utX=X&utT=T&rtH=H&rtS=S&rtZ=Z&rtO=O&rtAktiv=A", query),
+                        WebLookupAction(iconProvider, "LinkedIn", "https://www.linkedin.com/search/results/all/?keywords={0}", query)
+                        }.NotNull()
+                        .ToList();
                 }
             }
+
+            return Enumerable.Empty<IResult>();
         }
 
         IResult AzureDevopsSearch(IFileIconProvider iconProvider, string organization, string query)
-            =>  WebLookupAction(iconProvider, organization + " Azure Devops", $"https://dev.azure.com/{organization}/_search?text={{0}}*&type=wiki", query);
+            => WebLookupAction(iconProvider, organization + " Azure Devops", $"https://dev.azure.com/{organization}/_search?text={{0}}*&type=wiki", query);
 
-        IResult WebLookupAction(
+        IResult? WebLookupAction(
             IFileIconProvider iconProvider,
-            string title, 
-            string urlTemplate, 
-            string query)
+            string title,
+            string urlTemplate,
+            string query,
+            Func<string, bool>? queryFilter = null
+            )
         {
             var lastUsed = DateTime.MinValue;
 
@@ -66,8 +79,20 @@ namespace hagen
 
             if (p.Length >= 2 && title.StartsWith(p[0], StringComparison.InvariantCultureIgnoreCase))
             {
-               priority = Priority.High;
-                query = String.Join(" ", p.Skip(1));
+                priority = Priority.High;
+                query = String.Join(" ", p.Skip(1)).Trim();
+            }
+
+            if (queryFilter is { })
+            {
+                if (queryFilter(query))
+                {
+                    priority = Priority.High;
+                }
+                else
+                {
+                    return null;
+                }
             }
 
             var a = new ShellAction(

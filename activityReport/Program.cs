@@ -383,7 +383,10 @@ Work > {0} hours in {1:yyyy-MM}
 
         readonly Color idleColor = Color.Gray;
         readonly Color activeColor = Color.Red;
-        
+        readonly Color workingColor = Color.Pink;
+
+        static OxyColor ToOxyColor(Color c) => OxyPlot.OxyColor.FromUInt32((uint)(c).ToArgb());
+
         public Form StatisticsWindow()
         {
             var main = new ListDetail();
@@ -606,6 +609,37 @@ Work > {0} hours in {1:yyyy-MM}
             return plotView;
         }
 
+        static TimeSpan Worktime(IEnumerable<Input> input)
+        {
+            // Worktime: all active time plus a time window added at the end of each active period
+            // to not count every minute without typing as a break.
+            var allowedInactiveTime = TimeSpan.FromMinutes(5); // everything longer counts as break
+
+            var worktime = TimeSpan.Zero;
+
+            var lastWork = DateTime.MinValue;
+            foreach (var i in input.OrderBy(_ => _.TimeInterval.Begin))
+            {
+                if (i.IsActive)
+                {
+                    worktime += i.TimeInterval.Duration;
+                    lastWork = i.TimeInterval.End;
+                }
+                else
+                {
+                    if (i.TimeInterval.Duration > allowedInactiveTime || i.TimeInterval.Begin > (lastWork + allowedInactiveTime))
+                    {
+                    }
+                    else
+                    {
+                        worktime += i.TimeInterval.Duration;
+                    }
+                }
+            }
+
+            return worktime;
+        }
+
         Control Hours(TimeInterval m)
         {
             var model = new OxyPlot.PlotModel()
@@ -641,6 +675,7 @@ Work > {0} hours in {1:yyyy-MM}
                     {
                         Day = g.Key,
                         Active = g.Where(_ => _.IsActive).Sum(_ => _.TimeInterval.Duration.TotalSeconds),
+                        Working = Worktime(g).TotalSeconds,
                         On = g.Sum(_ => _.TimeInterval.Duration.TotalSeconds)
                     })
                     .ToList();
@@ -655,8 +690,9 @@ Work > {0} hours in {1:yyyy-MM}
             {
                 var refDay = i.Day;
                 var y = DateTimeAxis.ToDouble(refDay);
-                activity.Items.Add(new RectangleBarItem(0, y - daySep, i.On, y + daySep) { Color = OxyPlot.OxyColor.FromUInt32((uint)(idleColor).ToArgb())});
-                activity.Items.Add(new RectangleBarItem(0, y - daySep, i.Active, y + daySep) { Color = OxyPlot.OxyColor.FromUInt32((uint)(activeColor).ToArgb())});
+                activity.Items.Add(new RectangleBarItem(0, y - daySep, i.On, y + daySep) { Color = ToOxyColor(idleColor)});
+                activity.Items.Add(new RectangleBarItem(0, y - daySep, i.Working, y + daySep) { Color = ToOxyColor(workingColor) });
+                activity.Items.Add(new RectangleBarItem(0, y - daySep, i.Active, y + daySep) { Color = ToOxyColor(activeColor) });
             }
 
             model.Series.Add(activity);

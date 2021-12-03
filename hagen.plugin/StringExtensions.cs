@@ -46,6 +46,7 @@ namespace hagen
         public static string FirstWord(this string text)
         {
             var wordEnd = FirstIndex(text, _ => !char.IsWhiteSpace(_));
+            if (wordEnd < 0) return String.Empty;
             return text.Substring(0, wordEnd);
         }
     }

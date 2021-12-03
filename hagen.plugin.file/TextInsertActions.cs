@@ -23,6 +23,8 @@ using System.Windows.Forms;
 using Sidi.Util;
 using Sidi.CommandLine;
 using Sidi.Extensions;
+using System.Web;
+using Amg.FileSystem;
 
 namespace hagen
 {
@@ -36,6 +38,39 @@ namespace hagen
             {
                 var text = Clipboard.GetFileDropList().Cast<string>().Join();
                 InsertText(text);
+            }
+        }
+
+        static string UrlEncode(string x)
+        {
+            static bool NeedsEncoding(char x) => !Char.IsLetterOrDigit(x);
+            return x.Select(c =>
+            {
+                return NeedsEncoding(c)
+                    ? "%" + ((int)c).ToString("x2")
+                    : c.ToString();
+            }).Join(String.Empty);
+        }
+
+        static bool IsImage(string x) => x.HasExtension(".png", ".jpeg", ".jpg");
+
+        static string MarkdownLink(string path)
+        {
+            var name = System.IO.Path.GetFileName(path);
+            var relative = path.RelativeTo(path.Parent());
+            return IsImage(path)
+                ? $"![{name}]({ UrlEncode(relative)})  "
+                : $"[{name}]({ UrlEncode(relative)})  ";
+        }
+
+        [Usage("insert clipboard content as markdown")]
+        public void InsertMarkdown()
+        {
+            if (Clipboard.ContainsFileDropList())
+            {
+                var paths = Clipboard.GetFileDropList().Cast<string>();
+                var markdown = paths.Select(MarkdownLink).Join();
+                InsertText(markdown);
             }
         }
 

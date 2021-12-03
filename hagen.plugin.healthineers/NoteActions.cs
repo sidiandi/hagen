@@ -31,10 +31,12 @@ namespace hagen
             NotepadPlusPlus.Get().Open(path);
         }
 
+        const string ohExe = @"C:\src\oh\bin\Debug\net6.0-windows\oh.exe";
+
         [Usage("Create New Meeting Minutes")]
         public void NewMeetingMinutes()
         {
-            Process.Start(@"C:\src\oh\bin\Debug\net4.8\oh.exe", "edit-meeting-minutes");
+            Process.Start(ohExe, "edit-meeting-minutes");
         }
 
         string MarkdownExtension => ".md";

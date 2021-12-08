@@ -33,8 +33,8 @@ namespace hagen
 
         const string ohExe = @"C:\src\oh\bin\Debug\net6.0-windows\oh.exe";
 
-        [Usage("Create New Meeting Minutes")]
-        public void NewMeetingMinutes()
+        [Usage("Open meeting minutes for selected appointment")]
+        public void MeetingMinutes()
         {
             Process.Start(ohExe, "edit-meeting-minutes");
         }

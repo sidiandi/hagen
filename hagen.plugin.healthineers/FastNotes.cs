@@ -30,9 +30,11 @@ namespace hagen
         {
             if (query.Text.FirstWordIs("notes", out var searchTerm))
             {
-                index.Wait();
-                var files = fulltextSearch.Search(searchTerm, 64);
-                return files.Select(_ => ToResult(_));
+                if (index.IsCompleted)
+                {
+                    var files = fulltextSearch.Search(searchTerm, 64);
+                    return files.Select(_ => ToResult(_));
+                }
             }
             return Enumerable.Empty<IResult>();
         }

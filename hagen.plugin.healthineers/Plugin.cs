@@ -23,7 +23,8 @@ namespace hagen.plugin.healthineers
 
         public override IEnumerable<IActionSource3> GetActionSources()
         {
-            var notesDir = System.Environment.GetFolderPath(Environment.SpecialFolder.MyDocuments).Combine("meetings");
+            // var notesDir = System.Environment.GetFolderPath(Environment.SpecialFolder.MyDocuments).Combine("meetings");
+            var notesDir = @"c:\src\meetings";
             return base.GetActionSources().Concat(new IActionSource3[] { new FastNotes(notesDir) });
         }
     }

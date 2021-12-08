@@ -21,7 +21,7 @@ namespace hagen
             if (word.StartsWith(firstWord, StringComparison.OrdinalIgnoreCase))
             {
                 var restBegin = FirstIndex(text, _ => char.IsWhiteSpace(_), firstWord.Length);
-                rest = text.Substring(restBegin);
+                rest = restBegin >= 0 ? text.Substring(restBegin) : String.Empty;
                 return true;
             }
             else

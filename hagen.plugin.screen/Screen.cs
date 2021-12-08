@@ -31,6 +31,9 @@ using System.Reactive.Linq;
 using System.Reactive.Concurrency;
 using NetOffice.OutlookApi;
 using NetOffice.OutlookApi.Enums;
+using System.Collections.Specialized;
+using System.Threading.Tasks;
+using System.Threading;
 
 namespace hagen.ActionSource
 {
@@ -58,24 +61,37 @@ namespace hagen.ActionSource
                     CaptureScreens();
                 });
                 */
-
                 this.context.Input.KeyDown.SubscribeOn(TaskPoolScheduler.Default).Subscribe(HandlePrintScreen);
             }
         }
 
         void HandlePrintScreen(KeyEventArgs e)
         {
-            if (e.KeyCode == System.Windows.Forms.Keys.PrintScreen)
+            Task.Factory.StartNew(() =>
             {
-                if ((Control.ModifierKeys & Keys.Alt) == Keys.Alt)
+                try
                 {
-                    CaptureActiveWindow();
+                    if (e.KeyCode == System.Windows.Forms.Keys.PrintScreen)
+                    {
+                        if ((Control.ModifierKeys & Keys.Alt) == Keys.Alt)
+                        {
+                            this.context.SaveFocus();
+                            CaptureActiveWindow();
+                        }
+                        else
+                        {
+                            CaptureCurrentScreen();
+                        }
+                    }
                 }
-                else
+                catch (System.Exception ex)
                 {
-                    CaptureScreens();
+                    log.Warn(ex);
                 }
-            }
+            },
+            CancellationToken.None,
+            TaskCreationOptions.None, 
+            TaskScheduler.FromCurrentSynchronizationContext());
         }
 
         [Usage("Capture active window")]
@@ -86,7 +102,8 @@ namespace hagen.ActionSource
             {
                 throw new System.Exception("No active window");
             }
-            return screenCapture.Capture(fe, GetDestinationFilename(DateTime.Now, fe.Current.Name));
+            var file = screenCapture.Capture(fe, GetDestinationFilename(DateTime.Now, fe.Current.Name));
+            return CopyToClipboard(file);
         }
 
         LPath GetDestinationFilename(DateTime time, string title)
@@ -102,24 +119,57 @@ namespace hagen.ActionSource
         ScreenCapture screenCapture = new ScreenCapture();
 
         [Usage("Capture all screens")]
-        public IList<LPath> CaptureScreens()
+        public IList<LPath> CaptureAllScreens()
         {
             var now = DateTime.Now;
-            return screenCapture.CaptureAllScreens(s => GetDestinationFilename(now, s.DeviceName));
+            var files = screenCapture.CaptureAllScreens(s => GetDestinationFilename(now, s.DeviceName));
+            return CopyToClipboard(files);
         }
 
         [Usage("Capture the primary screen")]
         public LPath CapturePrimaryScreen()
         {
             var s = System.Windows.Forms.Screen.PrimaryScreen;
-            return screenCapture.Capture(s, GetDestinationFilename(DateTime.Now, s.DeviceName));
+            var file = screenCapture.Capture(s, GetDestinationFilename(DateTime.Now, s.DeviceName));
+            return CopyToClipboard(file);
         }
 
         [Usage("Capture the screen where the mouse pointer is right now")]
         public LPath CaptureCurrentScreen()
         {
             var s = System.Windows.Forms.Screen.PrimaryScreen;
-            return screenCapture.Capture(s, GetDestinationFilename(DateTime.Now, s.DeviceName));
+            var file = screenCapture.Capture(s, GetDestinationFilename(DateTime.Now, s.DeviceName));
+            return CopyToClipboard(file);
+        }
+
+        static LPath CopyToClipboard(LPath file)
+        {
+            CopyToClipboard(new[] { file }.ToList());
+            return file;
+        }
+
+        static IList<LPath> CopyToClipboard(IList<LPath> file)
+        {
+            var files = new StringCollection();
+            foreach (var i in file)
+            {
+                files.Add(i.ToString());
+            }
+            while (true)
+            {
+                try
+                {
+                    Clipboard.SetFileDropList(files);
+                    log.Info($"In clipboard: {String.Join(", ", files.Cast<string>())}");
+                    break;
+                }
+                catch (System.Exception ex)
+                {
+                    log.Warn(ex);
+                    Thread.Sleep(100);
+                }
+            }
+            return file;
         }
 
         [Usage("Create a screen shot mail")]

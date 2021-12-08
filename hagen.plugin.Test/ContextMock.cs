@@ -123,5 +123,9 @@ namespace hagen.plugin.Tests
         {
             throw new NotImplementedException();
         }
+
+        public void SaveFocus()
+        {
+        }
     }
 }

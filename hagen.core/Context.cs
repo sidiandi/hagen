@@ -186,8 +186,9 @@ namespace hagen
         {
             get
             {
-                return hagen.activityLogger == null ? null :
-                this.hagen.activityLogger.inputAggregator;
+                return hagen.activityLogger == null 
+                    ? null
+                    : this.hagen.activityLogger.inputAggregator;
             }
         }
 

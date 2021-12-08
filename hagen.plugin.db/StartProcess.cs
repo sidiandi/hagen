@@ -192,13 +192,7 @@ namespace hagen.Plugin.Db
                 }
             };
 
-            try
-            {
-                p.Start();
-            }
-            finally
-            {
-            }
+            p.Start();
         }
 
         public override string ToString()

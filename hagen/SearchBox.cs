@@ -339,7 +339,7 @@ namespace hagen
             OnItemsActivated();
         }
 
-        void OnItemsActivated()
+        public void OnItemsActivated()
         {
             if (ItemsActivated != null)
             {

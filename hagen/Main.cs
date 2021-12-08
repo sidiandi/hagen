@@ -216,6 +216,16 @@ namespace hagen
             }
         }
 
+        protected override bool ProcessCmdKey(ref Message msg, Keys keyData)
+        {
+            if (keyData == Keys.Enter)
+            {
+                searchBox.OnItemsActivated();
+                return true;
+            }
+            return base.ProcessCmdKey(ref msg, keyData);
+        }
+
         void Activate(IAction a)
         {
             if (System.Windows.Forms.Control.ModifierKeys == Keys.Shift)

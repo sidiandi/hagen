@@ -60,8 +60,8 @@ namespace hagen
             programUse = logDatabase.OpenProgramUses();
             inputs = logDatabase.OpenInputs();
 
-            // var hidMonitor = Debugger.IsAttached ? null : new HumanInterfaceDeviceMonitor();
-            var hidMonitor = new HumanInterfaceDeviceMonitor();
+            var hidMonitor = Debugger.IsAttached ? null : new HumanInterfaceDeviceMonitor();
+            // var hidMonitor = new HumanInterfaceDeviceMonitor();
             var winEventHook = new WinEventHook();
             var timer = Observable.Interval(this.inputLoggingInterval);
 

@@ -38,7 +38,7 @@ namespace hagen
             {
                 r = command.ExecuteReader();
             }
-            catch (Exception e)
+            catch (Exception)
             {
             }
 

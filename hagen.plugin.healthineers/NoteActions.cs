@@ -39,6 +39,18 @@ namespace hagen
             Process.Start(ohExe, "edit-meeting-minutes");
         }
 
+        [Usage("Open meeting minutes for selected appointment")]
+        public void MailMeetingMinutes()
+        {
+            Process.Start(ohExe, "mail-meeting-minutes");
+        }
+
+        [Usage("Cut of the selected outlook apointment series")]
+        public void EndSeries()
+        {
+            Process.Start(ohExe, "end-series");
+        }
+
         string MarkdownExtension => ".md";
 
         string NotesPath(DateTime time, string? subject)

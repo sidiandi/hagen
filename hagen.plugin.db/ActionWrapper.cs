@@ -99,6 +99,11 @@ namespace hagen.Plugin.Db
             }
         }
 
+        public override string ToString()
+        {
+            return this.Action.ToString();
+        }
+
         public event System.ComponentModel.PropertyChangedEventHandler PropertyChanged;
     }
 }

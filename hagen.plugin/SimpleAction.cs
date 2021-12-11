@@ -22,7 +22,7 @@ using System.Text;
 
 namespace hagen
 {
-    public class SimpleAction : IAction
+    public class SimpleAction : IAction, ISecondaryActions
     {
         private static readonly log4net.ILog log = log4net.LogManager.GetLogger(System.Reflection.MethodBase.GetCurrentMethod().DeclaringType);
 
@@ -64,10 +64,19 @@ namespace hagen
             }
         }
 
+        public IEnumerable<IAction> GetActions()
+        {
+            return SecondaryActions;
+        }
+
+        public IList<IAction> SecondaryActions { get; private set; } = new List<IAction>(); 
+
         public string Name
         {
             get { return name; }
         }
+
+        public override string ToString() => Name;
 
         public System.Drawing.Icon Icon
         {

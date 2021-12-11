@@ -108,6 +108,8 @@ namespace hagen
             {
                 get; set;
             }
+
+            public override string ToString() => Action.ToString();
         }
 
         /// <summary>

@@ -78,26 +78,6 @@ namespace hagen
             var repoName = rootDir.FileName();
             var seen = new HashSet<string>();
 
-            IEnumerable<string> MatchingLineage(IndexEntry _)
-            {
-                for (var path = repoName + "/" + _.Path; path != null; path = ParentPath(path))
-                {
-                    if (seen.Contains(path))
-                    {
-                        break;
-                    }
-                    if (re.IsMatch(path))
-                    {
-                        seen.Add(path);
-                        yield return _.Path;
-                    }
-                    else
-                    {
-                        break;
-                    }
-                }
-            }
-
             IEnumerable<string> Matching(IndexEntry _)
             {
                 var path = repoName + "/" + _.Path;

@@ -22,19 +22,21 @@ using System.Linq;
 using System.Text;
 using System.Text.RegularExpressions;
 
-namespace hagen
+#nullable enable
+
+namespace hagen;
+
+public class WebLookup : EnumerableActionSource
 {
-    public class WebLookup : EnumerableActionSource
+    protected override IEnumerable<IResult> GetResults(IQuery queryObject)
     {
-        protected override IEnumerable<IResult> GetResults(IQuery queryObject)
+        var query = queryObject.Text.Trim();
+        var iconProvider = queryObject.Context.GetService<IFileIconProvider>();
+        if (query.Length >= 3)
         {
-            var query = queryObject.Text.Trim();
-            var iconProvider = queryObject.Context.GetService<IFileIconProvider>();
-            if (query.Length >= 3)
+            if (!Uri.IsWellFormedUriString(query, UriKind.Absolute))
             {
-                if (!Uri.IsWellFormedUriString(query, UriKind.Absolute))
-                {
-                    return new[]{
+                return new[]{
                         AzureDevopsSearch(iconProvider, "CommonHostPlatform", query),
                         AzureDevopsSearch(iconProvider, "shs-baukasten", query),
                         WebLookupAction(
@@ -52,58 +54,57 @@ namespace hagen
                         WebLookupAction(iconProvider, "SCD", "https://scd.siemens.com/luz/IdentitySearch?cn={0}&maxanz=50&suchart=schnell&utI=I&utX=X&utT=T&rtH=H&rtS=S&rtZ=Z&rtO=O&rtAktiv=A", query),
                         WebLookupAction(iconProvider, "LinkedIn", "https://www.linkedin.com/search/results/all/?keywords={0}", query)
                         }.NotNull()
-                        .ToList();
-                }
+                    .ToList();
             }
-
-            return Enumerable.Empty<IResult>();
         }
 
-        IResult AzureDevopsSearch(IFileIconProvider iconProvider, string organization, string query)
-            => WebLookupAction(iconProvider, organization + " Azure Devops", $"https://dev.azure.com/{organization}/_search?text={{0}}*&type=wiki", query);
+        return Enumerable.Empty<IResult>();
+    }
 
-        IResult? WebLookupAction(
-            IFileIconProvider iconProvider,
-            string title,
-            string urlTemplate,
-            string query,
-            Func<string, bool>? queryFilter = null
-            )
+    IResult AzureDevopsSearch(IFileIconProvider iconProvider, string organization, string query)
+        => WebLookupAction(iconProvider, organization + " Azure Devops", $"https://dev.azure.com/{organization}/_search?text={{0}}*&type=wiki", query);
+
+    IResult? WebLookupAction(
+        IFileIconProvider iconProvider,
+        string title,
+        string urlTemplate,
+        string query,
+        Func<string, bool>? queryFilter = null
+        )
+    {
+        var lastUsed = DateTime.MinValue;
+
+        // try to parse query
+        var p = Regex.Split(query, @"\s+");
+
+        var priority = Priority.Low;
+
+        if (p.Length >= 2 && title.StartsWith(p[0], StringComparison.InvariantCultureIgnoreCase))
         {
-            var lastUsed = DateTime.MinValue;
+            priority = Priority.High;
+            query = String.Join(" ", p.Skip(1)).Trim();
+        }
 
-            // try to parse query
-            var p = Regex.Split(query, @"\s+");
-
-            var priority = Priority.Low;
-
-            if (p.Length >= 2 && title.StartsWith(p[0], StringComparison.InvariantCultureIgnoreCase))
+        if (queryFilter is { })
+        {
+            if (queryFilter(query))
             {
                 priority = Priority.High;
-                query = String.Join(" ", p.Skip(1)).Trim();
             }
-
-            if (queryFilter is { })
+            else
             {
-                if (queryFilter(query))
-                {
-                    priority = Priority.High;
-                }
-                else
-                {
-                    return null;
-                }
+                return null;
             }
-
-            var a = new ShellAction(
-                iconProvider,
-                String.Format(urlTemplate, System.Web.HttpUtility.UrlEncode(query)),
-                String.Format("{0} \"{1}\"", title, query))
-            {
-                LastExecuted = lastUsed
-            };
-
-            return a.ToResult(priority);
         }
+
+        var a = new ShellAction(
+            iconProvider,
+            String.Format(urlTemplate, System.Web.HttpUtility.UrlEncode(query)),
+            String.Format("{0} \"{1}\"", title, query))
+        {
+            LastExecuted = lastUsed
+        };
+
+        return a.ToResult(priority);
     }
 }

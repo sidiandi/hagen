@@ -7,42 +7,43 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 
-namespace hagen
+namespace hagen;
+
+#nullable enable
+
+public class NotepadPlusPlus
 {
-    public class NotepadPlusPlus
+    private LPath executable;
+
+    NotepadPlusPlus(LPath _)
     {
-        private LPath executable;
+        this.executable = _;
+    }
 
-        NotepadPlusPlus(LPath _)
-        {
-            this.executable = _;
-        }
+    public static NotepadPlusPlus? Get()
+    {
+        var notepadPlusPlusExe = @"Notepad++\notepad++.exe";
 
-        public static NotepadPlusPlus? Get()
-        {
-            var notepadPlusPlusExe = @"Notepad++\notepad++.exe";
-
-            var programDirectories = new[] {
+        var programDirectories = new[] {
                 new LPath(System.Environment.GetEnvironmentVariable("ProgramW6432")),
                 Paths.GetFolderPath(System.Environment.SpecialFolder.ProgramFilesX86)
             };
 
-            return programDirectories
-                .Select(_ => _.CatDir(notepadPlusPlusExe))
-                .Where(_ => _.IsFile)
-                .Take(1)
-                .Select(_ => new NotepadPlusPlus(_))
-                .FirstOrDefault();
-        }
+        return programDirectories
+            .Select(_ => _.CatDir(notepadPlusPlusExe))
+            .Where(_ => _.IsFile)
+            .Take(1)
+            .Select(_ => new NotepadPlusPlus(_))
+            .FirstOrDefault();
+    }
 
-        public void Open(TextLocation location)
-        {
-            Process.Start(executable, $"{location.FileName.Quote()} -n{location.Line}");
-        }
+    public void Open(TextLocation location)
+    {
+        Process.Start(executable, $"{location.FileName.Quote()} -n{location.Line}");
+    }
 
-        public void Open(string fileName)
-        {
-            Process.Start(executable, fileName.Quote());
-        }
+    public void Open(string fileName)
+    {
+        Process.Start(executable, fileName.Quote());
     }
 }

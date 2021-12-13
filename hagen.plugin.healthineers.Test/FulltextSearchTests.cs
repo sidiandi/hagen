@@ -13,9 +13,8 @@ namespace hagen.Test
         [Test]
         public async Task IndexAndSearch()
         {
-            var f = new FulltextSearch(@"C:\Users\griman6i\OneDrive - Siemens Healthineers\Documents\meetings");
-            // await f.Index();
-
+            var f = new FulltextSearch(@"C:\src\meetings");
+            await f.Index();
             Console.WriteLine(String.Join("\r\n", f.Search("Grimme")));
         }
     }

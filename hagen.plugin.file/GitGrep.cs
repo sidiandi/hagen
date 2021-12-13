@@ -51,7 +51,7 @@ namespace hagen
             {
                 yamlFile.EnsureParentDirectoryExists();
                 var serializer = new SerializerBuilder()
-                    .WithNamingConvention(new CamelCaseNamingConvention())
+                    .WithNamingConvention(CamelCaseNamingConvention.Instance)
                     .Build();
 
                 using (var w = yamlFile.WriteText())
